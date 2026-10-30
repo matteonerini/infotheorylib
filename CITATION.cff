@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this library, please cite it as below."
+title: "infotheorylib: a Lean 4 formalization of information theory"
+abstract: >-
+  A Lean 4 and Mathlib library of information theory, following T. M. Cover and J. A. Thomas,
+  Elements of Information Theory (2nd ed., 2006).
+type: software
+authors:
+  - family-names: Nerini
+    given-names: Matteo
+repository-code: "https://github.com/matteonerini/infotheorylib"
+license: Apache-2.0
+keywords:
+  - Lean 4
+  - Mathlib
+  - information theory
+  - formalization
+references:
+  - type: book
+    title: "Elements of Information Theory"
+    authors:
+      - family-names: Cover
+        given-names: Thomas M.
+      - family-names: Thomas
+        given-names: Joy A.
+    edition: "2nd"
+    publisher:
+      name: "John Wiley & Sons"
+    year: 2006
+    doi: "10.1002/047174882X"
