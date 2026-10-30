@@ -89,7 +89,9 @@ rev = "v4.36.0-rc2"
 
 then run `lake update infotheorylib` and `lake exe cache get`. A Lake project can contain only one
 version of Mathlib, so your project must use the same Lean toolchain (`v4.36.0-rc2`) and Mathlib
-version as the release you depend on. Releases are tagged with the Lean version they support.
+version as the release you depend on. Releases are tagged with the Lean version they support;
+the available versions are listed on the
+[releases page](https://github.com/matteonerini/infotheorylib/releases).
 The library uses the module system, so it can be imported from both module and non-module files.
 
 To use the library, import it and open the `InfoTheory` namespace, which also activates the
