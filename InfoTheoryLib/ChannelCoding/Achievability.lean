@@ -216,18 +216,17 @@ lemma jointIid_jointOf (p : α → ℝ) (W : α → β → ℝ) (n : ℕ) (z : (
     jointIid (jointOf p W) n z = iidPMF p n z.1 * channelExt W n z.1 z.2 := by
   simp only [jointIid, iidPMF, channelExt, jointOf, zipSeq, prod_mul_distrib]
 
-/-- **(7.65)–(7.78)** Averaged over the random codebooks, the probability of error of joint
-typicality decoding when the message `w` is sent is at most
-`Pr{(Xⁿ, Yⁿ) ∉ A_ε^(n)} + (M - 1) e^{-n(I(X;Y)-3ε)}`. -/
-theorem sum_codebook_condErrProb_le {p : α → ℝ} (hp : IsPMF p) {W : α → β → ℝ}
-    (hW : IsChannel W) {n M : ℕ} (ε : ℝ) (w₀ w : Fin M) :
-    ∑ C : Fin M → Fin n → α, iidPMF (iidPMF p n) M C *
-        (typicalCode (jointTypicalSet (jointOf p W) n ε) C w₀).condErrProb W w ≤
-      (1 - prob (jointIid (jointOf p W) n) (jointTypicalSet (jointOf p W) n ε)) +
+/-- **(7.65)–(7.78)** Averaged over the random codebooks, the probability of error of decoding
+with a set `A ⊆ A_ε^(n)` of jointly typical pairs when the message `w` is sent is at most
+`Pr{(Xⁿ, Yⁿ) ∉ A} + (M - 1) e^{-n(I(X;Y)-3ε)}`. -/
+theorem sum_codebook_condErrProb_le_of_subset {p : α → ℝ} (hp : IsPMF p) {W : α → β → ℝ}
+    (hW : IsChannel W) {n M : ℕ} {ε : ℝ} {A : Finset ((Fin n → α) × (Fin n → β))}
+    (hA : A ⊆ jointTypicalSet (jointOf p W) n ε) (w₀ w : Fin M) :
+    ∑ C : Fin M → Fin n → α, iidPMF (iidPMF p n) M C * (typicalCode A C w₀).condErrProb W w ≤
+      (1 - prob (jointIid (jointOf p W) n) A) +
         (M - 1) * exp (-(n * (mutualInfoOf p W - 3 * ε))) := by
   classical
   set q := jointOf p W
-  set A := jointTypicalSet q n ε
   have hpn := iidPMF_isPMF hp n
   -- The two error events, (7.72).
   set T₁ : (Fin n → α) → ℝ := fun x => ∑ y, channelExt W n x y * if (x, y) ∈ A then 0 else 1
@@ -279,7 +278,10 @@ theorem sum_codebook_condErrProb_le {p : α → ℝ} (hp : IsPMF p) {W : α → 
         exact sum_congr rfl fun x _ => by ring
       · simp
     rw [h1]
-    exact prob_indep_jointTypicalSet_le (jointOf_isPMF hp hW) n ε
+    refine le_trans ?_ (prob_indep_jointTypicalSet_le (jointOf_isPMF hp hW) n ε)
+    refine sum_le_sum_of_subset_of_nonneg hA fun z _ _ => ?_
+    exact mul_nonneg (iidPMF_nonneg ((jointOf_isPMF hp hW).dist _).nonneg _)
+      (iidPMF_nonneg ((jointOf_isPMF hp hW).dist _).nonneg _)
   calc ∑ C : Fin M → Fin n → α, iidPMF (iidPMF p n) M C * (typicalCode A C w₀).condErrProb W w
       ≤ ∑ C : Fin M → Fin n → α, iidPMF (iidPMF p n) M C *
           (T₁ (C w) + ∑ w' ∈ univ.erase w, T₂ (C w) (C w')) :=
@@ -302,14 +304,26 @@ theorem sum_codebook_condErrProb_le {p : α → ℝ} (hp : IsPMF p) {W : α → 
         · push_cast [Nat.cast_sub (Nat.one_le_iff_ne_zero.2 hM.ne')]
           ring
 
-/-- **The random coding bound, (7.79).** For every `M ≥ 1` and `ε`, some `(M, n)` code has average
-probability of error at most `Pr{(Xⁿ, Yⁿ) ∉ A_ε^(n)} + (M - 1) e^{-n(I(X;Y)-3ε)}`. -/
-theorem exists_code_avgErrProb_le {p : α → ℝ} (hp : IsPMF p) {W : α → β → ℝ}
-    (hW : IsChannel W) {M : ℕ} (hM : 0 < M) (n : ℕ) (ε : ℝ) :
-    ∃ c : ChannelCode M n α β, c.avgErrProb W ≤
+/-- **(7.65)–(7.78)** Averaged over the random codebooks, the probability of error of joint
+typicality decoding when the message `w` is sent is at most
+`Pr{(Xⁿ, Yⁿ) ∉ A_ε^(n)} + (M - 1) e^{-n(I(X;Y)-3ε)}`. -/
+theorem sum_codebook_condErrProb_le {p : α → ℝ} (hp : IsPMF p) {W : α → β → ℝ}
+    (hW : IsChannel W) {n M : ℕ} (ε : ℝ) (w₀ w : Fin M) :
+    ∑ C : Fin M → Fin n → α, iidPMF (iidPMF p n) M C *
+        (typicalCode (jointTypicalSet (jointOf p W) n ε) C w₀).condErrProb W w ≤
       (1 - prob (jointIid (jointOf p W) n) (jointTypicalSet (jointOf p W) n ε)) +
+        (M - 1) * exp (-(n * (mutualInfoOf p W - 3 * ε))) :=
+  sum_codebook_condErrProb_le_of_subset hp hW subset_rfl w₀ w
+
+/-- **The random coding bound, (7.79)**, for decoding with a set `A ⊆ A_ε^(n)`: for every `M ≥ 1`,
+some codebook `C` has average probability of error at most
+`Pr{(Xⁿ, Yⁿ) ∉ A} + (M - 1) e^{-n(I(X;Y)-3ε)}`. -/
+theorem exists_codebook_avgErrProb_le_of_subset {p : α → ℝ} (hp : IsPMF p) {W : α → β → ℝ}
+    (hW : IsChannel W) {M n : ℕ} (hM : 0 < M) {ε : ℝ}
+    {A : Finset ((Fin n → α) × (Fin n → β))} (hA : A ⊆ jointTypicalSet (jointOf p W) n ε) :
+    ∃ C : Fin M → Fin n → α, (typicalCode A C ⟨0, hM⟩).avgErrProb W ≤
+      (1 - prob (jointIid (jointOf p W) n) A) +
         (M - 1) * exp (-(n * (mutualInfoOf p W - 3 * ε))) := by
-  set A := jointTypicalSet (jointOf p W) n ε
   set U := (1 - prob (jointIid (jointOf p W) n) A) +
     (M - 1) * exp (-(n * (mutualInfoOf p W - 3 * ε)))
   have hμ := iidPMF_isPMF (iidPMF_isPMF hp n) M
@@ -320,10 +334,20 @@ theorem exists_code_avgErrProb_le {p : α → ℝ} (hp : IsPMF p) {W : α → β
     rw [sum_comm, div_le_iff₀ hM']
     calc ∑ w : Fin M, ∑ C : Fin M → Fin n → α,
           iidPMF (iidPMF p n) M C * (typicalCode A C ⟨0, hM⟩).condErrProb W w
-        ≤ ∑ _w : Fin M, U := sum_le_sum fun w _ => sum_codebook_condErrProb_le hp hW ε _ w
+        ≤ ∑ _w : Fin M, U :=
+          sum_le_sum fun w _ => sum_codebook_condErrProb_le_of_subset hp hW hA _ w
       _ = U * M := by simp [mul_comm]
-  obtain ⟨C, hC⟩ := exists_le_of_sum_mul_le hμ h
-  exact ⟨_, hC⟩
+  exact exists_le_of_sum_mul_le hμ h
+
+/-- **The random coding bound, (7.79).** For every `M ≥ 1` and `ε`, some `(M, n)` code has average
+probability of error at most `Pr{(Xⁿ, Yⁿ) ∉ A_ε^(n)} + (M - 1) e^{-n(I(X;Y)-3ε)}`. -/
+theorem exists_code_avgErrProb_le {p : α → ℝ} (hp : IsPMF p) {W : α → β → ℝ}
+    (hW : IsChannel W) {M : ℕ} (hM : 0 < M) (n : ℕ) (ε : ℝ) :
+    ∃ c : ChannelCode M n α β, c.avgErrProb W ≤
+      (1 - prob (jointIid (jointOf p W) n) (jointTypicalSet (jointOf p W) n ε)) +
+        (M - 1) * exp (-(n * (mutualInfoOf p W - 3 * ε))) :=
+  let ⟨_, hC⟩ := exists_codebook_avgErrProb_le_of_subset (n := n) hp hW hM subset_rfl
+  ⟨_, hC⟩
 
 /-! ### Theorem 7.7.1 -/
 

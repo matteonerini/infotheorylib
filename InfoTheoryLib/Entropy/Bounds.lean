@@ -107,4 +107,22 @@ lemma entropy_le_log_card_of_support {p : α → ℝ} (hp : IsPMF p) (S : Finset
   rw [entropy_eq_sum_negMulLog, hsum negMulLog negMulLog_zero]
   rwa [entropy_eq_sum_negMulLog] at this
 
+/-- Conditioning on less information increases the conditional entropy:
+`H(X | Y) ≤ H(X | h(Y))`. -/
+lemma condEntropy_le_condEntropy_comp {μ : Ω → ℝ} (hμ : IsPMF μ) (X : Ω → α) (Y : Ω → β)
+    (h : β → γ) : H[X | Y ; μ] ≤ H[X | h ∘ Y ; μ] := by
+  have e : H[X | Y ; μ] = H[X | pair Y (h ∘ Y) ; μ] :=
+    (condEntropy_congr_right hμ X (fun y => (y, h y)) (fun a b hab => (Prod.mk.inj hab).1)
+      (fun _ => rfl)).symm
+  rw [e]
+  exact condEntropy_le_condEntropy hμ X Y (h ∘ Y)
+
+/-- `H(X, Y) ≤ H(X) + H(Y)`, with equality iff `X` and `Y` are independent
+(`condEntropy_eq_entropy_iff`). -/
+theorem entropyRV_pair_le_add {μ : Ω → ℝ} (hμ : IsPMF μ) (X : Ω → α) (Y : Ω → β) :
+    H[pair X Y ; μ] ≤ H[X ; μ] + H[Y ; μ] := by
+  have h1 := chain_rule hμ X Y
+  have h2 := condEntropy_le_entropy hμ Y X
+  linarith
+
 end InfoTheory
