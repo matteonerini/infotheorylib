@@ -22,6 +22,7 @@ public import InfoTheoryLib.Books.CoverThomas.Chapter6
 public import InfoTheoryLib.Books.CoverThomas.Chapter7
 public import InfoTheoryLib.Books.CoverThomas.Chapter8
 public import InfoTheoryLib.Books.CoverThomas.Chapter9
+public import InfoTheoryLib.Books.ElGamalKim.Lecture1
 public import InfoTheoryLib.Books.ElGamalKim.Lecture2
 public import InfoTheoryLib.Books.ElGamalKim.Lecture3
 public import InfoTheoryLib.ChannelCoding.Achievability
