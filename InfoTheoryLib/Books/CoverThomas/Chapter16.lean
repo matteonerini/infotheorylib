@@ -5,7 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.Book.Chapter15
+public import InfoTheoryLib.Books.CoverThomas.Chapter15
 public import InfoTheoryLib.Investment.Basic
 public import InfoTheoryLib.Investment.KuhnTucker
 public import InfoTheoryLib.Investment.SideInformation

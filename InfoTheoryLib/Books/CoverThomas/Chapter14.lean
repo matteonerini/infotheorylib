@@ -5,7 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.Book.Chapter13
+public import InfoTheoryLib.Books.CoverThomas.Chapter13
 public import InfoTheoryLib.Kolmogorov.Computer
 public import InfoTheoryLib.Kolmogorov.Programs
 public import InfoTheoryLib.Kolmogorov.BinaryStrings

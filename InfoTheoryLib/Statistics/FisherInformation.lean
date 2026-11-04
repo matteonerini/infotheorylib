@@ -38,7 +38,7 @@ Fisher information is `n J(θ)`.
 The book works with densities and justifies the interchange of differentiation and integration
 for "well behaved" families. We work with families on a finite space, where the interchange is
 the derivative of a finite sum; the Gaussian family of Example 11.10.2 is treated in
-`Book.Chapter11`. The multiparameter Fisher information matrix (11.291)–(11.292) is not
+`Books.CoverThomas.Chapter11`. The multiparameter Fisher information matrix (11.291)–(11.292) is not
 formalized.
 
 ## References

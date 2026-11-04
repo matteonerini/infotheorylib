@@ -5,7 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.Book.Chapter7
+public import InfoTheoryLib.Books.CoverThomas.Chapter7
 public import InfoTheoryLib.SourceCoding.FixedLength
 public import InfoTheoryLib.SourceCoding.Kraft
 public import InfoTheoryLib.SourceCoding.OptimalLength
@@ -55,9 +55,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   symmetric, non-negative, and zero iff `X` and `Y` are independent: `mutualInfo_comm`,
   `mutualInfo_nonneg`, `mutualInfo_eq_zero_iff` (`MutualInformation.Basic`).
 * (1.5): `IsChannel`, `mutualInfoOf`, `capacity` (`ChannelCoding.Capacity`).
-* Example 1.1.3: `noiselessChannel` (`Book.Chapter7`), `noiselessCode`, `example_1_1_3` (here).
+* Example 1.1.3: `noiselessChannel` (`Books.CoverThomas.Chapter7`), `noiselessCode`,
+  `example_1_1_3` (here).
 * Example 1.1.4: `fourSymbolChannel`, `fourSymbolCode`, `example_1_1_4` (here).
-* Example 1.1.5: `bsc` (`Book.Chapter7`), `example_1_1_5` (here).
+* Example 1.1.5: `bsc` (`Books.CoverThomas.Chapter7`), `example_1_1_5` (here).
 * (1.6): `relEntropy`, `relEntropyReal` (`RelativeEntropy.Basic`); it is non-negative and zero iff
   `p = q`: `relEntropy_nonneg`, `relEntropy_eq_zero_iff`, `relEntropyReal_nonneg`,
   `relEntropyReal_eq_zero_iff` (`RelativeEntropy.InformationInequality`).

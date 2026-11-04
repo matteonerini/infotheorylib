@@ -5,7 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.Book.Chapter9
+public import InfoTheoryLib.Books.CoverThomas.Chapter9
 public import InfoTheoryLib.RateDistortion.Binary
 public import InfoTheoryLib.RateDistortion.ParallelGaussian
 public import InfoTheoryLib.RateDistortion.SourceChannel
@@ -94,7 +94,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `channelExt_mul_exp_le_iidPMF`; Lemma 10.5.3: `one_sub_mul_pow_le`.
 * Encoding and decoding: `typicalEncode`, `typicalRDCode`; (10.89)–(10.101):
   `sum_codebook_distortion_le`; achievability: `isAchievableRD_of_infoRD_lt`.
-* (10.103)–(10.104): `sphere_packing_ratio` (`Book.Chapter9`); (10.105):
+* (10.103)–(10.104): `sphere_packing_ratio` (`Books.CoverThomas.Chapter9`); (10.105):
   `sphere_covering_ratio` (here).
 
 ### 10.6 Strongly typical sequences and rate distortion

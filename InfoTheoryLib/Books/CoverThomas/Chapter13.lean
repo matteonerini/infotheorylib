@@ -5,7 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.Book.Chapter12
+public import InfoTheoryLib.Books.CoverThomas.Chapter12
 public import InfoTheoryLib.SourceCoding.Minimax
 public import InfoTheoryLib.SourceCoding.BinarySequences
 public import InfoTheoryLib.SourceCoding.Arithmetic

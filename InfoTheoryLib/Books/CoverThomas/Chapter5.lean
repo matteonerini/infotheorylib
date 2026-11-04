@@ -5,8 +5,8 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.Book.Chapter2
-public import InfoTheoryLib.Book.Chapter4
+public import InfoTheoryLib.Books.CoverThomas.Chapter2
+public import InfoTheoryLib.Books.CoverThomas.Chapter4
 public import InfoTheoryLib.SourceCoding.Huffman
 public import InfoTheoryLib.SourceCoding.ShannonFanoEliasBlock
 public import InfoTheoryLib.SourceCoding.CoinFlips

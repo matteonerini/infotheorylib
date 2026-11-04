@@ -5,7 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.Book.Chapter11
+public import InfoTheoryLib.Books.CoverThomas.Chapter11
 public import InfoTheoryLib.MaxEntropy.Basic
 public import InfoTheoryLib.MaxEntropy.Distributions
 public import InfoTheoryLib.MaxEntropy.Covariance

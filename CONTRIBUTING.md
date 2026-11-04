@@ -21,11 +21,15 @@ are adapted from [Mathlib's](https://leanprover-community.github.io/contribute/i
   grows past about 1000 lines.
 * **`ForMathlib/`** holds results that do not mention information theory, such as facts about
   `Real.log`. They are candidates for upstreaming to Mathlib.
-* **`Book/ChapterN.lean`** holds material specific to Cover & Thomas: its worked examples,
-  textbook-only definitions and the index of the chapter, in namespace `InfoTheory.CoverThomas`.
-  Each numbered lemma or theorem gets an alias named after its number (`theorem_2_6_5`) pointing to
-  the library declaration. Results that are useful beyond the book belong in a topic folder, with a
-  descriptive name.
+* **`Books/CoverThomas/ChapterN.lean`** and **`Books/ElGamalKim/LectureN.lean`** hold material
+  specific to one text: its worked examples, text-only definitions and the index of the chapter or
+  lecture. Cover & Thomas is in `Books/CoverThomas/` (namespace `InfoTheory.CoverThomas`), with one
+  file per chapter, and El Gamal & Kim's lecture notes are in `Books/ElGamalKim/` (namespace
+  `InfoTheory.ElGamalKim`), with one file per lecture. Each numbered lemma or theorem gets an alias
+  named after its number (`theorem_2_6_5`; `theorem_3_2` for Theorem 2 of Lecture 3) pointing to the
+  library declaration; a named but unnumbered result gets an alias named after it
+  (`mrs_gerber_lemma`). Results that are useful beyond the text belong in a topic folder, with a
+  descriptive name, and a result that both texts state is proved once and indexed in both files.
 * Check Mathlib before defining something: reuse `Real.negMulLog`, `Real.binEntropy`,
   `ConvexOn`, and so on.
 

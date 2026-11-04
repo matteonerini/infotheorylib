@@ -5,8 +5,8 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.Book.Chapter2
-public import InfoTheoryLib.Book.Chapter16
+public import InfoTheoryLib.Books.CoverThomas.Chapter2
+public import InfoTheoryLib.Books.CoverThomas.Chapter16
 public import InfoTheoryLib.DifferentialEntropy.ChainRule
 public import InfoTheoryLib.DifferentialEntropy.Estimation
 public import InfoTheoryLib.MarkovChain.SecondLaw
@@ -62,7 +62,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Theorem 17.1.4: `condEntropy_le_entropy`; Theorem 17.1.5: `chain_rule_entropy`,
   `entropy_prefixRV_le_sum`; Theorem 17.1.6: `entropy_concaveOn`.
 * Theorem 17.1.7: `relEntropyReal_nonneg`; Theorem 17.1.8: `relEntropyReal_convex_pair`.
-* Theorem 17.1.9: `theorem_2_4_1` (`Book.Chapter2`).
+* Theorem 17.1.9: `theorem_2_4_1` (`Books.CoverThomas.Chapter2`).
 * Theorem 17.1.10 (second law for Markov chains): `relEntropy_step_le`,
   `relEntropy_stationary_antitone`, `entropy_iterate_monotone`, `condEntropy_stationary_monotone`
   (`MarkovChain.SecondLaw`).

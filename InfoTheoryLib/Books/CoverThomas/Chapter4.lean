@@ -5,7 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.Book.Chapter3
+public import InfoTheoryLib.Books.CoverThomas.Chapter3
 public import InfoTheoryLib.MarkovChain.RandomWalk
 public import InfoTheoryLib.StochasticProcess.HiddenMarkov
 public import InfoTheoryLib.StochasticProcess.Independent

@@ -5,7 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.Book.Chapter14
+public import InfoTheoryLib.Books.CoverThomas.Chapter14
 public import InfoTheoryLib.Network.Gaussian
 public import InfoTheoryLib.Network.Typicality
 public import InfoTheoryLib.Network.MACCode

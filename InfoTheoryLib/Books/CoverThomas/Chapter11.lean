@@ -5,7 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.Book.Chapter10
+public import InfoTheoryLib.Books.CoverThomas.Chapter10
 public import InfoTheoryLib.Statistics.Types
 public import InfoTheoryLib.Statistics.LargeDeviations
 public import InfoTheoryLib.Statistics.ConditionalLimit

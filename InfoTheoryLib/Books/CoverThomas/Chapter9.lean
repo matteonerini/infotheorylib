@@ -5,7 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.Book.Chapter7
+public import InfoTheoryLib.Books.CoverThomas.Chapter7
 public import InfoTheoryLib.GaussianChannel.Bandlimited
 public import InfoTheoryLib.GaussianChannel.Feedback
 public import Mathlib.MeasureTheory.Measure.Lebesgue.EqHaar
