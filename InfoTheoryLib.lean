@@ -22,6 +22,7 @@ public import InfoTheoryLib.Books.CoverThomas.Chapter6
 public import InfoTheoryLib.Books.CoverThomas.Chapter7
 public import InfoTheoryLib.Books.CoverThomas.Chapter8
 public import InfoTheoryLib.Books.CoverThomas.Chapter9
+public import InfoTheoryLib.Books.ElGamalKim.Lecture2
 public import InfoTheoryLib.ChannelCoding.Achievability
 public import InfoTheoryLib.ChannelCoding.Capacity
 public import InfoTheoryLib.ChannelCoding.Code
@@ -46,6 +47,7 @@ public import InfoTheoryLib.Entropy.Collision
 public import InfoTheoryLib.Entropy.Concavity
 public import InfoTheoryLib.Entropy.Conditional
 public import InfoTheoryLib.Entropy.Fano
+public import InfoTheoryLib.Entropy.MrsGerber
 public import InfoTheoryLib.ForMathlib.Integral
 public import InfoTheoryLib.ForMathlib.Log
 public import InfoTheoryLib.ForMathlib.MatrixBlock
@@ -99,6 +101,7 @@ public import InfoTheoryLib.MutualInformation.Basic
 public import InfoTheoryLib.MutualInformation.ChainRule
 public import InfoTheoryLib.MutualInformation.Conditional
 public import InfoTheoryLib.MutualInformation.Convexity
+public import InfoTheoryLib.MutualInformation.CsiszarSum
 public import InfoTheoryLib.Network.Broadcast
 public import InfoTheoryLib.Network.Gaussian
 public import InfoTheoryLib.Network.MACAchievability
@@ -164,3 +167,6 @@ public import InfoTheoryLib.StochasticProcess.HiddenMarkov
 public import InfoTheoryLib.StochasticProcess.Independent
 public import InfoTheoryLib.StochasticProcess.Markov
 public import InfoTheoryLib.StochasticProcess.Recurrence
+public import InfoTheoryLib.Typicality.Basic
+public import InfoTheoryLib.Typicality.Conditional
+public import InfoTheoryLib.Typicality.JointTypicalityLemma
