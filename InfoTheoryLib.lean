@@ -30,6 +30,7 @@ public import InfoTheoryLib.Books.ElGamalKim.Lecture5
 public import InfoTheoryLib.Books.ElGamalKim.Lecture6
 public import InfoTheoryLib.Books.ElGamalKim.Lecture7
 public import InfoTheoryLib.Books.ElGamalKim.Lecture8
+public import InfoTheoryLib.Books.ElGamalKim.Lecture9
 public import InfoTheoryLib.ChannelCoding.Achievability
 public import InfoTheoryLib.ChannelCoding.AverageError
 public import InfoTheoryLib.ChannelCoding.Capacity
@@ -119,10 +120,14 @@ public import InfoTheoryLib.Network.BCBits
 public import InfoTheoryLib.Network.BCBounds
 public import InfoTheoryLib.Network.BCCapacity
 public import InfoTheoryLib.Network.BCClasses
+public import InfoTheoryLib.Network.BCCutSet
 public import InfoTheoryLib.Network.BCDegraded
 public import InfoTheoryLib.Network.BCDegradedLaws
+public import InfoTheoryLib.Network.BCDegradedMessages
+public import InfoTheoryLib.Network.BCMarton
 public import InfoTheoryLib.Network.BCMoreCapable
 public import InfoTheoryLib.Network.BCMoreCapableLaws
+public import InfoTheoryLib.Network.BCSemiDeterministic
 public import InfoTheoryLib.Network.BCSuperposition
 public import InfoTheoryLib.Network.BCSuperpositionLaws
 public import InfoTheoryLib.Network.BCTimeSharing
@@ -214,4 +219,5 @@ public import InfoTheoryLib.Typicality.Basic
 public import InfoTheoryLib.Typicality.Conditional
 public import InfoTheoryLib.Typicality.Covering
 public import InfoTheoryLib.Typicality.JointTypicalityLemma
+public import InfoTheoryLib.Typicality.MutualCovering
 public import InfoTheoryLib.Typicality.Packing
