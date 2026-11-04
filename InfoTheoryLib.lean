@@ -28,6 +28,7 @@ public import InfoTheoryLib.Books.ElGamalKim.Lecture3
 public import InfoTheoryLib.Books.ElGamalKim.Lecture4
 public import InfoTheoryLib.Books.ElGamalKim.Lecture5
 public import InfoTheoryLib.Books.ElGamalKim.Lecture6
+public import InfoTheoryLib.Books.ElGamalKim.Lecture7
 public import InfoTheoryLib.ChannelCoding.Achievability
 public import InfoTheoryLib.ChannelCoding.AverageError
 public import InfoTheoryLib.ChannelCoding.Capacity
@@ -185,6 +186,13 @@ public import InfoTheoryLib.SourceCoding.ShannonFanoElias
 public import InfoTheoryLib.SourceCoding.ShannonFanoEliasBlock
 public import InfoTheoryLib.SourceCoding.TypicalSetCode
 public import InfoTheoryLib.SourceCoding.Universal
+public import InfoTheoryLib.StateChannel.Basic
+public import InfoTheoryLib.StateChannel.Causal
+public import InfoTheoryLib.StateChannel.Compound
+public import InfoTheoryLib.StateChannel.GPConverse
+public import InfoTheoryLib.StateChannel.GPDerandomize
+public import InfoTheoryLib.StateChannel.GelfandPinsker
+public import InfoTheoryLib.StateChannel.Multicoding
 public import InfoTheoryLib.Statistics.Bernoulli
 public import InfoTheoryLib.Statistics.ChernoffInformation
 public import InfoTheoryLib.Statistics.ConditionalLimit
