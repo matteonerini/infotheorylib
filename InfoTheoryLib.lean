@@ -25,6 +25,7 @@ public import InfoTheoryLib.Books.CoverThomas.Chapter9
 public import InfoTheoryLib.Books.ElGamalKim.Lecture1
 public import InfoTheoryLib.Books.ElGamalKim.Lecture2
 public import InfoTheoryLib.Books.ElGamalKim.Lecture3
+public import InfoTheoryLib.Books.ElGamalKim.Lecture4
 public import InfoTheoryLib.ChannelCoding.Achievability
 public import InfoTheoryLib.ChannelCoding.AverageError
 public import InfoTheoryLib.ChannelCoding.Capacity
@@ -111,9 +112,12 @@ public import InfoTheoryLib.MutualInformation.CsiszarSum
 public import InfoTheoryLib.Network.Broadcast
 public import InfoTheoryLib.Network.Gaussian
 public import InfoTheoryLib.Network.MACAchievability
+public import InfoTheoryLib.Network.MACBits
+public import InfoTheoryLib.Network.MACBounds
 public import InfoTheoryLib.Network.MACCapacity
 public import InfoTheoryLib.Network.MACCode
 public import InfoTheoryLib.Network.MACConverse
+public import InfoTheoryLib.Network.MACMultiLetter
 public import InfoTheoryLib.Network.MACRegion
 public import InfoTheoryLib.Network.SlepianWolf
 public import InfoTheoryLib.Network.Typicality
