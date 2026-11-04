@@ -116,6 +116,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `IsPhysicallyDegraded.isStochasticallyDegraded`, `IsStochasticallyDegraded.capacityRegion_eq`.
 * Example 15.6.5, (15.229)–(15.230): `bscBroadcast`, `example_15_6_5` (here).
 * Example 15.6.6, (15.240)–(15.241): `gaussianBCRegion` (`Network.Gaussian`).
+* Superposition coding and the capacity region of the degraded broadcast channel, in the form of
+  El Gamal and Kim's lecture notes (rates in bits, unbounded alphabet for `U`):
+  `superpositionRegionBits_subset` (`Network.BCSuperposition`),
+  `bcCapacityRegionBits_eq_closure_degradedBCRegionBits` (`Network.BCCapacity`).
 
 ## Not formalized
 
@@ -130,8 +134,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The Slepian–Wolf theorem for many sources (Theorem 15.4.2), the interpretation of
   Section 15.4.4 and the duality of Section 15.5.
 * Examples 15.6.1–15.6.4, the rates (15.231)–(15.237) of Example 15.6.5, the broadcast channel
-  with common information, and Theorems 15.6.2–15.6.4 (superposition coding and the converse for
-  degraded broadcast channels).
+  with common information, the bound on the alphabet of `U`, and Theorems 15.6.2–15.6.4 in the
+  book's form (rates in nats); superposition coding and the converse for degraded broadcast
+  channels are indexed above, in the form of the lecture notes.
 * The relay channel (Section 15.7, Theorems 15.7.1–15.7.2), source coding with side information
   (Section 15.8, Theorem 15.8.1 and Lemma 15.8.1), rate distortion with side information
   (Section 15.9, Theorem 15.9.1 and Lemma 15.9.1) and the cut-set bound for general networks

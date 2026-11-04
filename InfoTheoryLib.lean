@@ -26,6 +26,7 @@ public import InfoTheoryLib.Books.ElGamalKim.Lecture1
 public import InfoTheoryLib.Books.ElGamalKim.Lecture2
 public import InfoTheoryLib.Books.ElGamalKim.Lecture3
 public import InfoTheoryLib.Books.ElGamalKim.Lecture4
+public import InfoTheoryLib.Books.ElGamalKim.Lecture5
 public import InfoTheoryLib.ChannelCoding.Achievability
 public import InfoTheoryLib.ChannelCoding.AverageError
 public import InfoTheoryLib.ChannelCoding.Capacity
@@ -109,6 +110,18 @@ public import InfoTheoryLib.MutualInformation.ChainRule
 public import InfoTheoryLib.MutualInformation.Conditional
 public import InfoTheoryLib.MutualInformation.Convexity
 public import InfoTheoryLib.MutualInformation.CsiszarSum
+public import InfoTheoryLib.Network.BCBits
+public import InfoTheoryLib.Network.BCBounds
+public import InfoTheoryLib.Network.BCCapacity
+public import InfoTheoryLib.Network.BCClasses
+public import InfoTheoryLib.Network.BCDegraded
+public import InfoTheoryLib.Network.BCDegradedLaws
+public import InfoTheoryLib.Network.BCMoreCapable
+public import InfoTheoryLib.Network.BCMoreCapableLaws
+public import InfoTheoryLib.Network.BCSuperposition
+public import InfoTheoryLib.Network.BCSuperpositionLaws
+public import InfoTheoryLib.Network.BCTimeSharing
+public import InfoTheoryLib.Network.BinarySymmetricBC
 public import InfoTheoryLib.Network.Broadcast
 public import InfoTheoryLib.Network.Gaussian
 public import InfoTheoryLib.Network.MACAchievability
