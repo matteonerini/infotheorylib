@@ -6,8 +6,9 @@
 A Lean 4 library of information theory, built on [Mathlib](https://github.com/leanprover-community/mathlib4).
 
 The goal is to formalize the core concepts and theorems of information theory, following
-T. M. Cover and J. A. Thomas, *Elements of Information Theory* (2nd ed., Wiley, 2006), and to
-organize them by topic, in the spirit of Mathlib for mathematics and Physlib for physics.
+T. M. Cover and J. A. Thomas, *Elements of Information Theory* (2nd ed., Wiley, 2006), and
+A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory* (arXiv:1001.3404, 2010), and
+to organize them by topic, in the spirit of Mathlib for mathematics and Physlib for physics.
 
 ## Status
 
@@ -31,13 +32,27 @@ organize them by topic, in the spirit of Mathlib for mathematics and Physlib for
 | 16. Information Theory and Portfolio Theory | Formalized: growth rates and log-optimal portfolios for finite markets with positive price relatives, the Kuhn–Tucker conditions, the costs of wrong beliefs and the value of side information, causal strategies in market processes (the chain rule for `W*`, the supermartingale `Sₙ/Sₙ*`, the growth rate of stationary markets), almost sure growth and asymptotic optimality, competitive optimality, and finite-horizon universal portfolios (Theorem 16.7.1 for any number of stocks); see the chapter file for what is omitted |
 | 17. Inequalities in Information Theory | Formalized: the `L₁` bound on entropy, the `χ²` approximation of relative entropy and the monotonicity of `E D(p̂ₙ‖p)`, the binomial bounds of Lemma 17.5.1, Han's inequalities (Theorems 17.6.1–17.6.4) for submodular set functions and discrete entropies, the determinant inequalities of Section 17.9 (Koteljanskii, Szász, Theorems 17.9.4–17.9.5, the Toeplitz theorem, Minkowski) and Bergstrøm's theorems of Section 17.10; de Bruijn's identity, the entropy power inequality and the Brunn–Minkowski and Young inequalities of Sections 17.7–17.8 are not formalized (see the chapter file for what is omitted) |
 
+| Lecture of El Gamal & Kim | Status |
+|---|---|
+| 1. Introduction | Formalized: the notation (including the `DSBS(p)` pmf and the functions `C(x)` and `R(x)`), with pointers to Shannon's four theorems in Lecture 3; the max-flow min-cut theorem, proved in Lecture 16, is not formalized (see the lecture file) |
+| 2. Entropy, Mutual Information, and Typicality | Formalized: entropy, differential entropy and mutual information with their inequalities, Mrs. Gerber's lemma in the notes' `H⁻¹` form (scalar and vector), the Csiszár sum identity, robust typicality with the typical average lemma, the properties of jointly typical sequences, the conditional typicality lemma, joint typicality for Markov chains, the joint typicality lemma (parts 1 and 2), and weak typicality; the entropy power inequality, the conditional maximum differential entropy lemma and the Stirling appendix are not formalized (see the lecture file, which also lists the issues found in the notes) |
+| 3. Point-to-Point Information Theory | Formalized: the channel coding theorem with the notes' definitions (rates in bits, average probability of error) and its examples, the packing lemma, channel coding with cost (Theorem 2), the AWGN channel (Theorem 3), lossless and lossy source coding with the Bernoulli examples and `R* = R(0)`, the covering lemma, the quadratic Gaussian rate–distortion function (Theorem 6, informational form), source–channel separation for `r = 1` and uncoded transmission; linear codes, Lemma 2 and the operational Gaussian source coding theorem are not formalized (see the lecture file) |
+| 4. Multiple Access Channels | Formalized: the notes' definitions in bits, the time-division inner bound and the outer bound with `C₁`, `C₂`, `C₁₂`, the binary multiplier MAC (exact region) and the binary erasure MAC, the multi-letter characterization (Theorem 1), time sharing and convexity, the single-letter characterization (Theorem 2), the sum capacity, and the AWGN-MAC formulas (corner points, TDMA with power control); the cardinality bound \|Q\| ≤ 2 (Theorem 3), the AWGN-MAC coding theorem (Theorem 4) and the `k`-sender MAC (Theorem 5) are not formalized (see the lecture file) |
+| 5. Degraded Broadcast Channels | Formalized: Lemma 1, time sharing, the simple bounds and their two examples, the superposition coding inner bound (Theorem 1), the capacity region of the degraded DM-BC (Theorem 2, without the cardinality bound), the capacity region of the binary symmetric BC, the capacity regions of less noisy and more capable channels, the BSC/BEC classification at exact thresholds; the common message, the AWGN-BC coding theorem (Theorem 3, which needs the entropy power inequality) and more than two receivers are not formalized (see the lecture file, which also lists the issues found in the notes) |
+| 6. Interference Channels | Formalized: the problem setup, the simple and Sato outer bounds, the simultaneous decoding inner bound (with super-letters in place of coded time sharing), the channel with equal marginals as a MAC, the modulo-2 sum IC, very strong and strong interference with the example `Y₁ = Y₂ = X₁ + X₂`, Lemma 1 and the capacity region under strong interference (Theorem 1, up to closure, as `\|Q\|` is not bounded), and for the AWGN-IC the formulas only: the region of Theorem 2, the rectangle under very strong interference, the degrees of freedom with the redundant bound and the "W" shape. Not formalized: the Han–Kobayashi inner bound (Theorem 4), the deterministic and semideterministic ICs (Theorem 5, Lemma 3, Proposition 5), the AWGN-IC coding theorems (Theorems 2 and 3, the half-bit theorem), the `q`-ary expansion deterministic IC, more than two user pairs. |
+| 7. Channels with State | Formalized: the compound channel (Theorem 1), also with the state at the decoder, with the compound BSC for finitely many crossover probabilities and the Z-channel example; the DMC with DM state in every scenario of state information: none, at the decoder, at both ends causally or noncausally, causally at the encoder (Theorem 3, Shannon strategies) and noncausally at the encoder (the Gelfand–Pinsker theorem, up to the cardinality bound); memory with defects and the BSC with additive state; for writing on dirty paper the formulas only: Costa's rate, its maximum `C(P)` and the corner point for the AWGN-MAC. Not formalized: infinitely many compound states, the arbitrarily varying channel (Theorem 2, stated without proof in the notes), the MAC and the degraded BC with state, writing on dirty paper as a coding theorem, coded state information. |
+| 8. Fading Channels | Formalized for finitely many fading states: the slow-fading compound capacity `min_g C(g²P)` as a coding theorem, also with the gain at the encoder; the rest at the level of the formulas, as the notes mostly cite the proofs: water-filling in time with its optimality and the water level, the high-SNR limit, the outage and broadcasting metrics and their order, the MAC regions and sum capacities with their order, the BC regions, and for the fading IC the comparison of time division, treating interference as noise and interference alignment, with conjugate gain matrices and the pairwise converse step. Not formalized: the coding theorems of fast fading (ergodic capacities), general stationary ergodic gains, the operational meaning of the metrics, the Fourier–Motzkin elimination on page 8-19. |
+| 9. General Broadcast Channels | Formalized for two receivers: the capacity region with degraded message sets (Theorem 1), the mutual covering lemma, Marton's inner bound (Theorem 2), also for random mappings `p(x \| u₁, u₂)`, the Cover–van der Meulen inner bound, the capacity regions of the semi-deterministic and deterministic channels, the outer bound with `U₂ = U`, the Blackwell channel and the formulas of the multilevel product example. Not formalized: the multilevel capacity region with indirect decoding (Theorem 5), Marton's bound with a common message (Theorem 3), the Nair–El Gamal outer bound in general (Theorem 4), the BSC–BEC and skew-symmetric examples, dirty paper coding for the AWGN-BC, and more than 2 receivers. The notes' region of the Blackwell channel is wrong, with a formal counterexample; see the lecture's index. |
+| 10. Gaussian Vector Channels | Formalized: the capacity of the Gaussian vector channel as a coding theorem (Theorem 1), by rotating to parallel channels and coding along the singular directions; the rest at the level of the formulas: the SVD and water-filling, the reciprocity lemma, sufficiency of the KKT conditions, Theorem 2 for finitely many fading states with its low and high SNR limits, the GV-MAC and spectral BC regions, the fixed points of iterative water-filling, the MMSE formula for vector dirty paper, the MAC–BC duality `R_DPC = C_DMAC`, and the algebra of the enhanced degraded channel. Not formalized: the coding theorems for the GV-MAC (Theorem 3), the spectral BC, vector dirty paper and the GV-BC capacity (the second Theorem 4, whose Lemma 4 needs the vector entropy power inequality), the product of reversely degraded DM-BCs, the uniqueness of the supporting hyperplane, and more than two receivers. |
+
 The library contains no `sorry` and builds without warnings under Mathlib's linter set.
 
 ## Main results
 
-A selection of the headline theorems; every numbered result of the book is listed, with its Lean
-name, in the chapter files `Book/ChapterN.lean`. Browse them in the
-[API documentation](https://matteonerini.github.io/infotheorylib/docs/).
+A selection of the headline theorems; every result of the two texts is listed, with its Lean name,
+in the chapter files `Books/CoverThomas/ChapterN.lean` and the lecture files
+`Books/ElGamalKim/LectureN.lean`. Browse them
+in the [API documentation](https://matteonerini.github.io/infotheorylib/docs/).
 
 | Result (Cover & Thomas) | Lean declaration | Module |
 |---|---|---|
@@ -65,6 +80,43 @@ name, in the chapter files `Book/ChapterN.lean`. Browse them in the
 | Universal portfolios (16.7.1) | `minimax_universal` | `Investment.Universal` |
 | Han's inequality (17.6.1) | `subsetAvg_succ_le` | `Inequalities.Han` |
 | Minkowski's determinant inequality (17.9.7) | `det_rpow_add_det_rpow_le` | `Inequalities.Determinant` |
+
+| Result (El Gamal & Kim, lecture notes) | Lean declaration | Module |
+|---|---|---|
+| Mrs. Gerber's lemma (Lecture 2) | `binConv_binEntropyInv_le`, `binConv_binEntropyInv_le_prefixRV` | `Entropy.MrsGerber` |
+| Csiszár sum identity (Lecture 2) | `csiszar_sum'` | `MutualInformation.CsiszarSum` |
+| Typical average lemma (Lecture 2) | `card_mul_le_sum_of_mem_robustTypicalSet`, `sum_le_card_mul_of_mem_robustTypicalSet` | `Typicality.Basic` |
+| Conditional typicality lemma (Lecture 2) | `one_sub_div_le_prob_condRobustTypicalSet` | `Typicality.Conditional` |
+| Joint typicality lemma (Lecture 2) | `prob_condRobustTypicalSet_condDist_le`, `sum_mul_prob_condRobustTypicalSet_condDist_le` | `Typicality.JointTypicalityLemma` |
+| Channel coding theorem (Lecture 3) | `opCapacityAvg_eq` | `ChannelCoding.AverageError` |
+| Packing lemma (Lecture 3) | `prob_exists_mem_robustTypicalSet_le` | `Typicality.Packing` |
+| Capacity with cost (Lecture 3, Theorem 2) | `opCapacityCost_eq` | `ChannelCoding.Cost` |
+| Capacity of the AWGN channel (Lecture 3, Theorem 3) | `opCapacityAWGN_eq` | `GaussianChannel.AWGN` |
+| Lossless source coding theorem (Lecture 3) | `optLosslessRate_eq` | `SourceCoding.LosslessRate` |
+| Lossy source coding theorem (Lecture 3) | `rateDistortionBits_eq` | `RateDistortion.BitRate` |
+| Covering lemma (Lecture 3) | `eventually_prob_forall_not_mem_robustTypicalSet_le` | `Typicality.Covering` |
+| Multi-letter MAC capacity region (Lecture 4, Theorem 1) | `macCapacityRegionBits_eq_closure_iUnion` | `Network.MACMultiLetter` |
+| MAC capacity region (Lecture 4, Theorem 2) | `macCapacityRegionBits_eq` | `Network.MACBits` |
+| Superposition coding inner bound (Lecture 5, Theorem 1) | `superpositionRegionBits_subset` | `Network.BCSuperposition` |
+| Capacity region of the degraded BC (Lecture 5, Theorem 2) | `bcCapacityRegionBits_eq_closure_degradedBCRegionBits` | `Network.BCCapacity` |
+| Capacity region of the binary symmetric BC (Lecture 5) | `bcCapacityRegionBits_bsbc` | `Network.BCCapacity` |
+| Sato's outer bound for the IC (Lecture 6) | `IsAchievableICBits.mem_closure_icSatoRegionBits` | `Network.ICBounds` |
+| Simultaneous decoding inner bound for the IC (Lecture 6) | `icSimultaneousRegionBits_subset` | `Network.ICAchievability` |
+| Capacity region of the IC under strong interference (Lecture 6, Theorem 1) | `icCapacityRegionBits_eq_closure_icStrongRegionBits` | `Network.ICAchievability` |
+| Capacity of the compound channel (Lecture 7, Theorem 1) | `compoundCapacity_eq` | `StateChannel.Compound` |
+| Capacity with causal state at the encoder, Shannon strategies (Lecture 7, Theorem 3) | `stateCapacity_causal_false` | `StateChannel.Causal` |
+| Gelfand–Pinsker theorem (Lecture 7) | `stateCapacity_noncausal_false` | `StateChannel.GPConverse` |
+| Compound capacity of the slowly fading Gaussian channel (Lecture 8) | `fadingCompoundCapacity_eq` | `GaussianChannel.FadingCompound` |
+| Water-filling in time (Lecture 8) | `fadingPowerRate_le_of_waterFill` | `GaussianChannel.Fading` |
+| Capacity region with degraded message sets (Lecture 9, Theorem 1) | `dmsCapacityRegionBits_eq` | `Network.BCDegradedMessages` |
+| Mutual covering lemma (Lecture 9) | `eventually_sum_mutualCovering_typical_le` | `Typicality.MutualCovering` |
+| Marton's inner bound (Lecture 9, Theorem 2) | `martonRegionBits_subset` | `Network.BCMarton` |
+| Capacity region of the semi-deterministic BC (Lecture 9) | `bcCapacityRegionBits_eq_of_isSemiDeterministicBC` | `Network.BCSemiDeterministic` |
+| Capacity region of the deterministic BC (Lecture 9) | `bcCapacityRegionBits_eq_of_isDeterministicBC` | `Network.BCCutSet` |
+| Capacity of the Gaussian vector channel (Lecture 10, Theorem 1) | `opCapacityGV_eq` | `GaussianChannel.VectorCode` |
+| Reciprocity lemma (Lecture 10) | `exists_reciprocal` | `GaussianChannel.Vector` |
+| Isotropic fading: `K* = (P/t) I` (Lecture 10, Theorem 2) | `gvFadingCapacity_eq` | `GaussianChannel.VectorFading` |
+| MAC–BC duality `R_DPC = C_DMAC` (Lecture 10) | `convexHull_dpcRegion_eq` | `Network.GaussianVector` |
 
 ## Getting started
 
@@ -124,6 +176,7 @@ InfoTheoryLib/
     Integral.lean        change of variables `∫ g(Ax) dx = |det A|⁻¹ ∫ g` for linear maps
     WeakLaw.lean         the weak law of large numbers for product measures
     MatrixDet.lean       determinant inequalities for positive semidefinite matrices
+    MatrixSVD.lean       the singular value decomposition, the tangent bound and concavity of `log |A|`
     MatrixBlock.lean     block diagonal positive definite matrices
   Probability/         finite probability spaces
     FinitePMF.lean       pmfs (`IsPMF`), random variables, laws (`dist`), `AbsCont`, uniform pmf
@@ -146,6 +199,7 @@ InfoTheoryLib/
     Concavity.lean       concavity of entropy
     Fano.lean            Fano's inequality
     Collision.lean       the probability `Pr(X = X')` that two independent variables agree
+    MrsGerber.lean       Mrs. Gerber's lemma, scalar and vector, `H⁻¹` and binary convolution
   RelativeEntropy/
     Basic.lean           relative entropy `D(p ‖ q)`
     InformationInequality.lean  `D(p ‖ q) ≥ 0`
@@ -158,11 +212,19 @@ InfoTheoryLib/
     Conditional.lean     conditional mutual information `I(X; Y | Z)`
     ChainRule.lean       chain rule for mutual information
     Convexity.lean       concavity and convexity of `I(X; Y)`
+    CsiszarSum.lean      the Csiszár sum identity
   AEP/
     Basic.lean           the asymptotic equipartition property, sample entropy
     TypicalSet.lean      the typical set `A_ε^(n)` and its properties
     HighProbabilitySet.lean  smallest high-probability sets, `≐` (equality to first order)
     StrongTypicality.lean  strongly typical sequences, `Pr{A_ε^{*(n)}} → 1`
+  Typicality/          robust typicality, as in El Gamal & Kim
+    Basic.lean           the typical set `T_ε^(n)`, typical average lemma, properties 1–4
+    Conditional.lean     jointly and conditionally typical sequences, conditional typicality lemma
+    JointTypicalityLemma.lean  the joint typicality lemma, typicality for Markov chains
+    Packing.lean         the packing lemma
+    Covering.lean        the covering lemma
+    MutualCovering.lean  the mutual covering lemma
   StochasticProcess/
     Basic.lean           stochastic processes, stationarity, entropy rates
     Independent.lean     independent and i.i.d. processes
@@ -188,6 +250,7 @@ InfoTheoryLib/
     IntegerCode.lean     the Elias gamma and delta codes for the integers
     RecurrenceTime.lean  recurrence time coding, optimality of the idealized LZ77
     LempelZivOptimality.lean  Ziv's inequality, optimality of LZ78
+    LosslessRate.lean    lossless source coding with vanishing error, `R* = H(X)`
   ChannelCoding/
     Capacity.lean        channel capacity, its properties, symmetric channels
     Code.lean            channel codes, error probabilities, achievable rates
@@ -196,6 +259,9 @@ InfoTheoryLib/
     Converse.lean        Fano's inequality and the converse, zero-error codes, feedback capacity
     Hamming.lean         the (7, 4) Hamming code
     SourceChannel.lean   the joint source–channel coding theorem
+    AverageError.lean    capacity with the average probability of error, rates in bits
+    Product.lean         product channels, `C = C₁ + C₂`
+    Cost.lean            channel coding with input cost, the capacity–cost function `C(B)`
   Gambling/
     HorseRace.lean       the horse race, doubling rate, proportional gambling, fair odds, cash
     SideInformation.lean  the value of side information, `ΔW = I(X; Y)`
@@ -229,16 +295,23 @@ InfoTheoryLib/
     Parallel.lean        parallel Gaussian channels
     ColoredNoise.lean    Gaussian channels with colored noise, the capacity `C_n`
     Feedback.lean        the capacity with feedback, `C_{n,FB} ≤ C_n + ½` and `C_{n,FB} ≤ 2C_n`
+    AWGN.lean            the channel `Y = gX + Z` with rates in bits, `C = C(g²P)`
+    FadingCompound.lean  the slowly fading channel, the compound capacity `min_g C(g²P)`
+    Fading.lean          water-filling in time and the metrics of the fading channel, as formulas
+    Vector.lean          the Gaussian vector channel: SVD, water-filling, reciprocity, KKT, MMSE
+    VectorCode.lean      the coding theorem for the Gaussian vector channel, Theorem 1 of Lecture 10
+    VectorFading.lean    Theorem 2 of Lecture 10 and the low and high SNR limits, as formulas
   RateDistortion/
     Basic.lean           distortion measures, rate distortion codes, `R(D)`, convexity of `R(D)`
     Converse.lean        the converse to the rate distortion theorem
     Achievability.lean   distortion typical sets, random coding, achievability
     Theorem.lean         the rate distortion region, `R(D) = R^(I)(D)`
     Binary.lean          the Bernoulli source, `R(D) = H(p) - H(D)`
-    Gaussian.lean        the Gaussian source, `R(D) = ½ log (σ²/D)`
+    Gaussian.lean        the Gaussian source, `R(D) = ½ log (σ²/D)`, the function `R(x)`
     ParallelGaussian.lean  independent Gaussian sources, reverse water-filling
     SourceChannel.lean   source–channel separation with distortion
     BlahutArimoto.lean   `R(D)` as a double minimization, the Blahut–Arimoto algorithm
+    BitRate.lean         rates in bits with `2^⌊nR⌋` indices, `R(0) = H(X)` for Hamming distortion
   Statistics/
     SufficientStatistic.lean  sufficient and minimal sufficient statistics
     Bernoulli.lean       Bernoulli trials, the number of ones as a sufficient statistic
@@ -263,14 +336,49 @@ InfoTheoryLib/
     Noncomputable.lean   the noncomputability of `K`
   Network/
     Gaussian.lean        Gaussian multiple-access, broadcast, relay and interference formulas
+    Fading.lean          Gaussian fading MAC, BC and IC, as formulas
     Typicality.lean      conditional joint typicality, i.i.d. pairs, Theorem 15.2.2
     MACCode.lean         multiple-access codes, achievable rates, time sharing (Theorem 15.3.2)
     MACRegion.lean       the pentagons, the time-sharing region, Lemma 15.3.1
     MACAchievability.lean  random coding for the multiple-access channel
     MACConverse.lean     the converse for the multiple-access channel
     MACCapacity.lean     the capacity region, Theorems 15.3.1 and 15.3.4, corner points
+    MACBits.lean         the MAC capacity region in bits, the pentagons `R(X₁, X₂)`
+    MACBounds.lean       simple inner and outer bounds on the MAC region, the sum capacity
+    MACMultiLetter.lean  the multi-letter characterization of the MAC region
     SlepianWolf.lean     distributed source codes, random binning, Theorem 15.4.1
     Broadcast.lean       broadcast codes, Theorem 15.6.1, degraded broadcast channels
+    BCBits.lean          the BC in bits, the superposition and degraded regions
+    BCTimeSharing.lean   BC codes, bits versus nats, Lemma 1, time sharing
+    BCBounds.lean        simple inner and outer bounds on the BC region, two examples
+    BCSuperpositionLaws.lean  the codebook laws and typical triples of superposition coding
+    BCSuperposition.lean  the superposition coding inner bound
+    BCDegradedLaws.lean  single-letter laws and time sharing for the degraded BC
+    BCDegraded.lean      the converse for the degraded BC
+    BinarySymmetricBC.lean  the binary symmetric BC and its region, via Mrs. Gerber's lemma
+    BCClasses.lean       less noisy and more capable channels, the BSC and the BEC
+    BCCapacity.lean      the capacity regions of the degraded and binary symmetric BC
+    BCMoreCapableLaws.lean  single-code bounds, the Csiszár sum identity in telescoped form
+    BCMoreCapable.lean   the converses for less noisy and more capable channels
+    BCMarton.lean        Marton's inner bound, the Cover–van der Meulen inner bound
+    BCCutSet.lean        the cut-set outer bound, the capacity region of the deterministic BC
+    BCDegradedMessages.lean  degraded message sets, Theorem 1, the outer bound with `U₂ = U`
+    BCSemiDeterministic.lean  Marton for random mappings, the semi-deterministic capacity region
+    GaussianVector.lean  the GV-MAC regions, iterative water-filling, the MAC–BC duality
+    GaussianVectorBC.lean  the enhanced degraded channel, the spectral Gaussian BC region
+    ICCode.lean          interference channel codes, the capacity region, equal marginals as a MAC
+    ICBounds.lean        Fano's inequality at each receiver, the simple and Sato outer bounds
+    ICStrong.lean        strong interference, products of more capable channels, the converse
+    ICSuperLetter.lean   compound random coding, independent letters as one super-letter
+    ICAchievability.lean  coded time sharing by super-letters, the inner bound, Theorem 1
+  StateChannel/
+    Basic.lean           codes for the DMC with state, the scenarios, strategies, known state
+    Multicoding.lean     random coding with subcodebooks, universal packing and covering bounds
+    Compound.lean        the compound channel
+    Causal.lean          causal state at the encoder, Shannon strategies
+    GelfandPinsker.lean  the value I(U; Y) - I(U; S), achievability by multicoding
+    GPDerandomize.lean   deterministic mappings x(u, s)
+    GPConverse.lean      the converse, by the Csiszár sum identity, and the theorem
   Investment/
     Basic.lean           growth rates, log-optimal portfolios, concavity and convexity
     KuhnTucker.lean      the Kuhn–Tucker conditions, `E(S/S*) ≤ 1`
@@ -287,7 +395,8 @@ InfoTheoryLib/
     Schur.lean           Schur complements, Fischer's inequality, Bergstrøm's theorems
     Determinant.lean     principal minors, Koteljanskii, Szász, Theorems 17.9.4–17.9.5, Minkowski
     Toeplitz.lean        determinants of Toeplitz matrices, Theorem 17.9.6
-  Book/                Cover & Thomas, namespace `InfoTheory.CoverThomas`
+  Books/
+   CoverThomas/        Cover & Thomas, namespace `InfoTheory.CoverThomas`
     Chapter1.lean        index of Chapter 1 (the preview), worked examples
     Chapter2.lean        index of Chapter 2, worked examples, aliases `theorem_2_6_5`, …
     Chapter3.lean        index of Chapter 3, worked examples, aliases `theorem_3_1_1`, …
@@ -305,13 +414,25 @@ InfoTheoryLib/
     Chapter15.lean       index of Chapter 15, worked examples, aliases `theorem_15_3_1`, …
     Chapter16.lean       index of Chapter 16, aliases `theorem_16_2_1`, …
     Chapter17.lean       index of Chapter 17, aliases `theorem_17_1_11`, …
+   ElGamalKim/         El Gamal & Kim's lecture notes, namespace `InfoTheory.ElGamalKim`
+    Lecture1.lean        index of Lecture 1 (the introduction), notation
+    Lecture2.lean        index of Lecture 2, examples, aliases `mrs_gerber_lemma`, …
+    Lecture3.lean        index of Lecture 3, examples, aliases `theorem_3_2`, `packing_lemma`, …
+    Lecture4.lean        index of Lecture 4, binary MAC examples, aliases `theorem_4_1`, …
+    Lecture5.lean        index of Lecture 5, the AWGN-BC region, aliases `theorem_5_1`, …
+    Lecture6.lean        index of Lecture 6, modulo-2 sum IC, AWGN-IC formulas, `theorem_6_1`, …
+    Lecture7.lean        index of Lecture 7, compound and defect examples, `gelfand_pinsker_theorem`
+    Lecture8.lean        index of Lecture 8, the example with two fading states
+    Lecture9.lean        index of Lecture 9, the Blackwell channel, the multilevel product example
+    Lecture10.lean       index of Lecture 10, the product channel, beamforming to one antenna
 docs/
   references.bib       bibliography, cited in docstrings as `[cover2006]`
 ```
 
-General theory goes in the topic folders. Material that is specific to the textbook (its worked
-examples, its numbering, textbook-only definitions) goes in `Book/ChapterN.lean`, which also maps
-each numbered result to the declaration that proves it.
+General theory goes in the topic folders, shared by both texts. Material that is specific to a
+text (its worked examples, its numbering, text-only definitions) goes in
+`Books/CoverThomas/ChapterN.lean` or `Books/ElGamalKim/LectureN.lean`, which also map each result of
+the chapter or lecture to the declaration that proves it.
 
 ## Conventions
 
@@ -327,15 +448,20 @@ each numbered result to the declaration that proves it.
   map `C : X → List α` into strings over a code alphabet `α`.
 * `relEntropy` takes values in `[0, ∞]` (`EReal`); most results use the real-valued
   `relEntropyReal` under absolute continuity.
+* Two notions of typicality coexist: the weak typicality of Cover & Thomas (`typicalSet`) and the
+  robust typicality of El Gamal & Kim (`robustTypicalSet`); robustly typical sequences are weakly
+  typical (`robustTypicalSet_subset_typicalSet`).
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full conventions and the workflow for adding
 files.
 
 ## Roadmap
 
-Chapters 1–17 are done, so every chapter of Cover & Thomas has a topic folder and a
-`Book/ChapterN.lean` index. The remaining work is listed in the "Not formalized" section of each
-chapter file.
+Chapters 1–17 of Cover & Thomas are done: every chapter has a topic folder and a
+`Books/CoverThomas/ChapterN.lean` index. The formalization of El Gamal & Kim's lecture notes is
+in progress: Lectures 1–10 are done, and the remaining networks will reuse the typicality, packing
+and covering lemmas of Lectures 2 and 3. The remaining work is
+listed in the "Not formalized" section of each chapter file.
 
 ## How this library was made
 
@@ -364,6 +490,7 @@ before the continuous chapters. Lemmas in `ForMathlib/` are candidates for upstr
 ## References
 
 * T. M. Cover and J. A. Thomas, *Elements of Information Theory*, 2nd ed., Wiley, 2006.
+* A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*, arXiv:1001.3404, 2010.
 
 ## License
 
