@@ -23,6 +23,7 @@ public import InfoTheoryLib.Books.CoverThomas.Chapter7
 public import InfoTheoryLib.Books.CoverThomas.Chapter8
 public import InfoTheoryLib.Books.CoverThomas.Chapter9
 public import InfoTheoryLib.Books.ElGamalKim.Lecture1
+public import InfoTheoryLib.Books.ElGamalKim.Lecture10
 public import InfoTheoryLib.Books.ElGamalKim.Lecture2
 public import InfoTheoryLib.Books.ElGamalKim.Lecture3
 public import InfoTheoryLib.Books.ElGamalKim.Lecture4
@@ -63,6 +64,7 @@ public import InfoTheoryLib.ForMathlib.Integral
 public import InfoTheoryLib.ForMathlib.Log
 public import InfoTheoryLib.ForMathlib.MatrixBlock
 public import InfoTheoryLib.ForMathlib.MatrixDet
+public import InfoTheoryLib.ForMathlib.MatrixSVD
 public import InfoTheoryLib.ForMathlib.WeakLaw
 public import InfoTheoryLib.Gambling.DataCompression
 public import InfoTheoryLib.Gambling.DependentRaces
@@ -80,6 +82,9 @@ public import InfoTheoryLib.GaussianChannel.Fading
 public import InfoTheoryLib.GaussianChannel.FadingCompound
 public import InfoTheoryLib.GaussianChannel.Feedback
 public import InfoTheoryLib.GaussianChannel.Parallel
+public import InfoTheoryLib.GaussianChannel.Vector
+public import InfoTheoryLib.GaussianChannel.VectorCode
+public import InfoTheoryLib.GaussianChannel.VectorFading
 public import InfoTheoryLib.GaussianChannel.WaterFilling
 public import InfoTheoryLib.Inequalities.Binomial
 public import InfoTheoryLib.Inequalities.Determinant
@@ -135,6 +140,8 @@ public import InfoTheoryLib.Network.BinarySymmetricBC
 public import InfoTheoryLib.Network.Broadcast
 public import InfoTheoryLib.Network.Fading
 public import InfoTheoryLib.Network.Gaussian
+public import InfoTheoryLib.Network.GaussianVector
+public import InfoTheoryLib.Network.GaussianVectorBC
 public import InfoTheoryLib.Network.ICAchievability
 public import InfoTheoryLib.Network.ICBounds
 public import InfoTheoryLib.Network.ICCode
