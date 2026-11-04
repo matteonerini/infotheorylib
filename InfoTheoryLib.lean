@@ -23,12 +23,16 @@ public import InfoTheoryLib.Books.CoverThomas.Chapter7
 public import InfoTheoryLib.Books.CoverThomas.Chapter8
 public import InfoTheoryLib.Books.CoverThomas.Chapter9
 public import InfoTheoryLib.Books.ElGamalKim.Lecture2
+public import InfoTheoryLib.Books.ElGamalKim.Lecture3
 public import InfoTheoryLib.ChannelCoding.Achievability
+public import InfoTheoryLib.ChannelCoding.AverageError
 public import InfoTheoryLib.ChannelCoding.Capacity
 public import InfoTheoryLib.ChannelCoding.Code
 public import InfoTheoryLib.ChannelCoding.Converse
+public import InfoTheoryLib.ChannelCoding.Cost
 public import InfoTheoryLib.ChannelCoding.Hamming
 public import InfoTheoryLib.ChannelCoding.JointTypicality
+public import InfoTheoryLib.ChannelCoding.Product
 public import InfoTheoryLib.ChannelCoding.SourceChannel
 public import InfoTheoryLib.DifferentialEntropy.AEP
 public import InfoTheoryLib.DifferentialEntropy.Basic
@@ -57,6 +61,7 @@ public import InfoTheoryLib.Gambling.DataCompression
 public import InfoTheoryLib.Gambling.DependentRaces
 public import InfoTheoryLib.Gambling.HorseRace
 public import InfoTheoryLib.Gambling.SideInformation
+public import InfoTheoryLib.GaussianChannel.AWGN
 public import InfoTheoryLib.GaussianChannel.Achievability
 public import InfoTheoryLib.GaussianChannel.Bandlimited
 public import InfoTheoryLib.GaussianChannel.Basic
@@ -124,6 +129,7 @@ public import InfoTheoryLib.Probability.WeakLaw
 public import InfoTheoryLib.RateDistortion.Achievability
 public import InfoTheoryLib.RateDistortion.Basic
 public import InfoTheoryLib.RateDistortion.Binary
+public import InfoTheoryLib.RateDistortion.BitRate
 public import InfoTheoryLib.RateDistortion.BlahutArimoto
 public import InfoTheoryLib.RateDistortion.Converse
 public import InfoTheoryLib.RateDistortion.Gaussian
@@ -147,6 +153,7 @@ public import InfoTheoryLib.SourceCoding.IntegerCode
 public import InfoTheoryLib.SourceCoding.Kraft
 public import InfoTheoryLib.SourceCoding.LempelZiv
 public import InfoTheoryLib.SourceCoding.LempelZivOptimality
+public import InfoTheoryLib.SourceCoding.LosslessRate
 public import InfoTheoryLib.SourceCoding.Minimax
 public import InfoTheoryLib.SourceCoding.OptimalLength
 public import InfoTheoryLib.SourceCoding.RecurrenceTime
@@ -169,4 +176,6 @@ public import InfoTheoryLib.StochasticProcess.Markov
 public import InfoTheoryLib.StochasticProcess.Recurrence
 public import InfoTheoryLib.Typicality.Basic
 public import InfoTheoryLib.Typicality.Conditional
+public import InfoTheoryLib.Typicality.Covering
 public import InfoTheoryLib.Typicality.JointTypicalityLemma
+public import InfoTheoryLib.Typicality.Packing
