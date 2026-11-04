@@ -29,6 +29,7 @@ public import InfoTheoryLib.Books.ElGamalKim.Lecture4
 public import InfoTheoryLib.Books.ElGamalKim.Lecture5
 public import InfoTheoryLib.Books.ElGamalKim.Lecture6
 public import InfoTheoryLib.Books.ElGamalKim.Lecture7
+public import InfoTheoryLib.Books.ElGamalKim.Lecture8
 public import InfoTheoryLib.ChannelCoding.Achievability
 public import InfoTheoryLib.ChannelCoding.AverageError
 public import InfoTheoryLib.ChannelCoding.Capacity
@@ -74,6 +75,8 @@ public import InfoTheoryLib.GaussianChannel.Capacity
 public import InfoTheoryLib.GaussianChannel.Code
 public import InfoTheoryLib.GaussianChannel.ColoredNoise
 public import InfoTheoryLib.GaussianChannel.Converse
+public import InfoTheoryLib.GaussianChannel.Fading
+public import InfoTheoryLib.GaussianChannel.FadingCompound
 public import InfoTheoryLib.GaussianChannel.Feedback
 public import InfoTheoryLib.GaussianChannel.Parallel
 public import InfoTheoryLib.GaussianChannel.WaterFilling
@@ -125,6 +128,7 @@ public import InfoTheoryLib.Network.BCSuperpositionLaws
 public import InfoTheoryLib.Network.BCTimeSharing
 public import InfoTheoryLib.Network.BinarySymmetricBC
 public import InfoTheoryLib.Network.Broadcast
+public import InfoTheoryLib.Network.Fading
 public import InfoTheoryLib.Network.Gaussian
 public import InfoTheoryLib.Network.ICAchievability
 public import InfoTheoryLib.Network.ICBounds
