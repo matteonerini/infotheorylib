@@ -12,6 +12,18 @@ are adapted from [Mathlib's](https://leanprover-community.github.io/contribute/i
   `InfoTheoryLib.lean`. `lake exe mk_all --check` checks it is up to date.
 * A change is ready when `lake build --wfail` succeeds: no errors, no warnings and no `sorry`.
   A statement that is planned but not yet proved can be recorded with `proof_wanted`.
+* Continuous integration also runs `axiom-audit`, since `--wfail` does not report `axiom`
+  declarations.
+* Before a release, replay the proofs through the kernel with `leanchecker`, which takes about 20
+  minutes. It runs one module per process because of
+  [lean4#16267](https://github.com/leanprover/lean4/issues/16267), which makes
+  `leanchecker InfoTheoryLib` crash on this Lean version:
+  ```sh
+  git ls-files 'InfoTheoryLib/*.lean' | sed 's/\.lean$//; s|/|.|g' |
+    LEAN_NUM_THREADS=1 lake env xargs -P 4 -n 1 leanchecker
+  ```
+* Also before a release, run `lake check --paranoid` once. It uses independent proof checkers too,
+  but it re-checks Mathlib, so it can take a long time. On macOS, add `--inadvisably-no-sandbox`.
 
 ## Where things go
 

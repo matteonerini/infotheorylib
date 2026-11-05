@@ -138,6 +138,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   18-52, and the optimality of the Cover–Leung region for the class of page 18-22.
 * The simple retransmission schemes for the binary erasure MAC on pages 18-23 and 18-24, whose rates
   `2/3`, `3/4` and `0.7602` are below `25 / 32`.
+* The bounds on the cardinalities of the auxiliary alphabets.
 * The bounds on the BMC that rely on numerical optimization, and the example of pages 18-55 and
   18-56.
 * The broadcast channel schemes with feedback for the AWGN channel.
