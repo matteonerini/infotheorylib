@@ -45,9 +45,9 @@ lemma log_sum_term {a b c : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) (hab : b = 0 → 
     mul_log_div_eq_sub_iff ha (by positivity) hcb⟩
 
 /-- **Theorem 2.7.1 (Log sum inequality).** For non-negative `a₁, …, aₙ` and `b₁, …, bₙ`,
-`∑ aᵢ log (aᵢ/bᵢ) ≥ (∑ aᵢ) log ((∑ aᵢ)/(∑ bᵢ))`.
-We use the conventions `0 log 0 = 0` and `0 log (0/0) = 0` (automatic), and assume
-`bᵢ = 0 → aᵢ = 0`. Otherwise some term is `aᵢ log (aᵢ/0) = ∞`, and the inequality is trivial. -/
+`∑ aᵢ log (aᵢ/bᵢ) ≥ (∑ aᵢ) log ((∑ aᵢ)/(∑ bᵢ))`. We use the conventions `0 log 0 = 0` and
+`0 log (0/0) = 0` (automatic), and assume `bᵢ = 0 → aᵢ = 0`. Otherwise some term is
+`aᵢ log (aᵢ/0) = ∞`, and the inequality is trivial. -/
 theorem log_sum_inequality {ι : Type*} (s : Finset ι) {a b : ι → ℝ} (ha : ∀ i ∈ s, 0 ≤ a i)
     (hb : ∀ i ∈ s, 0 ≤ b i) (hab : ∀ i ∈ s, b i = 0 → a i = 0) :
     (∑ i ∈ s, a i) * log ((∑ i ∈ s, a i) / ∑ i ∈ s, b i) ≤ ∑ i ∈ s, a i * log (a i / b i) := by

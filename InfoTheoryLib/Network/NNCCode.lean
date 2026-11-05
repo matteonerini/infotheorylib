@@ -554,8 +554,8 @@ theorem nncCode_errProb_pad (hW : IsChannel W) (L : NNCΩ X Y V → ℝ) (ε : �
     (pk : ∀ k, (Fin n → X k) → (Fin (K k) → Fin n → V k) → (Fin n → Y k) → Fin (K k))
     (Cs : ℕ → NNCBlock M K n X V) (dY : ∀ k, Y k) (hM : ∀ k, 0 < M k)
     (D : Fin N → Finset (Fin N)) {N' : ℕ} (hN : t * n ≤ N') :
-    (nncCode L ε pk Cs t dY hM N').errProb W D = (nncCode L ε pk Cs t dY hM (t * n)).errProb W D :=
-      by
+    (nncCode L ε pk Cs t dY hM N').errProb W D =
+      (nncCode L ε pk Cs t dY hM (t * n)).errProb W D := by
   classical
   set c' := nncCode L ε pk Cs t dY hM N' with hc'
   set c := nncCode L ε pk Cs t dY hM (t * n) with hc

@@ -11,12 +11,10 @@ public import InfoTheoryLib.Network.JSCCMACLaw
 # Joint source–channel coding over a MAC: the coding theorem
 
 This file proves Theorem 2 of Lecture 15 of El Gamal and Kim: a 2-DMS `(U₁, U₂)` with a common
-  function
-`U₀ = g₁(U₁) = g₂(U₂)` can be sent losslessly over a DM-MAC if
+function `U₀ = g₁(U₁) = g₂(U₂)` can be sent losslessly over a DM-MAC if
 `H(U₁|U₂) < I(X₁; Y|X₂, U₂, W)`, `H(U₂|U₁) < I(X₂; Y|X₁, U₁, W)`,
-`H(U₁, U₂|U₀) < I(X₁, X₂; Y|U₀, W)` and `H(U₁, U₂) < I(X₁, X₂; Y)`
-for some `p(w) p(x₁|u₁, w) p(x₂|u₂, w)`. Theorem 1 is the special case of a constant `U₀`, with
-`W = Q`.
+`H(U₁, U₂|U₀) < I(X₁, X₂; Y|U₀, W)` and `H(U₁, U₂) < I(X₁, X₂; Y)` for some
+`p(w) p(x₁|u₁, w) p(x₂|u₂, w)`. Theorem 1 is the special case of a constant `U₀`, with `W = Q`.
 
 ## Main definitions
 
@@ -47,8 +45,7 @@ variable {α₁ α₂ ω ξ₁ ξ₂ β c : Type*}
 /-! ### The codes -/
 
 /-- **Lecture 15 of [elgamal2010], page 15-3.** A joint source–channel code of rate pair `(1, 1)`
-  for
-a 2-DMS over a DM-MAC. -/
+for a 2-DMS over a DM-MAC. -/
 structure MACJSCCCode (n : ℕ) (α₁ α₂ ξ₁ ξ₂ β : Type*) where
   /-- The encoder of the first source. -/
   enc₁ : (Fin n → α₁) → Fin n → ξ₁
@@ -69,8 +66,7 @@ def MACJSCCCode.errProb (C : MACJSCCCode n α₁ α₂ ξ₁ ξ₂ β) (P : α�
     (if C.dec y = (fstSeq ω, sndSeq ω) then 0 else 1)
 
 /-- **Lecture 15 of [elgamal2010], page 15-4.** The sources are transmitted losslessly over the
-  DM-MAC
-if there is a sequence of codes with `P_e → 0`. -/
+DM-MAC if there is a sequence of codes with `P_e → 0`. -/
 def IsLosslessMAC (P : α₁ × α₂ → ℝ) (W : ξ₁ × ξ₂ → β → ℝ) : Prop :=
   ∃ C : ∀ n : ℕ, MACJSCCCode n α₁ α₂ ξ₁ ξ₂ β, Tendsto (fun n => (C n).errProb P W) atTop (𝓝 0)
 
@@ -135,8 +131,8 @@ def jsQ (P : α₁ × α₂ → ℝ) (n : ℕ) (p : (Fin n → α₁) × (Fin n 
   iidPMF P n (zipSeq p.1 p.2)
 
 /-- The conditional law of a sequence given a pair of sequences. -/
-def jsA {a b d : Type*} (κ : a × b → d → ℝ) (n : ℕ) (p : (Fin n → a) × (Fin n → b)) : (Fin n → d) →
-  ℝ :=
+def jsA {a b d : Type*} (κ : a × b → d → ℝ) (n : ℕ) (p : (Fin n → a) × (Fin n → b)) : (Fin n → d)
+    → ℝ :=
   channelExt κ n (zipSeq p.1 p.2)
 
 lemma jsA_isChannel {a b d : Type*} [Fintype d] {κ : a × b → d → ℝ} (hκ : IsChannel κ) :
@@ -318,8 +314,7 @@ variable (hP : IsPMF P) (hτ : IsPMF τ) (h₁ : IsChannel κ₁) (h₂ : IsChan
 include hP hτ h₁ h₂ hW
 
 /-- **The error event `E₂` of the notes (Lecture 15, page 15-11).** The bound on a wrong first
-  source
-sequence. -/
+source sequence. -/
 theorem event_a :
     ∑ z, iidPMF (jsLaw P τ κ₁ κ₂ W) n z * jsccΦa (jsA κ₁ n) (jsTest (jsLaw P τ κ₁ κ₂ W) n ε)
         (fun i => jU₂ (z i)) (fun i => jW (z i)) (fun i => jX₂ (z i)) (fun i => jY (z i)) ≤
@@ -368,8 +363,7 @@ theorem event_a :
     exact mul_le_mul h1 h2 h0 (exp_pos _).le
 
 /-- **The error event `E₃` of the notes (Lecture 15, page 15-12).** The bound on a wrong second
-  source
-sequence. -/
+source sequence. -/
 theorem event_b :
     ∑ z, iidPMF (jsLaw P τ κ₁ κ₂ W) n z * jsccΦb (jsA κ₂ n) (jsTest (jsLaw P τ κ₁ κ₂ W) n ε)
         (fun i => jU₁ (z i)) (fun i => jW (z i)) (fun i => jX₁ (z i)) (fun i => jY (z i)) ≤
@@ -417,8 +411,7 @@ theorem event_b :
     exact mul_le_mul h1 h2 h0 (exp_pos _).le
 
 /-- **The first part of the error event `E₄` of the notes (Lecture 15, page 15-12).** The bound on
-  two
-wrong source sequences with the true common part. -/
+two wrong source sequences with the true common part. -/
 theorem event_c [Fintype c] (g : α₁ → c) :
     ∑ z, iidPMF (jsLaw P τ κ₁ κ₂ W) n z * jsccΦc (fun u : Fin n → α₁ => fun i => g (u i))
         (jsA κ₁ n) (jsA κ₂ n) (jsTest (jsLaw P τ κ₁ κ₂ W) n ε)
@@ -514,8 +507,8 @@ theorem event_d :
     jsccΦd (iidPMF τ n) (jsA κ₁ n) (jsA κ₂ n) (jsTest L n ε) y with hΨ
   have e := sum_iid_comp L n jY Ψ
   refine le_trans (le_of_eq e) ?_
-  set w : (Fin n → β) × (Fin n → α₁) × (Fin n → α₂) × (Fin n → ω) × (Fin n → ξ₁) × (Fin n → ξ₂) → ℝ
-    :=
+  set w : (Fin n → β) × (Fin n → α₁) × (Fin n → α₂) × (Fin n → ω) × (Fin n → ξ₁) × (Fin n → ξ₂) →
+    ℝ :=
     fun x => iidPMF q n x.1 * (iidPMF τ n x.2.2.2.1 *
       (jsA κ₁ n (x.2.1, x.2.2.2.1) x.2.2.2.2.1 *
         (jsA κ₂ n (x.2.2.1, x.2.2.2.1) x.2.2.2.2.2 *
@@ -596,22 +589,19 @@ omit [Fintype c] in
 open Classical in
 /-- The code for one `n`, with the error probability bounded by the expectations of the test
 terms. -/
-theorem exists_macCode_le [Finite c] (hP : IsPMF P) (hτ : IsPMF τ) (h₁ : IsChannel κ₁) (h₂ :
-  IsChannel κ₂)
-    (hW : IsChannel W) [Nonempty α₁] [Nonempty α₂] {g₁ : α₁ → c} {g₂ : α₂ → c}
-    (hg : ∀ a b, P (a, b) ≠ 0 → g₁ a = g₂ b) (ε : ℝ) :
-    ∃ C : MACJSCCCode n α₁ α₂ ξ₁ ξ₂ β, C.errProb P W ≤
-      (∑ z, iidPMF (jsLaw P τ κ₁ κ₂ W) n z *
-        (if z ∈ robustTypicalSet (jsLaw P τ κ₁ κ₂ W) n ε then (0 : ℝ) else 1)) +
-      ∑ z, iidPMF (jsLaw P τ κ₁ κ₂ W) n z * jsccΦa (jsA κ₁ n) (jsTest (jsLaw P τ κ₁ κ₂ W) n ε)
-        (fun i => jU₂ (z i)) (fun i => jW (z i)) (fun i => jX₂ (z i)) (fun i => jY (z i)) +
-      ∑ z, iidPMF (jsLaw P τ κ₁ κ₂ W) n z * jsccΦb (jsA κ₂ n) (jsTest (jsLaw P τ κ₁ κ₂ W) n ε)
-        (fun i => jU₁ (z i)) (fun i => jW (z i)) (fun i => jX₁ (z i)) (fun i => jY (z i)) +
-      ∑ z, iidPMF (jsLaw P τ κ₁ κ₂ W) n z * jsccΦc (fun u : Fin n → α₁ => fun i => g₁ (u i))
-        (jsA κ₁ n) (jsA κ₂ n) (jsTest (jsLaw P τ κ₁ κ₂ W) n ε)
-        (fun i => g₁ (jU₁ (z i))) (fun i => jW (z i)) (fun i => jY (z i)) +
-      ∑ z, iidPMF (jsLaw P τ κ₁ κ₂ W) n z * jsccΦd (iidPMF τ n) (jsA κ₁ n) (jsA κ₂ n)
-        (jsTest (jsLaw P τ κ₁ κ₂ W) n ε) (fun i => jY (z i)) := by
+theorem exists_macCode_le [Finite c] (hP : IsPMF P) (hτ : IsPMF τ) (h₁ : IsChannel κ₁)
+    (h₂ : IsChannel κ₂) (hW : IsChannel W) [Nonempty α₁] [Nonempty α₂] {g₁ : α₁ → c}
+    {g₂ : α₂ → c} (hg : ∀ a b, P (a, b) ≠ 0 → g₁ a = g₂ b) (ε : ℝ) : ∃ C : MACJSCCCode n α₁ α₂ ξ₁
+    ξ₂ β, C.errProb P W ≤ (∑ z, iidPMF (jsLaw P τ κ₁ κ₂ W) n z * (if z ∈ robustTypicalSet (jsLaw P τ
+    κ₁ κ₂ W) n ε then (0 : ℝ) else 1)) + ∑ z, iidPMF (jsLaw P τ κ₁ κ₂ W) n z * jsccΦa (jsA κ₁ n)
+    (jsTest (jsLaw P τ κ₁ κ₂ W) n ε) (fun i => jU₂ (z i)) (fun i => jW (z i))
+    (fun i => jX₂ (z i)) (fun i => jY (z i)) + ∑ z, iidPMF (jsLaw P τ κ₁ κ₂ W) n z * jsccΦb
+    (jsA κ₂ n) (jsTest (jsLaw P τ κ₁ κ₂ W) n ε) (fun i => jU₁ (z i)) (fun i => jW (z i))
+    (fun i => jX₁ (z i)) (fun i => jY (z i)) + ∑ z, iidPMF (jsLaw P τ κ₁ κ₂ W) n z * jsccΦc
+    (fun u : Fin n → α₁ => fun i => g₁ (u i)) (jsA κ₁ n) (jsA κ₂ n)
+    (jsTest (jsLaw P τ κ₁ κ₂ W) n ε) (fun i => g₁ (jU₁ (z i))) (fun i => jW (z i))
+    (fun i => jY (z i)) + ∑ z, iidPMF (jsLaw P τ κ₁ κ₂ W) n z * jsccΦd (iidPMF τ n) (jsA κ₁ n)
+    (jsA κ₂ n) (jsTest (jsLaw P τ κ₁ κ₂ W) n ε) (fun i => jY (z i)) := by
   have hQ := jsQ_isPMF (n := n) hP
   have hg' : ∀ (u₁ : Fin n → α₁) (u₂ : Fin n → α₂), jsQ P n (u₁, u₂) ≠ 0 →
       (fun i => g₁ (u₁ i)) = fun i => g₂ (u₂ i) := fun u₁ u₂ h => by
@@ -642,11 +632,6 @@ theorem exists_macCode_le [Finite c] (hP : IsPMF P) (hτ : IsPMF τ) (h₁ : IsC
   refine sum_congr rfl fun z _ => ?_
   congr 1
   exact if_congr Iff.rfl rfl rfl
-
-/-- `exp (-n G) → 0`. -/
-lemma tendsto_exp_neg_mul_natCast {G : ℝ} (hG : 0 < G) :
-    Tendsto (fun n : ℕ => exp (-(n * G))) atTop (𝓝 0) :=
-  tendsto_exp_neg_atTop_nhds_zero.comp (tendsto_natCast_atTop_atTop.atTop_mul_const hG)
 
 /-- **Theorem 2 of Lecture 15 of [elgamal2010], page 15-16.** Let `g₁(U₁) = g₂(U₂) = U₀` almost
 surely. The 2-DMS `(U₁, U₂)` can be sent losslessly over the DM-MAC if
@@ -725,7 +710,7 @@ theorem isLosslessMAC_of_lt (hP : IsPMF P) (hτ : IsPMF τ) (h₁ : IsChannel κ
       (robustTypicalSet (jsLaw P τ κ₁ κ₂ W) n ε)) atTop (𝓝 0) := by
     simpa using hp.const_sub 1
   have hsmall₁ := (tendsto_order.1 hp').2 (θ / 5) (by positivity)
-  have hsmall₂ := (tendsto_order.1 (tendsto_exp_neg_mul_natCast
+  have hsmall₂ := (tendsto_order.1 (tendsto_exp_neg_mul_nat
     (show 0 < G / 2 by positivity))).2 (θ / 5) (by positivity)
   filter_upwards [hsmall₁, hsmall₂] with n a0 a1
   obtain ⟨C, hC⟩ := exists_macCode_le (n := n) (ξ₁ := ξ₁) (ξ₂ := ξ₂) (β := β) hP hτ h₁ h₂ hW hg ε
@@ -842,8 +827,8 @@ theorem isLosslessMAC_of_uncoded {f : ξ₁ × ξ₂ → β} (hW : ∀ x y, W x 
   refine ⟨fun n => ⟨fun u i => e₁ (u i), fun u i => e₂ (u i), fun y =>
     (fun i => (d (y i)).1, fun i => (d (y i)).2)⟩, ?_⟩
   have hzero : ∀ n : ℕ, (⟨fun u i => e₁ (u i), fun u i => e₂ (u i), fun y =>
-      (fun i => (d (y i)).1, fun i => (d (y i)).2)⟩ : MACJSCCCode n α₁ α₂ ξ₁ ξ₂ β).errProb P W = 0
-        :=
+      (fun i => (d (y i)).1, fun i => (d (y i)).2)⟩ : MACJSCCCode n α₁ α₂ ξ₁ ξ₂ β).errProb P W =
+        0 :=
     fun n => by
     refine sum_eq_zero fun ω _ => ?_
     by_cases hω : iidPMF P n ω = 0

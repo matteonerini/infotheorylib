@@ -303,15 +303,15 @@ theorem sum_dfBlock_test_le (hW : IsChannel W) (hp : IsPMF p) (hκc : ∀ k, IsC
         (z.1.1, z.2)) (c, a) = dist LT (fun z : ((∀ l, X l) × Y d) × X k => z.1.1) c * κ k c a := by
       intro c a
       have h₁ : dist LT (fun z : ((∀ l, X l) × Y d) × X k => (z.1.1, z.2)) = dfJoint p d₀ k := by
-        rw [hLT, dfLT, ← dist_dist_comp]
+        rw [hLT, dfLT, ← dist_comp_eq]
         have e : ((fun z : ((∀ l, X l) × Y d) × X k => (z.1.1, z.2)) ∘
             fun ω : (∀ l, X l) × (∀ l, Y l) => ((fillGe d₀ (k + 1) ω.1, ω.2 d), ω.1 k)) =
             (fun x : ∀ l, X l => (fillGe d₀ (k + 1) x, x k)) ∘ Prod.fst := rfl
-        rw [e, dist_dist_comp, hL₁, dist_jointOf_fst hW]
+        rw [e, dist_comp_eq, hL₁, dist_jointOf_fst hW]
         rfl
       have h₂ : dist LT (fun z : ((∀ l, X l) × Y d) × X k => z.1.1) = marg (dfJoint p d₀ k) := by
         funext c'
-        rw [marg_eq_dist, ← h₁, ← dist_dist_comp]
+        rw [marg_eq_dist, ← h₁, ← dist_comp_eq]
         rfl
       rw [h₁, h₂]
       exact hκ k c a
@@ -361,8 +361,8 @@ theorem sum_dfBlock_test_le (hW : IsChannel W) (hp : IsPMF p) (hκc : ∀ k, IsC
   refine hfin.le.trans ?_
   set E := exp (-(n * (dfE d₀ L₁ k d - ε * dfC d₀ L₁ k d))) with hE
   have hE0 : 0 ≤ E := (exp_pos _).le
-  calc _ ≤ ∑ u : ∀ k, Fin n → NetStrat X k, prodLaw (fun k => iidPMF (netStratLaw (κ k)) n) u * E :=
-    by
+  calc _ ≤ ∑ u : ∀ k, Fin n → NetStrat X k, prodLaw (fun k => iidPMF (netStratLaw (κ k)) n) u *
+    E := by
         refine sum_le_sum fun u _ => mul_le_mul_of_nonneg_left ?_ (prodLaw_nonneg hρ u)
         simp_rw [mul_sum]
         rw [sum_comm]

@@ -83,8 +83,7 @@ lemma entropy_mdExX : H[mdExX ; mdExLaw] = log 2 := by
     binEntropy_two_inv]
 
 /-- The bound `σ H(σ) ≥ (1/2) log 2` for `σ = 1/√2`, by concavity of the binary entropy between
-  `1/2`
-and `3/4`. -/
+`1/2` and `3/4`. -/
 lemma half_log_two_le : 1 / 2 * log 2 ≤ mdSigma * binEntropy mdSigma := by
   have hl := log_pos one_lt_two
   have h1 := mdSigma_gt
@@ -119,8 +118,8 @@ lemma half_log_two_le : 1 / 2 * log 2 ≤ mdSigma * binEntropy mdSigma := by
     have := mul_le_mul_of_nonneg_left h34 (by linarith : (0 : ℝ) ≤ 4 * mdSigma - 2)
     nlinarith
   have hm := mul_le_mul_of_nonneg_left hb mdSigma_pos.le
-  have e3 : mdSigma * ((1.4 - 0.8 * mdSigma) * log 2) = (1.4 * mdSigma - 0.8 * mdSigma ^ 2) * log 2
-    := by
+  have e3 : mdSigma * ((1.4 - 0.8 * mdSigma) * log 2) = (1.4 * mdSigma - 0.8 * mdSigma ^ 2) *
+    log 2 := by
     ring
   rw [e3, hsq] at hm
   nlinarith
@@ -300,8 +299,7 @@ lemma refinable_constant {p D₀ D₁ : ℝ} (h0 : 0 ≤ p) (h1 : p ≤ 1) (hD�
     exact mutualInfo_const_right' hμ _ c
 
 /-- The law of the backward cascade `X̂₁ → X̂₀ → X`, page 14-24: `X̂₁ ∼ Bern(r)`, `X̂₀ = X̂₁ ⊕ Z₁`
-  and
-`X = X̂₀ ⊕ Z₀`, with `Z₁ ∼ Bern(c)` and `Z₀ ∼ Bern(D₀)`. -/
+and `X = X̂₀ ⊕ Z₀`, with `Z₁ ∼ Bern(c)` and `Z₀ ∼ Bern(D₀)`. -/
 def cascadeLaw (r c D₀ : ℝ) : (Bool × Bool) × Bool → ℝ :=
   jointOf (jointOf (bernoulliPMF r) (bscKernel c)) fun v => bscKernel D₀ v.2
 

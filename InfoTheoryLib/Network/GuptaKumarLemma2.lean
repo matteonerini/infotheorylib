@@ -342,8 +342,8 @@ theorem integral_gkLog_ge : gkU c ν * log 2 ≤ ∫ u in 0..k, gkLog c ν u := 
 
 /-- **Page 20-41 of [elgamal2010]: the upper bound on `k E(X²)`.** -/
 theorem integral_gkLog_sq_le :
-    ∫ u in 0..k, gkLog c ν u ^ 2 ≤ gkU c ν * (2 * log (1 + c) ^ 2 + (64 * ν ^ 2 + 1 / (ν - 1))) :=
-      by
+    ∫ u in 0..k, gkLog c ν u ^ 2 ≤ gkU c ν *
+      (2 * log (1 + c) ^ 2 + (64 * ν ^ 2 + 1 / (ν - 1))) := by
   have hν0 : 0 < ν := by linarith
   set u₀ := gkU c ν with hu₀
   have hu0 : 0 ≤ u₀ := by linarith

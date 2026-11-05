@@ -12,9 +12,8 @@ public import InfoTheoryLib.Network.JSCCRandomCode
 # Joint source–channel coding over a MAC: the law and the entropies
 
 This file defines the law `p(u₁, u₂) p(w) p(x₁|u₁, w) p(x₂|u₂, w) p(y|x₁, x₂)` of the coding scheme
-  of
-Theorem 2 of Lecture 15 of El Gamal and Kim, and computes the entropies that appear in the exponents
-of the error events.
+of Theorem 2 of Lecture 15 of El Gamal and Kim, and computes the entropies that appear in the
+exponents of the error events.
 
 ## Main definitions
 

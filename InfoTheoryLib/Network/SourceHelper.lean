@@ -12,10 +12,8 @@ public import InfoTheoryLib.StateChannel.Multicoding
 # Lossless source coding with a helper: achievability
 
 The source `Xⁿ` is to be recovered losslessly from the index `M₁` of its encoder and the index `M₂`
-of
-a helper that observes the correlated `Yⁿ`. Theorem 2 of Lecture 11 says that the optimal rate
-region
-is `R₁ ≥ H(X | U)`, `R₂ ≥ I(Y; U)` for some `p(u | y)`. This file proves that these rates are
+of a helper that observes the correlated `Yⁿ`. Theorem 2 of Lecture 11 says that the optimal rate
+region is `R₁ ≥ H(X | U)`, `R₂ ≥ I(Y; U)` for some `p(u | y)`. This file proves that these rates are
 achievable, and `Network.SourceHelperConverse` the converse.
 
 The helper describes `Yⁿ` by a jointly typical sequence of a random codebook `Uⁿ(m₂)`, which is
@@ -98,8 +96,7 @@ def helperOptimalRegionBits (q : α × β → ℝ) : Set (ℝ × ℝ) :=
   closure {R | IsAchievableHelperBits q R.1 R.2}
 
 /-- **Theorem 2 of Lecture 11 of [elgamal2010], the region.** `R₁ ≥ H(X | U)`, `R₂ ≥ I(Y; U)` for
-some
-`p(u | y)`, in bits, with `U` on `Fin k`. -/
+some `p(u | y)`, in bits, with `U` on `Fin k`. -/
 def helperRegionBits (q : α × β → ℝ) : Set (ℝ × ℝ) :=
   {R | ∃ (k : ℕ) (κ : β → Fin k → ℝ), (∀ y, IsPMF (κ y)) ∧ helperCond q κ / log 2 ≤ R.1 ∧
     helperInfo q κ / log 2 ≤ R.2}
@@ -147,9 +144,8 @@ private lemma binDec_ne_le (B : (Fin n → α) → Fin M₁) (S : Fin M₂ → F
 
 open Classical in
 /-- **Lecture 11, pages 11-13, 11-14 and 11-28.** Random binning: for a helper encoder and sets
-`S m`
-of at most `K` allowed sequences for each helper index `m`, there is a binning of the source whose
-probability of error is at most `P{Xⁿ ∉ S(M₂)} + K / M₁`. -/
+`S m` of at most `K` allowed sequences for each helper index `m`, there is a binning of the source
+whose probability of error is at most `P{Xⁿ ∉ S(M₂)} + K / M₁`. -/
 theorem exists_bins_code {q : α × β → ℝ} (hM₁ : 0 < M₁) (hq0 : ∀ z, 0 ≤ q z)
     (hq1 : ∑ z : (Fin n → α) × (Fin n → β), jointIid q n z = 1) (enc₂ : (Fin n → β) → Fin M₂)
     (S : Fin M₂ → Finset (Fin n → α)) (d : Fin n → α) {K : ℝ}
@@ -236,6 +232,7 @@ def helperTriple (q : α × β → ℝ) (κ : β → 𝒰 → ℝ) : (β × 𝒰
 def helperUX (q : α × β → ℝ) (κ : β → 𝒰 → ℝ) : 𝒰 × α → ℝ :=
   dist (helperTriple q κ) fun z => (z.1.2, z.2)
 
+/-- The rearrangement of `((Y, U), X)` as `((X, Y), U)`. -/
 private def helperEquiv : (β × 𝒰) × α ≃ (α × β) × 𝒰 where
   toFun z := ((z.2, z.1.1), z.1.2)
   invFun z := ((z.1.2, z.2), z.1.1)
@@ -304,13 +301,6 @@ private lemma mem_condRobust_helperUX [Fintype β] [Fintype 𝒰] {ε : ℝ} {y 
     x ∈ condRobustTypicalSet (helperUX q κ) ε u := by
   rw [mem_condRobustTypicalSet] at h ⊢
   exact comp_mem_robustTypicalSet h fun z => (z.1.2, z.2)
-
-/-- `∑ₓ p(xⁿ, yⁿ) = p(yⁿ)`. -/
-lemma sum_jointIid_left (q : α × β → ℝ) (n : ℕ) (y : Fin n → β) :
-    ∑ x, jointIid q n (x, y) = iidPMF (margSnd q) n y := by
-  simp only [jointIid, iidPMF, zipSeq]
-  rw [← Fintype.prod_sum fun i a => q (a, y i)]
-  exact prod_congr rfl fun i _ => (dist_snd q (y i)).symm
 
 open Classical in
 /-- **Lecture 11, page 11-27.** If `(yⁿ, uⁿ)` is typical then, by the conditional typicality lemma
@@ -426,7 +416,7 @@ theorem sum_not_mem_helperEnc_le (hq : IsPMF q) (hκ : ∀ y, IsPMF (κ y)) {ε'
               split_ifs
               · exact jointIid_nonneg hq.nonneg n _
               · exact le_rfl
-        _ = iidPMF (margSnd q) n y := sum_jointIid_left q n y
+        _ = iidPMF (margSnd q) n y := sum_jointIid_fiber_fst q n y
         _ ≤ _ := le_add_of_nonneg_right (mul_nonneg h0 hK0)
   rw [Fintype.sum_prod_type_right]
   refine (sum_le_sum fun y _ => hy y).trans (le_of_eq ?_)
@@ -552,8 +542,7 @@ private lemma two_mul_exp_eq (a : ℝ) : 2 * exp a = exp (a + log 2) := by
   ring
 
 /-- **Theorem 2 of Lecture 11, achievability.** Rates with `R₁ > H(X | U)` and `R₂ > I(Y; U)` for
-some
-`p(u | y)` are achievable. -/
+some `p(u | y)` are achievable. -/
 theorem isAchievableHelperBits_of_lt (hq : IsPMF q) {κ : β → 𝒰 → ℝ} (hκ : ∀ y, IsPMF (κ y))
     {R₁ R₂ : ℝ} (h₁ : helperCond q κ / log 2 < R₁) (h₂ : helperInfo q κ / log 2 < R₂) :
     IsAchievableHelperBits q R₁ R₂ := by

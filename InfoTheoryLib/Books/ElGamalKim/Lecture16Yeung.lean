@@ -154,8 +154,8 @@ theorem yeung_count (c : NetCode (Fin 5) A M) (hA : ∀ j k, yeungW j k = 0 → 
   have hsum : #Good = ∑ a, #(G a) :=
     Finset.card_eq_sum_card_fiberwise fun _ _ => Finset.mem_coe.mpr (Finset.mem_univ _)
   -- Cauchy–Schwarz
-  have hfib : ∀ a, (#(G a) : ℝ) ≤ √(Fintype.card (M 1) : ℝ) * (√(#(xs a) : ℝ) * √(#(ys a) : ℝ)) :=
-    by
+  have hfib : ∀ a, (#(G a) : ℝ) ≤ √(Fintype.card (M 1) : ℝ) *
+    (√(#(xs a) : ℝ) * √(#(ys a) : ℝ)) := by
     intro a
     rw [← Real.sqrt_mul (Nat.cast_nonneg _), ← Real.sqrt_mul (Nat.cast_nonneg _)]
     refine Real.le_sqrt_of_sq_le ?_
@@ -329,8 +329,8 @@ def yeungScheme {b : Fin 5 → ℕ} {n p : ℕ} (hb : ∀ j, 2 ≤ j → b j = 0
           omega
       have hle : ∀ I : Finset ℕ, #I ≤ p → (∀ r : Σ j, Fin (b j), r.1 = 1 →
           yeungBits p k l r → r.2.val ∈ I) →
-          #(Finset.univ.filter fun r : Σ j, Fin (b j) => yeungW k l ≠ 0 ∧ yeungBits p k l r) ≤ n :=
-            by
+          #(Finset.univ.filter fun r : Σ j, Fin (b j) => yeungW k l ≠ 0 ∧ yeungBits p k l r) ≤
+            n := by
         intro I hI hmem
         let f : (Σ j, Fin (b j)) → ℕ ⊕ ℕ := fun r =>
           if r.1 = 0 then Sum.inl r.2.val else Sum.inr r.2.val
@@ -392,8 +392,8 @@ def yeungScheme {b : Fin 5 → ℕ} {n p : ℕ} (hb : ∀ j, 2 ≤ j → b j = 0
   forward k l r hr := by
     obtain ⟨hw, hp⟩ := (Finset.mem_filter.mp hr).2
     have hall : ∀ k l : Fin 5, yeungW k l ≠ 0 →
-        (k = 0 ∧ l = 1) ∨ (k = 1 ∧ l = 2) ∨ (k = 1 ∧ l = 3) ∨ (k = 2 ∧ l = 4) ∨ (k = 3 ∧ l = 4) :=
-          by
+        (k = 0 ∧ l = 1) ∨ (k = 1 ∧ l = 2) ∨ (k = 1 ∧ l = 3) ∨ (k = 2 ∧ l = 4) ∨
+          (k = 3 ∧ l = 4) := by
       decide
     have hmem : ∀ a c : Fin 5, yeungW a c ≠ 0 → yeungBits p a c r →
         r ∈ Finset.univ.filter fun r : Σ j, Fin (b j) => yeungW a c ≠ 0 ∧ yeungBits p a c r :=
@@ -559,8 +559,7 @@ theorem yeung_cutsetRegion :
         linarith
 
 /-- **Page 16-27 of [elgamal2010].** The cutset outer bound is loose: the rate pair `(1, 1)`
-  satisfies
-it and is not in the capacity region. -/
+satisfies it and is not in the capacity region. -/
 theorem yeung_cutset_loose :
     yeungRate (1, 1) ∈ cutsetRegion yeungNet yeungD ∧
       ((1, 1) : ℝ × ℝ) ∉ closure {p : ℝ × ℝ | IsAchievable yeungNet yeungD (yeungRate p)} := by

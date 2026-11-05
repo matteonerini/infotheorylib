@@ -13,12 +13,10 @@ public import InfoTheoryLib.Network.QuadraticGaussian
 # El Gamal & Kim, Lecture 13: Distributed Lossy Source Coding
 
 This file indexes the formalization of Lecture 13 of [elgamal2010]. We prove the Berger–Tung inner
-bound
-(Theorem 1), with the Markov lemma, the mutual packing lemma and time sharing, and the Berger–Tung
-outer
-bound (Theorem 2), as statements about codes. For the quadratic Gaussian problem and the Gaussian
-CEO
-problem, whose sources are continuous, we prove the formulas and the algebra of the notes.
+bound (Theorem 1), with the Markov lemma, the mutual packing lemma and time sharing, and the
+Berger–Tung outer bound (Theorem 2), as statements about codes. For the quadratic Gaussian problem
+and the Gaussian CEO problem, whose sources are continuous, we prove the formulas and the algebra of
+the notes.
 
 ## Conventions
 
@@ -49,8 +47,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The events `E₁`, `E₂` and `E₃`: `coverExp`, `sum_codebook_markov_le`, `sum_codebook_cond_le`,
   `btCoverBound`, `sum_two_codebooks_le`.
 * **The mutual packing lemma**: `btPackExp`, `sum_iidPMF_snd_typical_le`,
-  `sum_iidPMF_fst_typical_le`,
-  `prob_mutual_packing_le`, `mutual_packing_lemma` (here).
+  `sum_iidPMF_fst_typical_le`, `prob_mutual_packing_le`, `mutual_packing_lemma` (here).
 * The event `E₄`, with random bins: `btIndex`, `btIndex_not_mem_le`, `sum_bins_bt_le`,
   `exists_bt_code_le`.
 * The rates: `btRate₁`, `btRate₂`, `btRate₁₂`, `btRate₁_eq`, `btRate₂_eq`, `btRate₁₂_eq`,
@@ -58,8 +55,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The inner bound for a constant `Q`: `btCost₁`, `btCost₂`, `isAchievableDL_of_lt`.
 * Time sharing: `DistLossyCode.append`, `DistLossyCode.distortion₁_append`,
   `DistLossyCode.distortion₂_append`, `dlAchievableSet`, `convex_dlAchievableSet`,
-  `exists_rate_split`,
-  `IsAchievableDL.mono` (`Network.BergerTungSharing`).
+  `exists_rate_split`, `IsAchievableDL.mono` (`Network.BergerTungSharing`).
 * **Theorem 1**: `isAchievableDL_of_lt_sharing`, `theorem_13_1` (here).
 
 ### The special cases of the inner bound (page 13-5)
@@ -88,18 +84,15 @@ All in `Network.QuadraticGaussian`, as formulas.
 ## Not formalized
 
 * The bounds `|U₁| ≤ |X₁| + 4` and `|U₂| ≤ |X₂| + 4` of Theorem 1. For the same reason, the outer
-  bound holds
-  with `Dⱼ + ε` for every `ε > 0` in place of `Dⱼ`.
+  bound holds with `Dⱼ + ε` for every `ε > 0` in place of `Dⱼ`.
 * The tightness statements of pages 13-5 and 13-15, that is the converse of Berger and Yeung for
-  `D₂ = 0`,
-  and the outer bound for `X₂` a function of `X₁`.
+  `D₂ = 0`, and the outer bound for `X₂` a function of `X₁`.
 * The counterexample for the doubly symmetric binary source (pages 13-39 and 13-40), the
-  rate–distortion
-  region of Kaspi and Berger, and the proof that the Berger–Tung inner bound is not tight.
+  rate–distortion region of Kaspi and Berger, and the proof that the Berger–Tung inner bound is not
+  tight.
 * The coding theorems of the quadratic Gaussian problem (Theorem 3) and of the Gaussian CEO problem,
-  which
-  concern continuous sources and use the conditional entropy power inequality. We only check the
-  formulas.
+  which concern continuous sources and use the conditional entropy power inequality. We only check
+  the formulas.
 * Lemma 5 for the actual error covariance `K̂`, and steps (a) to (e) of its proof.
 * Deterministic binning, replaced by random binning, and the analogue of Lemma 1 of Lecture 12.
 * The hypergeometric proof of the Markov lemma, replaced by the change of measure below.
@@ -108,35 +101,28 @@ All in `Network.QuadraticGaussian`, as formulas.
 ## Differences from the notes
 
 * **The Markov lemma.** The notes bound a hypergeometric random variable.
-  `sum_not_mem_condRobust_le`
-  compares the law `φ` of `Zⁿ` with the product law on `T(Z | yⁿ)`, within a factor
-  `e^{n (E - E')}`, and uses
-  the Chernoff bound for the product law. Its hypothesis on `φ` is only the upper bound on
-  `T(Z | yⁿ)`.
+  `sum_not_mem_condRobust_le` compares the law `φ` of `Zⁿ` with the product law on `T(Z | yⁿ)`,
+  within a factor `e^{n (E - E')}`, and uses the Chernoff bound for the product law. Its hypothesis
+  on `φ` is only the upper bound on `T(Z | yⁿ)`.
 * **Lemma 2.** `sum_codebook_firstIn_le` gives the law of the selected codeword exactly: it is the
-  law of a
-  codeword conditioned on the typical set.
+  law of a codeword conditioned on the typical set.
 
 ## Issues in the notes
 
 These come from the text of the notes as extracted from the PDF.
 
 * **Page 13-30.** `R₂(θ)` is written with `(2 (1 + θ) + N)²`. The bound of Lemma 5 gives the first
-  power,
-  `|K_X| (2 (1 + θ) + N) / (N D₁ D₂ (1 + θ)²)`, and only this makes `R₁(θ*) = R₂(θ*)` on page 13-31
-  true
-  (`qgR2`, `qgR2_theta`).
+  power, `|K_X| (2 (1 + θ) + N) / (N D₁ D₂ (1 + θ)²)`, and only this makes `R₁(θ*) = R₂(θ*)` on page
+  13-31 true (`qgR2`, `qgR2_theta`).
 * **Page 13-23.** `R̃₁ = g₂(R̃₂, D₁)` should be `g₁(R̃₂, D₁)`.
 * **Page 13-25.** "the capacity region" should be the rate–distortion region.
 * **Page 13-40.** "the rate region of Theorem 5": the lecture has no Theorem 5; Theorem 1 is meant.
 * **Pages 13-47 and 13-48.** Factors of `n` are missing: `|n_y - n p(y)| ≤ ε' p(y)`,
   `(1 - δ) p(x, y, z) ≤ E(K)`, and the Chernoff bound `2 e^{-(ε - δ)² p(x, y, z) / 4}`, which must
-  have `n` in the
-  exponent to tend to `0`.
+  have `n` in the exponent to tend to `0`.
 * **Page 13-52.** `μᵀ μ` should be `μ μᵀ`.
 * **Page 13-12.** The bound on `E₄` refers to Lemma 1 of Lecture 12, whose proof has the gap listed
-  in
-  `Books.ElGamalKim.Lecture12`. Random bins avoid it.
+  in `Books.ElGamalKim.Lecture12`. Random bins avoid it.
 
 ## References
 

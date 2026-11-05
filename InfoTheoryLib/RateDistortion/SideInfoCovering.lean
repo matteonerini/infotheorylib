@@ -13,8 +13,7 @@ public import InfoTheoryLib.RateDistortion.SideInfo
 # Covering and binning for side information at the decoder
 
 The encoder of Lecture 12 describes `Xⁿ` by a sequence `Uⁿ(l)` of a random codebook drawn i.i.d.
-from
-`p(u)`.
+from `p(u)`.
 
 We show directly that `(Xⁿ, Yⁿ, Uⁿ(L))` falls in any given sequence of sets `Tₙ` of typical triples,
 that is any sets with `P{(Xⁿ, Yⁿ, Uⁿ) ∈ Tₙ} → 1` for i.i.d. triples. Instead of the conditional
@@ -36,8 +35,7 @@ that is jointly typical with `Yⁿ`.
 
 The notes bin the codewords deterministically, and bound the probability of the error event `E₃` by
 Lemma 1 of the Appendix. Step (b) of its proof uses that, given `L = l`, every collection of the
-other
-codewords has the same distribution. For an encoder that selects the *smallest* index `l` with
+other codewords has the same distribution. For an encoder that selects the *smallest* index `l` with
 `(xⁿ, uⁿ(l))` typical, this is not so: codewords with index smaller than `l` are known not to be
 typical with `xⁿ`, and those with a larger index are not. We bin at random, as Section 15.9 of Cover
 and Thomas does, independently of the codebook: given the codebook and `(Xⁿ, Yⁿ)`, another codeword
@@ -67,7 +65,6 @@ def fstSeq {n : ℕ} (ω : Fin n → α × γ) : Fin n → α := fun i => (ω i)
 /-- The sequence of the side information `(ωᵢ.2)`. -/
 def sndSeq {n : ℕ} (ω : Fin n → α × γ) : Fin n → γ := fun i => (ω i).2
 
-
 /-! ### Covering a set of typical pairs -/
 
 section Miss
@@ -76,10 +73,8 @@ variable {p : α → ℝ} {q : α → υ → ℝ}
 
 open Classical in
 /-- **Lecture 12, page 12-10, and (10.89)–(10.101).** A random codebook of `M` sequences drawn
-i.i.d.
-from `p(u)` misses a set `A` of typical pairs `(xⁿ, uⁿ)`, for `xⁿ` i.i.d. from `p(x)`, with
-probability
-at most `P{(Xⁿ, Uⁿ) ∉ A} + exp(-M e^{-n(I(X; U) + 3ε)})`. -/
+i.i.d. from `p(u)` misses a set `A` of typical pairs `(xⁿ, uⁿ)`, for `xⁿ` i.i.d. from `p(x)`, with
+probability at most `P{(Xⁿ, Uⁿ) ∉ A} + exp(-M e^{-n(I(X; U) + 3ε)})`. -/
 theorem sum_codebook_miss_le (hp : IsPMF p) (hq : IsChannel q) {n M : ℕ} {ε : ℝ} (hε : 0 ≤ ε)
     (A : Finset ((Fin n → α) × (Fin n → υ))) (hA : ∀ z ∈ A, z ∈ jointTypicalSet (jointOf p q) n ε) :
     ∑ C : Fin M → Fin n → υ, iidPMF (iidPMF (outDist p q) n) M C *
@@ -349,8 +344,7 @@ def wzIndex (B : Fin L → Fin M) (S : Finset ((Fin n → γ) × (Fin n → υ))
 open Classical in
 omit [Fintype α] [Fintype γ] [Fintype υ] in
 /-- **Lecture 12, page 12-23.** The decoder recovers the index `l` unless `(ω, uⁿ(l)) ∉ T` or
-another
-codeword of the bin is in `S` with `yⁿ`. -/
+another codeword of the bin is in `S` with `yⁿ`. -/
 lemma wzIndex_not_mem_le {B : Fin L → Fin M} {S : Finset ((Fin n → γ) × (Fin n → υ))}
     {C : Fin L → Fin n → υ} (l₀ l : Fin L) {T : Finset (Fin n → (α × γ) × υ)}
     (hTS : ∀ (ω : Fin n → α × γ) (u : Fin n → υ), zipSeq ω u ∈ T → (sndSeq ω, u) ∈ S)
@@ -383,8 +377,7 @@ lemma wzIndex_not_mem_le {B : Fin L → Fin M} {S : Finset ((Fin n → γ) × (F
     split_ifs <;> linarith
 
 /-- **Lecture 12, page 12-23.** Over random bins, the codewords other than the one of `l` that fall
-in
-its bin have a total weight of at most `(∑_{l'} Z(l')) / M`, whatever `l` is. -/
+in its bin have a total weight of at most `(∑_{l'} Z(l')) / M`, whatever `l` is. -/
 lemma sum_bins_erase_le (hM : 0 < M) (l : Fin L) {Z : Fin L → ℝ} (hZ : ∀ l', 0 ≤ Z l') :
     ∑ B : Fin L → Fin M, iidPMF (uniformPMF (Fin M)) L B * ∑ l' ∈ univ.erase l,
       (if B l' = B l then 1 else 0) * Z l' ≤ (∑ l', Z l') / M := by
@@ -492,10 +485,10 @@ lemma mutualInfoOf_side :
 
 open Classical in
 /-- **Lecture 12, pages 12-22 to 12-24.** The bound of covering and binning: with `L` codewords and
-`M`
-bins there is a code with `(Xⁿ, Yⁿ, Uⁿ(L)) ∈ T` except with probability at most
+`M` bins there is a code with `(Xⁿ, Yⁿ, Uⁿ(L)) ∈ T` except with probability at most
 `δ + P{(Xⁿ, Uⁿ) not typical} + P{(Xⁿ, Yⁿ, Uⁿ) ∉ T} / δ + exp(-L e^{-n(I(X; U) + 3ε)}) +
-(L / M) e^{-n(I(Y; U) - 3ε)}`, if `T` forces `(Yⁿ, Uⁿ)` to be jointly typical. -/
+(L / M) e^{-n(I(Y; U) - 3ε)}`,
+if `T` forces `(Yⁿ, Uⁿ)` to be jointly typical. -/
 theorem exists_wz_code_le (hP : IsPMF P) (hq : IsChannel q) (hW : IsChannel W)
     (hPW : ∀ x y, P (x, y) = margFst P x * W x y) (hL : 0 < L) (hM : 0 < M) {ε δ : ℝ} (hε : 0 ≤ ε)
     (hδ : 0 < δ) (T : Finset (Fin n → (α × γ) × υ))
@@ -614,9 +607,8 @@ lemma tendsto_exp_neg_cover {a b : ℝ} (hab : a < b) {L : ℕ → ℕ}
     (sub_pos.2 hab))
 
 /-- **Lecture 12, pages 12-9 and 12-10.** If `R > I(X; U)` and `Tₙ` are sets of typical triples,
-there
-are codebooks of `2^⌊nR⌋` sequences with `(Xⁿ, Yⁿ, Uⁿ(M)) ∈ Tₙ` except with probability at most `δ`,
-for `n` large. -/
+there are codebooks of `2^⌊nR⌋` sequences with `(Xⁿ, Yⁿ, Uⁿ(M)) ∈ Tₙ` except with probability at
+most `δ`, for `n` large. -/
 theorem eventually_causal_code (hP : IsPMF P) (hq : IsChannel q) {R : ℝ}
     (hR : mutualInfoOf (margFst P) q < R * log 2) (T : ∀ n : ℕ, Finset (Fin n → (α × γ) × υ))
     (hT : Tendsto (fun n => prob (iidPMF (siLaw P q) n) (T n)) atTop (𝓝 1)) {δ : ℝ} (hδ : 0 < δ) :

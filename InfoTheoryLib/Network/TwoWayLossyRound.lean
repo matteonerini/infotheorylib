@@ -296,7 +296,6 @@ theorem sum_codebook_kaspi_le (hμ : IsPMF μ) (hM : I[Xo : U | pair V Xs ; μ] 
 
 end Selected
 
-
 /-! ### The bins -/
 
 section Bins
@@ -465,8 +464,8 @@ lemma exists_round_params {rc rm : ℝ} (hc : I[Xs : U | V ; μ] < rc) {ε : ℝ
   have hg0 : 0 < rc - Is := sub_pos.2 hc
   obtain ⟨c₀, hc₀, hlimM⟩ := exists_mul_condExpBound_tendsto
     (dist μ (pair (pair Xo (pair V Xs)) U)) (half_lt_self hε)
-  obtain ⟨ε₂, hε₂d⟩ : ∃ ε₂, ε₂ = min (min (1 / 2) ((rc - Is) / (4 * (c + 1)))) (c₀ / (8 * (c + 1)))
-    :=
+  obtain ⟨ε₂, hε₂d⟩ : ∃ ε₂, ε₂ =
+    min (min (1 / 2) ((rc - Is) / (4 * (c + 1)))) (c₀ / (8 * (c + 1))) :=
     ⟨_, rfl⟩
   have hε₂0 : 0 < ε₂ := by
     rw [hε₂d]

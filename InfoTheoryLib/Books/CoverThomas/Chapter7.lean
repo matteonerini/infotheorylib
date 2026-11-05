@@ -326,8 +326,7 @@ lemma symmetricChannel_7_17_isChannel : IsChannel symmetricChannel_7_17 := fun x
   ⟨fun y => by
       unfold symmetricChannel_7_17 row_7_17
       generalize y - x = z
-      fin_cases z <;> norm_num,
-    by
+      fin_cases z <;> norm_num, by
       unfold symmetricChannel_7_17
       rw [show (∑ y, row_7_17 (y - x)) = ∑ z, row_7_17 z from
         Equiv.sum_comp (Equiv.subRight x) row_7_17]

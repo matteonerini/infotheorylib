@@ -62,12 +62,6 @@ lemma gaussCap_add_le {a b : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) :
   refine mul_le_mul_of_nonneg_left (log_le_log (by linarith) ?_) (by norm_num)
   nlinarith [mul_nonneg ha hb]
 
-/-- `C(x) ≤ x/2`. -/
-lemma gaussCap_le_half_self {x : ℝ} (hx : 0 ≤ x) : gaussCap x ≤ x / 2 := by
-  simp only [gaussCap]
-  have := log_le_sub_one_of_pos (by linarith : 0 < 1 + x)
-  linarith
-
 /-! ### The fading MAC -/
 
 section MAC
@@ -204,7 +198,7 @@ lemma bddAbove_macSumED (hq : ∀ s, 0 ≤ q s) (h₁ : 𝒢₁ → ℝ) (h₂ :
       K / 2 * (q s * φ₁ s + q s * φ₂ s) := fun s => by
     have a := mul_nonneg (sq_nonneg (h₁ s.1)) (hφ₁.1 s)
     have b := mul_nonneg (sq_nonneg (h₂ s.2)) (hφ₂.1 s)
-    have c := gaussCap_le_half_self (add_nonneg a b)
+    have c := gaussCap_le_half (add_nonneg a b)
     have d := mul_le_mul_of_nonneg_left c (hq s)
     refine d.trans ?_
     have e1 := mul_le_mul_of_nonneg_right (hK₁ s.1) (mul_nonneg (hq s) (hφ₁.1 s))

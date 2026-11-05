@@ -76,8 +76,8 @@ lemma osPair_isPMF {A : Type*} [Fintype A] {p₁ : U → ℝ} {K : U → A → �
 
 /-- **Page 17-36 of [elgamal2010].** The expression of the capacity, in nats. -/
 def rcOSBound (W₁ : X' × U → Y → ℝ) (W₂ : X'' × U → S → ℝ) : ℝ :=
-  sSup {v | ∃ (p₁ : U → ℝ) (A : U → X' → ℝ) (B : U → X'' → ℝ), IsPMF p₁ ∧ IsChannel A ∧ IsChannel B
-    ∧
+  sSup {v | ∃ (p₁ : U → ℝ) (A : U → X' → ℝ) (B : U → X'' → ℝ), IsPMF p₁ ∧ IsChannel A ∧
+    IsChannel B ∧
     v = min (mutualInfoOf (osPair p₁ A) W₁) (osCI (osPair p₁ B) W₂ + osCI (osPair p₁ A) W₁)}
 
 /-! ### The variables -/
@@ -98,8 +98,8 @@ lemma os_dist₁ (hW₂ : IsChannel W₂) :
   classical
   funext ⟨t, y⟩
   rw [dist_jointOf_row]
-  have hin : ∀ a : (X' × X'') × U, dist (rcOS W₁ W₂ a) (fun o => (osG₁ (a, o).1, (a, o).2.1)) (t, y)
-    =
+  have hin : ∀ a : (X' × X'') ×
+    U, dist (rcOS W₁ W₂ a) (fun o => (osG₁ (a, o).1, (a, o).2.1)) (t, y) =
       (if osG₁ a = t then 1 else 0) * W₁ t y := by
     intro a
     by_cases ha : osG₁ a = t
@@ -124,8 +124,8 @@ lemma os_dist₂ (hW₁ : IsChannel W₁) :
   classical
   funext ⟨t, y⟩
   rw [dist_jointOf_row]
-  have hin : ∀ a : (X' × X'') × U, dist (rcOS W₁ W₂ a) (fun o => (osG₂ (a, o).1, (a, o).2.2)) (t, y)
-    =
+  have hin : ∀ a : (X' × X'') ×
+    U, dist (rcOS W₁ W₂ a) (fun o => (osG₂ (a, o).1, (a, o).2.2)) (t, y) =
       (if osG₂ a = t then 1 else 0) * W₂ t y := by
     intro a
     by_cases ha : osG₂ a = t
@@ -159,7 +159,7 @@ lemma os_cond₁ (hq : IsPMF q) (hW₁ : IsChannel W₁) (hW₂ : IsChannel W₂
       H[Prod.snd | fun z : (X' × U) × Y => z.1.2 ; jointOf (dist q osG₁) W₁] := by
   refine condEntropy_eq_of_dist_pair_eq (jointOf_isPMF hq (rcOS_isChannel hW₁ hW₂))
     (jointOf_isPMF (hq.dist _) hW₁) ?_
-  rw [← os_dist₁ hW₂, ← dist_dist_comp]
+  rw [← os_dist₁ hW₂, ← dist_comp_eq]
   rfl
 
 lemma os_cond₂ (hq : IsPMF q) (hW₁ : IsChannel W₁) (hW₂ : IsChannel W₂) :
@@ -167,7 +167,7 @@ lemma os_cond₂ (hq : IsPMF q) (hW₁ : IsChannel W₁) (hW₂ : IsChannel W₂
       H[Prod.snd | fun z : (X'' × U) × S => z.1.2 ; jointOf (dist q osG₂) W₂] := by
   refine condEntropy_eq_of_dist_pair_eq (jointOf_isPMF hq (rcOS_isChannel hW₁ hW₂))
     (jointOf_isPMF (hq.dist _) hW₂) ?_
-  rw [← os_dist₂ hW₁, ← dist_dist_comp]
+  rw [← os_dist₂ hW₁, ← dist_comp_eq]
   rfl
 
 /-- **The broadcast cut**: `I(X; Y, Y₁ | X₁) ≤ I(X'; Y | X₁) + I(X''; Y₁ | X₁)`. -/
@@ -309,7 +309,7 @@ lemma os_markov (hp₁ : IsPMF p₁) (hA : IsChannel A) (hB : IsChannel B) (hW�
       dist_jointOf_fst (rcOS_isChannel hW₁ hW₂)
     have e : (fun z : ((X' × X'') × U) × (Y × S) => (z.1.2, z.1.1.2)) =
         (fun a : (X' × X'') × U => (a.2, a.1.2)) ∘ Prod.fst := rfl
-    rw [e, dist_dist_comp, hf, hGd]
+    rw [e, dist_comp_eq, hf, hGd]
     simp only [osInput]
     have e' : ∀ x', p₁ u * (A u x' * B u x'') = p₁ u * B u x'' * A u x' := fun _ => by ring
     simp_rw [e']
@@ -421,9 +421,9 @@ theorem rcCapacity_os (hW₁ : IsChannel W₁) (hW₂ : IsChannel W₂) :
     obtain ⟨A, hA, hfA⟩ := exists_kernel (hq.dist fun a : (X' × X'') × U => (a.2, a.1.1))
     obtain ⟨B, hB, hfB⟩ := exists_kernel (hq.dist fun a : (X' × X'') × U => (a.2, a.1.2))
     have hm₁ : dist (dist q fun a : (X' × X'') × U => (a.2, a.1.1)) Prod.fst = dist q Prod.snd :=
-      (dist_dist_comp _ _ _).symm
+      (dist_comp_eq _ _ _).symm
     have hm₂ : dist (dist q fun a : (X' × X'') × U => (a.2, a.1.2)) Prod.fst = dist q Prod.snd :=
-      (dist_dist_comp _ _ _).symm
+      (dist_comp_eq _ _ _).symm
     have hr₁ : dist q osG₁ = osPair (dist q Prod.snd) A := by
       funext ⟨x', u⟩
       have h := dist_comp_of_injective q osG₁ hswap₁ (x', u)

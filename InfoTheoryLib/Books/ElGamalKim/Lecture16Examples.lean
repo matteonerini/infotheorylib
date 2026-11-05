@@ -103,11 +103,10 @@ theorem example_capacity : multicastCapacity exampleNet 0 {5} = 3 := by
   rw [relay_capacity _ (by decide), example_minCut]
 
 /-- **The dual problem as printed on page 16-8 of [elgamal2010] is not the dual of the flow
-  problem.**
-With the constraints `νⱼ - νₖ = λⱼₖ ≥ 0` printed there, every feasible point of the network of page
-16-6 has value at least `4`, while the capacity is `3`. The minimum cut `{1, 2, 3, 5}` is not
-  feasible
-because the edge `(4, 5)` goes back across it. The dual of the flow problem has `νⱼ - νₖ ≤ λⱼₖ`. -/
+problem.** With the constraints `νⱼ - νₖ = λⱼₖ ≥ 0` printed there, every feasible point of the
+network of page 16-6 has value at least `4`, while the capacity is `3`. The minimum cut
+`{1, 2, 3, 5}` is not feasible because the edge `(4, 5)` goes back across it. The dual of the flow
+problem has `νⱼ - νₖ ≤ λⱼₖ`. -/
 theorem printed_dual_ge_four {ν : Fin 6 → ℝ} (hν : ∀ j k, 0 < exampleW j k → 0 ≤ ν j - ν k)
     (h1 : ν 0 - ν 5 = 1) : 4 ≤ ∑ j, ∑ k, (exampleW j k : ℝ) * (ν j - ν k) := by
   have h₁ := hν 3 4 (by decide)
@@ -142,18 +141,16 @@ def funCode (f : V → V → (V → Ω) → M → Ω) (g : V → V → (V → Ω
   dec l j u := g l j fun k => if h : k < l then u k h else 0
 
 omit [Fintype V] in
-lemma funCode_edge [Finite V] (f : V → V → (V → Ω) → M → Ω) (g : V → V → (V → Ω) → M) (m : V → M) (k
-  l : V) :
-    (funCode f g).edge m k l =
-      f k l (fun j => if j < k then (funCode f g).edge m j k else 0) (m k) := by
+lemma funCode_edge [Finite V] (f : V → V → (V → Ω) → M → Ω) (g : V → V → (V → Ω) → M) (m : V → M)
+    (k l : V) : (funCode f g).edge m k l = f k l
+    (fun j => if j < k then (funCode f g).edge m j k else 0) (m k) := by
   rw [NetCode.edge_eq]
   simp only [funCode, dite_eq_ite]
 
 omit [Fintype V] in
-lemma funCode_out [Finite V] (f : V → V → (V → Ω) → M → Ω) (g : V → V → (V → Ω) → M) (m : V → M) (l
-  j : V) :
-    (funCode f g).out m l j =
-      g l j fun k => if k < l then (funCode f g).edge m k l else 0 := by
+lemma funCode_out [Finite V] (f : V → V → (V → Ω) → M → Ω) (g : V → V → (V → Ω) → M) (m : V → M)
+    (l j : V) : (funCode f g).out m l j = g l j fun k => if k < l then (funCode f g).edge m k l
+    else 0 := by
   simp only [NetCode.out, funCode, dite_eq_ite]
 
 end FunCode
@@ -211,8 +208,7 @@ def butterflyW : Fin 7 → Fin 7 → ℕ :=
 def butterflyNet : NoiselessNetwork (Fin 7) := natNet butterflyW (by decide)
 
 /-- **Page 16-14 of [elgamal2010].** The code of the butterfly network: node `4` sends the XOR of
-  its
-two incoming bitstreams, and the others forward. -/
+its two incoming bitstreams, and the others forward. -/
 def butterflyCode (n : ℕ) :
     NetCode (Fin 7) (fun _ _ => Bitstream n) (fun _ => Bitstream n × Bitstream n) :=
   funCode
@@ -401,8 +397,7 @@ theorem butterfly_routing_split (S : RoutingScheme cap b (multicastD 0 {5, 6}))
   exact this.trans ((S.card_le 3 4).trans hcap)
 
 /-- If the source may send a bit on both of its edges then routing is limited by `2 b ≤ 3 n`, which
-  is
-more than the rate `1` of `butterfly_routing_split`. -/
+is more than the rate `1` of `butterfly_routing_split`. -/
 theorem butterfly_routing_le (S : RoutingScheme cap b (multicastD 0 {5, 6}))
     (hz : ∀ j k, butterflyW j k = 0 → cap j k = 0) (hb : ∀ j, j ≠ 0 → b j = 0)
     (hcap : ∀ j k, cap j k ≤ n) : 2 * b 0 ≤ 3 * n := by
@@ -729,8 +724,7 @@ theorem unicast_iff {R : Fin 6 → ℝ} (h0 : ∀ j, 0 ≤ R j) (hR : ∀ j, 2 �
   ⟨unicast_le_one, fun h => (unicast_isAchievableZE h0 hR h.1 h.2).isAchievable⟩
 
 /-- **Page 16-27 of [elgamal2010].** Routing is limited by the bottleneck edge `(3, 4)`: all the
-  bits
-of both messages have to go through it. -/
+bits of both messages have to go through it. -/
 theorem unicast_routing_bound {cap : Fin 6 → Fin 6 → ℕ} {b : Fin 6 → ℕ}
     (S : RoutingScheme cap b unicastD) (hz : ∀ j k, unicastW j k = 0 → cap j k = 0)
     (hb : ∀ j, 2 ≤ j → b j = 0) : b 0 + b 1 ≤ cap 2 3 := by
@@ -842,8 +836,7 @@ theorem printed_unicast_routing {R : Fin 6 → ℝ} (h0 : ∀ j, 0 ≤ R j) (h�
 /-! ### The linear code of page 16-18 -/
 
 /-- **Page 16-18 of [elgamal2010].** The multigraph of the example: the edges are `(1, 2)`,
-  `(1, 3)`,
-`(2, 3)`, `(2, 4)` and `(3, 4)`, with nodes numbered from `0`. -/
+`(1, 3)`, `(2, 3)`, `(2, 4)` and `(3, 4)`, with nodes numbered from `0`. -/
 def kmGraph : Multigraph (Fin 4) (Fin 5) :=
   ⟨![0, 0, 1, 1, 2], ![1, 2, 2, 3, 3], by decide⟩
 
@@ -869,8 +862,8 @@ def kmCoeff : LinCoeff K (Fin 5) kmB where
     else if e = 4 then (if r.2.val = 0 then α 9 else α 11) else 0
 
 lemma sum_subtype_five {M : Type*} [AddCommMonoid M] (p : Fin 5 → Prop) [DecidablePred p]
-    [Fintype {e // p e}] (f : Fin 5 → M) : ∑ e : {e // p e}, f e.1 = ∑ e, if p e then f e else 0 :=
-      by
+    [Fintype {e // p e}] (f : Fin 5 → M) : ∑ e : {e // p e}, f e.1 =
+      ∑ e, if p e then f e else 0 := by
   rw [← Finset.sum_filter]
   exact (Finset.sum_subtype _ (by simp) f).symm
 

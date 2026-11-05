@@ -96,7 +96,7 @@ theorem entropyRate_le_capacity [Nonempty α] (P : StochasticProcess 𝒱) {W : 
         n * (log 2 / n + (c n).errProb P W * log (Fintype.card 𝒱) + capacity W) := by
       rw [mul_add, mul_add, mul_div_cancel₀ _ hn'.ne']
       linarith
-    exact le_of_mul_le_mul_left key hn' 
+    exact le_of_mul_le_mul_left key hn'
   have hlim : Tendsto (fun n : ℕ => log 2 / n + (c n).errProb P W * log (Fintype.card 𝒱) +
       capacity W) atTop (𝓝 (capacity W)) := by
     have := ((tendsto_const_div_atTop_nhds_zero_nat (log 2)).add
@@ -211,7 +211,7 @@ theorem errProb_twoStageCode_le [Nonempty 𝒱] {n M : ℕ} (P : StochasticProce
     change (if h : ∃ v' ∈ A, idx v' = ch.dec y then h.choose else Classical.arbitrary _) = v
     split
     · next h' => exact hinj _ h'.choose_spec.1 _ hv (h'.choose_spec.2.trans hy)
-    · next h' => exact absurd h h' 
+    · next h' => exact absurd h h'
   -- Bound the error of each source block.
   have hterm : ∀ v, ∑ y, (if c.dec y ≠ v then P.law n v * channelExt W n (c.enc v) y else 0) ≤
       (if v ∈ A then 0 else P.law n v) + P.law n v * ch.maxErrProb W := by

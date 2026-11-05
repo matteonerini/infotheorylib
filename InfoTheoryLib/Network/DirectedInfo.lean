@@ -302,19 +302,19 @@ theorem cInfo_stratW_eq_causalDirectedInfo (hp₁ : IsPMF p₁) (hp₂ : IsPMF p
     have hd : dist μ Prod.fst = prodDist p₁ p₂ := dist_jointOf_fst hS
     have hd₁ : H[T₁ ; μ] = entropy p₁ := by
       have ee : T₁ = Prod.fst ∘ Prod.fst := rfl
-      rw [entropyRV, ee, dist_dist_comp, hd, dist_prodDist_fst hp₂]
+      rw [entropyRV, ee, dist_comp_eq, hd, dist_prodDist_fst hp₂]
     have hd₂ : H[T₂ ; μ] = entropy p₂ := by
       have ee : T₂ = Prod.snd ∘ Prod.fst := rfl
-      rw [entropyRV, ee, dist_dist_comp, hd, dist_prodDist_snd hp₁]
+      rw [entropyRV, ee, dist_comp_eq, hd, dist_prodDist_snd hp₁]
     have hd₃ : H[Prod.fst ; μ] = entropy p₁ + entropy p₂ := by
       rw [entropyRV, hd, entropy_prodDist hp₁ hp₂]
     set c₀ : (Fin n → Option Y) × (Fin n → Option X₂) := ((fun _ => none), (fun _ => none)) with hc₀
-    have e₁ : H[pair (fun _ : (Strat n X₁ Y × Strat n X₂ Y) × (Fin n → Y) => c₀) T₁ ; μ] = H[T₁ ; μ]
-      :=
+    have e₁ : H[pair (fun _ : (Strat n X₁ Y × Strat n X₂ Y) × (Fin n → Y) => c₀) T₁ ; μ] =
+      H[T₁ ; μ] :=
       entropyRV_eq_of_injective _ (fun a => (c₀, a)) (fun s t h => (Prod.ext_iff.mp h).2)
         fun _ => rfl
-    have e₂ : H[pair (fun _ : (Strat n X₁ Y × Strat n X₂ Y) × (Fin n → Y) => c₀) T₂ ; μ] = H[T₂ ; μ]
-      :=
+    have e₂ : H[pair (fun _ : (Strat n X₁ Y × Strat n X₂ Y) × (Fin n → Y) => c₀) T₂ ; μ] =
+      H[T₂ ; μ] :=
       entropyRV_eq_of_injective _ (fun a => (c₀, a)) (fun s t h => (Prod.ext_iff.mp h).2)
         fun _ => rfl
     have e₃ : H[pair (pair (fun _ : (Strat n X₁ Y × Strat n X₂ Y) × (Fin n → Y) => c₀) T₂) T₁ ; μ] =
@@ -334,8 +334,8 @@ theorem cInfo_stratW_eq_causalDirectedInfo (hp₁ : IsPMF p₁) (hp₂ : IsPMF p
     ring
   -- the induction
   have hstep : ∀ i : Fin n, I[T₁ : T₂ | pair (P i) (Q₂ i) ; μ] = 0 →
-      I[T₁ : T₂ | pair (P ((i : ℕ) + 1)) (Q₂ ((i : ℕ) + 1)) ; μ] = 0 ∧ I[T₂ : O i | C i ; μ] = 0 :=
-        by
+      I[T₁ : T₂ | pair (P ((i : ℕ) + 1)) (Q₂ ((i : ℕ) + 1)) ; μ] = 0 ∧ I[T₂ : O i | C i ; μ] =
+        0 := by
     intro i h0
     -- conditioning on the present input of sender 2
     have h₁ : I[T₁ : T₂ | C i ; μ] = 0 := by

@@ -513,13 +513,12 @@ variable {α₁ α₂ : Type u} [Fintype α₁] [Fintype α₂] {β₁ β₂ : T
 omit [Fintype β₂] [Fintype β₁] in
 open Classical in
 /-- **The distortion of `X₁`**, from the probability that a round is not good. -/
-theorem KBook.distortion₁_le [Finite β₁] (B : KBook L M n υ) (hP : IsPMF P) (hn : 0 < n) [Nonempty
-  β₁]
-    {d₁ : α₁ → β₁ → ℝ} (hd : ∀ x y, 0 ≤ d₁ x y) (hμ : IsPMF μ) (f₁ : (Fin q → υ) → α₂ → β₁)
-    (f₂ : (Fin q → υ) → α₁ → β₂) {ε : ℝ} (hε : 0 ≤ ε) :
-    ((B.proto spk μ ε₂ εd).code f₁ f₂).distortion₁ P d₁ ≤
-      (1 + ε) * ∑ z, μ z * d₁ z.1 (f₁ z.2.2 z.2.1) + maxDistortion d₁ *
-        ∑ ω, iidPMF P n ω * (if B.Good spk μ ε₂ εd q ε ω then 0 else 1) := by
+theorem KBook.distortion₁_le [Finite β₁] (B : KBook L M n υ) (hP : IsPMF P) (hn : 0 < n)
+    [Nonempty β₁] {d₁ : α₁ → β₁ → ℝ} (hd : ∀ x y, 0 ≤ d₁ x y) (hμ : IsPMF μ)
+    (f₁ : (Fin q → υ) → α₂ → β₁) (f₂ : (Fin q → υ) → α₁ → β₂) {ε : ℝ} (hε : 0 ≤ ε) :
+    ((B.proto spk μ ε₂ εd).code f₁ f₂).distortion₁ P d₁ ≤ (1 + ε) * ∑ z, μ z * d₁ z.1
+    (f₁ z.2.2 z.2.1) + maxDistortion d₁ * ∑ ω, iidPMF P n ω *
+    (if B.Good spk μ ε₂ εd q ε ω then 0 else 1) := by
   have := Fintype.ofFinite β₁
   obtain ⟨z₀⟩ : Nonempty (α₁ × α₂) := Fintype.card_pos_iff.1 (card_pos_of_isPMF hP)
   have hneα : Nonempty α₁ := ⟨z₀.1⟩
@@ -577,13 +576,12 @@ theorem KBook.distortion₁_le [Finite β₁] (B : KBook L M n υ) (hP : IsPMF P
 omit [Fintype β₁] [Fintype β₂] in
 open Classical in
 /-- **The distortion of `X₂`**, from the probability that a round is not good. -/
-theorem KBook.distortion₂_le [Finite β₂] (B : KBook L M n υ) (hP : IsPMF P) (hn : 0 < n) [Nonempty
-  β₂]
-    {d₂ : α₂ → β₂ → ℝ} (hd : ∀ x y, 0 ≤ d₂ x y) (hμ : IsPMF μ) (f₁ : (Fin q → υ) → α₂ → β₁)
-    (f₂ : (Fin q → υ) → α₁ → β₂) {ε : ℝ} (hε : 0 ≤ ε) :
-    ((B.proto spk μ ε₂ εd).code f₁ f₂).distortion₂ P d₂ ≤
-      (1 + ε) * ∑ z, μ z * d₂ z.2.1 (f₂ z.2.2 z.1) + maxDistortion d₂ *
-        ∑ ω, iidPMF P n ω * (if B.Good spk μ ε₂ εd q ε ω then 0 else 1) := by
+theorem KBook.distortion₂_le [Finite β₂] (B : KBook L M n υ) (hP : IsPMF P) (hn : 0 < n)
+    [Nonempty β₂] {d₂ : α₂ → β₂ → ℝ} (hd : ∀ x y, 0 ≤ d₂ x y) (hμ : IsPMF μ)
+    (f₁ : (Fin q → υ) → α₂ → β₁) (f₂ : (Fin q → υ) → α₁ → β₂) {ε : ℝ} (hε : 0 ≤ ε) :
+    ((B.proto spk μ ε₂ εd).code f₁ f₂).distortion₂ P d₂ ≤ (1 + ε) * ∑ z, μ z * d₂ z.2.1
+    (f₂ z.2.2 z.1) + maxDistortion d₂ * ∑ ω, iidPMF P n ω *
+    (if B.Good spk μ ε₂ εd q ε ω then 0 else 1) := by
   have := Fintype.ofFinite β₂
   obtain ⟨z₀⟩ : Nonempty (α₁ × α₂) := Fintype.card_pos_iff.1 (card_pos_of_isPMF hP)
   have hneα : Nonempty α₂ := ⟨z₀.2⟩
@@ -782,8 +780,8 @@ theorem isAchievableKaspi_of_lt [Finite β₁]
       R.1 * log 2)
     (hR₂ : I[fun z : α₁ × α₂ × (Fin q → υ) => z.2.1 : fun z => z.2.2 | fun z => z.1 ; μ] <
       R.2 * log 2)
-    (hE₁ : ∑ z, μ z * d₁ z.1 (f₁ z.2.2 z.2.1) ≤ D₁) (hE₂ : ∑ z, μ z * d₂ z.2.1 (f₂ z.2.2 z.1) ≤ D₂)
-      :
+    (hE₁ : ∑ z, μ z * d₁ z.1 (f₁ z.2.2 z.2.1) ≤ D₁)
+      (hE₂ : ∑ z, μ z * d₂ z.2.1 (f₂ z.2.2 z.1) ≤ D₂) :
     IsAchievableKaspi P spk d₁ d₂ D₁ D₂ R := by
   have := Fintype.ofFinite β₁
   have := Fintype.ofFinite β₂
@@ -895,8 +893,7 @@ theorem isAchievableKaspi_of_lt [Finite β₁]
 
 omit [Fintype β₁] [Fintype β₂] in
 /-- **Theorem 4 of Lecture 21 of [elgamal2010], page 21-22: the inner bound.** The region of a law
-  is
-contained in the `q`-round rate–distortion region. -/
+is contained in the `q`-round rate–distortion region. -/
 theorem kaspiInner_subset_kaspiRegion [Finite β₁]
     [Finite β₂] [Nonempty β₁] [Nonempty β₂] (hP : IsPMF P) {d₁ : α₁ → β₁ → ℝ}
     {d₂ : α₂ → β₂ → ℝ} (hd₁ : ∀ x y, 0 ≤ d₁ x y) (hd₂ : ∀ x y, 0 ≤ d₂ x y) (D₁ D₂ : ℝ) :

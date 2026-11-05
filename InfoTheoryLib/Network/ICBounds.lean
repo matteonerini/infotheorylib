@@ -13,8 +13,8 @@ public import InfoTheoryLib.Network.MACMultiLetter
 
 Fano's inequality at each receiver, and the fact that the capacity region of the DM-IC depends only
 on the conditional marginals, give Sato's outer bound: for every channel `p̃(y₁, y₂ | x₁, x₂)` with
-the same conditional marginals,
-`R₁ ≤ I(X₁; Y₁ | X₂, Q)`, `R₂ ≤ I(X₂; Y₂ | X₁, Q)`, `R₁ + R₂ ≤ I(X₁, X₂; Y₁, Y₂ | Q)`.
+the same conditional marginals, `R₁ ≤ I(X₁; Y₁ | X₂, Q)`, `R₂ ≤ I(X₂; Y₂ | X₁, Q)`,
+`R₁ + R₂ ≤ I(X₁, X₂; Y₁, Y₂ | Q)`.
 
 ## Main definitions
 

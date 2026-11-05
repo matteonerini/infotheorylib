@@ -236,8 +236,8 @@ lemma nncSel_isPMF {α β γ : Type*} [Fintype γ] {P : α → γ → ℝ} (hP :
   refine ⟨fun c => sum_nonneg fun C _ => mul_nonneg (hI.nonneg C) (ind_nonneg _), ?_⟩
   simp only [nncSel]
   rw [sum_comm]
-  have h : ∀ C : Fin K → γ, ∑ c, iidPMF (P a) K C * ind (C (pick a C b) = c) = iidPMF (P a) K C :=
-    by
+  have h : ∀ C : Fin K → γ, ∑ c, iidPMF (P a) K C * ind (C (pick a C b) = c) =
+    iidPMF (P a) K C := by
     intro C
     rw [Finset.sum_eq_single (C (pick a C b))]
     · rw [ind_of_pos rfl, mul_one]
@@ -548,7 +548,7 @@ lemma nncRho3_eq (hpx : ∀ k, IsPMF (px k)) (hW : IsChannel W) (hτ : ∀ k, Is
   have hL := nncLaw_isPMF hpx hW hτ (V := V)
   have hm : marg (nncRho3 (nncLaw px W τ) k) a =
       ∑ ω, nncLaw px W τ ω * ind ((ω.1 k, ω.2.1 k) = a) := by
-    rw [marg_eq_dist, nncRho3, ← dist_dist_comp]
+    rw [marg_eq_dist, nncRho3, ← dist_comp_eq]
     simp only [dist, ind]
     refine sum_congr rfl fun ω _ => ?_
     split_ifs with h₁ h₂ h₂
@@ -612,7 +612,7 @@ lemma nnc_chan_mul_le (hpx : ∀ k, IsPMF (px k)) (hW : IsChannel W) (hτ : ∀ 
   have h2P : IsPMF (nncRho L k) := hL.dist _
   have hmarg2 : marg (nncRho L k) = dist L (fun ω : NNCΩ X Y V => ω.1 k) := by
     funext x
-    rw [marg_eq_dist, nncRho, ← dist_dist_comp]
+    rw [marg_eq_dist, nncRho, ← dist_comp_eq]
     rfl
   have e₃ : seqChan (τ k) n (fun i => (a i, b i)) c =
       channelExt (condPMF (nncRho3 L k)) n (zipSeq a b) c :=
@@ -620,7 +620,7 @@ lemma nnc_chan_mul_le (hpx : ∀ k, IsPMF (px k)) (hW : IsChannel W) (hτ : ∀ 
   have hac : zipSeq a c ∈ robustTypicalSet (nncRho L k) n ε := by
     have hm := comp_mem_robustTypicalSet h fun t : (X k × Y k) × V k => (t.1.1, t.2)
     have e : dist (nncRho3 L k) (fun t : (X k × Y k) × V k => (t.1.1, t.2)) = nncRho L k := by
-      rw [nncRho3, ← dist_dist_comp]
+      rw [nncRho3, ← dist_comp_eq]
       rfl
     rw [e] at hm
     exact hm
@@ -775,8 +775,8 @@ theorem nnc_cover_aux (hpx : ∀ k, IsPMF (px k)) (hW : IsChannel W) (hτ : ∀ 
     rw [e₁]
     rw [e₂] at hstep
     -- the sequences of the node are typical
-    have hatyp : ∑ a, ∑ b, nncR px W k a b * ∑ c, nncTauN τ n k a b c * ind (¬ Tj a b c) ≤ η / 4 :=
-      by
+    have hatyp : ∑ a, ∑ b, nncR px W k a b * ∑ c, nncTauN τ n k a b c * ind (¬ Tj a b c) ≤ η /
+      4 := by
       have h₁ := sum_nncR_not_le hpx hW hτ k Tj (nncBad L ε') (fun x y v hB => by
         have hB' : nncFull x y v ∈ robustTypicalSet L n ε' := not_not.mp hB
         have hm := comp_mem_robustTypicalSet hB' fun ω : NNCΩ X Y V =>

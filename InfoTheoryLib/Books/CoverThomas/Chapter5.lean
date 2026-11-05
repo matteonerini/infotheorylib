@@ -655,6 +655,7 @@ generates `(1/2, 1/4, 1/4)`, but uses two fair bits per sample. -/
 def leaves_5_11_1' : Fin 4 → List Bool :=
   ![[false, false], [false, true], [true, false], [true, true]]
 
+/-- The coin tree of the prefix code `leaves_5_11_1'`. -/
 def tree_5_11_1' : CoinTree (Fin 3) :=
   CoinTree.ofCode leaves_5_11_1' (by unfold IsPrefixCode; decide) ![0, 1, 2, 0]
     (by

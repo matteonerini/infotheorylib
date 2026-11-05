@@ -38,8 +38,7 @@ namespace InfoTheory
 variable {α₁ α₂ ξ β₁ β₂ : Type*}
 
 /-- **Lecture 15 of [elgamal2010], page 15-19.** A joint source–channel code of rate pair `(1, 1)`
-  for a
-2-DMS over a DM-BC. -/
+for a 2-DMS over a DM-BC. -/
 structure BCJSCCCode (n : ℕ) (α₁ α₂ ξ β₁ β₂ : Type*) where
   /-- The encoder of the pair of sources. -/
   enc : (Fin n → α₁ × α₂) → Fin n → ξ
@@ -58,15 +57,13 @@ def BCJSCCCode.errProb (C : BCJSCCCode n α₁ α₂ ξ β₁ β₂) (P : α₁ 
     (if C.dec₁ (fun i => (y i).1) = fstSeq ω ∧ C.dec₂ (fun i => (y i).2) = sndSeq ω then 0 else 1)
 
 /-- **Lecture 15 of [elgamal2010], page 15-19.** The sources are transmitted losslessly over the
-  DM-BC
-if there is a sequence of codes with `P_e → 0`. -/
+DM-BC if there is a sequence of codes with `P_e → 0`. -/
 def IsLosslessBC (P : α₁ × α₂ → ℝ) (W : ξ → β₁ × β₂ → ℝ) : Prop :=
   ∃ C : ∀ n : ℕ, BCJSCCCode n α₁ α₂ ξ β₁ β₂, Tendsto (fun n => (C n).errProb P W) atTop (𝓝 0)
 
 /-- **Lecture 15, page 15-29: uncoded transmission.** If the channel is deterministic with
 `(Y₁, Y₂) = f(X)`, and `Uⱼ` can be recovered from `Yⱼ` for `X = e(U₁, U₂)` for every pair of
-  positive
-probability, then the sources can be sent losslessly, with no coding. -/
+positive probability, then the sources can be sent losslessly, with no coding. -/
 theorem isLosslessBC_of_uncoded [DecidableEq β₁] [DecidableEq β₂] {P : α₁ × α₂ → ℝ}
     {W : ξ → β₁ × β₂ → ℝ} {f : ξ → β₁ × β₂} (hW : ∀ x y, W x y = if f x = y then 1 else 0)
     (e : α₁ × α₂ → ξ) (d₁ : β₁ → α₁) (d₂ : β₂ → α₂)

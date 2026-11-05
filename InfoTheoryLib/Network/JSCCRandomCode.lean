@@ -31,8 +31,7 @@ sequences, and whether the common part, differ from the true ones.
 
 The codewords of `u₁` are a table indexed by `(u₁, s)` for all sequences `s`, independent of the
 table of the `w(c)`. The codeword is then `x₁(u₁, w(c))`. In this way all the entries are
-  independent,
-and conditioning on `w` is just a matter of evaluating the tables at the right indices.
+independent, and conditioning on `w` is just a matter of evaluating the tables at the right indices.
 
 ## References
 
@@ -644,13 +643,11 @@ omit [Fintype C] in
 open Classical in
 /-- **The random coding bound.** There are encoders and a decoder such that the error probability
 is at most the average of the five terms. -/
-theorem exists_jscc_code_le [Finite C] (hQ : IsPMF Q) (hτ : IsPMF τ) (hA : IsChannel A) (hB :
-  IsChannel B)
-    (hV : IsChannel V) (hg : ∀ u₁ u₂, Q (u₁, u₂) ≠ 0 → g₁ u₁ = g₂ u₂) :
-    ∃ (e₁ : A₁ → X₁) (e₂ : A₂ → X₂) (dec : Y → A₁ × A₂),
-      ∑ u₁, ∑ u₂, Q (u₁, u₂) * ∑ y, V (e₁ u₁, e₂ u₂) y *
-        (if dec y = (u₁, u₂) then 0 else 1) ≤
-      ∑ u₁, ∑ u₂, Q (u₁, u₂) * jsccBound g₁ τ A B V Test u₁ u₂ := by
+theorem exists_jscc_code_le [Finite C] (hQ : IsPMF Q) (hτ : IsPMF τ) (hA : IsChannel A)
+    (hB : IsChannel B) (hV : IsChannel V) (hg : ∀ u₁ u₂, Q (u₁, u₂) ≠ 0 → g₁ u₁ = g₂ u₂) : ∃
+    (e₁ : A₁ → X₁) (e₂ : A₂ → X₂) (dec : Y → A₁ × A₂), ∑ u₁, ∑ u₂, Q (u₁, u₂) * ∑ y, V
+    (e₁ u₁, e₂ u₂) y * (if dec y = (u₁, u₂) then 0 else 1) ≤ ∑ u₁, ∑ u₂, Q (u₁, u₂) * jsccBound g₁
+    τ A B V Test u₁ u₂ := by
   have := Fintype.ofFinite C
   have hL : IsPMF (jsccLaw (C := C) τ A B) := by
     refine ⟨fun T => mul_nonneg (piLaw_nonneg (fun _ => hτ) _)
@@ -702,8 +699,8 @@ omit [Fintype A₁] [Fintype A₂] [Fintype C] [Nonempty A₁] [Nonempty A₂] i
 /-- Exchange a weighted sum with the sums over the channel variables. -/
 lemma sum_mul_four_swap (c : J → ℝ) (F : J → S → X₁ → X₂ → Y → ℝ) (u₁ : A₁) (u₂ : A₂) :
     ∑ j, c j * ∑ s, τ s * ∑ a, A (u₁, s) a * ∑ b, B (u₂, s) b * ∑ y, V (a, b) y * F j s a b y =
-      ∑ s, τ s * ∑ a, A (u₁, s) a * ∑ b, B (u₂, s) b * ∑ y, V (a, b) y * ∑ j, c j * F j s a b y :=
-        by
+      ∑ s, τ s * ∑ a, A (u₁, s) a * ∑ b, B (u₂, s) b * ∑ y, V (a, b) y * ∑ j, c j *
+        F j s a b y := by
   refine (sum_mul_sum_swap' _ _ _).trans (sum_congr rfl fun s _ => congrArg _ ?_)
   refine (sum_mul_sum_swap' _ _ _).trans (sum_congr rfl fun a _ => congrArg _ ?_)
   refine (sum_mul_sum_swap' _ _ _).trans (sum_congr rfl fun b _ => congrArg _ ?_)

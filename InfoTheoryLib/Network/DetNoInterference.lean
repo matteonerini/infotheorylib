@@ -23,8 +23,7 @@ Each node receives a collection of functions of one input each:
 
 * `entropy_prodLaw`: the entropy of an independent family is the sum of the entropies.
 * `cutInfo_ni_le`: the information across a cut is at most the sum over the nodes of the cut, for
-  the
-  marginal laws.
+  the marginal laws.
 * `cutInfo_ni_prod`: for a product law, they are equal.
 * `mnCapacity_ni`: **the capacity of a deterministic multicast network with no interference**.
 
@@ -184,7 +183,7 @@ theorem cutInfo_ni_le {p : (∀ k, X k) → ℝ} (hp : IsPMF p) (S : Finset (Fin
     (fun (x : ∀ k, X k) j => niT a S j (x j)) (restr Sᶜ) S
   refine h₁.trans (sum_le_sum fun j _ => ?_)
   refine (condEntropy_le_entropy hp _ _).trans_eq ?_
-  rw [niH, ← dist_dist_comp]
+  rw [niH, ← dist_comp_eq]
   rfl
 
 /-- **Page 19-20 of [elgamal2010].** For a product law, the information across a cut is the sum over

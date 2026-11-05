@@ -82,9 +82,8 @@ def rwdCapacity (W₁ : X → Y₁ → ℝ) (W₂ : X × X₁ × Y₁ → Y → 
 variable [Fintype X] [Fintype X₁] [DecidableEq Y₁] [Nonempty X] [Nonempty X₁]
 
 /-- **Theorem 7 of Lecture 17 of [elgamal2010], page 17-73: the relay-without-delay cutset bound**,
-  in
-the form `max_{p(x, x₁')} min {I(X; Y, Y₁ | X₁'), I(X, X₁'; Y)}` of the remark there, with `X₁'` the
-maps `Y₁ → X₁`. -/
+in the form `max_{p(x, x₁')} min {I(X; Y, Y₁ | X₁'), I(X, X₁'; Y)}` of the remark there, with `X₁'`
+the maps `Y₁ → X₁`. -/
 theorem IsAchievableRWD.le_rcCutsetBound (h₁ : IsChannel W₁) (h₂ : IsChannel W₂) {R : ℝ}
     (h : IsAchievableRWD W₁ W₂ R) : R * log 2 ≤ rcCutsetBound (rwdChannel W₁ W₂) :=
   IsAchievableRC.le_rcCutsetBound (rwdChannel_isChannel h₁ h₂) h
@@ -283,8 +282,8 @@ lemma lookOfCompound_rowErr_le (h₁ : IsChannel W₁) (h₂ : IsChannel W₂)
     simp only [lookOfCompound, hdec]
     exact le_rfl
   · rw [ind_of_pos hdec]
-    have hle : ∑ y : Fin n → Y, (∏ i, W₂ ((c.enc m i).1, (lookOfCompound c).relay i y₁, y₁ i) (y i))
-      *
+    have hle : ∑ y : Fin n → Y,
+      (∏ i, W₂ ((c.enc m i).1, (lookOfCompound c).relay i y₁, y₁ i) (y i)) *
         ind ((lookOfCompound c).dec y ≠ m) ≤ 1 := by
       have hch := seqChan_isChannel h₂ n
         (fun i => ((c.enc m i).1, (lookOfCompound c).relay i y₁, y₁ i))
@@ -455,7 +454,7 @@ theorem IsAchievableLook.le_capacity (h₁ : IsChannel W₁) (h₂ : IsChannel W
     have hH : H[Mv ; μ] = log M := by
       have hd₁ : dist μ Mv = uniformPMF (Fin M) := by
         have e : Mv = Prod.fst ∘ Prod.fst := rfl
-        rw [e, dist_dist_comp, dist_fst_fbLaw h₂ n]
+        rw [e, dist_comp_eq, dist_fst_fbLaw h₂ n]
         funext m
         simp only [dist, Fintype.sum_prod_type]
         rw [Finset.sum_eq_single m]

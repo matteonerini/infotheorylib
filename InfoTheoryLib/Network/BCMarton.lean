@@ -25,7 +25,7 @@ a sequence jointly typical with its output.
 
 ## Main definitions
 
-* `martonJoint₁`, `martonJoint₂`: the pmfs of `((U₁, U₂), Y₁)` and `((U₁, U₂), Y₂)`.
+* `martonK₁`, `martonK₂`: the channels from `(U₁, U₂)` to `Y₁` and to `Y₂`.
 * `martonInfo₁`, `martonInfo₂`: `I(U₁; Y₁)`, `I(U₂; Y₂)`; `martonInfo₁₂`: `I(U₁; U₂)`.
 * `martonRegionBits W`: Marton's inner bound in bits.
 * `coverVanDerMeulenRegionBits W`: the Cover–van der Meulen inner bound in bits.

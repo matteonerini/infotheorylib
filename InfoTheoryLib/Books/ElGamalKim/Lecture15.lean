@@ -11,11 +11,10 @@ public import InfoTheoryLib.Books.ElGamalKim.Lecture15Examples
 # El Gamal & Kim, Lecture 15: Joint Source–Channel Coding
 
 This file indexes the formalization of Lecture 15 of [elgamal2010]. We prove the joint
-  source–channel
-coding theorems for the DM-MAC (Theorems 1 and 2), the Gray–Wyner theorem (Theorem 3), the
-relations between the common part, the mutual information and Wyner's common information and the
-corners of the Gray–Wyner region, and the two examples where source–channel separation fails. Over
-the DM-BC we define the codes and prove the example.
+source–channel coding theorems for the DM-MAC (Theorems 1 and 2), the Gray–Wyner theorem (Theorem
+3), the relations between the common part, the mutual information and Wyner's common information and
+the corners of the Gray–Wyner region, and the two examples where source–channel separation fails.
+Over the DM-BC we define the codes and prove the example.
 
 ## Conventions
 
@@ -39,8 +38,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Tables of independent entries: `piLaw`, `sum_piLaw_mul_prod`, `sum_piLaw_mul_eval`,
   `sum_piLaw_mul_eval₂` (`Network.JSCCRandomCode`).
 * The law of the tables and the expectation of the terms: `JSCCTable`, `jsccLaw`, `eval_true`,
-  `eval_a`,
-  `eval_b`, `eval_c`, `eval_d`, `jsccD`, `jsccDec`.
+  `eval_a`, `eval_b`, `eval_c`, `eval_d`, `jsccD`, `jsccDec`.
 * **The bound**: `jsccF₀`, `jsccFa`, `jsccFb`, `jsccFc`, `jsccFd`, `jsccBound`,
   `exists_jscc_code_le`, `jsccBound_eq`.
 
@@ -55,8 +53,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### The example over the binary erasure MAC (pages 15-5 and 15-6)
 * Uncoded transmission: `isLosslessMAC_of_uncoded` (`Network.JSCCMAC`).
 * `jsTriPMF`, `entropy_jsTriPMF`, `isLosslessMAC_jsTriPMF`, `binEntropy_le_quadratic`,
-  `erasure_sum_le`,
-  `entropy_jsTriPMF_gt_erasure` (`Books.ElGamalKim.Lecture15Examples`).
+  `erasure_sum_le`, `entropy_jsTriPMF_gt_erasure` (`Books.ElGamalKim.Lecture15Examples`).
 
 ### The common part (pages 15-14 and 15-15)
 * `commonRel`, `CommonIdx`, `commonG₁`, `commonG₂`, `commonG_eq`, **`exists_common_lift`**
@@ -87,22 +84,18 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### Sources over a DM-BC (pages 15-19 and 15-29)
 * `BCJSCCCode`, `BCJSCCCode.errProb`, `IsLosslessBC`, `isLosslessBC_of_uncoded` (`Network.JSCCBC`).
 * The example over the Blackwell channel: `jsTriInput`, `isLosslessBC_jsTriPMF`,
-  **`gray_wyner_blackwell`**
-  (`Books.ElGamalKim.Lecture15Examples`).
+  **`gray_wyner_blackwell`** (`Books.ElGamalKim.Lecture15Examples`).
 
 ## Not formalized
 
 * **Theorem 4** (Han–Costa) and its special cases, Lemma 1 and the appendix, pages 15-30 to 15-40.
-  The
-  proof needs a three-layer covering lemma with random mappings of `(u₁ⁿ, u₂ⁿ)` on top of Marton
+  The proof needs a three-layer covering lemma with random mappings of `(u₁ⁿ, u₂ⁿ)` on top of Marton
   coding with a common message, which Lecture 9 also leaves out.
 * The separation results over the DM-BC on pages 15-20, 15-27 and 15-28, and the code-level meaning
-  of
-  the bounds `R₀ + R₁ ≤ H(Y₁)` on page 15-29. `gray_wyner_blackwell` is a statement about the
+  of the bounds `R₀ + R₁ ≤ H(Y₁)` on page 15-29. `gray_wyner_blackwell` is a statement about the
   Gray–Wyner region and these three inequalities.
 * The sufficient conditions of separate coding on pages 15-4 and 15-5, the special cases of Theorem
-  1
-  on pages 15-7 and 15-8 and the example `U₁ = U₂` on page 15-13, as corollaries.
+  1 on pages 15-7 and 15-8 and the example `U₁ = U₂` on page 15-13, as corollaries.
 * The DM-MAC with common message on page 15-17 and the claim that `W` need not be correlated with
   `U₀`; the claim that the scheme is not optimal in general [5].
 * The cardinality bound `|𝒱| ≤ |𝒰₁| |𝒰₂| + 2`. We have `+ 4`, from Carathéodory's theorem.
@@ -114,14 +107,13 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * **Theorem 2 first.** We prove Theorem 2, for any common function, and Theorem 1 is the case of a
   constant function, with `W = Q`. So time sharing is not a separate argument, unlike page 15-9.
 * **Independent tables.** The codewords are drawn for all pairs `(u₁ⁿ, wⁿ)` in advance,
-  independently
-  of the table of the `wⁿ(u₀ⁿ)`, and the codeword used is `x₁ⁿ(u₁ⁿ, wⁿ(u₀ⁿ))`. The joint law of a
-    few
-  entries then has an elementary form (`sum_piLaw_mul_eval₂`). The notes draw `x₁ⁿ` given `wⁿ(u₀ⁿ)`.
+  independently of the table of the `wⁿ(u₀ⁿ)`, and the codeword used is `x₁ⁿ(u₁ⁿ, wⁿ(u₀ⁿ))`. The
+  joint law of a few entries then has an elementary form (`sum_piLaw_mul_eval₂`). The notes draw
+  `x₁ⁿ` given `wⁿ(u₀ⁿ)`.
 * **The error events.** `E₄` of the notes splits into two events, for the true and for a wrong
-  common
-  part, which give the third and the fourth inequality of Theorem 2. All the events are bounded
-  by `|T_ε| max p(visible) p(new)`, by `sum_typical_le` and the law of the visible variables.
+  common part, which give the third and the fourth inequality of Theorem 2. All the events are
+  bounded by `|T_ε| max p(visible) p(new)`, by `sum_typical_le` and the law of the visible
+  variables.
 * **The decoder** checks the common part directly, instead of relying on joint typicality for it.
 * **The Gray–Wyner achievability** sends the position of `uⱼⁿ` in `T_ε(Uⱼ|vⁿ)` by an explicit index
   (`exists_index_of_card_le`), and the codebook of `vⁿ` is chosen by the averaging of

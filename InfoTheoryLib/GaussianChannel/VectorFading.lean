@@ -11,12 +11,9 @@ public import InfoTheoryLib.GaussianChannel.Vector
 # The Gaussian vector fading channel: the formulas
 
 With the gain matrix `G` known at the decoder and a covariance matrix `K` at the encoder, the rate
-is
-`E[½ log |I + G K Gᵀ|]`. This file studies its maximum for finitely many fading states. If the law
-of
-`G` does not change under sign flips and permutations of the transmit antennas, the maximum is
-attained
-by `K* = (P/t) I`. The operational meaning of the rate is not formalized.
+is `E[½ log |I + G K Gᵀ|]`. This file studies its maximum for finitely many fading states. If the
+law of `G` does not change under sign flips and permutations of the transmit antennas, the maximum
+is attained by `K* = (P/t) I`. The operational meaning of the rate is not formalized.
 
 ## Main definitions
 
@@ -34,8 +31,7 @@ by `K* = (P/t) I`. The operational meaning of the rate is not formalized.
 ## Implementation notes
 
 A finitely supported law cannot be invariant under all orthogonal matrices unless `G = 0`. We ask
-for
-the invariance under the flips of a sign and the transpositions of two columns only, which every
+for the invariance under the flips of a sign and the transpositions of two columns only, which every
 orthogonally invariant law has. The proof does not average over a group: the invariance makes the
 matrix `E[Gᵀ (I + (P/t) G Gᵀ)⁻¹ G]` a multiple of the identity, which is the KKT condition for
 `K* = (P/t) I`.
@@ -126,8 +122,7 @@ private lemma isoKernel_swap (x : ℝ) (G : Matrix r t ℝ) (e : t ≃ t) (a b :
   rfl
 
 /-- **Lecture 10, page 10-14.** For an isotropic law, the matrix `E[Gᵀ (x G Gᵀ + I)⁻¹ G]` is a
-multiple
-of the identity. -/
+multiple of the identity. -/
 theorem exists_sum_isoKernel_eq {q : σ → ℝ} {G : σ → Matrix r t ℝ} (hiso : IsIsotropicFading q G)
     (x : ℝ) : ∃ c : t → ℝ, (∀ i j, c i = c j) ∧ ∑ s, q s • isoKernel x (G s) = diagonal c := by
   set M := ∑ s, q s • isoKernel x (G s) with hM
@@ -225,8 +220,8 @@ theorem gvFadingRate_le_isotropic {q : σ → ℝ} (hq : ∀ s, 0 ≤ q s) {G : 
   linarith
 
 /-- **Theorem 2 of Lecture 10 of [elgamal2010], page 10-14.** For an isotropic law of the gain
-matrix,
-`max_{K ≽ 0, tr K ≤ P} E[½ log |I + G K Gᵀ|] = E[½ log |I + (P/t) G Gᵀ|]`, attained by `(P/t) I`. -/
+matrix, `max_{K ≽ 0, tr K ≤ P} E[½ log |I + G K Gᵀ|] = E[½ log |I + (P/t) G Gᵀ|]`, attained by
+`(P/t) I`. -/
 theorem gvFadingCapacity_eq {q : σ → ℝ} (hq : ∀ s, 0 ≤ q s) {G : σ → Matrix r t ℝ}
     (hiso : IsIsotropicFading q G) {P : ℝ} (hP : 0 ≤ P) (ht : 0 < Fintype.card t) :
     gvFadingCapacity q G P = gvFadingRate q G ((P / Fintype.card t) • 1) := by
@@ -347,10 +342,8 @@ theorem tendsto_gvFadingRate_div (q : σ → ℝ) (G : σ → Matrix r t ℝ) (h
   field_simp
 
 /-- **Lecture 10, page 10-15.** The high SNR behaviour of the fading channel when the rank of `G Gᵀ`
-is
-`m` in each state: `C - (m/2) log(P/t) → E[½ ∑ⱼ log Λⱼ]`, for the rate of `(P/t) I`. This is an
-`m`-fold
-increase of the capacity, with `m = min(t, r)` for full rank. -/
+is `m` in each state: `C - (m/2) log(P/t) → E[½ ∑ⱼ log Λⱼ]`, for the rate of `(P/t) I`. This is an
+`m`-fold increase of the capacity, with `m = min(t, r)` for full rank. -/
 theorem tendsto_gvFadingRate_sub_log {q : σ → ℝ} (hq : ∑ s, q s = 1) (G : σ → Matrix r t ℝ)
     (ht : 0 < Fintype.card t) {m : ℕ}
     (hm : ∀ s,

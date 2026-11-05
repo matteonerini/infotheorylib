@@ -29,7 +29,8 @@ if the cut conditions hold.
 
 * `exists_coeff_of_bit`: routing is a linear code with coefficients in `𝔽₂` and `A_j(α) = I`.
 * `detGeneric_ne_zero_of_cuts`: the cut conditions imply `|A_j(x)| ≠ 0`.
-* `exists_invertible_coeff`: the common nonzero value in `𝔽_{2^m}` for all destinations.
+* `exists_coeff_of_card_gt`: over a large enough field, coefficients with nonzero determinants for
+  all destinations.
 * `LinCoeff.code_correct`: a linear code with invertible matrices has no errors.
 * `cuts_of_detGeneric_ne_zero`: `|A_j(x)| ≠ 0` implies the cut conditions.
 * `card_not_invertible_le`: a random linear code works with high probability.
@@ -63,9 +64,8 @@ structure Multigraph (V E : Type*) [LT V] where
 
 /-- **Page 16-17 of [elgamal2010].** The coefficients of a linear code for messages of `b j` symbols
 at node `j`: `y r e` multiplies the message symbol `r` on an edge out of its node, `x e' e`
-  multiplies
-the symbol of `e'` on an edge `e` out of the head of `e'`, and `z t e r` is the coefficient of the
-symbol of `e` in the estimate of the symbol `r` at node `t`. -/
+multiplies the symbol of `e'` on an edge `e` out of the head of `e'`, and `z t e r` is the
+coefficient of the symbol of `e` in the estimate of the symbol `r` at node `t`. -/
 structure LinCoeff (K E : Type*) {V : Type*} (b : V → ℕ) where
   /-- The coefficients of the source encoders. -/
   y : (Σ j, Fin (b j)) → E → K
@@ -577,8 +577,7 @@ lemma degreeOf_detGeneric_le (G : Multigraph V E) (t : V) (v : LinVar E b) :
     _ = _ := by simp
 
 /-- **Page 16-22 of [elgamal2010].** A field with more than `|D| R` elements is enough: then a
-  single
-coefficient vector makes `A_t(α)` invertible for all destinations. So `𝔽_{2^m}` with
+single coefficient vector makes `A_t(α)` invertible for all destinations. So `𝔽_{2^m}` with
 `m ≤ ⌈log(|D| R + 1)⌉` works. -/
 theorem exists_coeff_of_card_gt {F : Type*} [Field F] [Algebra (ZMod 2) F] [Fintype F]
     (G : Multigraph V E) {T : Finset V} (h : ∀ t ∈ T, detGeneric (b := b) G t ≠ 0)

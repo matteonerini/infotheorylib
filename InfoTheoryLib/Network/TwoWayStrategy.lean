@@ -71,13 +71,13 @@ theorem condInfo_le_cInfo_of_law {Ω Ma Mb A B Z : Type*} [Fintype Ω] [Fintype 
       (fun x : Ma × Mb => (ta x.1, tb x.2)) hrow
     have hdq : dist μ ((fun x : Ma × Mb => (ta x.1, tb x.2)) ∘ pair ma mb) = q := by
       have h := dist_jointOf_fst (p := q) (W := T) hT
-      rw [← hd, ← dist_dist_comp] at h
+      rw [← hd, ← dist_comp_eq] at h
       exact h
     rw [hch, hdq]
   have h₂ : H[O | mb ; μ] ≤ H[O | tb ∘ mb ; μ] := condEntropy_le_condEntropy_comp hμ O mb tb
   have h₃ : H[O | tb ∘ mb ; μ] = H[Prod.snd | fun z : (A × B) × Z => z.1.2 ; jointOf q T] := by
     refine condEntropy_eq_of_dist_pair_eq hμ hJ ?_
-    rw [← hd, ← dist_dist_comp]
+    rw [← hd, ← dist_comp_eq]
     rfl
   rw [hI, h₁, cInfo_eq hq hT, ← h₃]
   linarith
@@ -118,8 +118,8 @@ theorem stratW_isChannel [Finite X₁] [Finite X₂] (hV : IsChannel V) :
   simp only [dist, Fintype.sum_prod_type] at h
   rw [Finset.sum_eq_single s.1, Finset.sum_eq_single s.2] at h
   · simp only [ite_true] at h
-    have hl : ∀ y, fbLaw (uniformPMF (Strat k X₁ Y × Strat k X₂ Y)) V (stratEnc k) k ((s.1, s.2), y)
-      =
+    have hl : ∀ y, fbLaw (uniformPMF (Strat k X₁ Y × Strat k X₂ Y)) V (stratEnc k) k
+      ((s.1, s.2), y) =
         uniformPMF (Strat k X₁ Y × Strat k X₂ Y) s * stratW V k s y := fun y => by
       rw [fbLaw_eq_prod, stratW_eq_prod]
     simp_rw [hl, ← mul_sum] at h
@@ -229,7 +229,7 @@ theorem exists_strat (hV : IsChannel V) (h₁ : 0 < M₁) (h₂ : 0 < M₂) :
     have e₁ := dist_comp_of_injective μ id hinj (x.swap, o)
     rw [dist_id] at e₁
     have e₂ := dist_comp_of_injective (dist μ Prod.fst) id Prod.swap_injective x.swap
-    rw [dist_id, ← dist_dist_comp] at e₂
+    rw [dist_id, ← dist_comp_eq] at e₂
     have e₃ : dist μ Prod.fst = uniformPMF (Fin M₁ × Fin M₂) := dist_fst_fbLaw hV n
     rw [e₃] at e₂
     have ee₁ : dist μ (pair (pair (fun z : (Fin M₁ × Fin M₂) × (Fin n → Y) => z.1.2)
@@ -250,7 +250,7 @@ theorem exists_strat (hV : IsChannel V) (h₁ : 0 < M₁) (h₂ : 0 < M₂) :
     have e₀ : dist μ (fun z => ((c.strat₂ z.1.2, c.strat₁ z.1.1), z.2)) =
         dist (dist μ fun z => ((c.strat₁ z.1.1, c.strat₂ z.1.2), z.2))
           fun t : (Strat n X₁ Y × Strat n X₂ Y) × (Fin n → Y) => (t.1.swap, t.2) :=
-      dist_dist_comp μ (fun z => ((c.strat₁ z.1.1, c.strat₂ z.1.2), z.2))
+      dist_comp_eq μ (fun z => ((c.strat₁ z.1.1, c.strat₂ z.1.2), z.2))
         fun t : (Strat n X₁ Y × Strat n X₂ Y) × (Fin n → Y) => (t.1.swap, t.2)
     rw [e₀, hd₁]
     funext ⟨t, o⟩

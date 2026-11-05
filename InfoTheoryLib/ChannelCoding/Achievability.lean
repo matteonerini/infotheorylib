@@ -165,7 +165,7 @@ lemma typicalDecode_eq {n M : ℕ} {A : Finset ((Fin n → α) × (Fin n → β)
   unfold typicalDecode
   split
   · next h' => exact huniq _ h'.choose_spec.1
-  · next h' => exact absurd h h' 
+  · next h' => exact absurd h h'
 
 /-- The code with codebook `C` and joint typicality decoding. -/
 def typicalCode {n M : ℕ} (A : Finset ((Fin n → α) × (Fin n → β))) (C : Fin M → Fin n → α)

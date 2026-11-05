@@ -344,8 +344,8 @@ lemma KBook.good_succ₁ {l : Fin q} (hs : spk l = true) (B : KBook L M n υ)
     have h₁ := comp_mem_robustTypicalSet hT' fun w => (id (w.1.2.2, w.1.1),
       Function.update w.1.2.1 l w.2)
     have e : zipSeq ω (kUpd l v (C lstar)) = (fun w => (id (w.1.2.2, w.1.1),
-        Function.update w.1.2.1 l w.2)) ∘ zipSeq (zipSeq (sndSeq ω) (zipSeq v (fstSeq ω))) (C lstar)
-          := by
+        Function.update w.1.2.1 l w.2)) ∘
+          zipSeq (zipSeq (sndSeq ω) (zipSeq v (fstSeq ω))) (C lstar) := by
       funext i
       rfl
     rw [e]
@@ -477,8 +477,8 @@ lemma KBook.good_succ₂ {l : Fin q} (hs : spk l = false) (B : KBook L M n υ)
     have h₁ := comp_mem_robustTypicalSet hT' fun w => (Prod.swap (w.1.2.2, w.1.1),
       Function.update w.1.2.1 l w.2)
     have e : zipSeq ω (kUpd l v (C lstar)) = (fun w => (Prod.swap (w.1.2.2, w.1.1),
-        Function.update w.1.2.1 l w.2)) ∘ zipSeq (zipSeq (fstSeq ω) (zipSeq v (sndSeq ω))) (C lstar)
-          := by
+        Function.update w.1.2.1 l w.2)) ∘
+          zipSeq (zipSeq (fstSeq ω) (zipSeq v (sndSeq ω))) (C lstar) := by
       funext i
       rfl
     rw [e]

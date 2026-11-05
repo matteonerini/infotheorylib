@@ -172,9 +172,8 @@ def errProb (D : t → Finset r) : ℝ :=
 end GNCode
 
 /-- **Page 20-2 of [elgamal2010], with no relaying.** A rate tuple, in bits, is achievable. -/
-def IsAchievableGN {r t : Type*} [Fintype r] [Fintype t] [DecidableEq t] (G : Matrix r t ℝ) (D : t →
-  Finset r)
-    (P : ℝ≥0) (R : t → ℝ) : Prop :=
+def IsAchievableGN {r t : Type*} [Fintype r] [Fintype t] [DecidableEq t] (G : Matrix r t ℝ)
+    (D : t → Finset r) (P : ℝ≥0) (R : t → ℝ) : Prop :=
   ∃ c : ∀ n : ℕ, GNCode (fun j => 2 ^ ⌈(n : ℝ) * R j⌉₊) n r,
     (∀ n, (c n).SatisfiesPower P) ∧ Tendsto (fun n => (c n).errProb G D) atTop (𝓝 0)
 

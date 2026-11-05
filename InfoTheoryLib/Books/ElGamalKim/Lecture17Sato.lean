@@ -66,8 +66,7 @@ lemma relEntropy_satoW₂ (a : Fin 3 × Fin 2) : relEntropyReal (satoW₂ a) sat
     simp only [relEntropyReal, Fin.sum_univ_three, satoW₂, satoQ] <;> norm_num <;> linarith
 
 /-- **Page 17-71 of [elgamal2010].** The capacity of the channel from `(X, X₁)` to `Y`, an upper
-  bound
-for all the relay models. -/
+bound for all the relay models. -/
 lemma sato_le_log {α : Type*} [Fintype α] [Nonempty α] {V : α → Fin 3 → ℝ} (hV : IsChannel V)
     (g : α → Fin 3 × Fin 2) (hg : ∀ a, V a = satoW₂ (g a)) : capacity V ≤ log (9 / 4) := by
   obtain ⟨a, ha⟩ := exists_capacity_le_relEntropy hV satoQ_isPMF (q := satoQ) fun a y hy => by
@@ -187,8 +186,8 @@ lemma sato_rwd_marg (x : Fin 3) (φ : Fin 3 → Fin 2) :
 
 /-- `I(X; Y) = log (9/4)` for instantaneous relaying. -/
 lemma sato_info_rwd :
-    mutualInfoOf satoQ₀ (fun x => bcMarg₁ (rwdChannel satoW₁ satoW₂') (x, satoφ)) = log (9 / 4) :=
-      by
+    mutualInfoOf satoQ₀ (fun x => bcMarg₁ (rwdChannel satoW₁ satoW₂') (x, satoφ)) =
+      log (9 / 4) := by
   have hV : IsChannel fun x : Fin 3 => bcMarg₁ (rwdChannel satoW₁ satoW₂') (x, satoφ) := fun x =>
     (rwdChannel_isChannel satoW₁_isChannel satoW₂'_isChannel).bcMarg₁ _
   have hout : outDist satoQ₀ (fun x => bcMarg₁ (rwdChannel satoW₁ satoW₂') (x, satoφ)) = satoQ := by

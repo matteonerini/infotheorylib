@@ -58,7 +58,7 @@ lemma dist_fbLaw_prefix (hW : IsChannel W) (m : ℕ) : ∀ k (h : m ≤ k),
         (z.1, fun t : Fin m => z.2 ⟨t, lt_of_lt_of_le t.2 (hk.trans (Nat.le_succ k))⟩)) =
         (fun z : 𝒲 × (Fin k → β) => (z.1, fun t : Fin m => z.2 ⟨t, lt_of_lt_of_le t.2 hk⟩)) ∘
           fun z => (z.1, Fin.init z.2) := rfl
-    rw [e, dist_dist_comp, dist_fbLaw_init hW k, ih]
+    rw [e, dist_comp_eq, dist_fbLaw_init hW k, ih]
 
 /-- **The memoryless property.** Let `G₀` be a function of the message and of the past outputs that
 determines the input at time `i`. Then the output at time `i` is produced by the channel from
@@ -84,7 +84,7 @@ theorem dist_fbLaw_letter [Finite γ] (hW : IsChannel W) {n : ℕ} (i : Fin n)
         (pair (pair (fun z : 𝒲 × (Fin (i + 1) → β) => Fin.init z.2) Prod.fst)
           fun z => z.2 (Fin.last i)) ∘ T := rfl
     have e₂ : Q = (pair (fun z : 𝒲 × (Fin (i + 1) → β) => Fin.init z.2) Prod.fst) ∘ T := rfl
-    rw [e₁, dist_dist_comp, hT, e₂, dist_dist_comp, hT]
+    rw [e₁, dist_comp_eq, hT, e₂, dist_comp_eq, hT]
     exact h
   have e₃ : (fun z : 𝒲 × (Fin n → β) => G₀ (z.1, fbPre i z.2)) =
       (fun t : (Fin i → β) × 𝒲 => G₀ (t.2, t.1)) ∘ Q := rfl

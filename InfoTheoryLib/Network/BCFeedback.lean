@@ -137,11 +137,10 @@ lemma condEntropy_past (hW : IsChannel W) (h₁ : 0 < M₁) (h₂ : 0 < M₂) (i
     (fun t => c.enc i t.2 t.1) (fun _ _ => rfl) t b
 
 /-- `H(Yᵢ | Uᵢ) - H(Yᵢ | Xᵢ) = I(Xᵢ; Y₁ᵢ | Uᵢ)`, for a physically degraded channel. -/
-lemma term₁ (hW : IsChannel W) (hd : IsPhysicallyDegraded W) (h₁ : 0 < M₁) (h₂ : 0 < M₂) (i : Fin n)
-  :
-    H[fun z => z.2 i | fun z => (degradedBCPast (i : ℕ) z.2, z.1.2) ; c.law W] -
-      ∑ a, dist (c.law W) (fun z => c.enc i z.1 (fbPre i z.2)) a * entropy (W a) =
-      bcInfoXY₁U (c.letter W i) W := by
+lemma term₁ (hW : IsChannel W) (hd : IsPhysicallyDegraded W) (h₁ : 0 < M₁) (h₂ : 0 < M₂)
+    (i : Fin n) : H[fun z => z.2 i | fun z => (degradedBCPast (i : ℕ) z.2, z.1.2) ; c.law W] - ∑
+    a, dist (c.law W) (fun z => c.enc i z.1 (fbPre i z.2)) a * entropy (W a) = bcInfoXY₁U
+    (c.letter W i) W := by
   have hμ := c.law_isPMF (W := W) hW h₁ h₂
   have hq : IsPMF (c.letter W i) := hμ.dist _
   have hB : H[fun z => z.2 i | pair (fun z => c.enc i z.1 (fbPre i z.2))
@@ -193,7 +192,7 @@ lemma entropy_law₂ (hW : IsChannel W) (h₁ : 0 < M₁) (h₂ : 0 < M₂) :
     exact this
   have e : (fun z : (Fin M₁ × Fin M₂) × (Fin n → β₁ × β₂) => z.1.2) =
       (fun w : Fin M₁ × Fin M₂ => w.2) ∘ Prod.fst := rfl
-  rw [entropyRV, e, dist_dist_comp, hd, hu, entropy_uniformPMF, Fintype.card_fin]
+  rw [entropyRV, e, dist_comp_eq, hd, hu, entropy_uniformPMF, Fintype.card_fin]
 
 /-- **The bound on `R₁`, for one code.** -/
 theorem log_le_sum₁ (hW : IsChannel W) (hd : IsPhysicallyDegraded W) (h₁ : 0 < M₁) (h₂ : 0 < M₂) :

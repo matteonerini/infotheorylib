@@ -48,7 +48,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### 13.1 Universal codes and channel capacity
 * (13.1)–(13.6), the redundancy `R(p_θ, q) = D(p_θ ‖ q)`: `redundancy`,
   `redundancy_eq_relEntropyReal` (`SourceCoding.Minimax`).
-* (13.14)–(13.20): `sum_relEntropy_eq`, with (13.15) `relEntropy_jointOf_prodDist_eq_sum`.
+* (13.14)–(13.20): `sum_relEntropy_eq`, with (13.15) `relEntropyReal_jointOf_prodDist`.
 * (13.21)–(13.23): `mutualInfoOf_le_sum_relEntropy`, `mutualInfoOf_eq_sum_relEntropy`.
 * Theorem 13.1.1, (13.11)–(13.12), (13.24)–(13.29): `isLeast_maxRedundancy`, from
   `exists_capacity_le_relEntropy` and `relEntropy_le_capacity`; the minimax distribution is unique

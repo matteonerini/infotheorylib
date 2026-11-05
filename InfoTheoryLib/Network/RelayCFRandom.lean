@@ -227,8 +227,7 @@ theorem sum_rowA_le (hp₁ : IsPMF p₁) (hq : IsChannel q) (hW : IsChannel W) {
 
 omit [Fintype X] [Fintype U] [Fintype Y] [Fintype V] [NeZero M] [NeZero L] [NeZero K] in
 /-- **The decoder of the message, for fixed tables of the sender and of the relay.** The average
-  over
-the bins of the error. -/
+over the bins of the error. -/
 lemma sum_bin_le (tx : Fin M → Fin n → X) (u : Fin n → U) (C : Fin K → Fin n → V) (y : Fin n → Y)
     (k : Fin K) (m d : Fin M) [NeZero L] :
     ∑ b, cfPB L K b * ind (cfUniq (fun m' => ∃ k', b k' = b k ∧ T (tx m') u (C k') y) d ≠ m) ≤
@@ -395,15 +394,13 @@ lemma sum_weight_expand {I J K' : Type*} [Fintype I] [Fintype K'] (s : Finset J)
 
 omit [NeZero M] [NeZero L] in
 /-- **The decoder of the message.** -/
-theorem sum_rowB_le (hp : IsPMF p) (hp₁ : IsPMF p₁) (hq : IsChannel q) (hW : IsChannel W) {e₂ e₃ :
-  ℝ}
-    (h₂ : ∀ u v y, ∑ x, iidPMF p n x * ind (T x u v y) ≤ e₂)
-    (h₃ : ∀ u y, ∑ x, iidPMF p n x * ∑ v, seqChan q n u v * ind (T x u v y) ≤ e₃)
-    [NeZero M] [NeZero L] (l : Fin L) (m : Fin M) :
-    ∑ tx, cfPX p n M tx * ∑ tu, cfPU p₁ q n L K tu * ∑ b, cfPB L K b *
-      ∑ ζ, relaySeq W n (tx m, (tu l).1) ζ * ind (cfUniq (fun m' => ∃ k, b k =
-        b (cfPick (Good (tu l).1 ζ.2) (tu l).2) ∧ T (tx m') (tu l).1 ((tu l).2 k) ζ.1) 0 ≠ m) ≤
-    cfCov p p₁ W q T Good K + ((M : ℝ) - 1) * (e₂ + (K : ℝ) / L * e₃) := by
+theorem sum_rowB_le (hp : IsPMF p) (hp₁ : IsPMF p₁) (hq : IsChannel q) (hW : IsChannel W)
+    {e₂ e₃ : ℝ} (h₂ : ∀ u v y, ∑ x, iidPMF p n x * ind (T x u v y) ≤ e₂)
+    (h₃ : ∀ u y, ∑ x, iidPMF p n x * ∑ v, seqChan q n u v * ind (T x u v y) ≤ e₃) [NeZero M]
+    [NeZero L] (l : Fin L) (m : Fin M) : ∑ tx, cfPX p n M tx * ∑ tu, cfPU p₁ q n L K tu * ∑ b,
+    cfPB L K b * ∑ ζ, relaySeq W n (tx m, (tu l).1) ζ * ind
+    (cfUniq (fun m' => ∃ k, b k = b (cfPick (Good (tu l).1 ζ.2) (tu l).2) ∧ T (tx m') (tu l).1 ((tu
+    l).2 k) ζ.1) 0 ≠ m) ≤ cfCov p p₁ W q T Good K + ((M : ℝ) - 1) * (e₂ + (K : ℝ) / L * e₃) := by
   classical
   have hΛ : IsPMF (cfLam p₁ q n K) := cfLam_isPMF hp₁ hq
   have hνu : ∀ _ : Fin L, IsPMF (cfLam p₁ q n K) := fun _ => hΛ
@@ -424,8 +421,8 @@ theorem sum_rowB_le (hp : IsPMF p) (hp₁ : IsPMF p₁) (hq : IsChannel q) (hW :
   have hbin : ∀ (tx : Fin M → Fin n → X) (a : (Fin n → U) × (Fin K → Fin n → V)),
       ∑ b, cfPB L K b * ∑ ζ, relaySeq W n (tx m, a.1) ζ * ind (cfUniq (fun m' => ∃ k, b k =
         b (cfPick (Good a.1 ζ.2) a.2) ∧ T (tx m') a.1 (a.2 k) ζ.1) 0 ≠ m) ≤
-      ∑ ζ, relaySeq W n (tx m, a.1) ζ * (ind (¬ T (tx m) a.1 (a.2 (cfPick (Good a.1 ζ.2) a.2)) ζ.1)
-        +
+      ∑ ζ, relaySeq W n (tx m, a.1) ζ *
+        (ind (¬ T (tx m) a.1 (a.2 (cfPick (Good a.1 ζ.2) a.2)) ζ.1) +
         ∑ m' ∈ univ.filter (· ≠ m), (ind (T (tx m') a.1 (a.2 (cfPick (Good a.1 ζ.2) a.2)) ζ.1) +
           (1 / (L : ℝ)) * ∑ k', ind (T (tx m') a.1 (a.2 k') ζ.1))) := by
     intro tx a

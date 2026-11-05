@@ -12,8 +12,7 @@ public import InfoTheoryLib.Network.SlepianWolf
 
 In their lecture notes, El Gamal and Kim measure the rates in bits, with index sets
 `[1 : 2^{nR}) = {1, …, 2^⌊nR⌋}`. This file bridges the Slepian–Wolf theorem of Chapter 15 of Cover
-and
-Thomas, in nats with `⌊e^{nR}⌋` indices, to this form.
+and Thomas, in nats with `⌊e^{nR}⌋` indices, to this form.
 
 ## Main definitions
 
@@ -44,9 +43,8 @@ namespace InfoTheory
 variable {α β : Type*} [Fintype α] [Fintype β]
 
 /-- **Lecture 11 of [elgamal2010], page 11-3.** A rate pair, in bits per source symbol, is
-achievable
-if there are distributed source codes with the index sets `[1 : 2^{nRⱼ})` whose probability of error
-tends to `0`. -/
+achievable if there are distributed source codes with the index sets `[1 : 2^{nRⱼ})` whose
+probability of error tends to `0`. -/
 def IsAchievableSWBits (q : α × β → ℝ) (R₁ R₂ : ℝ) : Prop :=
   0 ≤ R₁ ∧ 0 ≤ R₂ ∧ ∃ c : ∀ n : ℕ, SWCode (2 ^ ⌊n * R₁⌋₊) (2 ^ ⌊n * R₂⌋₊) n α β,
     Tendsto (fun n => (c n).errProb q) atTop (𝓝 0)
@@ -137,8 +135,7 @@ private lemma floor_exp_le_two_pow {n : ℕ} {R R' : ℝ} (h : log 2 ≤ n * (R 
   exact_mod_cast hreal
 
 /-- **The Slepian–Wolf theorem of Lecture 11, achievability.** A pair of rates in the interior of
-the
-region is achievable. -/
+the region is achievable. -/
 theorem isAchievableSWBits_of_lt {q : α × β → ℝ} (hq : IsPMF q) {R₁ R₂ : ℝ}
     (h₁ : H[Prod.fst | Prod.snd ; q] / log 2 < R₁) (h₂ : H[Prod.snd | Prod.fst ; q] / log 2 < R₂)
     (h₃ : entropy q / log 2 < R₁ + R₂) : IsAchievableSWBits q R₁ R₂ := by
@@ -198,8 +195,7 @@ theorem isAchievableSWBits_of_lt {q : α × β → ℝ} (hq : IsPMF q) {R₁ R�
   exact hc' n ((div_le_iff₀ ht).1 (Nat.ceil_le.1 hn))
 
 /-- **The Slepian–Wolf theorem (Lecture 11 of [elgamal2010], page 11-9).** The optimal rate region
-of
-distributed lossless source coding of a 2-DMS is `R₁ ≥ H(X₁ | X₂)`, `R₂ ≥ H(X₂ | X₁)`,
+of distributed lossless source coding of a 2-DMS is `R₁ ≥ H(X₁ | X₂)`, `R₂ ≥ H(X₂ | X₁)`,
 `R₁ + R₂ ≥ H(X₁, X₂)`, in bits. -/
 theorem swOptimalRegionBits_eq {q : α × β → ℝ} (hq : IsPMF q) :
     swOptimalRegionBits q = swRegionBits q := by

@@ -26,7 +26,7 @@ Theorem 3 of Lecture 17 of El Gamal and Kim and its special cases.
 * `isAchievableRC_partialDF`: partial decode–forward for layered codebooks.
 * `isAchievableRC_of_pmf`: **Theorem 3 of Lecture 17**.
 * `isAchievableRC_of_fun`: the case where `U` is a function of `(X, X₁)`.
-* `isAchievableRC_decodeForward`, `le_rcCapacity_decodeForward`: **Theorem 2, decode–forward**.
+* `isAchievableRC_decodeForward`: **Theorem 2, decode–forward**.
 * `isAchievableRC_multihop`: the coherent multi-hop lower bound.
 * `isAchievableRC_direct`: the direct transmission lower bound.
 
@@ -117,8 +117,8 @@ lemma rGapL_relayLaw (hτ : IsPMF τ) (hA : IsChannel A) (hB : IsChannel B) (hW 
   rw [rGapL_eq hL, mutualInfo_eq_entropy_sub_condEntropy' hL]
   have hchan : ∀ (t : (X₁ × U) × X) (y : Y), dist (relayLaw τ A B W)
       (pair Prod.fst fun z => z.2.1) (t, y) =
-      dist (relayLaw τ A B W) Prod.fst t * bcMarg₁ W ((fun t : (X₁ × U) × X => (t.2, t.1.1)) t) y :=
-        by
+      dist (relayLaw τ A B W) Prod.fst t *
+        bcMarg₁ W ((fun t : (X₁ × U) × X => (t.2, t.1.1)) t) y := by
     intro t y
     rw [show (pair Prod.fst fun z : ((X₁ × U) × X) × (Y × Y₁) => z.2.1) =
       pair Prod.fst fun z => (Prod.snd z).1 from rfl, dist_pair_marg_fst, dist_pair_fst_snd]
@@ -129,7 +129,7 @@ lemma rGapL_relayLaw (hτ : IsPMF τ) (hA : IsChannel A) (hB : IsChannel B) (hW 
     rfl
   have h := entropy_sub_condEntropy_eq_mutualInfoOf (fun t : (X₁ × U) × X => (t.2, t.1.1)) hL
     hW.bcMarg₁ hchan
-  rw [h, dist_dist_comp, (relayLaw_marg (τ := τ) hA hB hW).1]
+  rw [h, dist_comp_eq, (relayLaw_marg (τ := τ) hA hB hW).1]
   rfl
 
 /-! ### Theorem 3 -/
@@ -207,8 +207,7 @@ def rcPdfLaw (q₃ : (X₁ × U) × X → ℝ) (W : X × X₁ → Y × Y₁ → 
   jointOf q₃ fun t => W (t.2, t.1.1)
 
 /-- **Theorem 3 of Lecture 17 of [elgamal2010], page 17-33: the partial decode–forward lower
-  bound.**
-For any law `p(x₁, u, x)`, every rate `R`, in bits, with `R log 2 < I(X, X₁; Y)` and
+bound.** For any law `p(x₁, u, x)`, every rate `R`, in bits, with `R log 2 < I(X, X₁; Y)` and
 `R log 2 < I(U; Y₁ | X₁) + I(X; Y | X₁, U)` is achievable. -/
 theorem isAchievableRC_of_pmf [Nonempty U] {q₃ : (X₁ × U) × X → ℝ} (hq₃ : IsPMF q₃)
     (hW : IsChannel W) {R : ℝ} (h₁ : R * log 2 < rcMacInfo (dist q₃ fun t => (t.2, t.1.1)) W)
@@ -265,7 +264,7 @@ theorem isAchievableRC_of_fun [Nonempty U] (hp : IsPMF p) (hW : IsChannel W) (f 
   let g : X × X₁ → (X₁ × U) × X := fun a => ((a.2, f a), a.1)
   let T : (X × X₁) × (Y × Y₁) → ((X₁ × U) × X) × (Y × Y₁) := fun z => (g z.1, z.2)
   have hg : dist (dist p g) (fun t => (t.2, t.1.1)) = p := by
-    rw [← dist_dist_comp]
+    rw [← dist_comp_eq]
     exact dist_id p
   have hginj : Function.Injective g := fun a b h => by
     have h₁ := congrArg Prod.snd h
@@ -324,8 +323,8 @@ lemma rcFunInfo_fst (hp : IsPMF p) (hW : IsChannel W) : rcFunInfo p Prod.fst W =
   rw [hzero, add_zero]
 
 /-- **Theorem 2 of Lecture 17 of [elgamal2010], page 17-18: decode–forward.** For any input law,
-  every
-rate `R`, in bits, with `R log 2 < I(X, X₁; Y)` and `R log 2 < I(X; Y₁ | X₁)` is achievable. -/
+every rate `R`, in bits, with `R log 2 < I(X, X₁; Y)` and `R log 2 < I(X; Y₁ | X₁)` is
+achievable. -/
 theorem isAchievableRC_decodeForward (hp : IsPMF p) (hW : IsChannel W) {R : ℝ}
     (h₁ : R * log 2 < rcMacInfo p W) (h₂ : R * log 2 < rcDfInfo p W) : IsAchievableRC W R :=
   isAchievableRC_of_fun hp hW Prod.fst h₁ (by rw [rcFunInfo_fst hp hW]; exact h₂)
@@ -355,8 +354,7 @@ lemma rcMacInfo_eq (p : X × X₁ → ℝ) :
   simp only [jointOf, bcMarg₁, mul_sum]
 
 /-- **The coherent multi-hop lower bound, page 17-14 of [elgamal2010].** For any input law, every
-  rate
-`R`, in bits, with `R log 2 < I(X₁; Y)` and `R log 2 < I(X; Y₁ | X₁)` is achievable. The simple
+rate `R`, in bits, with `R log 2 < I(X₁; Y)` and `R log 2 < I(X; Y₁ | X₁)` is achievable. The simple
 multi-hop lower bound of page 17-10 is the case of a product law. -/
 theorem isAchievableRC_multihop (hp : IsPMF p) (hW : IsChannel W) {R : ℝ}
     (h₁ : R * log 2 < I[fun z : (X × X₁) × (Y × Y₁) => z.1.2 : fun z => z.2.1 ; jointOf p W])

@@ -25,11 +25,9 @@ codes for typical triples of `RateDistortion.SideInfoCovering`.
 ## Main statements
 
 * `isAchievableCausalBits_of_lt`, `isAchievableWZBits_of_lt`: **the achievability of Theorem 1 and
-  of
-  the Wyner–Ziv theorem**.
+  of the Wyner–Ziv theorem**.
 * `isLosslessCausalBits_of_lt`, `isLosslessWZBits_of_lt`: **the achievability of Theorem 2**, and
-  the
-  fact that the Slepian–Wolf rate is a special case of the Wyner–Ziv theorem.
+  the fact that the Slepian–Wolf rate is a special case of the Wyner–Ziv theorem.
 
 ## References
 
@@ -52,8 +50,7 @@ def prefixSeq {n : ℕ} (y : Fin n → γ) (i : Fin n) : Fin (i + 1) → γ :=
   fun j => y (Fin.castLE (Nat.succ_le_of_lt i.2) j)
 
 /-- **Lecture 12 of [elgamal2010], page 12-5.** A rate–distortion code with side information
-available
-causally at the decoder: an encoder `m(xⁿ)` and a decoder `x̂ᵢ(m, yⁱ)`. -/
+available causally at the decoder: an encoder `m(xⁿ)` and a decoder `x̂ᵢ(m, yⁱ)`. -/
 structure CausalCode (M n : ℕ) (α γ β : Type*) where
   /-- The encoder. -/
   enc : (Fin n → α) → Fin M
@@ -75,8 +72,7 @@ def CausalCode.errProb {M n : ℕ} (c : CausalCode M n α γ α) (P : α × γ �
   ∑ ω, if c.output (c.enc (fstSeq ω)) (sndSeq ω) ≠ fstSeq ω then iidPMF P n ω else 0
 
 /-- **Lecture 12 of [elgamal2010], page 12-16.** A rate–distortion code with side information
-available
-noncausally at the decoder: an encoder `m(xⁿ)` and a decoder `x̂ⁿ(m, yⁿ)`. -/
+available noncausally at the decoder: an encoder `m(xⁿ)` and a decoder `x̂ⁿ(m, yⁿ)`. -/
 structure WZCode (M n : ℕ) (α γ β : Type*) where
   /-- The encoder. -/
   enc : (Fin n → α) → Fin M
@@ -93,8 +89,7 @@ def WZCode.errProb {M n : ℕ} (c : WZCode M n α γ α) (P : α × γ → ℝ) 
   ∑ ω, if c.dec (c.enc (fstSeq ω)) (sndSeq ω) ≠ fstSeq ω then iidPMF P n ω else 0
 
 /-- **Lecture 12 of [elgamal2010], page 12-5.** A pair `(R, D)`, with `R` in bits, is achievable
-with
-causal side information if there are `(2^{nR}, n)` codes with `limsup E d(Xⁿ, X̂ⁿ) ≤ D`. -/
+with causal side information if there are `(2^{nR}, n)` codes with `limsup E d(Xⁿ, X̂ⁿ) ≤ D`. -/
 def IsAchievableCausalBits (P : α × γ → ℝ) (d : α → β → ℝ) (R D : ℝ) : Prop :=
   0 ≤ R ∧ ∃ c : ∀ n : ℕ, CausalCode (2 ^ ⌊n * R⌋₊) n α γ β,
     ∀ ε > 0, ∀ᶠ n in atTop, (c n).distortion P d ≤ D + ε
@@ -105,8 +100,7 @@ def rateCausalBits (P : α × γ → ℝ) (d : α → β → ℝ) (D : ℝ) : �
   sInf {R | IsAchievableCausalBits P d R D}
 
 /-- **Lecture 12 of [elgamal2010], page 12-16.** A pair `(R, D)`, with `R` in bits, is achievable
-with
-noncausal side information if there are `(2^{nR}, n)` codes with `limsup E d(Xⁿ, X̂ⁿ) ≤ D`. -/
+with noncausal side information if there are `(2^{nR}, n)` codes with `limsup E d(Xⁿ, X̂ⁿ) ≤ D`. -/
 def IsAchievableWZBits (P : α × γ → ℝ) (d : α → β → ℝ) (R D : ℝ) : Prop :=
   0 ≤ R ∧ ∃ c : ∀ n : ℕ, WZCode (2 ^ ⌊n * R⌋₊) n α γ β,
     ∀ ε > 0, ∀ᶠ n in atTop, (c n).distortion P d ≤ D + ε
@@ -117,8 +111,8 @@ def rateWZBits (P : α × γ → ℝ) (d : α → β → ℝ) (D : ℝ) : ℝ :=
   sInf {R | IsAchievableWZBits P d R D}
 
 /-- **Lecture 12 of [elgamal2010], page 12-13.** A rate `R`, in bits, is achievable for lossless
-source
-coding with causal side information if there are `(2^{nR}, n)` codes with `P{X̂ⁿ ≠ Xⁿ} → 0`. -/
+source coding with causal side information if there are `(2^{nR}, n)` codes with
+`P{X̂ⁿ ≠ Xⁿ} → 0`. -/
 def IsLosslessCausalBits (P : α × γ → ℝ) (R : ℝ) : Prop :=
   0 ≤ R ∧ ∃ c : ∀ n : ℕ, CausalCode (2 ^ ⌊n * R⌋₊) n α γ α,
     Tendsto (fun n => (c n).errProb P) atTop (𝓝 0)
@@ -130,8 +124,7 @@ def IsLosslessWZBits (P : α × γ → ℝ) (R : ℝ) : Prop :=
     Tendsto (fun n => (c n).errProb P) atTop (𝓝 0)
 
 /-- To get a sequence of codes it is enough to find, for every `ε > 0` and all large `n`, a code
-with
-cost at most `a + ε`: the codes of least cost then form a sequence. -/
+with cost at most `a + ε`: the codes of least cost then form a sequence. -/
 lemma exists_seq_of_eventually {C : ℕ → Type*} [∀ n, Finite (C n)] [∀ n, Nonempty (C n)]
     (g : ∀ n, C n → ℝ) {a : ℝ} (h : ∀ ε > 0, ∀ᶠ n in atTop, ∃ c, g n c ≤ a + ε) :
     ∃ c : ∀ n, C n, ∀ ε > 0, ∀ᶠ n in atTop, g n (c n) ≤ a + ε := by
@@ -180,8 +173,7 @@ lemma tendsto_prob_costTypical (hP : IsPMF P) (hq : IsChannel q) (d : α → β 
   simpa using hl.const_sub 1
 
 /-- **Lecture 12, page 12-10.** The distortion of a sequence is at most `E d(X, X̂) + ε` on the
-typical
-triples, and at most `d_max` otherwise. -/
+typical triples, and at most `d_max` otherwise. -/
 lemma seqDistortion_le_of_costTypical [Finite β] (hP : IsPMF P) (hq : IsChannel q)
     (hd : ∀ x y, 0 ≤ d x y) {ε : ℝ} (hε : 0 < ε) {n : ℕ} (hn : 0 < n) (ω : Fin n → α × γ)
     (u : Fin n → υ) :
@@ -283,8 +275,8 @@ theorem isAchievableCausalBits_of_lt [Finite β] (hP : IsPMF P) (hd : ∀ x y, 0
       refine ⟨causalCodeOf enc C f, ?_⟩
       have hle : (causalCodeOf enc C f).distortion P d ≤ ∑ ω, iidPMF P n ω *
           ((sideCost P q fun u x y => d x (f u y)) + ε / 2 + maxDistortion d *
-            (if zipSeq ω (C (enc (fstSeq ω))) ∈ costTypical P q d f (ε / 2) n then (0 : ℝ) else 1))
-          := by
+            (if zipSeq ω (C (enc (fstSeq ω))) ∈
+          costTypical P q d f (ε / 2) n then (0 : ℝ) else 1)) := by
         refine sum_le_sum fun ω _ => mul_le_mul_of_nonneg_left ?_ ((iidPMF_isPMF hP n).nonneg ω)
         have := seqDistortion_le_of_costTypical (f := f) (q := q) hP hq hd (half_pos hε) hn ω
           (C (enc (fstSeq ω)))
@@ -395,8 +387,7 @@ lemma tendsto_zero_of_eventually_le {g : ℕ → ℝ} (h0 : ∀ n, 0 ≤ g n)
 open Classical in
 /-- **Theorem 2 of Lecture 12, achievability.** If `x = x̂(u, y)` on the support of
 `p(x, y) p(u | x)`, every rate `R > I(X; U)` bits is achievable for lossless source coding with
-causal
-side information. -/
+causal side information. -/
 theorem isLosslessCausalBits_of_lt (hP : IsPMF P) (hq : IsChannel q) (f : υ → γ → α)
     (hf : ∀ z, siLaw P q z ≠ 0 → f z.2 z.1.2 = z.1.1) {R : ℝ}
     (hR : sideRate 0 P q / log 2 < R) : IsLosslessCausalBits P R := by
@@ -440,9 +431,9 @@ theorem isLosslessCausalBits_of_lt (hP : IsPMF P) (hq : IsChannel q) (f : υ →
 open Classical in
 /-- **Lecture 12, page 12-25.** If `x = x̂(u, y)` on the support of `p(x, y) p(u | x)`, every rate
 `R > I(X; U) - I(Y; U)` bits is achievable for lossless source coding with noncausal side
-information.
-With `U = X`, this gives the corner point of the Slepian–Wolf theorem: the Slepian–Wolf theorem is a
-special case of the Wyner–Ziv theorem, with deterministic instead of random binning of the source.
+information. With `U = X`, this gives the corner point of the Slepian–Wolf theorem: the Slepian–Wolf
+theorem is a special case of the Wyner–Ziv theorem, with deterministic instead of random binning of
+the source.
 -/
 theorem isLosslessWZBits_of_lt (hP : IsPMF P) (hq : IsChannel q) (f : υ → γ → α)
     (hf : ∀ z, siLaw P q z ≠ 0 → f z.2 z.1.2 = z.1.1) {R : ℝ}

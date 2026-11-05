@@ -355,7 +355,7 @@ theorem condEntropy_eq_zero_of_errProb_eq_zero {μ : Ω → ℝ} (hμ : IsPMF μ
   rw [h, binEntropy_zero, zero_mul, add_zero] at this
   have h' : 0 ≤ H[X | Y ; μ] := by
     have := condEntropy_eq_sub hμ X Y
-    rw [condEntropy, ← sum_const_zero (s := (univ : Finset β))] 
+    rw [condEntropy, ← sum_const_zero (s := (univ : Finset β))]
     refine sum_le_sum fun y _ => mul_nonneg (dist_nonneg hμ _ _) ?_
     rcases (dist_nonneg hμ Y y).eq_or_lt with hy | hy
     · simp [condEntropyAt, condDist, ← hy, entropy]

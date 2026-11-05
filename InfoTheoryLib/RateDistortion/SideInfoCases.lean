@@ -14,12 +14,10 @@ This file treats the special cases of Lecture 12 in which the side information i
 encoder. Each of them reduces to another theorem, with no new coding argument.
 
 * **At the encoder only**, the side information does not help: `R_SI-E(D) = R(D)`. For each `xⁿ`,
-  the
-  encoder can use the best `yⁿ`, which gives a code without side information of no larger
+  the encoder can use the best `yⁿ`, which gives a code without side information of no larger
   distortion.
 * **At both the encoder and the decoder**, `R_SI-ED(D) = min_{p(x̂ | x, y)} I(X; X̂ | Y)`. The notes
-  say
-  that this is easy to show. A code is a Wyner–Ziv code for the source `(X, Y)` with side
+  say that this is easy to show. A code is a Wyner–Ziv code for the source `(X, Y)` with side
   information `Y`, and the formula follows from the Wyner–Ziv theorem.
 
 We also prove `R_SI-ED(D) ≤ R_SI-D(D) ≤ R_CSI-D(D) ≤ R(D)`.
@@ -69,8 +67,7 @@ def EncSideCode.distortion {M n : ℕ} (c : EncSideCode M n α γ β) (P : α ×
   ∑ ω, iidPMF P n ω * seqDistortion d (fstSeq ω) (c.dec (c.enc (fstSeq ω) (sndSeq ω)))
 
 /-- **Lecture 12 of [elgamal2010], page 12-3.** A pair `(R, D)`, with `R` in bits, is achievable
-with
-side information at the encoder only. -/
+with side information at the encoder only. -/
 def IsAchievableEncSideBits (P : α × γ → ℝ) (d : α → β → ℝ) (R D : ℝ) : Prop :=
   0 ≤ R ∧ ∃ c : ∀ n : ℕ, EncSideCode (2 ^ ⌊n * R⌋₊) n α γ β,
     ∀ ε > 0, ∀ᶠ n in atTop, (c n).distortion P d ≤ D + ε
@@ -111,8 +108,7 @@ lemma EncSideCode.exists_rdCode_le (hP : IsPMF P) {M n : ℕ} (c : EncSideCode M
         (channelExt_nonneg hW x y')
 
 /-- **Lecture 12 of [elgamal2010], page 12-3.** Side information available only at the encoder does
-not
-help: `R_SI-E(D) = R(D)`, for `D ≥ D_min`, in bits. -/
+not help: `R_SI-E(D) = R(D)`, for `D ≥ D_min`, in bits. -/
 theorem rateEncSideBits_eq [Fintype β] [Nonempty β] (hP : IsPMF P) (hd : ∀ x y, 0 ≤ d x y) {D : ℝ}
     (hD : minDistortion (margFst P) d ≤ D) :
     rateEncSideBits P d D = infoRD (margFst P) d D / log 2 := by
@@ -155,8 +151,7 @@ def BothSideCode.distortion {M n : ℕ} (c : BothSideCode M n α γ β) (P : α 
   ∑ ω, iidPMF P n ω * seqDistortion d (fstSeq ω) (c.dec (c.enc (fstSeq ω) (sndSeq ω)) (sndSeq ω))
 
 /-- **Lecture 12 of [elgamal2010], page 12-3.** A pair `(R, D)`, with `R` in bits, is achievable
-with
-side information at both ends. -/
+with side information at both ends. -/
 def IsAchievableBothBits (P : α × γ → ℝ) (d : α → β → ℝ) (R D : ℝ) : Prop :=
   0 ≤ R ∧ ∃ c : ∀ n : ℕ, BothSideCode (2 ^ ⌊n * R⌋₊) n α γ β,
     ∀ ε > 0, ∀ᶠ n in atTop, (c n).distortion P d ≤ D + ε
@@ -174,8 +169,7 @@ def bothRate (P : α × γ → ℝ) (q : α × γ → υ → ℝ) : ℝ :=
   I[fun z : (α × γ) × υ => z.1.1 : Prod.snd | fun z => z.1.2 ; bothLaw P q]
 
 /-- **Lecture 12 of [elgamal2010], page 12-3.** `R_SI-ED(D) = min I(X; X̂ | Y)` over `p(x̂ | x, y)`
-with
-`E d(X, X̂) ≤ D`, in nats. -/
+with `E d(X, X̂) ≤ D`, in nats. -/
 def bothRD [Fintype β] (P : α × γ → ℝ) (d : α → β → ℝ) (D : ℝ) : ℝ :=
   sInf {I | ∃ q : α × γ → β → ℝ, IsChannel q ∧
     ∑ z, bothLaw P q z * d z.1.1 z.2 ≤ D ∧ bothRate P q = I}
@@ -405,8 +399,7 @@ theorem bothRD_eq_wzRD [Fintype β] [Nonempty β] (hP : IsPMF P) {d : α → β 
     exact this.trans_le hc
 
 /-- **Lecture 12 of [elgamal2010], page 12-3.** The rate–distortion function with side information
-at
-both the encoder and the decoder is `R_SI-ED(D) = min I(X; X̂ | Y)`, over `p(x̂ | x, y)` with
+at both the encoder and the decoder is `R_SI-ED(D) = min I(X; X̂ | Y)`, over `p(x̂ | x, y)` with
 `E d(X, X̂) ≤ D`, for `D ≥ D_min`, in bits. -/
 theorem rateBothBits_eq [Fintype β] [Nonempty β] (hP : IsPMF P) {d : α → β → ℝ}
     (hd : ∀ x y, 0 ≤ d x y) {D : ℝ} (hD : minDistortion (margFst P) d ≤ D) :

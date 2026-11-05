@@ -26,8 +26,7 @@ El Gamal and Kim.
 ## Main statements
 
 * `commonG_eq`, `exists_common_lift`: the common part is a common function, and every common
-  function
-  is a function of it. This is the maximality of `k` on page 15-15.
+  function is a function of it. This is the maximality of `k` on page 15-15.
 * `gwRegion_le`: the four bounds of page 15-24.
 * `mem_gwRegion_det` and the extreme points of page 15-23.
 * `gkCommon_le_mutualInfo`, `mutualInfo_le_wynerJ`, `wynerJ_le_entropy`:
@@ -35,8 +34,7 @@ El Gamal and Kim.
 * `gkCommon_mem_gwRegion`, `le_gkCommon_of_mem_gwRegion`: `K(U₁; U₂)` is the largest `R₀` with
   `R₀ + R₁ = H(U₁)` and `R₀ + R₂ = H(U₂)`.
 * `exists_wyner_min`, `wynerJ_mem_gwRegion`, `wynerJ_le_of_mem_gwRegion`: `J(U₁; U₂)` is the
-  smallest
-  `R₀` with `R₀ + R₁ + R₂ = H(U₁, U₂)`.
+  smallest `R₀` with `R₀ + R₁ + R₂ = H(U₁, U₂)`.
 * `mutualInfo_of_outer`: `I(U₁; U₂)` is the largest `R₀` with
   `2 R₀ + R₁ + R₂ = H(U₁) + H(U₂)` allowed by the bounds.
 
@@ -86,8 +84,7 @@ lemma commonG_eq {a : α₁} {b : α₂} (h : P (a, b) ≠ 0) : commonG₁ P a =
   Quot.sound (Relation.EqvGen.rel _ _ ⟨a, b, rfl, rfl, h⟩)
 
 /-- **Lecture 15, page 15-15: the maximality of the common part.** If `h₁(U₁) = h₂(U₂)` almost
-  surely,
-then `h₁` and `h₂` are functions of the common part. -/
+surely, then `h₁` and `h₂` are functions of the common part. -/
 theorem exists_common_lift {T : Type*} (h₁ : α₁ → T) (h₂ : α₂ → T)
     (hh : ∀ a b, P (a, b) ≠ 0 → h₁ a = h₂ b) :
     ∃ f : CommonIdx P → T, (∀ a, h₁ a = f (commonG₁ P a)) ∧ ∀ b, h₂ b = f (commonG₂ P b) := by
@@ -207,8 +204,7 @@ variable [Fintype α₁] [Fintype α₂] {P : α₁ × α₂ → ℝ}
 
 /-- **Lecture 15, page 15-24.** A rate triple of the region satisfies `R₀ + R₁ ≥ H(U₁)`,
 `R₀ + R₂ ≥ H(U₂)`, `R₀ + R₁ + R₂ ≥ H(U₁, U₂)` and `2 R₀ + R₁ + R₂ ≥ H(U₁) + H(U₂)`, with the rates
-  in
-bits. -/
+in bits. -/
 theorem gwRegion_le (hP : IsPMF P) {R₀ R₁ R₂ : ℝ} (h : (R₀, R₁, R₂) ∈ gwRegion P) :
     H[Prod.fst ; P] ≤ (R₀ + R₁) * log 2 ∧ H[Prod.snd ; P] ≤ (R₀ + R₂) * log 2 ∧
       entropy P ≤ (R₀ + R₁ + R₂) * log 2 ∧
@@ -349,8 +345,8 @@ theorem gwInfo_le_gkCommon_of_markov {υ : Type*} [Fintype υ] {κ : α₁ × α
   set U₁ : (α₁ × α₂) × υ → α₁ := fun z => z.1.1
   set U₂ : (α₁ × α₂) × υ → α₂ := fun z => z.1.2
   -- `κ(v | a, b) = p(v | a)` on the support.
-  have hval : ∀ a b v, dist μ (pair U₂ (pair U₁ V)) (b, a, v) = P (a, b) * κ (a, b) v := fun a b v
-    => by
+  have hval : ∀ a b v, dist μ (pair U₂ (pair U₁ V)) (b, a, v) = P (a, b) * κ (a, b) v :=
+    fun a b v => by
     have hinj : Function.Injective (fun w : (α₁ × α₂) × υ => (w.1.2, w.1.1, w.2)) := by
       rintro ⟨⟨a, b⟩, c⟩ ⟨⟨a', b'⟩, c'⟩ h
       simp only [Prod.mk.injEq] at h ⊢
@@ -695,8 +691,7 @@ theorem common_information_chain (hP : IsPMF P) :
 
 /-- **Lecture 15, page 15-25.** `J(U₁; U₂)` is the smallest common rate with
 `R₀ + R₁ + R₂ = H(U₁, U₂)`: every such rate triple of the region has `R₀ ≥ J(U₁; U₂)`, with the
-  rates
-in bits. -/
+rates in bits. -/
 theorem wynerJ_le_of_mem_gwRegion (hP : IsPMF P) {R₀ R₁ R₂ : ℝ} (h : (R₀, R₁, R₂) ∈ gwRegion P)
     (hs : (R₀ + R₁ + R₂) * log 2 = entropy P) : wynerJ P ≤ R₀ * log 2 := by
   obtain ⟨κ, hκ, a0, a1, a2⟩ := gwRegion_subset_gwSet hP h

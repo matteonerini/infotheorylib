@@ -20,8 +20,7 @@ This file proves Theorem 1 of Lecture 10 of El Gamal and Kim's notes for the cha
 For the converse, let `K̄` be the average covariance of the codewords and rotate the outputs by the
 eigenvectors of `G K̄ Gᵀ + I`. This gives parallel Gaussian channels whose average powers are the
 eigenvalues of `G K̄ Gᵀ`, and the comparison of the output with independent normal coordinates
-bounds
-the mutual information by `n · ½ log |G K̄ Gᵀ + I|`.
+bounds the mutual information by `n · ½ log |G K̄ Gᵀ + I|`.
 
 For achievability, write `G = U D Ψᵀ`. A code for the AWGN channel for each `γₖ ≠ 0`, with the power
 `pₖ` that it is allotted by Hadamard's inequality, gives the code with the transmitted vectors
@@ -39,7 +38,7 @@ For achievability, write `G = U D Ψᵀ`. A code for the AWGN channel for each `
 * `map_stdNoise_of_orthogonal`: an orthogonal matrix preserves the noise.
 * `GaussianCode.one_sub_avgErrProb_mul_log_le_sum`: the bound for parallel channels.
 * `IsAchievableGV.le`: the converse.
-* `isAchievableGV_of_lt`: achievability.
+* `isAchievableGV_of_lt_gvRate`: achievability.
 * `opCapacityGV_eq`: **Theorem 1 of Lecture 10**.
 
 ## References
@@ -333,9 +332,8 @@ end ParallelIndex
 /-! ### Codes for the vector channel -/
 
 /-- **Lecture 10 of [elgamal2010], pages 10-2 and 10-3.** A code for the Gaussian vector channel
-with
-`t` inputs and `r` outputs: an encoder and a measurable decoder of the output `y(i, k)`, the output
-`k` at the time `i`. -/
+with `t` inputs and `r` outputs: an encoder and a measurable decoder of the output `y(i, k)`, the
+output `k` at the time `i`. -/
 structure GVCode (M n : ℕ) (r t : Type*) where
   /-- The encoder `w ↦ (x(w, 1), …, x(w, n))`. -/
   enc : Fin M → Fin n → t → ℝ
@@ -577,8 +575,7 @@ end GVCode
 
 omit [DecidableEq t] in
 /-- **Theorem 1 of Lecture 10 (converse).** Every achievable rate is at most the capacity formula,
-in
-bits. -/
+in bits. -/
 theorem IsAchievableGV.le {G : Matrix r t ℝ} {P : ℝ≥0} {R : ℝ} (h : IsAchievableGV G P R) :
     R ≤ gvCapacity G P / log 2 := by
   obtain ⟨c, hpow, hc⟩ := h

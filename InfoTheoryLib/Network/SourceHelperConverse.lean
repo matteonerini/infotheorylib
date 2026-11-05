@@ -16,10 +16,8 @@ This file proves the converse of Theorem 2 of Lecture 11, with `Uᵢ = (M₂, X�
 
 We bound the helper differently from the notes, which use a Markov chain for
 `I(Yᵢ; M₂ | Yⁱ⁻¹) = I(Yᵢ; M₂, Yⁱ⁻¹, Xⁱ⁻¹)`. With `Zᵢ = (Xᵢ, Yᵢ)`, the independence of `Yᵢ` and
-`Zⁱ⁻¹`
-gives `I(Yᵢ; Uᵢ) = I(Yᵢ; M₂ | Zⁱ⁻¹) ≤ I(Zᵢ; M₂ | Zⁱ⁻¹)`, and the chain rule bounds the sum of the
-last
-terms by `H(M₂)`.
+`Zⁱ⁻¹` gives `I(Yᵢ; Uᵢ) = I(Yᵢ; M₂ | Zⁱ⁻¹) ≤ I(Zᵢ; M₂ | Zⁱ⁻¹)`, and the chain rule bounds the sum of
+the last terms by `H(M₂)`.
 
 ## Main statements
 
@@ -647,8 +645,7 @@ theorem IsAchievableHelperBits.mem_closure_helperRegionBits (hq : IsPMF q) {R₁
 
 /-- **Theorem 2 of Lecture 11 of [elgamal2010], page 11-23.** The optimal rate region for lossless
 source coding with a helper is `R₁ ≥ H(X | U)`, `R₂ ≥ I(Y; U)` for some `p(u | y)`, up to closure,
-as
-the cardinality of `U` is not bounded. -/
+as the cardinality of `U` is not bounded. -/
 theorem helperOptimalRegionBits_eq (hq : IsPMF q) :
     helperOptimalRegionBits q = closure (helperRegionBits q) := by
   refine Set.Subset.antisymm (closure_minimal (fun R hR => ?_) isClosed_closure)

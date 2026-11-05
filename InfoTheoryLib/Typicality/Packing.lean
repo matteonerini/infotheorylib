@@ -82,9 +82,8 @@ lemma prob_mem_robustTypicalSet_eq {μ : Ω → ℝ} (W : Ω → Fin n → υ ×
 
 open Classical in
 /-- **Packing lemma (Lecture 3).** Let `(Ũⁿ, Ỹⁿ)` be arbitrarily distributed and let `Xⁿ(m)`,
-`m ∈ 𝒜`, each be distributed according to `∏ᵢ p(xᵢ|ũᵢ)` and conditionally independent of `Ỹⁿ`
-given `Ũⁿ`. Then
-`P{(Ũⁿ, Xⁿ(m), Ỹⁿ) ∈ T_ε^(n) for some m ∈ 𝒜} ≤ |𝒜| e^{-n(I(X;Y|U) - δ(ε))}` with
+`m ∈ 𝒜`, each be distributed according to `∏ᵢ p(xᵢ|ũᵢ)` and conditionally independent of `Ỹⁿ` given
+`Ũⁿ`. Then `P{(Ũⁿ, Xⁿ(m), Ỹⁿ) ∈ T_ε^(n) for some m ∈ 𝒜} ≤ |𝒜| e^{-n(I(X;Y|U) - δ(ε))}` with
 `δ(ε) = ε (H(X|U, Y) + H(X|U))`. -/
 theorem prob_exists_mem_robustTypicalSet_le (hq : IsPMF q) {μ : Ω → ℝ} (hμ : IsPMF μ)
     (W : Ω → Fin n → υ × β) (Xc : ι → Ω → Fin n → α)

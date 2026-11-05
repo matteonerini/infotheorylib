@@ -512,14 +512,14 @@ lemma clLaw_dist₂ (hW : IsChannel W) :
     dist (clLaw pu A B W) (pair (pair clU clX₂) clX₁) = jointOf (jointOf pu B) fun v => A v.1 := by
   have e' : pair (pair (clU : (U × (X₁ × X₂)) × Y → U) clX₂) clX₁ =
       (fun t : U × (X₁ × X₂) => ((t.1, t.2.2), t.2.1)) ∘ Prod.fst := rfl
-  rw [e', dist_dist_comp, clLaw_dist_fst hW]
+  rw [e', dist_comp_eq, clLaw_dist_fst hW]
   exact dist_twIn₂
 
 lemma clLaw_dist₁ (hW : IsChannel W) :
     dist (clLaw pu A B W) (pair (pair clU clX₁) clX₂) = jointOf (jointOf pu A) fun v => B v.1 := by
   have e' : pair (pair (clU : (U × (X₁ × X₂)) × Y → U) clX₁) clX₂ =
       (fun t : U × (X₁ × X₂) => ((t.1, t.2.1), t.2.2)) ∘ Prod.fst := rfl
-  rw [e', dist_dist_comp, clLaw_dist_fst hW]
+  rw [e', dist_comp_eq, clLaw_dist_fst hW]
   exact dist_twIn₁
 
 /-- `clGap₂` is `I(X₂; Y | X₁, U)`. -/
@@ -570,7 +570,7 @@ lemma cl_info₃ (hu : IsPMF pu) (hA : IsChannel A) (hB : IsChannel B) (hW : IsC
   rw [mutualInfo_eq_entropy_sub_condEntropy' hμ, mutualInfoOf,
     mutualInfo_eq_entropy_sub_condEntropy' hJ]
   congr 1
-  · rw [e, entropyRV, dist_dist_comp, hd]
+  · rw [e, entropyRV, dist_comp_eq, hd]
     rfl
   · refine condEntropy_eq_of_dist_pair_eq hμ hJ (hd.trans ?_)
     rw [show pair (Prod.fst : (X₁ × X₂) × Y → _) Prod.snd = id from rfl, dist_id]
@@ -637,7 +637,7 @@ theorem exists_clBlock_gaps {Mb Mm : ℕ} [NeZero Mb] [NeZero Mm] (hu : IsPMF pu
         robustTypicalSet (dist μ fun z : (U × (X₁ × X₂)) × Y => (z.2, z.1)) n ε)
       (fun _ _ h => h) y
     have e₁ : dist (dist μ fun z : (U × (X₁ × X₂)) × Y => (z.2, z.1)) Prod.snd = twIn pu A B := by
-      rw [← dist_dist_comp]
+      rw [← dist_comp_eq]
       exact clLaw_dist_fst hW
     rw [e₁] at h
     have e₂ : H[Prod.fst ; dist μ fun z : (U × (X₁ × X₂)) × Y => (z.2, z.1)] = H[Prod.snd ; μ] :=
@@ -708,7 +708,7 @@ theorem eventually_clBlock (hu : IsPMF pu) (hA : IsChannel A) (hB : IsChannel B)
     linarith
   have hprob := tendsto_prob_robustTypicalSet hμ hεpos
   have hexp : Tendsto (fun n : ℕ => exp (-(n * ε))) atTop (𝓝 0) :=
-    tendsto_exp_neg_mul_natCast hεpos
+    tendsto_exp_neg_mul_nat hεpos
   have hlim : Tendsto (fun n : ℕ => 3 * (2 * (1 - prob (iidPMF μ n) (robustTypicalSet μ n ε)) +
       exp (-(n * ε)) + exp (-(n * ε)) + 2 * exp (-(n * ε)))) atTop
       (𝓝 (3 * (2 * (1 - 1) + 0 + 0 + 2 * 0))) :=

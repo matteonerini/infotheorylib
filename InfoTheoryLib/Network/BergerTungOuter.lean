@@ -22,14 +22,13 @@ variable `Q`, which replaces the convexity argument.
 ## Main statements
 
 * `condEntropy_mix_prefix`: `H(Z_Q | Q, M, Z^{Q-1}) = (1 / n) H(Zⁿ | M)`.
-* `DistLossyCode.dlOuterAt`: the single-letter bounds for one code.
+* `DistLossyCode.dlOuterAt_of_code`: the single-letter bounds for one code.
 * `IsAchievableDL.dlOuterAt`: **the Berger–Tung outer bound (Theorem 2 of Lecture 13)**.
 
 ## Implementation notes
 
 The notes state the outer bound with the distortion constraints `Dⱼ ≥ E dⱼ(Xⱼ, X̂ⱼ)`. As `U₁` and
-`U₂`
-have no bounded cardinality here, we get `Dⱼ + ε ≥ E dⱼ(Xⱼ, X̂ⱼ)` for every `ε > 0`.
+`U₂` have no bounded cardinality here, we get `Dⱼ + ε ≥ E dⱼ(Xⱼ, X̂ⱼ)` for every `ε > 0`.
 
 ## References
 
@@ -47,12 +46,10 @@ variable {α₁ α₂ β₁ β₂ : Type*} [Fintype α₁] [Fintype α₂] {P : 
   {d₂ : α₂ → β₂ → ℝ} {n : ℕ}
 
 /-- **Theorem 2 of Lecture 13 of [elgamal2010], page 13-14.** The outer bound holds at `(R₁, R₂)`
-and
-`(D₁, D₂)`: for some `p(u₁, u₂ | x₁, x₂)` with `U₁ → X₁ → X₂` and `X₁ → X₂ → U₂` and functions
+and `(D₁, D₂)`: for some `p(u₁, u₂ | x₁, x₂)` with `U₁ → X₁ → X₂` and `X₁ → X₂ → U₂` and functions
 `x̂ⱼ(u₁, u₂)`, we have `E dⱼ(Xⱼ, X̂ⱼ) ≤ Dⱼ`, and, in bits, `R₁ ≥ I(X₁, X₂; U₁ | U₂)`,
 `R₂ ≥ I(X₁, X₂; U₂ | U₁)` and `R₁ + R₂ ≥ I(X₁, X₂; U₁, U₂)`. The auxiliary random variables take
-values
-in `Fin k₁` and `Fin k₂`. -/
+values in `Fin k₁` and `Fin k₂`. -/
 def dlOuterAt (P : α₁ × α₂ → ℝ) (d₁ : α₁ → β₁ → ℝ) (d₂ : α₂ → β₂ → ℝ) (R₁ R₂ D₁ D₂ : ℝ) : Prop :=
   ∃ (k₁ k₂ : ℕ) (κ : α₁ × α₂ → Fin k₁ × Fin k₂ → ℝ) (κ₁ : α₁ → Fin k₁ → ℝ) (κ₂ : α₂ → Fin k₂ → ℝ)
     (f₁ : Fin k₁ → Fin k₂ → β₁) (f₂ : Fin k₁ → Fin k₂ → β₂),
@@ -310,10 +307,8 @@ theorem DistLossyCode.dlOuterAt_of_code (hP : IsPMF P) (hn : 0 < n)
     exact add_le_add hM₁ hM₂
 
 /-- **Theorem 2 of Lecture 13 of [elgamal2010], page 13-14: the Berger–Tung outer bound.** If
-`(R₁, R₂)`
-is achievable with `(D₁, D₂)`, then the outer bound holds at `(R₁, R₂)` and `(D₁ + ε, D₂ + ε)`, for
-every
-`ε > 0`. -/
+`(R₁, R₂)` is achievable with `(D₁, D₂)`, then the outer bound holds at `(R₁, R₂)` and
+`(D₁ + ε, D₂ + ε)`, for every `ε > 0`. -/
 theorem IsAchievableDL.dlOuterAt (hP : IsPMF P) {R₁ R₂ D₁ D₂ : ℝ}
     (h : IsAchievableDL P d₁ d₂ R₁ R₂ D₁ D₂) {ε : ℝ} (hε : 0 < ε) :
     dlOuterAt P d₁ d₂ R₁ R₂ (D₁ + ε) (D₂ + ε) := by

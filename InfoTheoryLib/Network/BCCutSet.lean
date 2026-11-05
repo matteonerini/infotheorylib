@@ -53,8 +53,8 @@ variable {𝒲 𝓜 β' : Type*} [Fintype 𝒲] [Fintype 𝓜] [Fintype β'] [No
 
 open Classical in
 /-- A message `m(W)`, function of a uniformly distributed `W`, decoded from `n` uses of the channel
-`V` with the inputs `x(W)`, satisfies
-`log |𝓜| ≤ ∑ᵢ I(Xᵢ; Yᵢ) + log 2 + Pₑ log |𝓜|`, if `m(W)` is uniformly distributed. -/
+`V` with the inputs `x(W)`, satisfies `log |𝓜| ≤ ∑ᵢ I(Xᵢ; Yᵢ) + log 2 + Pₑ log |𝓜|`, if `m(W)` is
+uniformly distributed. -/
 theorem log_le_sum_mutualInfoOf_of_dec [Nonempty α] (x : 𝒲 → Fin n → α) {V : α → β' → ℝ}
     (hV : IsChannel V) (m : 𝒲 → 𝓜) (hm : dist (uniformPMF 𝒲) m = uniformPMF 𝓜) [Nonempty 𝓜]
     (g : (Fin n → β') → 𝓜) {e : ℝ}

@@ -567,9 +567,8 @@ lemma tableOf_bijective {M₀ : ℕ} (e : Fin M₀ ≃ (Fin B → Fin M)) :
 
 /-- **The error of the code of all the blocks.** Some choice of the message of the last block and of
 the offsets gives a code with error at most `B + 1` times the average error of the block code. -/
-theorem exists_code_le {M₀ : ℕ} (hW : IsChannel W) (e : Fin M₀ ≃ (Fin B → Fin M)) (d₁ : S) (dy : Y)
-  :
-    ∃ (m₀ : Fin M) (d : Fin (B + 1) → Fin L), (C.code (X := X) e m₀ d d₁ dy).errProb W ≤
+theorem exists_code_le {M₀ : ℕ} (hW : IsChannel W) (e : Fin M₀ ≃ (Fin B → Fin M)) (d₁ : S)
+    (dy : Y) : ∃ (m₀ : Fin M) (d : Fin (B + 1) → Fin L), (C.code (X := X) e m₀ d d₁ dy).errProb W ≤
       ((B : ℝ) + 1) * C.avgErr (relaySeq W n) := by
   classical
   have hV := relaySeq_isChannel hW n
@@ -597,8 +596,8 @@ theorem exists_code_le {M₀ : ℕ} (hW : IsChannel W) (e : Fin M₀ ≃ (Fin B 
     have h0 := C.blockLaw_nonneg hV d₁ (B + 1) (tableOf e m₀ d w, blockEquiv z)
     have hnd := C.ind_dec_le (X := X) e m₀ d d₁ dy w z
     rw [hl, hu]
-    have hle : 1 / (M₀ : ℝ) * C.blockLaw (relaySeq W n) d₁ (B + 1) (tableOf e m₀ d w, blockEquiv z)
-      *
+    have hle : 1 / (M₀ : ℝ) *
+      C.blockLaw (relaySeq W n) d₁ (B + 1) (tableOf e m₀ d w, blockEquiv z) *
         ind ((C.code (X := X) e m₀ d d₁ dy).dec (fun i => (z i).1) ≠ w) ≤
         C.blockLaw (relaySeq W n) d₁ (B + 1) (tableOf e m₀ d w, blockEquiv z) *
           (∑ j : Fin (B + 1), C.blockLoss d₁ j (tableOf e m₀ d w) (blockEquiv z)) / M₀ := by
@@ -623,8 +622,8 @@ theorem exists_code_le {M₀ : ℕ} (hW : IsChannel W) (e : Fin M₀ ≃ (Fin B 
       _ = (∑ θ : Fin (B + 1) → Fin M × Fin L, C.totalLoss (relaySeq W n) d₁ θ) / M₀ := by
           rw [← sum_div, ← (tableOf_bijective (L := L) e).sum_comp]
           congr 1
-          rw [sum_comm, Fintype.sum_prod_type (f := fun i : Fin M₀ × Fin M × (Fin (B + 1) → Fin L)
-            =>
+          rw [sum_comm, Fintype.sum_prod_type
+            (f := fun i : Fin M₀ × Fin M × (Fin (B + 1) → Fin L) =>
             C.totalLoss (relaySeq W n) d₁ (tableOf e i.2.1 i.2.2 i.1))]
       _ = _ := by
           rw [C.sum_totalLoss hV d₁]

@@ -22,7 +22,8 @@ wishes to receive the message.
 
 ## Main statements
 
-* `RoutingScheme.exists_code`: a routing scheme gives a code that is always correct.
+* `RoutingScheme.code`, `RoutingScheme.code_correct`: a routing scheme gives a code that is always
+  correct.
 * `exists_routes`: when the integer cut conditions hold, all bits can be routed to one node.
 * `cutCap_floor_ge`: the capacity of a cut after rounding the capacities down.
 * `isRoutingAchievable_of_lt_minCut`: routing achieves every rate below the minimum cut.
@@ -46,11 +47,9 @@ variable {V : Type*} [LinearOrder V] [Fintype V]
 /-! ### Routing schemes -/
 
 /-- **Lecture 16 of [elgamal2010], pages 16-7 and 16-13.** A routing scheme. Node `j` has a message
-  of
-`b j` bits, and the edge `(k, l)` carries a set of at most `cap k l` bits. A bit on an edge out of
-  `k`
-either belongs to the message of `k` or came in on an edge into `k`, so nodes may forward copies of
-a bit but do no other operation. Every destination receives all the bits it wants. -/
+of `b j` bits, and the edge `(k, l)` carries a set of at most `cap k l` bits. A bit on an edge out
+of `k` either belongs to the message of `k` or came in on an edge into `k`, so nodes may forward
+copies of a bit but do no other operation. Every destination receives all the bits it wants. -/
 structure RoutingScheme (cap : V → V → ℕ) (b : V → ℕ) (D : V → Finset V) where
   /-- The bits carried by an edge. -/
   carry : V → V → Finset (Σ j, Fin (b j))
@@ -82,9 +81,8 @@ def RoutingScheme.code (S : RoutingScheme cap b D) :
 
 omit [Fintype V] in
 /-- Every index of the code of a routing scheme is the tuple of the right bits. -/
-lemma RoutingScheme.code_edge [Finite V] (S : RoutingScheme cap b D) (m : ∀ j, Fin (b j) → Bool) (k
-  : V) :
-    ∀ (l : V) (r : ↥(S.carry k l)), S.code.edge m k l r = m r.1.1 r.1.2 := by
+lemma RoutingScheme.code_edge [Finite V] (S : RoutingScheme cap b D) (m : ∀ j, Fin (b j) → Bool)
+    (k : V) : ∀ (l : V) (r : ↥(S.carry k l)), S.code.edge m k l r = m r.1.1 r.1.2 := by
   induction k using WellFoundedLT.induction with
   | ind k ih =>
     intro l r
@@ -100,9 +98,8 @@ lemma RoutingScheme.code_edge [Finite V] (S : RoutingScheme cap b D) (m : ∀ j,
 
 omit [Fintype V] in
 /-- **Page 16-9 of [elgamal2010].** The code of a routing scheme has no errors. -/
-theorem RoutingScheme.code_correct [Finite V] (S : RoutingScheme cap b D) (m : ∀ j, Fin (b j) →
-  Bool) :
-    S.code.Correct D m := by
+theorem RoutingScheme.code_correct [Finite V] (S : RoutingScheme cap b D)
+    (m : ∀ j, Fin (b j) → Bool) : S.code.Correct D m := by
   intro j l hl
   funext i
   simp only [NetCode.out, RoutingScheme.code, hl, dite_true]
@@ -384,8 +381,7 @@ theorem isRoutingAchievable_all_nodes {s : V} {R : ℝ} (hR : 0 ≤ R)
     exact ⟨j, hlt' j l r hls hj, by simpa [hls] using hj⟩
 
 /-- **Page 16-12 of [elgamal2010].** If every node wishes to receive the message then the capacity
-  is
-the cutset bound, and routing achieves it. -/
+is the cutset bound, and routing achieves it. -/
 theorem all_nodes_capacity {s : V} (hne : (Finset.univ.erase s).Nonempty) :
     multicastCapacity N s (Finset.univ.erase s) =
       (Finset.univ.erase s).inf' hne (minCut N.C s) := by

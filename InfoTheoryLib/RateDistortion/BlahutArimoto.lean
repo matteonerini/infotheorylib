@@ -235,7 +235,7 @@ lemma baChannel_isChannel {r : β → ℝ} (hr : IsPMF r) (lam : ℝ) :
     (sum_baChannel_pos hr lam x).le, by
     simp only [baChannel, ← sum_div]; exact div_self (sum_baChannel_pos hr lam x).ne'⟩
 
-/-- `D(p(x) q(y|x) ‖ p(x) r(y)) = ∑ₓ p(x) D(q(·|x) ‖ r)`. -/
+/-- **(13.15)** `D(p(x) q(y|x) ‖ p(x) r(y)) = ∑ₓ p(x) D(q(·|x) ‖ r)`. -/
 lemma relEntropyReal_jointOf_prodDist (p : α → ℝ) (q : α → β → ℝ) (r : β → ℝ) :
     relEntropyReal (jointOf p q) (prodDist p r) = ∑ x, p x * relEntropyReal (q x) r := by
   rw [relEntropyReal, Fintype.sum_prod_type]

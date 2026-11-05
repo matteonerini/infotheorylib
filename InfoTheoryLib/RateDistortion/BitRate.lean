@@ -139,8 +139,8 @@ theorem IsAchievableRDBits.infoRD_div_le [Nonempty β] (hp : IsPMF p) {R D : ℝ
   linarith
 
 /-- **Shannon's lossy source coding theorem (Lecture 3).** For `D ≥ D_min`, the rate–distortion
-function of a discrete memoryless source is
-`R(D) = min_{p(x̂|x) : E d(X, X̂) ≤ D} I(X; X̂)`, in bits. -/
+function of a discrete memoryless source is `R(D) = min_{p(x̂|x) : E d(X, X̂) ≤ D} I(X; X̂)`, in
+bits. -/
 theorem rateDistortionBits_eq [Nonempty β] (hp : IsPMF p) (hd : ∀ x y, 0 ≤ d x y) {D : ℝ}
     (hD : minDistortion p d ≤ D) : rateDistortionBits p d D = infoRD p d D / log 2 :=
   csInf_eq_of_forall_ge_of_forall_gt_exists_lt

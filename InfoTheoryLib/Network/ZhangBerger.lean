@@ -140,8 +140,8 @@ theorem exists_zb_chain (hμ : IsPMF μ) (hL₀ : 0 < L₀) (hL₁ : 0 < L₁) (
     (h₂ : ∀ (v : Fin n → υ × β₁ × β₂) (x : Fin n → α),
       zipSeq v x ∈ robustTypicalSet (dist μ (pair (pair U (pair Y₁ Y₂)) X)) n ε₂ →
       IsPMF (iidPMF (channelExt (condDist μ Y₀ (pair U (pair Y₁ Y₂))) n v) L₃) ∧
-      ∑ C : Fin L₃ → Fin n → β₀, iidPMF (channelExt (condDist μ Y₀ (pair U (pair Y₁ Y₂))) n v) L₃ C
-        *
+      ∑ C : Fin L₃ → Fin n → β₀, iidPMF (channelExt (condDist μ Y₀ (pair U (pair Y₁ Y₂))) n v)
+        L₃ C *
           (if ∀ m, ¬ zipSeq (zipSeq v x) (C m) ∈
             robustTypicalSet (triLaw μ (pair U (pair Y₁ Y₂)) X Y₀) n ε₃ then 1 else 0) ≤ η₂) :
     ∃ (C : Fin L₀ → Fin n → υ) (D : Fin L₀ → (Fin L₁ → Fin n → β₁) × (Fin L₂ → Fin n → β₂))
@@ -411,8 +411,8 @@ lemma exp_le_four_mul_two_pow_floor (R R' : ℝ) (n : ℕ) : exp (n * ((R + R') 
 /-- The error term of the middle layer tends to zero. -/
 lemma tendsto_middle_term {J a₁ a₂ R R' : ℝ} (hJ : J < (R + R') * log 2) (h₁ : a₁ < R * log 2)
     (h₂ : a₂ < R' * log 2) :
-    Tendsto (fun n : ℕ => 4 * (exp (n * J) / (((2 ^ ⌊n * R⌋₊ : ℕ) : ℝ) * ((2 ^ ⌊n * R'⌋₊ : ℕ) : ℝ))
-      +
+    Tendsto (fun n : ℕ => 4 *
+      (exp (n * J) / (((2 ^ ⌊n * R⌋₊ : ℕ) : ℝ) * ((2 ^ ⌊n * R'⌋₊ : ℕ) : ℝ)) +
       exp (n * a₁) / ((2 ^ ⌊n * R⌋₊ : ℕ) : ℝ) + exp (n * a₂) / ((2 ^ ⌊n * R'⌋₊ : ℕ) : ℝ)))
       atTop (𝓝 0) := by
   have ht1 := tendsto_exp_div_of_le (a := J) (b := (R + R') * log 2) (K := 4) hJ
@@ -457,8 +457,8 @@ theorem eventually_zb_code_aux (hμ : IsPMF μ) {ε : ℝ} (hε : 0 < ε) (hε�
       (∀ x i, (t x i).1.1.2.1 = c.dec₁ (c.enc₁ x) i) ∧
       (∀ x i, (t x i).1.1.2.2 = c.dec₂ (c.enc₂ x) i) ∧
       ∑ x, iidPMF (dist μ X) n x *
-        (if t x ∈ robustTypicalSet (triLaw μ (pair U (pair Y₁ Y₂)) X Y₀) n ε then 0 else 1) ≤ θ :=
-          by
+        (if t x ∈ robustTypicalSet (triLaw μ (pair U (pair Y₁ Y₂)) X Y₀) n ε then 0 else 1) ≤
+          θ := by
   have hfirst := eventually_sum_first_codebook_le (ε₀ := ε / 5) (ε := 2 * ε / 5) hμ X U
     (by linarith) (by linarith) (by linarith)
   have htwo := eventually_sum_two_codebooks_le (X := X) (U := U) (Y₁ := Y₁) (Y₂ := Y₂)
@@ -521,8 +521,8 @@ theorem eventually_zb_code (hμ : IsPMF μ) {ε : ℝ} (hε : 0 < ε) (hε₁ : 
       (∀ x i, (t x i).1.1.2.1 = c.dec₁ (c.enc₁ x) i) ∧
       (∀ x i, (t x i).1.1.2.2 = c.dec₂ (c.enc₂ x) i) ∧
       ∑ x, iidPMF (dist μ X) n x *
-        (if t x ∈ robustTypicalSet (triLaw μ (pair U (pair Y₁ Y₂)) X Y₀) n ε then 0 else 1) ≤ θ :=
-          by
+        (if t x ∈ robustTypicalSet (triLaw μ (pair U (pair Y₁ Y₂)) X Y₀) n ε then 0 else 1) ≤
+          θ := by
   have hcU : 0 ≤ log (Fintype.card υ) := log_natCast_nonneg _
   have hc₀ : 0 ≤ log (Fintype.card β₀) := log_natCast_nonneg _
   have hc₁ : 0 ≤ log (Fintype.card β₁) := log_natCast_nonneg _

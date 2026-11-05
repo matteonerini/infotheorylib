@@ -224,8 +224,8 @@ theorem exists_layer [Nonempty 𝒟] [Nonempty J] {w : A → ℝ} (hw : IsPMF w)
     if h : ∃ j, R (e x) (D (e x)) x j then h.choose else Classical.arbitrary J with hf
   refine ⟨D, f, ?_⟩
   have hpt : ∀ x, w x * (if G x ∧ R (e x) (D (e x)) x (f x) then 0 else 1) ≤
-      w x * (if G x then 0 else 1) + (if G x then w x * fail (e x) (D (e x)) x else 0) := fun x =>
-        by
+      w x * (if G x then 0 else 1) + (if G x then w x * fail (e x) (D (e x)) x else 0) :=
+        fun x => by
     by_cases hG : G x
     · by_cases hex : ∃ j, R (e x) (D (e x)) x j
       · have hR : R (e x) (D (e x)) x (f x) := by

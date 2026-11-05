@@ -59,9 +59,8 @@ def btRate₁₂ (P : α₁ × α₂ → ℝ) (κ₁ : α₁ → υ₁ → ℝ) 
   I[fun z : ((α₁ × υ₁) × α₂) × υ₂ => (z.1.1.1, z.1.2) : fun z => (z.1.1.2, z.2) ; btLaw P κ₁ κ₂]
 
 /-- If the law of `(V, U)` is `p(v) κ(u | g(v))`, then `H(U | V) = H(U | g(V))`. -/
-lemma condEntropy_eq_comp_of_channel {Ω V X U : Type*} [Fintype Ω] [Fintype V] [Fintype X] [Fintype
-  U]
-    {μ : Ω → ℝ} (hμ : IsPMF μ) (A : Ω → V) (B : Ω → U) (g : V → X) {κ : X → U → ℝ}
+lemma condEntropy_eq_comp_of_channel {Ω V X U : Type*} [Fintype Ω] [Fintype V] [Fintype X]
+    [Fintype U] {μ : Ω → ℝ} (hμ : IsPMF μ) (A : Ω → V) (B : Ω → U) (g : V → X) {κ : X → U → ℝ}
     (hκ : IsChannel κ) (h : dist μ (pair A B) = jointOf (dist μ A) fun v => κ (g v)) :
     H[B | A ; μ] = H[B | g ∘ A ; μ] := by
   classical
@@ -204,8 +203,8 @@ theorem btRate₁₂_eq (hP : IsPMF P) (h₁ : IsChannel κ₁) (h₂ : IsChanne
   -- The chain rule.
   have hc := chain_rule_cond hμ U₁ U₂ XX
   have hc2 := chain_rule hμ U₁ U₂
-  have e0 : btRate₁₂ P κ₁ κ₂ = H[pair U₁ U₂ ; btLaw P κ₁ κ₂] - H[pair U₁ U₂ | XX ; btLaw P κ₁ κ₂] :=
-    by
+  have e0 : btRate₁₂ P κ₁ κ₂ = H[pair U₁ U₂ ; btLaw P κ₁ κ₂] -
+    H[pair U₁ U₂ | XX ; btLaw P κ₁ κ₂] := by
     rw [btRate₁₂, mutualInfo_comm hμ, mutualInfo_eq_entropy_sub_condEntropy hμ]
     rfl
   rw [e0, hc, hc2, h1, h2, mutualInfo_eq_entropy_sub_condEntropy hμ,
@@ -319,8 +318,8 @@ lemma bin_terms_le (n : ℕ) {R₁ R₂ b₁ b₂ E : ℝ} (hb₁ : 0 ≤ b₁) 
 open Classical in
 /-- **Lecture 13, page 13-13.** If `R₁ > I(X₁; U₁) - I(U₁; U₂)`, `R₂ > I(X₂; U₂) - I(U₁; U₂)` and
 `R₁ + R₂ > I(X₁; U₁) + I(X₂; U₂) - I(U₁; U₂)`, with a loss `δ(ε)` in `I(U₁; U₂)`, then there are
-codes with
-`2^⌊nRⱼ⌋` indices and with `(X₁ⁿ, U₁ⁿ, X₂ⁿ, U₂ⁿ)` typical except with probability at most `δ`. -/
+codes with `2^⌊nRⱼ⌋` indices and with `(X₁ⁿ, U₁ⁿ, X₂ⁿ, U₂ⁿ)` typical except with probability at most
+`δ`. -/
 theorem eventually_bt_code (hP : IsPMF P) (h₁ : IsChannel κ₁) (h₂ : IsChannel κ₂) (hε0 : 0 < ε)
     (hε1 : ε ≤ 1)
     (hR₁ : I[Prod.snd : Prod.fst ; btJ₁ P κ₁] - btPackExp (btUU P κ₁ κ₂) ε < R₁ * log 2)
@@ -480,8 +479,7 @@ lemma DistLossyCode.nonempty [Nonempty β₁] [Nonempty β₂] {M₁ M₂ n : �
     fun _ => (fun _ => Classical.arbitrary β₁, fun _ => Classical.arbitrary β₂)⟩⟩
 
 /-- To show that a rate pair is achievable it is enough to find, for every `ε > 0` and all large
-`n`,
-a code with distortions at most `Dⱼ + ε`. -/
+`n`, a code with distortions at most `Dⱼ + ε`. -/
 theorem isAchievableDL_of_eventually [Finite β₁] [Finite β₂] [Nonempty β₁] [Nonempty β₂]
     {R₁ R₂ D₁ D₂ : ℝ} (hR₁ : 0 ≤ R₁) (hR₂ : 0 ≤ R₂)
     (h : ∀ ε > 0, ∀ᶠ n : ℕ in atTop, ∃ c : DistLossyCode (2 ^ ⌊n * R₁⌋₊) (2 ^ ⌊n * R₂⌋₊) n α₁ α₂ β₁
@@ -594,10 +592,9 @@ lemma distortion₂_btCode_le [Finite β₂] (hP : IsPMF P) (h₁ : IsChannel κ
 
 open Classical in
 /-- **Theorem 1 of Lecture 13, for a constant `Q` (pages 13-9 to 13-13).** For
-`p(u₁ | x₁) p(u₂ | x₂)` and
-`x̂ⱼ(u₁, u₂)` with `E dⱼ(Xⱼ, X̂ⱼ) ≤ Dⱼ`, every rate pair with `R₁ > I(X₁; U₁ | U₂)`,
-`R₂ > I(X₂; U₂ | U₁)`
-and `R₁ + R₂ > I(X₁, X₂; U₁, U₂)` bits is achievable. -/
+`p(u₁ | x₁) p(u₂ | x₂)` and `x̂ⱼ(u₁, u₂)` with `E dⱼ(Xⱼ, X̂ⱼ) ≤ Dⱼ`, every rate pair with
+`R₁ > I(X₁; U₁ | U₂)`, `R₂ > I(X₂; U₂ | U₁)` and `R₁ + R₂ > I(X₁, X₂; U₁, U₂)` bits is
+achievable. -/
 theorem isAchievableDL_of_lt [Finite β₁] [Finite β₂] (hP : IsPMF P) (hd₁ : ∀ x y, 0 ≤ d₁ x y)
     (hd₂ : ∀ x y, 0 ≤ d₂ x y) (h₁ : IsChannel κ₁) (h₂ : IsChannel κ₂) (f₁ : υ₁ → υ₂ → β₁)
     (f₂ : υ₁ → υ₂ → β₂) {R₁ R₂ D₁ D₂ : ℝ} (hc₁ : btCost₁ P κ₁ κ₂ d₁ f₁ ≤ D₁)

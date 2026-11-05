@@ -51,13 +51,6 @@ section General
 
 variable {Ω a b c : Type*} [Fintype Ω] [Fintype a] [Fintype b] [Fintype c]
 
-omit [Fintype b] in
-lemma dist_dist_comp (μ : Ω → ℝ) (T : Ω → a) (g : a → b) :
-    dist μ (g ∘ T) = dist (dist μ T) g := by
-  funext y
-  rw [dist_comp]
-  rfl
-
 omit [Fintype a] [Fintype b] in
 /-- The law of `(T, U₁)` is a marginal of the law of `(T, (U₁, U₂))`. -/
 lemma dist_pair_marg_fst {b₂ : Type*} [Fintype b₂] (μ : Ω → ℝ) (T : Ω → a) (U : Ω → b × b₂)
@@ -290,7 +283,7 @@ lemma sum_cInfo_le {ι : Type*} [Fintype ι] {w : ι → ℝ} (hw : IsPMF w) {q 
       · simp
     have h₁ : pair (Prod.snd ∘ fun z : ι × ((A × B) × Z) => (z.1, z.2.1.2))
         (fun z => z.2.2) = (pair (fun z : (A × B) × Z => z.1.2) Prod.snd) ∘ Prod.snd := rfl
-    rw [h₁, dist_dist_comp, hd]
+    rw [h₁, dist_comp_eq, hd]
   have : ∑ i, w i * H[Prod.snd | fun z : (A × B) × Z => z.1.2 ; jointOf (q i) T] ≤
       H[Prod.snd | fun z : (A × B) × Z => z.1.2 ;
         jointOf (fun a => ∑ i, w i * q i a) T] := by
@@ -388,7 +381,7 @@ theorem RCFBCode.mutualInfo_succ_le_mac (c : RCFBCode M n X X₁ Y Y₁) (hM : 0
   have h3 : I[Mv : Yp ; μ] = I[Prod.fst : rcY ; c.law W k] := by
     refine mutualInfo_eq_of_dist_pair_eq ?_
     have e : pair Mv Yp = (pair Prod.fst rcY) ∘ fun z => (z.1, Fin.init z.2) := rfl
-    rw [e, dist_dist_comp]
+    rw [e, dist_comp_eq]
     congr 1
     exact dist_fbLaw_init hW k
   have h4 : I[Mv : Yl | Yp ; μ] ≤ H[Yl ; μ] - H[Yl | pair Yp Mv ; μ] := by
@@ -487,7 +480,7 @@ theorem RCFBCode.mutualInfo_succ_le_bc (c : RCFBCode M n X X₁ Y Y₁) (hM : 0 
     have e : pair (fun z : (X × X₁) × (Y × Y₁) => z.1.2) Prod.snd ∘
         pair (fun z : Fin M × (Fin (k + 1) → Y × Y₁) => c.fbEnc k z.1 (Fin.init z.2))
           (fun z => z.2 (Fin.last k)) = pair X1k Zl := rfl
-    rw [← e, dist_dist_comp]
+    rw [← e, dist_comp_eq]
   have hchan : ∀ (z : (Fin k → Y × Y₁) × Fin M) (b : Y × Y₁),
       dist μ (pair (pair Zp Mv) Zl) (z, b) = dist μ (pair Zp Mv) z * W (c.fbEnc k z.2 z.1) b :=
     fun z b => dist_fbLaw_chan hW k z b
@@ -660,9 +653,7 @@ lemma IsAchievableRC.toFB {R : ℝ} (h : IsAchievableRC W R) : IsAchievableRCFB 
   exact ⟨fun n => (c n).toFB, hc⟩
 
 /-- **The cutset bound holds with feedback, pages 17-5 and 18-44 of [elgamal2010].** Every
-  achievable
-  rate,
-converted to nats, is at most the cutset bound. -/
+achievable rate, converted to nats, is at most the cutset bound. -/
 theorem IsAchievableRCFB.le_rcCutsetBound [Nonempty X] [Nonempty X₁] (hW : IsChannel W) {R : ℝ}
     (h : IsAchievableRCFB W R) : R * log 2 ≤ rcCutsetBound W := by
   obtain ⟨c, hc⟩ := h
@@ -696,16 +687,14 @@ theorem IsAchievableRCFB.le_rcCutsetBound [Nonempty X] [Nonempty X₁] (hW : IsC
         linarith
 
 /-- **Theorem 1 of Lecture 17 of [elgamal2010], page 17-5: the cutset bound.** Every achievable
-  rate,
-converted to nats, is at most the cutset bound. -/
+rate, converted to nats, is at most the cutset bound. -/
 theorem IsAchievableRC.le_rcCutsetBound [Nonempty X] [Nonempty X₁] (hW : IsChannel W) {R : ℝ}
     (h : IsAchievableRC W R) : R * log 2 ≤ rcCutsetBound W :=
   h.toFB.le_rcCutsetBound hW
 
 omit [Fintype X] [Fintype X₁] in
 /-- **A converse from a bound on the information.** If `I(M; Yⁿ) ≤ n V` for all the codes, then
-  every
-achievable rate, converted to nats, is at most `V`. -/
+every achievable rate, converted to nats, is at most `V`. -/
 theorem IsAchievableRC.le_of_info_bound {R V : ℝ} (hW : IsChannel W) (h : IsAchievableRC W R)
     (hV : ∀ (n : ℕ) (_ : 0 < n) (c : RCCode (2 ^ ⌈(n : ℝ) * R⌉₊) n X X₁ Y Y₁),
       I[Prod.fst : rcY ; c.law W n] ≤ n * V) : R * log 2 ≤ V := by

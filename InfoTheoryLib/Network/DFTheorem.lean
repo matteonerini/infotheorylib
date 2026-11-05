@@ -94,13 +94,13 @@ lemma dfE_eq {L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ} (hL : IsPMF L₀) (k 
   have hkv : ∀ x : ∀ l, X l, fillGe d₀ k x k = x k := fun x => by simp [fillGe]
   have h₁ : H[Prod.fst ; dfLT d₀ L₀ k d] = H[pair F₁ Yd ; L₀] := by
     simp only [entropyRV, dfLT]
-    rw [← dist_dist_comp]
+    rw [← dist_comp_eq]
     rfl
   have h₂ : H[fun z : ((∀ l, X l) × Y d) × X k => (z.1.1, z.2) ; dfLT d₀ L₀ k d] = H[F₀ ; L₀] := by
     have e : H[fun z : ((∀ l, X l) × Y d) × X k => (z.1.1, z.2) ; dfLT d₀ L₀ k d] =
         H[fun ω : (∀ l, X l) × (∀ l, Y l) => (F₁ ω, ω.1 k) ; L₀] := by
       simp only [entropyRV, dfLT]
-      rw [← dist_dist_comp]
+      rw [← dist_comp_eq]
       rfl
     rw [e]
     refine entropyRV_eq_of_comp₂ hL (fun w => (fillGe d₀ (k + 1) w, w k))
@@ -111,7 +111,7 @@ lemma dfE_eq {L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ} (hL : IsPMF L₀) (k 
       rw [hfill₂]
   have h₃ : H[fun z : ((∀ l, X l) × Y d) × X k => z.1.1 ; dfLT d₀ L₀ k d] = H[F₁ ; L₀] := by
     simp only [entropyRV, dfLT]
-    rw [← dist_dist_comp]
+    rw [← dist_comp_eq]
     rfl
   have h₄ : entropy (dfLT d₀ L₀ k d) = H[pair F₀ Yd ; L₀] := by
     have e : entropy (dfLT d₀ L₀ k d) =
@@ -202,8 +202,8 @@ theorem dfCode_errProb_pad (hW : IsChannel W) (d₀ : ∀ l, X l) (L₀ : (∀ l
   have hlaw : dist (c'.law W) T = c.law W := dist_fbLaw_prefix hW (t * n) N' hN
   have hdec : ∀ z, c'.Wrong D z ↔ c.Wrong D (T z) := by
     intro z
-    have hval : ∀ k, c'.dec k (z.1 k) (fun i => z.2 i k) = c.dec k (z.1 k) (fun i => (T z).2 i k) :=
-      by
+    have hval : ∀ k, c'.dec k (z.1 k) (fun i => z.2 i k) =
+      c.dec k (z.1 k) (fun i => (T z).2 i k) := by
       intro k
       have hE : (fun j : Fin B' => dfEst d₀ L₀ ε Cs B' k (getBlock (dY k) fun i => z.2 i k) j) =
           fun j : Fin B' => dfEst d₀ L₀ ε Cs B' k (getBlock (dY k) fun i => (T z).2 i k) j := by
@@ -400,8 +400,8 @@ theorem isAchievableMN_df (hp : IsPMF p) (hW : IsChannel W) {s₀ : Fin N} (hs :
         have h₆ : ((n : ℝ)) * ((N : ℝ) * r + 1) ≤ n * (B' * ξ₃) :=
           mul_le_mul_of_nonneg_left hB' hn0
         have h₇ : ((t : ℝ) + 0) * r + log 2 ≤ n := hbign
-        have h₈ : ((t : ℝ) * ((n : ℝ) + 1) * R + 1) * log 2 = (t : ℝ) * n * r + (t : ℝ) * r + log 2
-          := by
+        have h₈ : ((t : ℝ) * ((n : ℝ) + 1) * R + 1) * log 2 = (t : ℝ) * n * r + (t : ℝ) * r +
+          log 2 := by
           rw [hr]
           ring
         rw [h₈] at h₅

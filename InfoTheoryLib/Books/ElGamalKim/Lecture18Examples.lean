@@ -166,8 +166,8 @@ lemma info₃_clErasure :
 
 /-- The value of `H(Y)`: it exceeds `25 / 16` bits. -/
 lemma entropy_clErasure_gt :
-    (25 / 32 + 25 / 32 : ℝ) * log 2 < negMulLog (5 / 16) + negMulLog (3 / 8) + negMulLog (5 / 16) :=
-      by
+    (25 / 32 + 25 / 32 : ℝ) * log 2 < negMulLog (5 / 16) + negMulLog (3 / 8) +
+      negMulLog (5 / 16) := by
   have h : 10 * log 5 + 6 * log 3 < 33 * log 2 := by
     have hlt : ((5 : ℝ) ^ 10 * 3 ^ 6) < 2 ^ 33 := by norm_num
     have := log_lt_log (by positivity) hlt

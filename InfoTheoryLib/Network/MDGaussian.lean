@@ -117,8 +117,8 @@ lemma mdNoise_high_distortion (hP : 0 < P) (h₁ : D₀ ≤ D₁) (hD₁ : D₁ 
   have hb₁ : 0 < P - D₁ := by linarith
   have hb₂ : 0 < P - D₂ := by linarith
   rw [add_mdNoise (by linarith), mdNoise_sub hD₁ (by linarith), mdNoise_sub hD₂ (by linarith)]
-  have e : (P ^ 2 * (D₁ - D₀) / ((P - D₁) * (P - D₀))) * (P ^ 2 * (D₂ - D₀) / ((P - D₂) * (P - D₀)))
-    =
+  have e : (P ^ 2 * (D₁ - D₀) / ((P - D₁) * (P - D₀))) *
+    (P ^ 2 * (D₂ - D₀) / ((P - D₂) * (P - D₀))) =
       (P ^ 2 / (P - D₀)) ^ 2 * ((D₁ - D₀) * (D₂ - D₀) / ((P - D₁) * (P - D₂))) := by
     field_simp
   rw [e]
@@ -352,10 +352,8 @@ theorem ozarowN_pos_iff (h₀ : 0 < D₀) (h₁ : D₀ < D₁) (h₂ : D₀ ≤ 
 
 /-- **The correlation of the reproductions for `ρ = -1`, page 14-18.** If `a² = (D₁ - D₀)(D₂ - D₀)`
 and `b² = (P - D₁)(P - D₂)`, then the covariance `(1 - D₁/P) (1 - D₂/P) (P + K₁₂)` of `X̂₁`, `X̂₂`
-  with
-`K₁₂ = N₀ - √((N₁ - N₀)(N₂ - N₀))` is `b (b - a) / (P - D₀)`, so the correlation coefficient of
-  `X̂₁`,
-`X̂₂` is `(b - a) / (P - D₀)` and `1 / (1 - corr²)` is the ratio. Hence `I(X̂₁; X̂₂) = Δ`. -/
+with `K₁₂ = N₀ - √((N₁ - N₀)(N₂ - N₀))` is `b (b - a) / (P - D₀)`, so the correlation coefficient of
+`X̂₁`, `X̂₂` is `(b - a) / (P - D₀)` and `1 / (1 - corr²)` is the ratio. Hence `I(X̂₁; X̂₂) = Δ`. -/
 theorem ozarow_corr_sq (hP : 0 < P) (h₁ : D₀ ≤ D₁) (hD₁ : D₁ < P) (hD₂ : D₂ < P)
     (hG : 0 < (P - D₀) ^ 2 - (ozarowB P D₁ D₂ - ozarowA D₀ D₁ D₂) ^ 2) :
     (1 - D₁ / P) * (1 - D₂ / P) * (P + (mdNoise P D₀ -

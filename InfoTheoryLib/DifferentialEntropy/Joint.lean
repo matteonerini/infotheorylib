@@ -66,16 +66,14 @@ def marginalSnd (μ : Measure α) (f : α × β → ℝ) (y : β) : ℝ := ∫ x
 lemma IsPDF.marginalFst {f : α × β → ℝ} (hf : IsPDF (μ.prod ν) f) :
     IsPDF μ (marginalFst ν f) :=
   ⟨(hf.measurable.stronglyMeasurable.integral_prod_right').measurable,
-    fun _ => integral_nonneg fun _ => hf.nonneg _, hf.integrable.integral_prod_left,
-    by
+    fun _ => integral_nonneg fun _ => hf.nonneg _, hf.integrable.integral_prod_left, by
       change ∫ x, ∫ y, f (x, y) ∂ν ∂μ = 1
       rw [← integral_prod f hf.integrable, hf.integral_eq_one]⟩
 
 lemma IsPDF.marginalSnd {f : α × β → ℝ} (hf : IsPDF (μ.prod ν) f) :
     IsPDF ν (marginalSnd μ f) :=
   ⟨(hf.measurable.stronglyMeasurable.integral_prod_left').measurable,
-    fun _ => integral_nonneg fun _ => hf.nonneg _, hf.integrable.integral_prod_right,
-    by
+    fun _ => integral_nonneg fun _ => hf.nonneg _, hf.integrable.integral_prod_right, by
       change ∫ y, ∫ x, f (x, y) ∂μ ∂ν = 1
       rw [← integral_prod_symm f hf.integrable, hf.integral_eq_one]⟩
 

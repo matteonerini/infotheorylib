@@ -17,16 +17,14 @@ distortion. Side information available causally and noncausally at the decoder a
 as `min (I(X; U) - θ I(Y; U))` with `θ = 0` and `θ = 1`.
 
 For each `u`, the function `x̂(u, ·)` is a constant, the identity or the negation. The rate is the
-mean
-under `p(u)` of `ψ(P{X = 1 | U = u})`, with
+mean under `p(u)` of `ψ(P{X = 1 | U = u})`, with
 
   `ψ(a) = (1 - θ) log 2 - H(a) + θ H(a ∗ p)`,
 
 so `ψ(a) = 1 - H(a)` for `θ = 0` and `ψ(a) = g(a) = H(a ∗ p) - H(a)` for `θ = 1`, and `ψ` is convex.
 A constant has distortion `a` or `1 - a`, and the others `p` or `1 - p`. Hence any line below `ψ`
-that
-vanishes at `p` is a lower bound on the rate, and the rate–distortion function is the lower convex
-envelope of `ψ` and the point `(p, 0)`.
+that vanishes at `p` is a lower bound on the rate, and the rate–distortion function is the lower
+convex envelope of `ψ` and the point `(p, 0)`.
 
 ## Main statements
 
@@ -204,8 +202,7 @@ lemma line_le_dsbsPsi (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ 1) (hp0 : 0 ≤ p) (hp : 
     linarith
 
 /-- **The supporting lines (the converse for a `DSBS(p)`).** For every `p(u | x)` and `x̂(u, y)` and
-a
-line `A - s c` with `s ≥ 0`, below `ψ` on `[0, 1]` and nonpositive at `p`, we have
+a line `A - s c` with `s ≥ 0`, below `ψ` on `[0, 1]` and nonpositive at `p`, we have
 `I(X; U) - θ I(Y; U) ≥ A - s E d(X, X̂)`. -/
 theorem line_le_sideRate (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ 1) (hp0 : 0 ≤ p) (hp : p ≤ 1 / 2) {A s : ℝ}
     (hs : 0 ≤ s) (h1 : ∀ c ∈ Set.Icc (0 : ℝ) 1, A - s * c ≤ dsbsPsi θ p c) (h2 : A - s * p ≤ 0)
@@ -452,8 +449,7 @@ theorem sideRD_dsbs_eq_psi (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ 1) (hp0 : 0 < p) (hp
     nlinarith
 
 /-- **Lecture 12, pages 12-7 and 12-19.** For `x ≤ D ≤ p`, the rate is `(p - D) (-ψ'(x))`, the
-tangent
-to `ψ` through `(p, 0)`: time sharing between `U = X ⊕ V` and zero-rate decoding. -/
+tangent to `ψ` through `(p, 0)`: time sharing between `U = X ⊕ V` and zero-rate decoding. -/
 theorem sideRD_dsbs_eq_line (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ 1) (hp0 : 0 < p) (hp : p < 1 / 2) {x : ℝ}
     (hx : IsDsbsTangency θ p x) {D : ℝ} (hD : x ≤ D) (hDp : D ≤ p) :
     sideRD θ (dsbsPMF p) hammingDistortion D = (p - D) * -dsbsDPsi θ p x := by
@@ -496,8 +492,7 @@ theorem sideRD_dsbs_eq_line (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ 1) (hp0 : 0 < p) (h
       nlinarith
 
 /-- **Lecture 12, pages 12-7 and 12-19.** The rate at `D = 0` is `ψ(0)`: `1` for causal side
-information
-and `H(p)` for noncausal side information. -/
+information and `H(p)` for noncausal side information. -/
 theorem sideRD_dsbs_zero (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ 1) (hp0 : 0 < p) (hp : p < 1 / 2) {x : ℝ}
     (hx : IsDsbsTangency θ p x) :
     sideRD θ (dsbsPMF p) hammingDistortion 0 = dsbsPsi θ p 0 := by
@@ -601,10 +596,8 @@ theorem exists_isDsbsTangency (hθ0 : 0 ≤ θ) (hθ1 : θ ≤ 1) (hp0 : 0 < p) 
   exact ⟨x, (hFeq x).2 ⟨⟨ha₀.1.trans_le hx.1, lt_of_le_of_ne hx.2 hxp⟩, hFx⟩⟩
 
 /-- **Lecture 12, page 12-7.** For a `DSBS(p)` and the Hamming distortion, with the point of
-tangency
-`D_c`, `R_CSI-D(D) = 1 - H(D)` for `0 ≤ D ≤ D_c`, in nats. By `rateCausalBits_eq`, the rate in bits
-is
-this value divided by `log 2`. -/
+tangency `D_c`, `R_CSI-D(D) = 1 - H(D)` for `0 ≤ D ≤ D_c`, in nats. By `rateCausalBits_eq`, the rate
+in bits is this value divided by `log 2`. -/
 theorem causalRD_dsbs_of_le_tangency (hp0 : 0 < p) (hp : p < 1 / 2) {x : ℝ}
     (hx : IsDsbsTangency 0 p x) {D : ℝ} (hD0 : 0 ≤ D) (hD : D ≤ x) :
     causalRD (dsbsPMF p) hammingDistortion D = log 2 - binEntropy D := by
@@ -633,10 +626,8 @@ lemma dsbsPsi_one (p D : ℝ) : dsbsPsi 1 p D = binEntropy (binConv D p) - binEn
   ring
 
 /-- **Lecture 12, page 12-19.** For a `DSBS(p)` and the Hamming distortion, with the point of
-tangency
-`D'_c`, `R_SI-D(D) = g(D) = H(p ∗ D) - H(D)` for `0 ≤ D ≤ D'_c`, in nats. By `rateWZBits_eq`, the
-rate in
-bits is this value divided by `log 2`. -/
+tangency `D'_c`, `R_SI-D(D) = g(D) = H(p ∗ D) - H(D)` for `0 ≤ D ≤ D'_c`, in nats. By
+`rateWZBits_eq`, the rate in bits is this value divided by `log 2`. -/
 theorem wzRD_dsbs_of_le_tangency (hp0 : 0 < p) (hp : p < 1 / 2) {x : ℝ}
     (hx : IsDsbsTangency 1 p x) {D : ℝ} (hD0 : 0 ≤ D) (hD : D ≤ x) :
     wzRD (dsbsPMF p) hammingDistortion D = binEntropy (binConv D p) - binEntropy D := by
@@ -833,8 +824,7 @@ theorem binEntropy_sub_le_bothRate (hp0 : 0 ≤ p) (hp1 : p ≤ 1) {q : Bool × 
 
 /-- **Lecture 12, page 12-7.** For a `DSBS(p)` and the Hamming distortion,
 `R_SI-ED(D) = H(p) - H(D)` for `0 ≤ D ≤ p`, in nats. By `rateBothBits_eq`, the rate in bits is this
-value
-divided by `log 2`. -/
+value divided by `log 2`. -/
 theorem bothRD_dsbs (hp0 : 0 ≤ p) (hp : p ≤ 1 / 2) {D : ℝ} (hD0 : 0 ≤ D) (hD : D ≤ p) :
     bothRD (dsbsPMF p) hammingDistortion D = binEntropy p - binEntropy D := by
   classical
@@ -871,8 +861,8 @@ theorem bothRD_dsbs_of_le (hp0 : 0 ≤ p) (hp : p ≤ 1 / 2) {D : ℝ} (hD : p �
     exact condMutualInfo_nonneg (jointOf_isPMF hP hq) _ _ _
 
 /-- **Lecture 12, page 12-19.** There is a nonzero cost for the lack of side information at the
-encoder:
-`R_SI-ED(D) < R_SI-D(D)` for `0 < D < p`. The notes write the inequality the other way round. -/
+encoder: `R_SI-ED(D) < R_SI-D(D)` for `0 < D < p`. The notes write the inequality the other way
+round. -/
 theorem bothRD_lt_wzRD_dsbs (hp0 : 0 < p) (hp : p < 1 / 2) {D : ℝ} (hD0 : 0 < D) (hD : D < p) :
     bothRD (dsbsPMF p) hammingDistortion D < wzRD (dsbsPMF p) hammingDistortion D := by
   have hphalf : p ∈ Set.Icc (0 : ℝ) 2⁻¹ := ⟨hp0.le, by norm_num; linarith⟩

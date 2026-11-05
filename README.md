@@ -366,6 +366,7 @@ InfoTheoryLib/
     ColoredNoise.lean    Gaussian channels with colored noise, the capacity `C_n`
     Feedback.lean        the capacity with feedback, `C_{n,FB} ≤ C_n + ½` and `C_{n,FB} ≤ 2C_n`
     AWGN.lean            the channel `Y = gX + Z` with rates in bits, `C = C(g²P)`
+    SchalkwijkKailath.lean  the Schalkwijk–Kailath scheme for the AWGN channel with feedback
     FadingCompound.lean  the slowly fading channel, the compound capacity `min_g C(g²P)`
     Fading.lean          water-filling in time and the metrics of the fading channel, as formulas
     Vector.lean          the Gaussian vector channel: SVD, water-filling, reciprocity, KKT, MMSE

@@ -442,11 +442,11 @@ theorem rcBcInfo_ro_le (hq : IsPMF q) (hP : IsChannel P) (hκ : IsChannel κ) :
   -- the law of `(Y', Y₁)`
   have hrow : ∀ a : X × U, dist (rcRO P κ a) (fun o => (o.1.1, o.2)) = P a.1 := by
     intro a
-    rw [rcRO_row, ← dist_dist_comp]
+    rw [rcRO_row, ← dist_comp_eq]
     exact dist_prodDist_fst (hκ _) _
   have hrow₂ : ∀ a : X × U, dist (rcRO P κ a) (fun o => o.1.2) = κ a.2 := by
     intro a
-    rw [rcRO_row, ← dist_dist_comp]
+    rw [rcRO_row, ← dist_comp_eq]
     exact dist_prodDist_snd (hP _) _
   have hA : dist J Aa = outDist (dist q Prod.fst) P := by
     funext t
@@ -455,8 +455,8 @@ theorem rcBcInfo_ro_le (hq : IsPMF q) (hP : IsChannel P) (hκ : IsChannel κ) :
     rw [show (fun o => Aa (a, o)) = fun o => (o.1.1, o.2) from rfl, hrow]
   -- the entropy of `Y''` given `X₁`
   have hB : H[Bb | Uu ; J] = ∑ u, dist q Prod.snd u * entropy (κ u) := by
-    have hd : dist J (pair Uu Bb) = dist (jointOf (dist q Prod.snd) κ) (pair Prod.fst Prod.snd) :=
-      by
+    have hd : dist J (pair Uu Bb) =
+      dist (jointOf (dist q Prod.snd) κ) (pair Prod.fst Prod.snd) := by
       funext ⟨u, y⟩
       rw [dist_pair_fst_snd, hJd, dist_jointOf_row]
       have hin : ∀ a : X × U, dist (rcRO P κ a) (fun o => pair Uu Bb (a, o)) (u, y) =
@@ -545,8 +545,7 @@ lemma roIdC_isChannel [DecidableEq S] : IsChannel (roIdC S) := fun s => by
   · simp [roIdC]
 
 /-- **Page 17-51 of [elgamal2010]: the receiver-orthogonal semi-deterministic relay channel.** If
-  `Y₁`
-is a function of `(X, Y')`, then compress–forward with `Ŷ₁ = Y₁` achieves the cutset bound. -/
+`Y₁` is a function of `(X, Y')`, then compress–forward with `Ŷ₁ = Y₁` achieves the cutset bound. -/
 theorem rcCapacity_ro_semiDet [Nonempty X] [Nonempty U] [Nonempty Y'] [Nonempty Y''] [Nonempty S]
     {f : X × Y' → S} (hf : IsSemiDetRO P f) (hP : IsChannel P) (hκ : IsChannel κ) :
     rcCapacity (rcRO P κ) = rcROBound P κ / log 2 := by
@@ -579,7 +578,7 @@ theorem rcCapacity_ro_semiDet [Nonempty X] [Nonempty U] [Nonempty Y'] [Nonempty 
     rw [dist_pair_fst_snd]
     have e : (pair (fun z : (X × (Y' × S)) × S => z.1.1) fun z => z.1.2.1) =
         (pair (Prod.fst : X × (Y' × S) → X) fun z => (Prod.snd z).1) ∘ Prod.fst := rfl
-    rw [e, dist_dist_comp, hfst, dist_pair_marg_fst]
+    rw [e, dist_comp_eq, hfst, dist_pair_marg_fst]
     simp_rw [dist_pair_fst_snd]
     simp only [jointOf, bcMarg₁, mul_sum]
   -- the third information
@@ -593,7 +592,7 @@ theorem rcCapacity_ro_semiDet [Nonempty X] [Nonempty U] [Nonempty Y'] [Nonempty 
     rw [hae]
     have e : (pair (fun z : (X × (Y' × S)) × S => z.1.1) fun z => z.1.2) =
         (pair Prod.fst Prod.snd) ∘ Prod.fst := rfl
-    rw [e, dist_dist_comp, hfst]
+    rw [e, dist_comp_eq, hfst]
   -- the second information
   have h₂ : I[fun z => z.1.2.2 : fun z => z.2 | fun z => (z.1.1, z.1.2.1) ; ν] = 0 := by
     rw [condMutualInfo_eq_entropies hν]

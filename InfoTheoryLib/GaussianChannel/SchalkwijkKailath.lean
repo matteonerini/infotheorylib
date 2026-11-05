@@ -589,8 +589,8 @@ theorem skCode_power_le (hν : IsUnitNoise ν) (hP : 0 ≤ P) (N : ℕ) :
     (skCode M P N).SatisfiesPower ν P := by
   have := hν.prob
   intro m
-  have hk : ∀ k : Fin N, ∫ z, (skCode M P N).input m z k ^ 2 ∂(Measure.pi fun _ : Fin N => ν) ≤ P :=
-    by
+  have hk : ∀ k : Fin N, ∫ z, (skCode M P N).input m z k ^ 2 ∂(Measure.pi fun _ : Fin N => ν) ≤
+    P := by
     rintro ⟨k, hk⟩
     cases k with
     | zero =>
@@ -625,8 +625,7 @@ lemma skCode_err_subset (hP : 0 < P) (m : Fin M) (n : ℕ) :
   exact skIdx_eq hP m hc'
 
 /-- **The remark of page 18-11 of [elgamal2010].** For any noise with zero mean and unit variance,
-  the
-probability of error is at most `(1 + P)⁻ⁿ M² / P`, by Chebyshev's inequality. -/
+the probability of error is at most `(1 + P)⁻ⁿ M² / P`, by Chebyshev's inequality. -/
 theorem skCode_err_le (hν : IsUnitNoise ν) (hP : 0 < P) (n : ℕ) :
     (skCode M P (n + 1)).avgErr ν ≤ skV P n * M ^ 2 / P := by
   have := hν.prob
@@ -672,10 +671,8 @@ end Code
 /-! ### Achievable rates -/
 
 /-- **Pages 18-6 to 18-11 of [elgamal2010].** For any noise with zero mean and unit variance, every
-  rate
-below `C(P)` is achievable with feedback under the expected power constraint. The rate is in bits
-  and
-`C(P)` in nats. -/
+rate below `C(P)` is achievable with feedback under the expected power constraint. The rate is in
+bits and `C(P)` in nats. -/
 theorem isAchievableAddFB_of_lt {ν : Measure ℝ} (hν : IsUnitNoise ν) {P R : ℝ} (hP : 0 < P)
     (hR : R * log 2 < gaussCap P) : IsAchievableAddFB ν P R := by
   have hlog2 : 0 < log 2 := log_pos (by norm_num)

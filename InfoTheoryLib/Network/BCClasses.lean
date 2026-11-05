@@ -118,7 +118,6 @@ lemma dist_bcJoint_UY₁ (q : 𝒰 × α → ℝ) (W : α → β₁ × β₂ →
   simp only [dist, bcJoint, jointOf, pair_apply, Prod.mk.injEq, Fintype.sum_prod_type, bcMarg₁,
     mul_sum, ite_and, sum_ite_irrel, sum_const_zero, sum_ite_eq', mem_univ, ite_true]
 
-
 lemma dist_bcJoint_UY₂ (q : 𝒰 × α → ℝ) (W : α → β₁ × β₂ → ℝ) (u : 𝒰) (y : β₂) :
     dist (bcJoint q W) (pair (fun z => z.1.1) (fun z => z.2.2)) (u, y) =
       ∑ x, q (u, x) * bcMarg₂ W x y := by
@@ -235,7 +234,6 @@ theorem IsStochasticallyDegraded.isLessNoisy {W : α → β₁ × β₂ → ℝ}
   exact (IsPhysicallyDegraded.isLessNoisy hW' ⟨bcMarg₁ W, V, hW.bcMarg₁, hV, fun _ _ _ => rfl⟩)
     |>.congr h₁ h₂
 
-
 omit [Fintype β₁] [Fintype β₂] in
 /-- With `U = X`, encoded in `Fin k` by an equivalence `e`, the law `p(u, y) = ∑ₓ p(u, x) p(y | x)`
 has the mutual information `I(X; Y)`. -/
@@ -285,7 +283,6 @@ theorem IsLessNoisy.isMoreCapable {W : α → β₁ × β₂ → ℝ} (hW : IsCh
 theorem IsStochasticallyDegraded.isMoreCapable {W : α → β₁ × β₂ → ℝ} (hW : IsChannel W)
     (h : IsStochasticallyDegraded W) : IsMoreCapable W :=
   (h.isLessNoisy hW).isMoreCapable hW
-
 
 /-! ### Binary inputs: `I(U; Y)` as a Jensen gap -/
 

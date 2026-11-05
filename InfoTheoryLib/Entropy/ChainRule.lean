@@ -33,8 +33,7 @@ lemma entropyRV_prefixRV_succ (μ : Ω → ℝ) (X : ℕ → Ω → α) (n : ℕ
     H[prefixRV X (n + 1) ; μ] = H[pair (prefixRV X n) (X n) ; μ] :=
   entropyRV_eq_of_injective μ _ (snoc_injective2 n) (fun ω => prefixRV_succ X n ω)
 
-/-- **Theorem 2.5.1 (Chain rule for entropy).**
-`H(X₁, X₂, …, Xₙ) = ∑ᵢ H(Xᵢ | X_{i-1}, …, X₁)`. -/
+/-- **Theorem 2.5.1 (Chain rule for entropy).** `H(X₁, X₂, …, Xₙ) = ∑ᵢ H(Xᵢ | X_{i-1}, …, X₁)`. -/
 theorem chain_rule_entropy {μ : Ω → ℝ} (hμ : IsPMF μ) (X : ℕ → Ω → α) (n : ℕ) :
     H[prefixRV X n ; μ] = ∑ i ∈ range n, H[X i | prefixRV X i ; μ] := by
   induction n with

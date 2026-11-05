@@ -29,8 +29,7 @@ codes and proves the direct part of Theorem 3 of Lecture 15 of El Gamal and Kim.
 
 No random binning is needed. Encoder 0 describes `(u₁ⁿ, u₂ⁿ)` by a sequence `vⁿ` of a codebook, and
 encoder `j` sends the position of `uⱼⁿ` in the conditionally typical set `T(Uⱼ|vⁿ)`, as on page
-  15-23
-of the notes.
+15-23 of the notes.
 
 ## References
 

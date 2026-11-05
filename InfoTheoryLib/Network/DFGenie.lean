@@ -298,8 +298,8 @@ theorem sum_dfGenie_not_good_le (hp : IsPMF p) (hW : IsChannel W) (hκc : ∀ k,
       linarith
   -- the terms of the union bound
   have htyp : ∀ B : Fin b, ∑ ξ : Fin b → DFΞ N Mm n X Y, piLaw ν ξ *
-      ind (¬ dfTyp d₀ L₁ ε (dfTagOf msg B) (ξ B)) = 1 - prob (iidPMF L₁ n) (robustTypicalSet L₁ n ε)
-        := by
+      ind (¬ dfTyp d₀ L₁ ε (dfTagOf msg B) (ξ B)) = 1 -
+        prob (iidPMF L₁ n) (robustTypicalSet L₁ n ε) := by
     intro B
     rw [sum_piLaw_mul_eval hν B fun v => ind (¬ dfTyp d₀ L₁ ε (dfTagOf msg B) v)]
     exact sum_dfPB_not_typ d₀ hp hW hκc hκ ε _

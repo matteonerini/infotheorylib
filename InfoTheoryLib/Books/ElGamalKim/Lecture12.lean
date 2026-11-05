@@ -12,11 +12,9 @@ public import InfoTheoryLib.ChannelCoding.Product
 # El Gamal & Kim, Lecture 12: Source Coding with Side Information
 
 This file indexes the formalization of Lecture 12 of [elgamal2010] and contains the lossless
-examples
-and the quadratic Gaussian computation. We prove Theorems 1 and 2, the Wyner–Ziv theorem, and the
-special cases of side information at the encoder or at both ends, as coding theorems. The examples
-for
-the doubly symmetric binary source are in `Books.ElGamalKim.Lecture12DSBS`.
+examples and the quadratic Gaussian computation. We prove Theorems 1 and 2, the Wyner–Ziv theorem,
+and the special cases of side information at the encoder or at both ends, as coding theorems. The
+examples for the doubly symmetric binary source are in `Books.ElGamalKim.Lecture12DSBS`.
 
 ## Conventions
 
@@ -24,11 +22,9 @@ the doubly symmetric binary source are in `Books.ElGamalKim.Lecture12DSBS`.
   single-letter functions `sideRD`, `causalRD`, `wzRD`, `bothRD` and `infoRD` are in nats, and the
   theorems divide them by `log 2`.
 * **Auxiliary random variables.** `U` takes values in `Fin k` for some `k`; the minimum is attained
-  with
-  `|𝒰| ≤ |𝒳| + 3`, against `|𝒰| ≤ |𝒳| + 1` in the notes.
+  with `|𝒰| ≤ |𝒳| + 3`, against `|𝒰| ≤ |𝒳| + 1` in the notes.
 * **Causal and noncausal together.** `sideRD θ` is `min (I(X; U) - θ I(Y; U))`, so that `causalRD`
-  is
-  `θ = 0` and `wzRD` is `θ = 1`, and all the properties have one proof.
+  is `θ = 0` and `wzRD` is `θ = 1`, and all the properties have one proof.
 
 ## Index
 
@@ -69,8 +65,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * `H(X | Y) ≤ R*_CSI-D ≤ H(X)`: `condEntropy_le_losslessCausalRate`,
   `losslessCausalRate_le_entropy`.
 * The three examples: `losslessCausalRate_diag`, `losslessCausalRate_prod`,
-  `losslessCausalRate_pair`
-  (here).
+  `losslessCausalRate_pair` (here).
 * `p(x, y) > 0` gives `R*_CSI-D = H(X)`: `losslessCausalRate_of_pos`.
 
 ### Noncausal side information (pages 12-16 to 12-27)
@@ -106,17 +101,14 @@ All in `Books.ElGamalKim.Lecture12DSBS`.
 ## Not formalized
 
 * The bound `|𝒰| ≤ |𝒳| + 1`, which needs the Fenchel–Eggleston strengthening of Carathéodory's
-  theorem:
-  we prove `|𝒰| ≤ |𝒳| + 3`, which is enough for all the theorems.
+  theorem: we prove `|𝒰| ≤ |𝒳| + 3`, which is enough for all the theorems.
 * Source coding when side information may be absent (pages 12-30 to 12-33), that is the results of
   Heegard and Berger and of Kaspi with two decoders.
 * The coding theorems of the quadratic Gaussian case, including `R_SI-D(D) = R_SI-ED(D)`: the source
-  is
-  not discrete, and we only check the formulas of the notes.
+  is not discrete, and we only check the formulas of the notes.
 * Deterministic binning and Lemma 1 of the Appendix, replaced by random binning (see the issues).
 * The lossless cases `R*_SI-E = H(X)` and `R*_SI-ED = H(X | Y)` for the block probability of error;
-  we
-  have them for the distortion at `D = 0`.
+  we have them for the distortion at `D = 0`.
 * The tangent formulas for `p = 0` and `p = 1/2`, where no point of tangency exists in `(0, p)`.
 * The discussion of the duality between Wyner–Ziv and Gelfand–Pinsker on pages 12-28 and 12-29.
 
@@ -126,21 +118,18 @@ All in `Books.ElGamalKim.Lecture12DSBS`.
   `g(D'_c) / (p - D'_c) = g'(D'_c)` lack a sign: they should have `-g'(D'_c)`, as in
   `IsDsbsTangency` and `wzRD_dsbs_of_tangency_le`.
 * **Page 12-19.** "`R_SI-D(D) < R_SI-ED(D)`" is the wrong way round, as page 12-17 says: the
-  statement
-  is `R_SI-ED(D) < R_SI-D(D)` for `0 < D < p`, which is `bothRD_lt_wzRD_dsbs`.
+  statement is `R_SI-ED(D) < R_SI-D(D)` for `0 < D < p`, which is `bothRD_lt_wzRD_dsbs`.
 * **Pages 12-36 and 12-37, Lemma 1.** Step (b) says that, given `L = l`, any collection of the other
   codewords has the same distribution. With the encoder of page 12-22, which selects the smallest
   index, this is not so: the codewords with an index below `l` are known not to be typical with
-  `Xⁿ`,
-  and the others are not. The step holds for an encoder that picks a typical index uniformly at
-  random.
-  We avoid the lemma by binning at random, independently of the codebook (`sum_bins_erase_le`).
+  `Xⁿ`, and the others are not. The step holds for an encoder that picks a typical index uniformly
+  at random. We avoid the lemma by binning at random, independently of the codebook
+  (`sum_bins_erase_le`).
 * **Page 12-28.** The second capacity is written `R_SI-E`; it should be `C_SI-E`.
 * **Page 12-31.** The minimum is written over `x̂₂(u, y)` and then described over `x̂₂(u, x̂₁, y)`.
 * **The converse on page 12-12.** Step (a) uses a Markov chain, which `CausalCode.exists_kernel_le`
   avoids with `Uᵢ = (M, Zⁱ⁻¹)` and `Zᵢ = (Xᵢ, Yᵢ)`: the chain rule for `Zⁿ` bounds `∑ᵢ I(Xᵢ; Uᵢ)`.
-  This is
-  not an error in the notes.
+  This is not an error in the notes.
 
 ## References
 
@@ -184,8 +173,7 @@ section ZeroDistortion
 variable {α γ : Type*} [Fintype α] [Fintype γ] {P : α × γ → ℝ}
 
 /-- **Lecture 12, page 12-3.** With side information at the encoder only, the rate–distortion
-function
-at `D = 0` for the Hamming distortion is `H(X)`, in bits. -/
+function at `D = 0` for the Hamming distortion is `H(X)`, in bits. -/
 theorem rateEncSideBits_hamming_zero (hP : IsPMF P) :
     rateEncSideBits P (hammingDistortion (α := α)) 0 = entropy (margFst P) / log 2 := by
   obtain ⟨z⟩ : Nonempty (α × γ) := Fintype.card_pos_iff.1 (card_pos_of_isPMF hP)
@@ -360,8 +348,7 @@ theorem gaussian_estimate {Q : ℝ} (hP : 0 < P) (hN : 0 < N) (hQ : 0 < Q) (hD0 
   nlinarith
 
 /-- **Lecture 12, page 12-18.** The rate of the quadratic Gaussian case: `h(X | Y) - h(X | U, Y)`
-with
-`Var(X | Y) = P'` and `Var(X | U, Y) = D` is `R(P' / D) = (1 / 2) log (P' / D)`. -/
+with `Var(X | Y) = P'` and `Var(X | U, Y) = D` is `R(P' / D) = (1 / 2) log (P' / D)`. -/
 theorem gaussian_rate {P' : ℝ} (hP' : 0 < P') (hD0 : 0 < D) :
     1 / 2 * log (2 * π * rexp 1 * P') - 1 / 2 * log (2 * π * rexp 1 * D) =
       1 / 2 * log (P' / D) := by
@@ -370,6 +357,5 @@ theorem gaussian_rate {P' : ℝ} (hP' : 0 < P') (hD0 : 0 < D) :
   ring
 
 end Gaussian
-
 
 end InfoTheory.ElGamalKim

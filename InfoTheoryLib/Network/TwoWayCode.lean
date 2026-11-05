@@ -46,9 +46,8 @@ variable {𝒲 A B α β γ ξ : Type*} [Fintype 𝒲] [Fintype A] [Fintype B] [
   [Fintype γ] [Fintype ξ] {ν : 𝒲 → ℝ} {W : α → β → ℝ} {enc : ∀ k, 𝒲 → (Fin k → β) → α} {n : ℕ}
 
 /-- **The single-letter bound.** Let `A, B` be functions of the message `w` that determine it. Let
-  `O`
-be a function of the output, and suppose that a function `φ` of the input is determined by `B` and
-by the past of `O`. Then `I(A; Oⁿ | B) ≤ ∑ᵢ (H(Oᵢ | φ(Xᵢ)) - H(Oᵢ | Xᵢ))`. -/
+`O` be a function of the output, and suppose that a function `φ` of the input is determined by `B`
+and by the past of `O`. Then `I(A; Oⁿ | B) ≤ ∑ᵢ (H(Oᵢ | φ(Xᵢ)) - H(Oᵢ | Xᵢ))`. -/
 theorem condInfo_le_sum (hν : IsPMF ν) (hW : IsChannel W) (ma : 𝒲 → A) (mb : 𝒲 → B)
     (hab : Function.Injective fun w => (ma w, mb w)) (v : β → γ) (φ : α → ξ)
     (e : ∀ k, B → (Fin k → γ) → ξ)
@@ -118,8 +117,7 @@ theorem condInfo_le_sum (hν : IsPMF ν) (hW : IsChannel W) (ma : 𝒲 → A) (m
   linarith
 
 /-- **The single-letter bound, with the informations of the letters**, for an input `(a, b)` of
-  which
-`b` is determined by `B` and the past of `O`. -/
+which `b` is determined by `B` and the past of `O`. -/
 theorem condInfo_le_sum_cInfo {a' b' : Type*} [Fintype a'] [Fintype b']
     {W : a' × b' → β → ℝ} {enc : ∀ k, 𝒲 → (Fin k → β) → a' × b'} (hν : IsPMF ν) (hW : IsChannel W)
     (ma : 𝒲 → A) (mb : 𝒲 → B) (hab : Function.Injective fun w => (ma w, mb w)) (v : β → γ)
@@ -145,7 +143,7 @@ theorem condInfo_le_sum_cInfo {a' b' : Type*} [Fintype a'] [Fintype b']
   · refine condEntropy_eq_of_dist_pair_eq hμ (jointOf_isPMF hq hK) ?_
     have e₁ : (pair (fun z : 𝒲 × (Fin n → β) => (X z).2) fun z => v (z.2 i)) =
         (pair (fun t : (a' × b') × γ => t.1.2) Prod.snd) ∘ pair X fun z => v (z.2 i) := rfl
-    rw [e₁, dist_dist_comp, hd]
+    rw [e₁, dist_comp_eq, hd]
   · exact condEntropy_of_channel (W := fun t => dist (W t) v) id fun t d =>
       dist_fbLaw_letter_view hW i (fun t : 𝒲 × (Fin i → β) => enc i t.1 t.2) id (fun _ _ => rfl)
         v t d
@@ -155,8 +153,7 @@ end Bound
 /-! ### Codes -/
 
 /-- **Page 18-46 of [elgamal2010].** A code for two nodes. Each encoder sees the past of what its
-  node
-receives, and each decoder knows the message of its node. -/
+node receives, and each decoder knows the message of its node. -/
 structure TWCCode (M₁ M₂ n : ℕ) (α₁ α₂ γ₁ γ₂ : Type*) where
   /-- The encoder of node 1. -/
   enc₁ : ∀ k, Fin M₁ → (Fin k → γ₁) → α₁
@@ -245,7 +242,7 @@ lemma log_le_of_fano₂ (hW : IsChannel W) (h₁ : 0 < M₁) (h₂ : 0 < M₂) [
     have e₂ : H[fun z : (Fin M₁ × Fin M₂) × (Fin n → β) => z.1.2 ; c.law W v₁ v₂] = log M₂ := by
       have ee : (fun z : (Fin M₁ × Fin M₂) × (Fin n → β) => z.1.2) =
           (fun w : Fin M₁ × Fin M₂ => w.2) ∘ Prod.fst := rfl
-      rw [entropyRV, ee, dist_dist_comp, hd, hu, entropy_uniformPMF, Fintype.card_fin]
+      rw [entropyRV, ee, dist_comp_eq, hd, hu, entropy_uniformPMF, Fintype.card_fin]
     rw [e, e₂, entropyRV, hd, entropy_uniformPMF, Fintype.card_prod, Fintype.card_fin,
       Fintype.card_fin]
     push_cast
@@ -291,7 +288,7 @@ lemma log_le_of_fano₁ (hW : IsChannel W) (h₁ : 0 < M₁) (h₂ : 0 < M₂) [
     have e₂ : H[fun z : (Fin M₁ × Fin M₂) × (Fin n → β) => z.1.1 ; c.law W v₁ v₂] = log M₁ := by
       have ee : (fun z : (Fin M₁ × Fin M₂) × (Fin n → β) => z.1.1) =
           (fun w : Fin M₁ × Fin M₂ => w.1) ∘ Prod.fst := rfl
-      rw [entropyRV, ee, dist_dist_comp, hd, hu, entropy_uniformPMF, Fintype.card_fin]
+      rw [entropyRV, ee, dist_comp_eq, hd, hu, entropy_uniformPMF, Fintype.card_fin]
     rw [e, e₂, entropyRV, hd, entropy_uniformPMF, Fintype.card_prod, Fintype.card_fin,
       Fintype.card_fin]
     push_cast
@@ -439,8 +436,8 @@ def twcInfo₂ (p : α₁ × α₂ → ℝ) (W : α₁ × α₂ → β₁ × β�
 
 /-- The correction to the rates of a sequence of codes tends to zero. -/
 lemma tendsto_rate_eps {R₁ R₂ : ℝ} {P : ℕ → ℝ} (hP : Tendsto P atTop (𝓝 0)) (hP0 : ∀ n, 0 ≤ P n) :
-    Tendsto (fun n : ℕ => (1 + P n * ((⌈(n : ℝ) * R₁⌉₊ : ℝ) + ⌈(n : ℝ) * R₂⌉₊)) / n) atTop (𝓝 0) :=
-      by
+    Tendsto (fun n : ℕ => (1 + P n * ((⌈(n : ℝ) * R₁⌉₊ : ℝ) + ⌈(n : ℝ) * R₂⌉₊)) / n) atTop
+      (𝓝 0) := by
   set K := |R₁| + |R₂| + 2
   have hup : Tendsto (fun n : ℕ => 1 / (n : ℝ) + P n * K) atTop (𝓝 0) := by
     have := (tendsto_const_div_atTop_nhds_zero_nat (1 : ℝ)).add (hP.mul_const K)

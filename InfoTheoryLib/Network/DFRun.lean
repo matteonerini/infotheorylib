@@ -20,8 +20,7 @@ public import InfoTheoryLib.Network.DFGenie
 
 * `dfCode_law`: the law of the code as a product over the blocks.
 * `dfCode_not_wrong_of_good`: on the good event of the genie run, the actual run is the genie run
-  and
-  the destinations decode.
+  and the destinations decode.
 * `dfCode_avg_le`: **the average of the probability of error over the codes of the blocks**.
 
 ## References

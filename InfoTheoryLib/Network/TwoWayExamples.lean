@@ -24,8 +24,7 @@ public import InfoTheoryLib.Network.TwoWayInner
 * `isAchievableTWC_bmc`: the inner bound for the binary multiplier channel.
 * `mem_twcOuterRegion_bmc_iff`: the outer bound for the binary multiplier channel.
 * `isAchievableTWC_bmc_symm`, `three_fifths_mem_twcCapacityRegion_bmc`: symmetric rates up to
-  `3 / 5`
-  are achievable.
+  `3 / 5` are achievable.
 
 ## References
 
@@ -245,8 +244,8 @@ lemma cInfo_comp_fst_le {A B Z : Type*} [Fintype A] [Fintype B] [Fintype Z] {p :
   have hμ := jointOf_isPMF hp hT'
   have hp₁ := hp.dist (Prod.fst : A × B → A)
   have h₁ := condEntropy_le_entropy hμ (Prod.snd : (A × B) × Z → Z) fun z => z.1.2
-  have h₂ : H[Prod.snd ; jointOf p fun t : A × B => T t.1] = entropy (outDist (dist p Prod.fst) T)
-    := by
+  have h₂ : H[Prod.snd ; jointOf p fun t : A × B => T t.1] =
+    entropy (outDist (dist p Prod.fst) T) := by
     rw [entropyRV, dist_jointOf_snd]
     congr 1
     funext y
@@ -429,8 +428,8 @@ lemma three_fifths_le_binEntropy : 3 / 5 * log 2 ≤ 3 / 4 * binEntropy (3 / 4) 
 
 /-- **Symmetric rates up to `3 / 5` are achievable** for the binary multiplier channel. The notes
 state the larger value `0.6170`. -/
-theorem isAchievableTWC_bmc_symm {R : ℝ} (hR : R < 3 / 5) : IsAchievableTWC (commonTW bmcV) R R :=
-  by
+theorem isAchievableTWC_bmc_symm {R : ℝ} (hR : R < 3 / 5) : IsAchievableTWC (commonTW bmcV) R R
+    := by
   have hlog2 : 0 < log 2 := log_pos (by norm_num)
   have h : R * log 2 < 3 / 4 * binEntropy (3 / 4) :=
     (mul_lt_mul_of_pos_right hR hlog2).trans_le three_fifths_le_binEntropy
@@ -592,14 +591,14 @@ theorem mem_twcOuterRegion_bmc_iff {R : ℝ × ℝ} :
         ring
     refine ⟨p, hp, ?_, ?_⟩
     · rw [hi₁ p hp]
-      have e : bmcPhi (p (true, true)) (p (false, true)) = (1 - p₁) * binEntropy (p₂ / (1 - p₁)) :=
-        by
+      have e : bmcPhi (p (true, true)) (p (false, true)) = (1 - p₁) *
+        binEntropy (p₂ / (1 - p₁)) := by
         rw [← bmcPhi_eq h₂0 (by linarith)]
         simp [p]
       rwa [e]
     · rw [hi₂ p hp]
-      have e : bmcPhi (p (true, true)) (p (true, false)) = (1 - p₂) * binEntropy (p₁ / (1 - p₂)) :=
-        by
+      have e : bmcPhi (p (true, true)) (p (true, false)) = (1 - p₂) *
+        binEntropy (p₁ / (1 - p₂)) := by
         rw [← bmcPhi_eq h₁0 (by linarith)]
         simp only [p, ite_true, Bool.false_eq_true, ite_false]
         congr 1

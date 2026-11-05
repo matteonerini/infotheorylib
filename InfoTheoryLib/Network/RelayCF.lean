@@ -33,12 +33,10 @@ variable {X U Y S V : Type*} [Fintype X] [Fintype U] [Fintype Y] [Fintype S] [Fi
 
 omit [Fintype X] [Fintype U] in
 /-- **Codes for one block of compress–forward give achievable rates.** -/
-theorem isAchievableRC_of_cfBlocks [Nonempty X] [Nonempty U] [Nonempty Y] [Nonempty S] {R₀ R₁ R : ℝ}
-  (hR₀ : 0 ≤ R₀)
-    (hR : R * log 2 < R₀) (hW : IsChannel W)
+theorem isAchievableRC_of_cfBlocks [Nonempty X] [Nonempty U] [Nonempty Y] [Nonempty S]
+    {R₀ R₁ R : ℝ} (hR₀ : 0 ≤ R₀) (hR : R * log 2 < R₀) (hW : IsChannel W)
     (hblock : ∀ δ > 0, ∀ᶠ n : ℕ in atTop, ∃ C : CFBlock ⌈exp (n * R₀)⌉₊ ⌈exp (n * R₁)⌉₊ n X U Y S,
-      C.avgErr (relaySeq W n) ≤ δ) :
-    IsAchievableRC W R := by
+    C.avgErr (relaySeq W n) ≤ δ) : IsAchievableRC W R := by
   classical
   refine isAchievableRC_of_codes hR₀ hR hW fun B₁ _ ε hε => ?_
   have hB₁pos : (0 : ℝ) < (B₁ : ℝ) + 1 := by positivity

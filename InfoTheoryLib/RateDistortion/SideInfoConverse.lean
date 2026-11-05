@@ -13,15 +13,13 @@ public import InfoTheoryLib.RateDistortion.SideInfoAchievability
 
 This file proves the converses of Theorems 1 and 2 of Lecture 12 and of the Wyner–Ziv theorem, and
 so these theorems. A code gives an auxiliary random variable `Uᵢ` for each coordinate. With a
-uniform
-time sharing variable `Q`, the pair `(Q, U_Q)` is a single auxiliary random variable, with
+uniform time sharing variable `Q`, the pair `(Q, U_Q)` is a single auxiliary random variable, with
 `U → X → Y` because `Uᵢ` does not depend on `Yᵢ` given `Xᵢ`. The notes use the convexity of the
 rate–distortion function instead of `Q`.
 
 * For causal side information, we take `Uᵢ = (M, Zⁱ⁻¹)`, with `Zᵢ = (Xᵢ, Yᵢ)`, instead of the
   `Uᵢ = (M, Yⁱ⁻¹)` of the notes, and bound `∑ᵢ I(Xᵢ; Uᵢ)` by the chain rule for `Zⁿ`. This avoids
-  the
-  Markov chain `Xᵢ → (M, Xⁱ⁻¹) → Yⁱ⁻¹` of step (a) on page 12-12.
+  the Markov chain `Xᵢ → (M, Xⁱ⁻¹) → Yⁱ⁻¹` of step (a) on page 12-12.
 * For noncausal side information, we take `Uᵢ = (M, Yⁿ \ Yᵢ)` as in the notes.
 
 ## Main statements
@@ -54,8 +52,7 @@ section Kernel
 open Classical in
 omit [Fintype υ] in
 /-- **The Markov chain `Uᵢ → g(Zᵢ) → Zᵢ` (Lecture 12, pages 12-11 and 12-26).** If `Vᵢ` does not
-  depend on
-`Zᵢ` given `g(Zᵢ)`, then `p(a) p(z, v) = p(z) p(a, v)`, with `a = g(z)`. -/
+depend on `Zᵢ` given `g(Zᵢ)`, then `p(a) p(z, v) = p(z) p(a, v)`, with `a = g(z)`. -/
 private lemma markov_coordinate {a : Type*} (g : α × γ → a) (i : Fin n)
     (V : (Fin n → α × γ) → υ)
     (hV : ∀ ω (c : α × γ), g c = g (ω i) → V (Function.update ω i c) = V ω) (z : α × γ) (u : υ) :
@@ -96,10 +93,8 @@ private lemma markov_coordinate {a : Type*} (g : α × γ → a) (i : Fin n)
   ring
 
 /-- **The auxiliary random variable.** Let `Vᵢ` be a function of `Zⁿ` that does not depend on `Zᵢ`
-  given
-`g(Zᵢ)`. There is `p(u | a)` such that `p(z) p(u | g(z))` is the law of `(Z_Q, V_Q)`, for a uniform
-  time
-sharing variable `Q`. -/
+given `g(Zᵢ)`. There is `p(u | a)` such that `p(z) p(u | g(z))` is the law of `(Z_Q, V_Q)`, for a
+uniform time sharing variable `Q`. -/
 theorem exists_mix_kernel_comp {a : Type*} [Finite a] (hP : IsPMF P) (hn : 0 < n) (g : α × γ → a)
     (V : Fin n → (Fin n → α × γ) → υ)
     (hV : ∀ i ω (c : α × γ), g c = g (ω i) → V i (Function.update ω i c) = V i ω) :
@@ -170,8 +165,7 @@ theorem exists_mix_kernel_comp {a : Type*} [Finite a] (hP : IsPMF P) (hn : 0 < n
 
 /-- **The auxiliary random variable (Lecture 12, pages 12-11 and 12-26).** Let `Vᵢ` be a function of
 `Zⁿ` that does not depend on `Yᵢ` given `Xᵢ`. There is `p(u | x)` such that `p(x, y) p(u | x)` is
-  the
-law of `((X_Q, Y_Q), V_Q)`, for a uniform time sharing variable `Q`. -/
+the law of `((X_Q, Y_Q), V_Q)`, for a uniform time sharing variable `Q`. -/
 theorem exists_mix_kernel (hP : IsPMF P) (hn : 0 < n) (V : Fin n → (Fin n → α × γ) → υ)
     (hV : ∀ i ω (c : α × γ), c.1 = (ω i).1 → V i (Function.update ω i c) = V i ω) :
     ∃ q : α → υ → ℝ, IsChannel q ∧
@@ -548,8 +542,7 @@ theorem IsAchievableWZBits.exists_kernel [Finite β] (hP : IsPMF P) {d : α → 
     (by simpa using log_two_pow_floor_le n hR)) hn'⟩
 
 /-- **The Wyner–Ziv theorem (Lecture 12 of [elgamal2010], page 12-17).** The rate–distortion
-function
-with side information available only at the decoder is
+function with side information available only at the decoder is
 `R_SI-D(D) = min (I(X; U) - I(Y; U)) = min I(X; U | Y)`, over `p(u | x)` and `x̂(u, y)` with
 `E d(X, X̂) ≤ D`, for `D ≥ D_min`, in bits. By `exists_sideRD_eq`, the minimum is attained with
 `|𝒰| ≤ |𝒳| + 3`. -/
@@ -575,8 +568,7 @@ section Lossless
 variable {q : α → υ → ℝ}
 
 /-- **Lecture 12, page 12-13.** `min I(X; U)` over `p(u | x)` with `H(X | U, Y) = 0`, with `U` on
-`Fin k`
-for some `k`, in nats. -/
+`Fin k` for some `k`, in nats. -/
 def losslessCausalRate (P : α × γ → ℝ) : ℝ :=
   sInf {I | ∃ (k : ℕ) (q : α → Fin k → ℝ), IsChannel q ∧
     H[fun z : (α × γ) × Fin k => z.1.1 | pair Prod.snd (fun z => z.1.2) ; siLaw P q] = 0 ∧
@@ -690,9 +682,8 @@ theorem IsLosslessWZBits.isAchievable {R : ℝ} (hP : IsPMF P) (h : IsLosslessWZ
   · exact mul_nonpos_of_nonneg_of_nonpos h0 this
 
 /-- **Theorem 2 of Lecture 12 of [elgamal2010], page 12-13.** The optimal rate of lossless source
-coding
-with causal side information is `R*_CSI-D = min I(X; U)` over `p(u | x)` with `H(X | U, Y) = 0`, in
-bits. -/
+coding with causal side information is `R*_CSI-D = min I(X; U)` over `p(u | x)` with
+`H(X | U, Y) = 0`, in bits. -/
 theorem losslessCausalBits_eq (hP : IsPMF P) :
     sInf {R | IsLosslessCausalBits P R} = losslessCausalRate P / log 2 := by
   classical

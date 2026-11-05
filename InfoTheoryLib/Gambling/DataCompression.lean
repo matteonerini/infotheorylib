@@ -13,11 +13,11 @@ public import InfoTheoryLib.SourceCoding.ShannonFanoElias
 A gambler who bets `b(x)` on each sequence `x` of `n` binary outcomes, at `2`-for-`1` odds per
 outcome, ends with wealth `S(x) = 2ⁿ b(x)`. An identical twin of the gambler can serve as a
 decompressor. Arrange the sequences in order, and describe `x` by
-`k = ⌈log (1/b(x))⌉ = ⌈n - log S(x)⌉` bits pinning down a point of the interval `[F(x⁻), F(x))`
-of length `b(x)`, where
-`F(x) = ∑_{x' ≤ x} b(x')`. The twin, who can compute `b` and hence `F`, recovers `x`. So a sequence
-on which the gambler wins `S(x)` is compressed to fewer than `n - log S(x) + 1` bits. If the gambler
-bets proportionally (`b = p`), the expected description length is less than `H(X₁, …, Xₙ) + 1`.
+`k = ⌈log (1/b(x))⌉ = ⌈n - log S(x)⌉` bits pinning down a point of the interval `[F(x⁻), F(x))` of
+length `b(x)`, where `F(x) = ∑_{x' ≤ x} b(x')`. The twin, who can compute `b` and hence `F`,
+recovers `x`. So a sequence on which the gambler wins `S(x)` is compressed to fewer than
+`n - log S(x) + 1` bits. If the gambler bets proportionally (`b = p`), the expected description
+length is less than `H(X₁, …, Xₙ) + 1`.
 
 We work with any finite linearly ordered set of outcomes `X`, which covers the sequences of `n`
 outcomes in lexicographic order (`Lex (Fin n → Bool)`).

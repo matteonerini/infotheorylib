@@ -320,8 +320,8 @@ theorem depBalance_step [Nonempty Y] (hV : IsChannel V) (i : Fin n) :
   -- both sides as entropies of the output
   have hL : I[fun z : (Fin M₁ × Fin M₂) × (Fin n → Y) => z.1.1 : dO i |
       pair (dC i) (fun z => z.1.2) ; c.dLaw V] =
-      H[dO i | pair (dC i) (fun z => z.1.2) ; c.dLaw V] - H[dO i | pair (dC i) Prod.fst ; c.dLaw V]
-        := by
+      H[dO i | pair (dC i) (fun z => z.1.2) ; c.dLaw V] -
+        H[dO i | pair (dC i) Prod.fst ; c.dLaw V] := by
     rw [condMutualInfo_comm hμ, condMutualInfo_eq' hμ]
     congr 1
     exact condEntropy_congr_right hμ _ (fun t : (Fin n → Option Y) × (Fin M₁ × Fin M₂) =>
@@ -400,11 +400,11 @@ lemma depBalance_zero [NeZero M₁] [NeZero M₂] (hV : IsChannel V) :
   have h₃ : H[fun z : (Fin M₁ × Fin M₂) × (Fin n → Y) => z.1.1 ; c.dLaw V] = log M₁ := by
     have ee : (fun z : (Fin M₁ × Fin M₂) × (Fin n → Y) => z.1.1) =
         (fun w : Fin M₁ × Fin M₂ => w.1) ∘ Prod.fst := rfl
-    rw [entropyRV, ee, dist_dist_comp, hd, hu₁, entropy_uniformPMF, Fintype.card_fin]
+    rw [entropyRV, ee, dist_comp_eq, hd, hu₁, entropy_uniformPMF, Fintype.card_fin]
   have h₄ : H[fun z : (Fin M₁ × Fin M₂) × (Fin n → Y) => z.1.2 ; c.dLaw V] = log M₂ := by
     have ee : (fun z : (Fin M₁ × Fin M₂) × (Fin n → Y) => z.1.2) =
         (fun w : Fin M₁ × Fin M₂ => w.2) ∘ Prod.fst := rfl
-    rw [entropyRV, ee, dist_dist_comp, hd, hu₂, entropy_uniformPMF, Fintype.card_fin]
+    rw [entropyRV, ee, dist_comp_eq, hd, hu₂, entropy_uniformPMF, Fintype.card_fin]
   have h₅ : H[Prod.fst ; c.dLaw V] = log M₁ + log M₂ := by
     rw [entropyRV, hd, entropy_uniformPMF, Fintype.card_prod, Fintype.card_fin, Fintype.card_fin]
     push_cast
@@ -516,7 +516,7 @@ lemma dist_dR (hV : IsChannel V) (i : Fin n) (t : ((Fin n → Option Y) × (X₁
     (fun t : (Fin M₁ × Fin M₂) × (Fin i → Y) => (BCFBCode.mask i t.2, c.fbEnc id id i t.1 t.2))
     Prod.snd (fun _ _ => rfl) t.1 t.2
   simp only [BCFBCode.mask_fbPre] at h
-  rw [← dist_dist_comp]
+  rw [← dist_comp_eq]
   exact h
 
 end TWCCode
@@ -631,8 +631,8 @@ theorem TWCCode.exists_dep (c : TWCCode M₁ M₂ n X₁ X₂ Y Y) (hV : IsChann
       · exact condMutualInfo_dist hμ (c.dR i) _ _ _
       · exact condMutualInfo_dist hμ (c.dR i) _ _ _
     simp only [e]
-    have hbb := (hsum fun i => (I[c.dX₁ i : c.dX₂ i | pair (TWCCode.dC i) (TWCCode.dO i) ; c.dLaw V]
-      -
+    have hbb := (hsum fun i =>
+      (I[c.dX₁ i : c.dX₂ i | pair (TWCCode.dC i) (TWCCode.dO i) ; c.dLaw V] -
           I[c.dX₁ i : c.dX₂ i | TWCCode.dC i ; c.dLaw V]))
     rw [hbb] at hb
     exact nonneg_of_mul_nonneg_right (by linarith) hn'
@@ -664,8 +664,8 @@ lemma TWCCode.sum_commonTW (c : TWCCode M₁ M₂ n X₁ X₂ Y Y) [DecidableEq 
     funext k
     exact Prod.ext rfl (congrFun h₂ k).symm
   · intro y _
-    have hl : c.law V id id (w, y) = c.law (commonTW V) Prod.fst Prod.snd (w, fun k => (y k, y k))
-      := by
+    have hl : c.law V id id (w, y) =
+      c.law (commonTW V) Prod.fst Prod.snd (w, fun k => (y k, y k)) := by
       rw [TWCCode.law, TWCCode.law, fbLaw_eq_prod, fbLaw_eq_prod]
       congr 1
       refine prod_congr rfl fun k _ => ?_

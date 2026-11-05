@@ -340,7 +340,7 @@ theorem isAchievableTWC_of_multi (hk : 0 < k) {p₁ : Strat k X₁ Y → ℝ} {p
   set K₂ := 2 * exp (k * (|R₂| * log 2)) with hK₂
   have hprob := tendsto_prob_robustTypicalSet hμ hεpos
   have hexp : Tendsto (fun m : ℕ => exp (-(m * ε))) atTop (𝓝 0) :=
-    tendsto_exp_neg_mul_natCast hεpos
+    tendsto_exp_neg_mul_nat hεpos
   have hlim : Tendsto (fun m : ℕ => 2 * (1 - prob (iidPMF μ m) (robustTypicalSet μ m ε)) +
       K₂ * exp (-(m * ε)) + K₁ * exp (-(m * ε))) atTop (𝓝 (2 * (1 - 1) + K₂ * 0 + K₁ * 0)) :=
     (((tendsto_const_nhds.sub hprob).const_mul _).add (hexp.const_mul _)).add (hexp.const_mul _)

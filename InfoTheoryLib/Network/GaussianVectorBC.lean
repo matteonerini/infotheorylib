@@ -157,8 +157,7 @@ theorem det_smul_rpow_add {M : Matrix t t ℝ} (hM : M.PosDef) (ht : 0 < Fintype
 
 omit [DecidableEq t] in
 /-- **Lecture 10, page 10-53.** The KKT conditions give `I - Gⱼ Σⱼ Gⱼᵀ ≽ 0`, which makes the
-original
-channel a degraded version of the enhanced channel. -/
+original channel a degraded version of the enhanced channel. -/
 theorem one_sub_mul_sigma_posSemidef {r : Type*} [Finite r] [DecidableEq r] {G : Matrix r t ℝ}
     {Sg : Matrix t t ℝ} {U : Matrix r r ℝ} (hU : U.PosSemidef) (hl : 0 < lam)
     (h : G * Sg * Gᵀ + lam⁻¹ • U = 1) : (1 - G * Sg * Gᵀ).PosSemidef := by
@@ -270,9 +269,8 @@ def spectralBCRegion (P : ℝ) (N₁ N₂ : d → ℝ) : Set (ℝ × ℝ × ℝ)
         gaussCap ((1 - α k) * β k * P / N₁ k) else gaussCap (β k * P / N₂ k))}
 
 /-- **Lecture 10, page 10-24.** The region contains the rates of the parallel channels to receiver
-1:
-all the power of a component where receiver 1 is the better one goes to satellite codewords, and the
-other components carry only cloud centers. -/
+1: all the power of a component where receiver 1 is the better one goes to satellite codewords, and
+the other components carry only cloud centers. -/
 theorem single_mem_spectralBCRegion {P : ℝ} {N₁ N₂ : d → ℝ} (hP : 0 ≤ P) (h₁ : ∀ k, 0 < N₁ k)
     (h₂ : ∀ k, 0 < N₂ k) {β : d → ℝ} (hβ : ∀ k, 0 ≤ β k ∧ β k ≤ 1) (hs : ∑ k, β k = 1) :
     ((0 : ℝ), ∑ k, gaussCap (β k * P / N₁ k), (0 : ℝ)) ∈ spectralBCRegion P N₁ N₂ := by

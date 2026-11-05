@@ -109,8 +109,8 @@ section Slots
 variable {t : Type*} [Fintype t] [DecidableEq t] {n m : ℕ}
 
 /-- The times at which sender `j` transmits. -/
-def gnSlot (e : t ≃ Fin (Fintype.card t)) (hm : Fintype.card t * m ≤ n) (j : t) (i : Fin m) : Fin n
-  :=
+def gnSlot (e : t ≃ Fin (Fintype.card t)) (hm : Fintype.card t * m ≤ n) (j : t) (i : Fin m) : Fin
+    n :=
   Fin.castLE hm (finProdFinEquiv (e j, i))
 
 omit [DecidableEq t] in
@@ -224,8 +224,8 @@ theorem gnTdm_errProb_le [Nonempty t] (e : t ≃ Fin (Fintype.card t)) (hm : Fin
       intro he
       apply hne
       have hd : c.dec (dest j) (fun i => c.out G a i (dest j) + z (i, dest j)) j =
-          (cs j).dec fun i => c.out G a (gnSlot e hm j i) (dest j) + z (gnSlot e hm j i, dest j) :=
-            by
+          (cs j).dec fun i => c.out G a (gnSlot e hm j i) (dest j) +
+            z (gnSlot e hm j i, dest j) := by
         simp only [hc, gnTdmCode, ite_true]
       rw [hd, ← he]
       congr 1
@@ -239,8 +239,8 @@ theorem gnTdm_errProb_le [Nonempty t] (e : t ≃ Fin (Fintype.card t)) (hm : Fin
         measurable_pi_iff.mpr fun b => measurable_pi_apply (f j b)
       have hE : MeasurableSet {z : Fin m → ℝ | (cs j).dec (G (dest j) j • (cs j).enc (a j) + z) ≠
           a j} := by
-        have hm' : Measurable fun z : Fin m → ℝ => (cs j).dec (G (dest j) j • (cs j).enc (a j) + z)
-          :=
+        have hm' : Measurable fun z : Fin m → ℝ =>
+          (cs j).dec (G (dest j) j • (cs j).enc (a j) + z) :=
           (cs j).measurable_dec.comp (measurable_const.add measurable_id)
         exact hm' (measurableSet_singleton _).compl
       have h₁ := map_measureReal_apply (μ := stdNoise (Fin n × r)) hρ hE

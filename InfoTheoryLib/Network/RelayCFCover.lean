@@ -301,8 +301,8 @@ theorem sum_cover_outer (hp : IsPMF p) (hp₁ : IsPMF p₁) (hW : IsChannel W) (
   classical
   have hρ := cfRho_nonneg (n := n) hp hW
   have hup := iidPMF_isPMF hp₁ n
-  have hτs : ∀ (u : Fin n → U) (s : Fin n → S), IsPMF (seqChan τ n fun i => (u i, s i)) := fun u s
-    =>
+  have hτs : ∀ (u : Fin n → U) (s : Fin n → S), IsPMF (seqChan τ n fun i => (u i, s i)) :=
+    fun u s =>
     seqChan_isChannel hτ n (fun i => ((u i, s i) : U × S))
   -- for a fixed pair
   have h₁ : ∀ (u : Fin n → U) (s : Fin n → S), cfRho p W u s *
@@ -368,9 +368,8 @@ theorem sum_cover_outer (hp : IsPMF p) (hp₁ : IsPMF p₁) (hW : IsChannel W) (
 
 /-- **The covering bound.** Let `(x₁ⁿ, ŷ₁ⁿ(·))` be drawn at random and let `(xⁿ, yⁿ, y₁ⁿ)` be
 generated from `x₁ⁿ`. Let `ŷ₁ⁿ(K)` be a good sequence of the codebook for `(x₁ⁿ, y₁ⁿ)`. Then the
-  test
-`T` fails with probability at most `δ`, plus the probability of the atypical i.i.d. sequences, plus
-the probability that no sequence of the codebook is good. -/
+test `T` fails with probability at most `δ`, plus the probability of the atypical i.i.d. sequences,
+plus the probability that no sequence of the codebook is good. -/
 theorem sum_cover_le {K : ℕ} [NeZero K] (hp : IsPMF p) (hp₁ : IsPMF p₁) (hW : IsChannel W)
     {q : U → V → ℝ} (hq : IsChannel q) (hτ : IsChannel τ) {ε δ y : ℝ} (hδ : 0 < δ) (hy1 : y ≤ 1)
     (T : (Fin n → X) → (Fin n → U) → (Fin n → V) → (Fin n → Y) → Prop)

@@ -16,12 +16,11 @@ public import Mathlib.Analysis.SpecialFunctions.BinaryEntropy
 /-!
 # Mrs. Gerber's lemma
 
-Let `X` be a binary random variable, `U` an arbitrary random variable, and `Z ∼ Bern(p)`
-independent of `(X, U)`. Mrs. Gerber's lemma (Wyner and Ziv) lower bounds the conditional entropy
-of `Y = X ⊕ Z` in terms of that of `X`:
-`H(Y|U) ≥ H(H⁻¹(H(X|U)) ∗ p)`, where `H` is the binary entropy function, `H⁻¹ : [0, 1] → [0, 1/2]`
-its inverse and `a ∗ p = a(1 - p) + (1 - a)p` the binary convolution. The lemma follows from
-Jensen's inequality and the convexity of `v ↦ H(H⁻¹(v) ∗ p)`.
+Let `X` be a binary random variable, `U` an arbitrary random variable, and `Z ∼ Bern(p)` independent
+of `(X, U)`. Mrs. Gerber's lemma (Wyner and Ziv) lower bounds the conditional entropy of `Y = X ⊕ Z`
+in terms of that of `X`: `H(Y|U) ≥ H(H⁻¹(H(X|U)) ∗ p)`, where `H` is the binary entropy function,
+`H⁻¹ : [0, 1] → [0, 1/2]` its inverse and `a ∗ p = a(1 - p) + (1 - a)p` the binary convolution. The
+lemma follows from Jensen's inequality and the convexity of `v ↦ H(H⁻¹(v) ∗ p)`.
 
 The convexity is the analytic heart of the lemma. Writing `v = H(a)` with `a ∈ [0, 1/2]` and
 `F(a) = H(a ∗ p)`, the slopes of `v ↦ F(H⁻¹(v))` are, by Cauchy's mean value theorem, values of

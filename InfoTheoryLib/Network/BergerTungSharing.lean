@@ -13,9 +13,9 @@ public import InfoTheoryLib.Network.BergerTungInner
 This file proves Theorem 1 of Lecture 13 with the time sharing random variable `Q`. Two codes used
 one after the other share the rates and the distortions, so that the set of the achievable tuples,
 up to an arbitrarily small increase of the rates, is convex. For each value of `Q`, the rate region
-of
-`p(u₁ | x₁, q) p(u₂ | x₂, q)` is a contra-polymatroid, since `I(X₁; U₁ | U₂) + I(X₂; U₂ | U₁) ≤
-I(X₁, X₂; U₁, U₂)`, and so a rate pair of the region for `Q` splits into rate pairs for each `q`.
+of `p(u₁ | x₁, q) p(u₂ | x₂, q)` is a contra-polymatroid, since
+`I(X₁; U₁ | U₂) + I(X₂; U₂ | U₁) ≤ I(X₁, X₂; U₁, U₂)`, and so a rate pair of the region for `Q`
+splits into rate pairs for each `q`.
 
 ## Main definitions
 
@@ -197,8 +197,7 @@ section Convex
 variable [Finite β₁] [Finite β₂] [Nonempty β₁] [Nonempty β₂]
 
 /-- The tuples `(R₁, R₂, D₁, D₂)` such that `(R₁ + η, R₂ + η)` is achievable with `(D₁, D₂)`, for
-every
-`η > 0`. -/
+every `η > 0`. -/
 def dlAchievableSet (P : α₁ × α₂ → ℝ) (d₁ : α₁ → β₁ → ℝ) (d₂ : α₂ → β₂ → ℝ) :
     Set (ℝ × ℝ × ℝ × ℝ) :=
   {z | ∀ η > 0, IsAchievableDL P d₁ d₂ (z.1 + η) (z.2.1 + η) z.2.2.1 z.2.2.2}
@@ -406,8 +405,7 @@ theorem IsAchievableDL.mono [Fintype α₁] [Fintype α₂] {R₁ R₂ D₁ D₂
 
 omit [Fintype α₁] [Fintype α₂] in
 /-- **The splitting of the rates among the values of `Q`.** A rate pair in the interior of the sum
-of
-contra-polymatroids is a sum of rate pairs in the interior of each of them. -/
+of contra-polymatroids is a sum of rate pairs in the interior of each of them. -/
 theorem exists_rate_split {Q : Type*} [Fintype Q] {τ : Q → ℝ} (hτ : IsPMF τ) {a b c : Q → ℝ}
     (habc : ∀ q, a q + b q ≤ c q) {R₁ R₂ : ℝ} (h₁ : ∑ q, τ q * a q < R₁)
     (h₂ : ∑ q, τ q * b q < R₂) (h₁₂ : ∑ q, τ q * c q < R₁ + R₂) :
@@ -489,11 +487,10 @@ theorem exists_rate_split {Q : Type*} [Fintype Q] {τ : Q → ℝ} (hτ : IsPMF 
 variable {Q : Type*} [Fintype Q] [Fintype υ₁] [Fintype υ₂]
 
 /-- **Theorem 1 of Lecture 13 of [elgamal2010], page 13-4: the Berger–Tung inner bound.** A rate
-pair is
-achievable with the distortion pair `(D₁, D₂)` if `R₁ > I(X₁; U₁ | U₂, Q)`, `R₂ > I(X₂; U₂ | U₁, Q)`
-and
-`R₁ + R₂ > I(X₁, X₂; U₁, U₂ | Q)`, in bits, for some `p(q) p(u₁ | x₁, q) p(u₂ | x₂, q)` and
-`x̂ⱼ(u₁, u₂, q)` with `E dⱼ(Xⱼ, X̂ⱼ) ≤ Dⱼ`. The informations given `Q` are the means over `q`. -/
+pair is achievable with the distortion pair `(D₁, D₂)` if `R₁ > I(X₁; U₁ | U₂, Q)`,
+`R₂ > I(X₂; U₂ | U₁, Q)` and `R₁ + R₂ > I(X₁, X₂; U₁, U₂ | Q)`, in bits, for some
+`p(q) p(u₁ | x₁, q) p(u₂ | x₂, q)` and `x̂ⱼ(u₁, u₂, q)` with `E dⱼ(Xⱼ, X̂ⱼ) ≤ Dⱼ`. The informations
+given `Q` are the means over `q`. -/
 theorem isAchievableDL_of_lt_sharing [Finite β₁] [Finite β₂] (hP : IsPMF P)
     (hd₁ : ∀ x y, 0 ≤ d₁ x y) (hd₂ : ∀ x y, 0 ≤ d₂ x y) {τ : Q → ℝ} (hτ : IsPMF τ)
     {κ₁ : Q → α₁ → υ₁ → ℝ} {κ₂ : Q → α₂ → υ₂ → ℝ} (h₁ : ∀ q, IsChannel (κ₁ q))

@@ -42,8 +42,8 @@ variable {N n : ℕ} {X Y V : Fin N → Type*} [∀ k, Fintype (X k)] [∀ k, Fi
 open Classical in
 /-- The number of tuples of messages with a given set of wrong messages. -/
 lemma sum_ind_wrong_le (m : ∀ k, Fin (M k)) (T : Finset (Fin N)) (P : (∀ k, Fin (M k)) → Prop) :
-    ∑ m' : ∀ k, Fin (M k), ind (P m' ∧ univ.filter (fun k => m' k ≠ m k) = T) ≤ ∏ k ∈ T, (M k : ℝ)
-      := by
+    ∑ m' : ∀ k, Fin (M k), ind (P m' ∧ univ.filter (fun k => m' k ≠ m k) = T) ≤ ∏ k ∈
+      T, (M k : ℝ) := by
   rw [sum_ind_eq_card]
   have hc : ∏ k ∈ T, (M k : ℝ) = (Fintype.card (∀ k : T, Fin (M k)) : ℝ) := by
     rw [Fintype.card_pi]
@@ -293,7 +293,7 @@ theorem isAchievableDMN_nnc (hpx : ∀ k, IsPMF (px k)) (hW : IsChannel W)
       dist L (fun ω : NNCΩ X Y V => ω.1 k) a * q k a b := by
     intro k a b
     have hm : marg (nncRho L k) a = dist L (fun ω : NNCΩ X Y V => ω.1 k) a := by
-      rw [marg_eq_dist, nncRho, ← dist_dist_comp]
+      rw [marg_eq_dist, nncRho, ← dist_comp_eq]
       rfl
     rw [hq₀, hm]
   -- the slack in the rates

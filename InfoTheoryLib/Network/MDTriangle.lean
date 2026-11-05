@@ -441,8 +441,8 @@ lemma isAchievableMDN_tri_aux {υ : Type u} [Fintype υ] [Nonempty υ] (hP : IsP
     (hu : I[Prod.fst : fun z : α × υ × β 1 × β 2 => z.2.1 ; μ] < ru)
     (h₁ : I[Prod.fst : fun z : α × υ × β 1 × β 2 => z.2.2.1 | fun z => z.2.1 ; μ] < r₁)
     (h₂ : I[Prod.fst : fun z : α × υ × β 1 × β 2 => z.2.2.2 | fun z => z.2.1 ; μ] < r₂)
-    (hs : ∀ᶠ n : ℕ in atTop, ⌈exp ((n : ℝ) * ru)⌉₊ * ⌈exp ((n : ℝ) * r₁)⌉₊ ≤ 2 ^ ⌊(n : ℝ) * R 0 1⌋₊
-      ∧
+    (hs : ∀ᶠ n : ℕ in atTop, ⌈exp ((n : ℝ) * ru)⌉₊ * ⌈exp ((n : ℝ) * r₁)⌉₊ ≤ 2 ^ ⌊(n : ℝ) *
+      R 0 1⌋₊ ∧
       ⌈exp ((n : ℝ) * r₂)⌉₊ ≤ 2 ^ ⌊(n : ℝ) * R 0 2⌋₊ ∧
       ⌈exp ((n : ℝ) * ru)⌉₊ ≤ 2 ^ ⌊(n : ℝ) * R 1 2⌋₊)
     (hD₁ : ∑ z, μ z * d 1 z.1 z.2.2.1 ≤ D 1) (hD₂ : ∑ z, μ z * d 2 z.1 z.2.2.2 ≤ D 2) :

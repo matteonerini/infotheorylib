@@ -158,10 +158,8 @@ theorem awgn_cutset (hS : 0 ≤ S) (hS₂ : 0 ≤ S₂) (hpos : 0 < S + S₁) :
     exact isGreatest_awgnMaxMin_of_ge hpos.le (by linarith)
 
 /-- **Page 17-31 of [elgamal2010]: a typo in the cutset bound.** The closed form printed in the
-  notes,
-with `√(S + S₁ - S₂)` for `√(S (S + S₁ - S₂))`, is wrong: for `S = 4`, `S₁ = S₂ = 1` it gives
-  `C(9/5)`,
-while the optimum is `C(5)`. -/
+notes, with `√(S + S₁ - S₂)` for `√(S (S + S₁ - S₂))`, is wrong: for `S = 4`, `S₁ = S₂ = 1` it gives
+`C(9/5)`, while the optimum is `C(5)`. -/
 theorem awgn_cutset_notes_ne :
     ¬ IsGreatest (awgnMaxMin 4 1 (4 + 1) '' Icc 0 1)
       (gaussCap ((√(1 * 1) + √(4 + 1 - 1)) ^ 2 / (4 + 1))) := by
@@ -193,15 +191,13 @@ theorem awgn_decodeForward (hS : 0 ≤ S) (hS₂ : 0 ≤ S₂) (hS₁ : 0 < S₁
     exact isGreatest_awgnMaxMin_of_ge hS₁.le h.le
 
 /-- **Page 17-32 of [elgamal2010].** For `S₁ < S`, the decode–forward rate is lower than the
-  capacity
-`C(S)` of the direct channel. -/
+capacity `C(S)` of the direct channel. -/
 theorem awgn_decodeForward_lt_direct (hS₂ : 0 ≤ S₂) (hS₁ : 0 ≤ S₁) (h : S₁ < S) :
     IsGreatest (awgnMaxMin S S₂ S₁ '' Icc 0 1) (gaussCap S₁) ∧ gaussCap S₁ < gaussCap S :=
   ⟨isGreatest_awgnMaxMin_of_ge hS₁ (by linarith), gaussCap_lt_gaussCap hS₁ h⟩
 
 /-- **Pages 17-31 and 17-32 of [elgamal2010].** Multi-hop is at most non-coherent decode–forward,
-  and
-non-coherent decode–forward is decode–forward with `ρ = 0`. -/
+and non-coherent decode–forward is decode–forward with `ρ = 0`. -/
 theorem awgn_multihop_le_noncoherent (hS : 0 ≤ S) (hS₂ : 0 ≤ S₂) :
     min (gaussCap S₁) (gaussCap (S₂ / (S + 1))) ≤ min (gaussCap S₁) (gaussCap (S + S₂)) := by
   refine min_le_min le_rfl (gaussCap_le_gaussCap (by positivity) ?_)
@@ -263,8 +259,8 @@ theorem isGreatest_awgnCFExpr (hS : 0 ≤ S) (hS₁ : 0 ≤ S₁) (hT : S < T) :
 signals and `Ŷ₁ = Y₁ + Z'`, for `Z' ∼ N(0, N)`, the optimum over `N` is
 `C(S + S₁ S₂ / (S + S₁ + S₂ + 1))`. -/
 theorem isGreatest_awgnCF (hS : 0 ≤ S) (hS₁ : 0 ≤ S₁) (hS₂ : 0 < S₂) :
-    IsGreatest (awgnCFExpr (S + S₂) S S₁ '' Ioi 0) (gaussCap (S + S₁ * S₂ / (S + S₁ + S₂ + 1))) :=
-      by
+    IsGreatest (awgnCFExpr (S + S₂) S S₁ '' Ioi 0)
+      (gaussCap (S + S₁ * S₂ / (S + S₁ + S₂ + 1))) := by
   have h := isGreatest_awgnCFExpr (T := S + S₂) hS hS₁ (by linarith)
   have e₁ : S + S₂ - S = S₂ := by ring
   have e₂ : S + S₂ + 1 + S₁ = S + S₁ + S₂ + 1 := by ring

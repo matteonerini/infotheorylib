@@ -292,8 +292,7 @@ theorem exists_gvRate_waterFill (hU : Uᵀ * U = 1) (hU' : U * Uᵀ = 1)
 omit [DecidableEq t] in
 /-- **Lecture 10, pages 10-4 and 10-5.** The capacity of the Gaussian vector channel by
 water-filling on the singular values: `C = ∑ₖ ½ log (1 + γₖ² (ν - 1/γₖ²)⁺)` for the water level
-`ν > 0` with
-`∑ₖ (ν - 1/γₖ²)⁺ = P`. -/
+`ν > 0` with `∑ₖ (ν - 1/γₖ²)⁺ = P`. -/
 theorem gvCapacity_eq_waterFill (hU : Uᵀ * U = 1) (hU' : U * Uᵀ = 1)
     (hG : G = U * diagonal γ * Ψᵀ) (hΨ : Ψᵀ * Ψ = diagonal (svdSupport γ)) {P ν : ℝ} (hν : 0 < ν)
     (hP : ∑ k, waterFill (svdNoise γ) ν k = P) :

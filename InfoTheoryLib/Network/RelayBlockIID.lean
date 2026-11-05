@@ -128,7 +128,7 @@ lemma sum_inner_swap {I J : Type*} [Fintype I] [Fintype J] (a : I → ℝ) (b : 
 /-- The entropy of a function under a pushforward. -/
 lemma entropyRV_dist {Ω a b : Type*} [Fintype Ω] [Fintype a] [Fintype b] (L : Ω → ℝ) (R : Ω → a)
     (f : a → b) : H[f ; dist L R] = H[f ∘ R ; L] := by
-  rw [entropyRV, entropyRV, dist_dist_comp]
+  rw [entropyRV, entropyRV, dist_comp_eq]
 
 /-- The gap of a wrong `a'`: `I(U; Y₁ | X₁)`. -/
 def rGapA (L : ((X₁ × U) × X) × (Y × Y₁) → ℝ) : ℝ :=
@@ -214,11 +214,11 @@ lemma relayLaw_marg :
     dist_jointOf_fst fun _ => hW _
   have h₂ : dist (relayLaw τ A B W) (fun z => z.1.1) = jointOf τ A := by
     have e : (fun z : ((X₁ × U) × X) × (Y × Y₁) => z.1.1) = Prod.fst ∘ Prod.fst := rfl
-    rw [e, dist_dist_comp, h₁]
+    rw [e, dist_comp_eq, h₁]
     exact dist_jointOf_fst hB
   refine ⟨h₁, h₂, ?_⟩
   have e : (fun z : ((X₁ × U) × X) × (Y × Y₁) => z.1.1.1) = Prod.fst ∘ fun z => z.1.1 := rfl
-  rw [e, dist_dist_comp, h₂]
+  rw [e, dist_comp_eq, h₂]
   exact dist_jointOf_fst hA
 
 /-- A wrong `a'` passes the test of the relay with a small probability. -/
@@ -249,16 +249,16 @@ theorem relayFa_le :
   have hfresh := sum_fresh_le (L := dist L relayR₁) (hL.dist _) (Prod.fst : X₁ × Y₁ → X₁) (κ := A)
     (fun k t => by
       have e₁ : dist (dist L relayR₁) (fun z => (z.1.1, z.2)) = jointOf τ A := by
-        rw [← dist_dist_comp]
+        rw [← dist_comp_eq]
         exact hd₂
       have e₂ : dist (dist L relayR₁) (fun z => z.1.1) = τ := by
-        rw [← dist_dist_comp]
+        rw [← dist_comp_eq]
         exact hd₃
       rw [e₁, e₂]
       rfl) hA (n := n) (ε := ε)
     (fun r t => relayT₁ L n ε (fun i => (r i).1) t fun i => (r i).2) (fun r t h => h)
   have e₀ : dist (dist L relayR₁) Prod.fst = dist L Rv := by
-    rw [← dist_dist_comp]
+    rw [← dist_comp_eq]
     rfl
   rw [e₀] at hfresh
   refine hfresh.trans (le_of_eq ?_)
@@ -294,10 +294,10 @@ theorem relayFc_le :
     (κ := B)
     (fun k t => by
       have e₁ : dist (dist L relayRc) (fun z => (z.1.1, z.2)) = jointOf (jointOf τ A) B := by
-        rw [← dist_dist_comp]
+        rw [← dist_comp_eq]
         exact hd₁
       have e₂ : dist (dist L relayRc) (fun z => z.1.1) = jointOf τ A := by
-        rw [← dist_dist_comp]
+        rw [← dist_comp_eq]
         exact hd₂
       rw [e₁, e₂]
       rfl) hB (n := n) (ε := ε)
@@ -305,10 +305,10 @@ theorem relayFc_le :
     (fun r t h => by
       have := comp_mem_robustTypicalSet h
         (fun p : ((X₁ × U) × X) × Y => ((p.1.1, p.2), p.1.2))
-      rw [← dist_dist_comp] at this
+      rw [← dist_comp_eq] at this
       exact this)
   have e₀ : dist (dist L relayRc) Prod.fst = dist L Rv := by
-    rw [← dist_dist_comp]
+    rw [← dist_comp_eq]
     rfl
   rw [e₀] at hfresh
   refine hfresh.trans (le_of_eq ?_)
@@ -384,7 +384,7 @@ theorem relayFl_le :
         have := dist_comp_of_injective (dist L relayRl) (fun z => z.2)
           (f := fun t => ((), t)) (fun a b h => (Prod.mk.inj h).2) t
         have e₃ : dist (dist L relayRl) (fun z => z.2) = q := by
-          rw [← dist_dist_comp]
+          rw [← dist_comp_eq]
           exact hd₁
         rw [e₃] at this
         exact this
@@ -392,10 +392,10 @@ theorem relayFl_le :
     (fun r t => relayT₂ L n ε (fun i => (t i).1.1) (fun i => (t i).1.2) (fun i => (t i).2) r)
     (fun r t h => by
       have := comp_mem_robustTypicalSet h (fun p : ((X₁ × U) × X) × Y => (p.2, p.1))
-      rw [← dist_dist_comp] at this
+      rw [← dist_comp_eq] at this
       exact this)
   have e₀ : dist (dist L relayRl) Prod.fst = dist L fun z => z.2.1 := by
-    rw [← dist_dist_comp]
+    rw [← dist_comp_eq]
     rfl
   rw [e₀] at hfresh
   refine hfresh.trans (le_of_eq ?_)
@@ -493,7 +493,7 @@ theorem eventually_relayBlock (hτ : IsPMF τ) (hA : IsChannel A) (hB : IsChanne
   -- the limit of the bound
   have hprob := tendsto_prob_robustTypicalSet hL hεpos
   have hexp : Tendsto (fun n : ℕ => exp (-(n * (γ / 2)))) atTop (𝓝 0) :=
-    tendsto_exp_neg_mul_natCast (by positivity)
+    tendsto_exp_neg_mul_nat (by positivity)
   have hlim : Tendsto (fun n : ℕ => 3 * (2 * (1 - prob (iidPMF L n) (robustTypicalSet L n ε)) +
       8 * exp (-(n * (γ / 2))))) atTop (𝓝 (3 * (2 * (1 - 1) + 8 * 0))) :=
     ((tendsto_const_nhds.sub hprob).const_mul _ |>.add (hexp.const_mul _)).const_mul _

@@ -13,27 +13,24 @@ public import InfoTheoryLib.Network.GaussianVectorBC
 # El Gamal & Kim, Lecture 10: Gaussian Vector Channels
 
 This file indexes the formalization of Lecture 10 of [elgamal2010] and contains two examples. We
-prove
-the capacity of the Gaussian vector channel as a coding theorem. The other results are about the
-formulas: the coding theorems for the MAC and the BC are for continuous alphabets, and the converse
-for
-the Gaussian vector BC needs the vector entropy power inequality, which the library does not have.
+prove the capacity of the Gaussian vector channel as a coding theorem. The other results are about
+the formulas: the coding theorems for the MAC and the BC are for continuous alphabets, and the
+converse for the Gaussian vector BC needs the vector entropy power inequality, which the library
+does not have.
 
 ## Conventions
 
 * **Rates.** The coding theorem is in bits, as in Lecture 3. The formulas are in nats.
 * **The noise.** It is `N(0, I)`; a general `K_Z ≻ 0` is whitened by `exists_mul_gvRate_eq`. In a
-  code
-  the output is indexed by the pairs `(i, k)` of a time and an antenna.
+  code the output is indexed by the pairs `(i, k)` of a time and an antenna.
 * **The singular value decomposition.** `exists_svd` keeps the index set of the outputs and allows
   `γₖ = 0`, so that `U` is square: `G = U D Ψᵀ` with `Ψᵀ Ψ = diag(1[γₖ ≠ 0])`.
 * **Regions.** They are for nonnegative rates and with non-strict inequalities. With these, the
-  convex
-  hull of the two dirty paper coding regions is the dual MAC region without taking a closure.
+  convex hull of the two dirty paper coding regions is the dual MAC region without taking a closure.
 * **Fading.** There are finitely many states, as in Lecture 8. Isotropy is the invariance of the law
   under sign flips and transpositions of the transmit antennas, which every orthogonally invariant
-  law
-  has, as a finitely supported law cannot be invariant under all orthogonal matrices unless `G = 0`.
+  law has, as a finitely supported law cannot be invariant under all orthogonal matrices unless
+  `G = 0`.
 
 ## Index
 
@@ -41,11 +38,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ### The Gaussian vector channel
 * The codes: `GVCode`, `GVCode.SatisfiesPower`, `GVCode.avgErrProb`, `IsAchievableGV`,
-  `opCapacityGV`
-  (`GaussianChannel.VectorCode`).
+  `opCapacityGV` (`GaussianChannel.VectorCode`).
 * **Theorem 1**: `gvRate`, `gvCapacity` (`GaussianChannel.Vector`), `opCapacityGV_eq`, with the
-  converse
-  `IsAchievableGV.le` and achievability `isAchievableGV_of_lt_gvRate`.
+  converse `IsAchievableGV.le` and achievability `isAchievableGV_of_lt_gvRate`.
 * The tools: `map_stdNoise_of_orthogonal`, `blockRot`,
   `GaussianCode.one_sub_avgErrProb_mul_log_le_sum`,
   `GVCode.avgCov`, `GVCode.one_sub_avgErrProb_mul_log_le`.
@@ -84,11 +79,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `exists_dual_of_bc`, `exists_bc_of_dual`, and `dpcRegion₁_subset`, `dpcRegion₂_subset`,
   `gvSumMACRegion_subset_convexHull`.
 * The enhanced degraded channel (`Network.GaussianVectorBC`): `enhSigma₁`, `enhSigma₂`, `enhK₁`,
-  `enhK₂`, with
-  `enhK₁_add_sigma₁`, `enhK₁_add_sigma₂`, `enhK_add_sigma₂`, `enhSigma₂_sub`, `enhK₁_posSemidef`,
-  `enhK₂_posSemidef`, `enhSigma₂_sub_posSemidef`, `enhSigma₁_posDef`, `det_enhK₁_add_div`,
-  `det_enhK_add_div`, `trace_enhK_add`, `log_det_add_sigma₂_le`, `det_smul_rpow_add`,
-  `one_sub_mul_sigma_posSemidef`.
+  `enhK₂`, with `enhK₁_add_sigma₁`, `enhK₁_add_sigma₂`, `enhK_add_sigma₂`, `enhSigma₂_sub`,
+  `enhK₁_posSemidef`, `enhK₂_posSemidef`, `enhSigma₂_sub_posSemidef`, `enhSigma₁_posDef`,
+  `det_enhK₁_add_div`, `det_enhK_add_div`, `trace_enhK_add`, `log_det_add_sigma₂_le`,
+  `det_smul_rpow_add`, `one_sub_mul_sigma_posSemidef`.
 * Matrix inverses: `one_sub_inv_posSemidef`, `posSemidef_inv_sub_inv`.
 
 ## Not formalized
@@ -102,13 +96,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Vector writing on dirty paper as a coding theorem: the Gelfand–Pinsker theorem of Lecture 7 is for
   finite alphabets.
 * The capacity region of the Gaussian vector BC (the second Theorem 4): the coding theorem of the
-  dirty
-  paper region, Lemma 3 as a statement about codes, and Lemma 4, which needs the vector entropy
-  power
-  inequality. We have the matrix facts that these proofs use.
+  dirty paper region, Lemma 3 as a statement about codes, and Lemma 4, which needs the vector
+  entropy power inequality. We have the matrix facts that these proofs use.
 * The closedness of the dual MAC region, its boundary points as solutions of the optimization
-  problem,
-  the uniqueness of the supporting hyperplane, and more than two receivers.
+  problem, the uniqueness of the supporting hyperplane, and more than two receivers.
 * The figures on pages 10-40, 10-43 and 10-45.
 
 ## Issues in the notes
@@ -116,16 +107,13 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * **Numbering.** There are two results called Theorem 4, on pages 10-24 and 10-46, and the Lemmas 3
   and 4 have no Lemmas 1 and 2.
 * **Pages 10-2 and 10-13.** The gain `Gⱼₖ` is described with `j` a transmit antenna and
-  `j ∈ [1 : t]`,
-  `k ∈ [1 : r]`, while `G` is an `r × t` matrix.
+  `j ∈ [1 : t]`, `k ∈ [1 : r]`, while `G` is an `r × t` matrix.
 * **Page 10-5.** The water-filling condition has `Pⱼ` on the left and `γᵢ` on the right.
 * **Page 10-12.** The stationarity condition has `λ* I_r` twice; it should be `λ* I_t`, as
-  `Gᵀ (…)⁻¹ G`
-  is `t × t` (`log_det_le_of_kkt`).
+  `Gᵀ (…)⁻¹ G` is `t × t` (`log_det_le_of_kkt`).
 * **Page 10-29.** In the capacity region of the product of `d` reversely degraded DM-BCs, the first
-  sum
-  in each of the four bounds should run over `k ∈ [1 : r]`, not `[1 : d]`, as in the first Theorem 4
-  on page 10-24, and the pmf should be `∏ₖ p(uₖ, xₖ)`.
+  sum in each of the four bounds should run over `k ∈ [1 : r]`, not `[1 : d]`, as in the first
+  Theorem 4 on page 10-24, and the pmf should be `∏ₖ p(uₖ, xₖ)`.
 * **Page 10-37.** "the converse is does not follow".
 * **Page 10-39.** The numerator of the bound on `R₂` in the second region has `I_t`; it should be
   `I_r`.
@@ -192,8 +180,7 @@ section Examples
 variable {t : Type*} [Fintype t] [DecidableEq t]
 
 /-- **Lecture 10, page 10-3.** The vector channel with `G = diag(g)` is the Gaussian product
-channel:
-the rate of `K = diag(p)` is `∑ⱼ ½ log (1 + gⱼ² pⱼ)`. -/
+channel: the rate of `K = diag(p)` is `∑ⱼ ½ log (1 + gⱼ² pⱼ)`. -/
 theorem gvRate_diagonal_gain {g p : t → ℝ} (hp : ∀ j, 0 ≤ p j) :
     gvRate (diagonal g) (diagonal p) = ∑ j, 1 / 2 * log (1 + g j ^ 2 * p j) := by
   have e : diagonal g * diagonal p * (diagonal g)ᵀ + 1 =

@@ -25,8 +25,7 @@ extra condition.
   `I(X; X̂₁) < R₁` of the notes is `I[X : Y₁ ; μ] < R₁ * log 2`.
 * **Random variables.** In the inner bounds, `X`, `U`, `X̂ⱼ` are random variables on a finite
   probability space, and the source law is `dist μ X`. In the outer bound and in the regions they
-    are
-  given by a test channel `p(x̂₀, x̂₁, x̂₂|x)`.
+  are given by a test channel `p(x̂₀, x̂₁, x̂₂|x)`.
 * **Removing a decoder.** `Dⱼ = ∞` in the notes is the alphabet `Unit` with the distortion measure
   `0` and `Dⱼ = 0` here.
 
@@ -119,17 +118,15 @@ These show that the simple outer bound is tight for these cases, as page 14-6 sa
   sharing variable independent of `X` is a common description of rate `I(U; X) = 0`. So no separate
   time sharing argument and no convexity of the region are needed, unlike page 14-14.
 * **Choice of the codebooks.** The notes use one random codebook with a tree structure. We choose
-  the
-  codebooks one layer at a time (`exists_layer`): given the previous layers and the encoder so far,
-  each conditional codebook is chosen separately by averaging. Each layer then only involves
+  the codebooks one layer at a time (`exists_layer`): given the previous layers and the encoder so
+  far, each conditional codebook is chosen separately by averaging. Each layer then only involves
   independent codewords of a fixed law, and the error probabilities add.
 * **The middle layer.** The notes cite the multivariate covering lemma of Lecture 9 and a
-  conditional
-  version. We prove the conditional version directly from `sum_mutualCovering_le`, since `(xⁿ, uⁿ)`
-  is fixed and the second moment bound holds for any relation between two independent families.
+  conditional version. We prove the conditional version directly from `sum_mutualCovering_le`, since
+  `(xⁿ, uⁿ)` is fixed and the second moment bound holds for any relation between two independent
+  families.
 * **The codebook of `X̂₀ⁿ`.** The notes draw this codebook for typical pairs `(x̂₁ⁿ, x̂₂ⁿ)` only. We
-  draw
-  one for every index, and it is only used for typical ones.
+  draw one for every index, and it is only used for typical ones.
 * **The outer bound.** The notes say it "follows trivially". We use a uniform time index `Q` and
   `H(X_Q | Y_Q) ≥ H(X_Q | Q, M) ≥ (1/n) H(Xⁿ | M)`. The bound for the region has the exact `Dⱼ`, by
   compactness of the test channels (`isClosed_mdOuter`).
@@ -144,19 +141,17 @@ These show that the simple outer bound is tight for these cases, as page 14-6 sa
 The formula of page 14-15 was checked against the PDF, and the other items were read from its
 extracted text.
 
-* **Page 14-15, Theorem 2.** The formula for `Δ` needs the condition
-  `1/D₀ + 1/P ≥ 1/D₁ + 1/D₂` in the low distortion case. Without it, the noise variance `N` of page
-  14-20 is not positive (`ozarowN_pos_iff`), although the converse requires a noise `Zᵢ ∼ N(0, N)`.
-  At `(P, D₀, D₁, D₂) = (1, 0.3, 0.31, 0.31)` the printed sum rate `R(P/D₀) + Δ` is about 2.94 bits,
+* **Page 14-15, Theorem 2.** The formula for `Δ` needs the condition `1/D₀ + 1/P ≥ 1/D₁ + 1/D₂` in
+  the low distortion case. Without it, the noise variance `N` of page 14-20 is not positive
+  (`ozarowN_pos_iff`), although the converse requires a noise `Zᵢ ∼ N(0, N)`. At
+  `(P, D₀, D₁, D₂) = (1, 0.3, 0.31, 0.31)` the printed sum rate `R(P/D₀) + Δ` is about 2.94 bits,
   while sending the same description twice has the sum rate `2 R(P/D₀)`, about 1.74 bits, and
   independent noises have the sum rate `R(P/D₁) + R(P/D₂)`, about 1.69 bits, with the combined
   distortion `(1/D₁ + 1/D₂ - 1/P)⁻¹ ≈ 0.18 < D₀` (`ozarow_counterexample`, `mdNoise_indep_inv`).
-    When
-  the condition fails, the distortion `D₀` is not active, the sum rate is `R(P/D₁) + R(P/D₂)`, and
-  the region should be evaluated with `D₀` replaced by `(1/D₁ + 1/D₂ - 1/P)⁻¹`. As the library has
-    no
-  Gaussian coding theorem, the formal statement is about the formulas, and these rate claims follow
-  the coding scheme of the notes.
+  When the condition fails, the distortion `D₀` is not active, the sum rate is `R(P/D₁) + R(P/D₂)`,
+  and the region should be evaluated with `D₀` replaced by `(1/D₁ + 1/D₂ - 1/P)⁻¹`. As the library
+  has no Gaussian coding theorem, the formal statement is about the formulas, and these rate claims
+  follow the coding scheme of the notes.
 * Page 14-2: decoder 2 reproduces `X` with distortion `D₁`; it should be `D₂`.
 * Page 14-5: `E(d₀(X̂₀, X))` has its arguments in the wrong order.
 * Page 14-14: the multivariate covering lemma is said to be in Lecture Notes 7. It is in Lecture

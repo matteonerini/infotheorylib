@@ -12,14 +12,12 @@ public import InfoTheoryLib.Typicality.Conditional
 # The Slepian–Wolf theorem for more than two sources
 
 Theorem 3 of Lecture 11: the optimal rate region of a `k`-DMS `(X₁, …, X_k)` is the set of rate
-tuples
-with `∑_{j ∈ S} Rⱼ ≥ H(X(S) | X(Sᶜ))` for all `S ⊆ [1 : k]`.
+tuples with `∑_{j ∈ S} Rⱼ ≥ H(X(S) | X(Sᶜ))` for all `S ⊆ [1 : k]`.
 
 The converse is Fano's inequality for each `S`. For achievability each sequence of each source is
-put
-in a random bin, and a wrong sequence `x'` is split according to the set `S` of the sources where it
-differs from the right one: it falls in the right bins with probability `∏_{j ∈ S} 1/Mⱼ`, and there
-are at most `e^{n(H(X(S) | X(Sᶜ)) + δ)}` typical such sequences.
+put in a random bin, and a wrong sequence `x'` is split according to the set `S` of the sources
+where it differs from the right one: it falls in the right bins with probability `∏_{j ∈ S} 1/Mⱼ`,
+and there are at most `e^{n(H(X(S) | X(Sᶜ)) + δ)}` typical such sequences.
 
 ## Main definitions
 
@@ -614,8 +612,7 @@ theorem isAchievableManyBits_of_lt (hq : IsPMF q) {R : ι → ℝ}
     (fun n => errProb_nonneg (iidPMF_isPMF hq n) _ _ _) hc⟩
 
 /-- **Theorem 3 of Lecture 11 of [elgamal2010], page 11-32.** The optimal rate region of a `k`-DMS
-is
-the set of rate tuples with `∑_{j ∈ S} Rⱼ ≥ H(X(S) | X(Sᶜ))` for all `S ⊆ [1 : k]`, in bits. -/
+is the set of rate tuples with `∑_{j ∈ S} Rⱼ ≥ H(X(S) | X(Sᶜ))` for all `S ⊆ [1 : k]`, in bits. -/
 theorem manyOptimalRegionBits_eq (hq : IsPMF q) : manyOptimalRegionBits q = manyRegionBits q := by
   refine subset_antisymm (closure_minimal (fun R hR => ?_) (isClosed_manyRegionBits q)) ?_
   · exact IsAchievableManyBits.mem_manyRegionBits hq hR

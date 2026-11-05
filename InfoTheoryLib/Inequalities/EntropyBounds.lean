@@ -212,8 +212,7 @@ lemma abs_one_add_mul_log_sub_le {u : ℝ} (hu : |u| ≤ 1 / 2) :
     _ ≤ 4 * |u| ^ 3 := by linarith
 
 /-- **Lemma 17.3.3, (17.36).** Near `Q > 0`, the relative entropy is half the `χ²` distance: for
-`P = Q + tΔ` with `∑ Δ = 0` and `|tΔ| ≤ Q/2`,
-`|D(P ‖ Q) - χ²(P, Q)/2| ≤ 4|t|³ ∑ₓ |Δ(x)|³/Q(x)²`. -/
+`P = Q + tΔ` with `∑ Δ = 0` and `|tΔ| ≤ Q/2`, `|D(P ‖ Q) - χ²(P, Q)/2| ≤ 4|t|³ ∑ₓ |Δ(x)|³/Q(x)²`. -/
 theorem abs_relEntropyReal_sub_chiSq_le {Q Δ : α → ℝ} (hQ : ∀ x, 0 < Q x) (hΔ : ∑ x, Δ x = 0)
     {t : ℝ} (ht : ∀ x, |t * Δ x| ≤ Q x / 2) :
     |relEntropyReal (fun x => Q x + t * Δ x) Q - chiSq (fun x => Q x + t * Δ x) Q / 2| ≤

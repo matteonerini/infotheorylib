@@ -30,11 +30,9 @@ the messages is the cutset outer bound.
 ## Implementation notes
 
 The notes approximate real capacities by a multigraph whose edges carry `n/k` bits. Here a
-  multigraph
-with `⌊K C⌋` edges is fixed, with `K` large, and for block length `n` the field `𝔽_{2^m}` with
-`m = ⌊n / K⌋` is used. So all large `n` are covered by one construction, because a nonzero
-  polynomial
-has a nonzero value in `𝔽_{2^m}` for all large `m`.
+multigraph with `⌊K C⌋` edges is fixed, with `K` large, and for block length `n` the field `𝔽_{2^m}`
+with `m = ⌊n / K⌋` is used. So all large `n` are covered by one construction, because a nonzero
+polynomial has a nonzero value in `𝔽_{2^m}` for all large `m`.
 
 ## References
 
@@ -74,8 +72,7 @@ lemma capGraph_count (cap : V → V → ℕ) (h : ∀ j k, 0 < cap j k → j < k
   simp
 
 /-- **Page 16-21 of [elgamal2010].** For a multigraph, `|A_t(x)|` is a nonzero polynomial if and
-  only
-if all the message symbols fit through the cuts separating them from `t`. -/
+only if all the message symbols fit through the cuts separating them from `t`. -/
 theorem detGeneric_ne_zero_iff {E : Type*} [Fintype E] (G : Multigraph V E) {b : V → ℕ}
     {t : V} (hb : b t = 0) :
     detGeneric (b := b) G t ≠ 0 ↔ ∀ S : Finset V, t ∉ S →
@@ -83,10 +80,9 @@ theorem detGeneric_ne_zero_iff {E : Type*} [Fintype E] (G : Multigraph V E) {b :
   ⟨fun h _ hS => cuts_of_detGeneric_ne_zero G h hS, detGeneric_ne_zero_of_cuts G t hb⟩
 
 /-- **Pages 16-15 and 16-22 of [elgamal2010].** Linear network coding with zero error and finite
-  block
-size: if the destinations in `T` have no messages and the integer rates fit through the cuts of a
-multigraph, then a linear code over any field `F` with `|F| > |T| R`, of characteristic `2`, has no
-errors. -/
+block size: if the destinations in `T` have no messages and the integer rates fit through the cuts
+of a multigraph, then a linear code over any field `F` with `|F| > |T| R`, of characteristic `2`,
+has no errors. -/
 theorem exists_linear_code {E F : Type*} [Fintype E] [Field F] [Algebra (ZMod 2) F]
     [Fintype F] (G : Multigraph V E) {b : V → ℕ} {T : Finset V} {D : V → Finset V}
     (hD : ∀ j, ∀ l ∈ D j, l ∈ T) (hb : ∀ t ∈ T, b t = 0)
@@ -306,8 +302,7 @@ theorem network_coding_theorem (N : NoiselessNetwork V) {s : V} {T : Finset V} (
 /-- **Page 16-25 of [elgamal2010].** The capacity region of a multi-source multicast network: the
 nodes of `Src` are the sources and every node of `T` wishes to decode all the messages. For rate
 tuples with no rate outside `Src`, the capacity region is the cutset outer bound. The notes cite
-  this
-result; here it comes from the same proof as the network coding theorem. -/
+this result; here it comes from the same proof as the network coding theorem. -/
 theorem capacityRegion_multisource (N : NoiselessNetwork V) {Src T : Finset V}
     (hdisj : Disjoint Src T) {R : V → ℝ} (hR : ∀ j, j ∉ Src → R j = 0) :
     R ∈ capacityRegion N (fun j => if j ∈ Src then T else ∅) ↔

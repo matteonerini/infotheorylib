@@ -43,8 +43,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * `K ≼ tr(K) I`: `posSemidef_trace_smul_sub`; the relaxation of the cutset bound: `cutset_relax`,
   here `gaussian_cutset_relax` (`Network.GaussianNetBounds`).
 * The rate of Theorem 1: `nncGaussRate`. The two terms of its derivation: `gk_nnc_gap`,
-  `gvRate_half`
-  (`Network.GuptaKumar`).
+  `gvRate_half` (`Network.GuptaKumar`).
 * The gap: `nnc_gap_le`, `gvRate_le_nncGaussRate_add`, here `gaussian_constant_gap`.
 
 ### Capacity scaling, examples (pages 20-10 to 20-17)
@@ -136,8 +135,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `Unif[0, N^{1/2}]`, whereas `|U_j|` is on `[0, N^{1/2} / 2]`: it is `2 |U_j|` that has this law.
   This affects only constants.
 * **Page 20-40.** `∫_1^{u₀} log (1 + a u^{-ν'} k) du ≥ ∫_1^{u₀} log (1 + a) du` fails for `a > 1`:
-  at
-  `u₀` the integrand is `log 2` (`printed_log_lower_fails`). With `log 2` the proof goes through
+  at `u₀` the integrand is `log 2` (`printed_log_lower_fails`). With `log 2` the proof goes through
   (`gkLog_ge_log_two`).
 
 ## References

@@ -182,12 +182,10 @@ variable {T : Type*} [Fintype T]
 
 /-- **The probability that a random codebook misses a set.** If every sequence of a set `G` has
 probability at least `y` times its probability under `Q`, then a codebook of `K` sequences misses
-  `G`
-with probability at most `1 - Q(G) + exp(-y K)`. -/
-theorem sum_miss_le {P Q : T → ℝ} (hP : IsPMF P) (hQ : IsPMF Q) {G : T → Prop} {y : ℝ} (hy1 : y ≤ 1)
-  (hy : ∀ v, G v → Q v * y ≤ P v) (K : ℕ) :
-    ∑ C : Fin K → T, iidPMF P K C * ∏ k, ind (¬ G (C k)) ≤
-      1 - ∑ v, Q v * ind (G v) + exp (-(y * K)) := by
+`G` with probability at most `1 - Q(G) + exp(-y K)`. -/
+theorem sum_miss_le {P Q : T → ℝ} (hP : IsPMF P) (hQ : IsPMF Q) {G : T → Prop} {y : ℝ}
+    (hy1 : y ≤ 1) (hy : ∀ v, G v → Q v * y ≤ P v) (K : ℕ) : ∑ C : Fin K → T, iidPMF P K C * ∏ k,
+    ind (¬ G (C k)) ≤ 1 - ∑ v, Q v * ind (G v) + exp (-(y * K)) := by
   classical
   set a := ∑ v, Q v * ind (G v) with ha
   have ha0 : 0 ≤ a := sum_nonneg fun v _ => mul_nonneg (hQ.nonneg v) (ind_nonneg _)
@@ -231,8 +229,7 @@ section Tilt
 variable {A B C : Type*} [Fintype A] [Fintype B] [Fintype C]
 
 /-- **A change of the law of a sequence**, on the typical sequences: the law of `cⁿ` given
-  `(aⁿ, bⁿ)`
-is at most `exp(n I(B; C | A))` times the law of `cⁿ` given `aⁿ`. -/
+`(aⁿ, bⁿ)` is at most `exp(n I(B; C | A))` times the law of `cⁿ` given `aⁿ`. -/
 theorem tilt_le {J : (A × B) × C → ℝ} (hJ : IsPMF J) {τ : A × B → C → ℝ} {q : A → C → ℝ}
     (hτ : ∀ a c, J (a, c) = dist J Prod.fst a * τ a c)
     (hq : ∀ a c, dist J (fun z => (z.1.1, z.2)) (a, c) = dist J (fun z => z.1.1) a * q a c)
@@ -311,8 +308,8 @@ theorem tilt_le {J : (A × B) × C → ℝ} (hJ : IsPMF J) {τ : A × B → C �
       _ = _ := by
           rw [mul_comm (exp _) (seqChan q n a c), mul_assoc, hexp, mul_one]
   refine le_trans ?_ hqge
-  calc _ ≤ exp (-(n * (HJ - ε * HJ))) * exp (n * (HUS + ε * HUS)) * exp (-(n * (HUS + HUV - HU - HJ
-    +
+  calc _ ≤ exp (-(n * (HJ - ε * HJ))) * exp (n * (HUS + ε * HUS)) *
+    exp (-(n * (HUS + HUV - HU - HJ +
         ε * (HUS + HUV + HU + HJ)))) := mul_le_mul_of_nonneg_right hτle (exp_pos _).le
     _ = _ := by
         rw [← exp_add, ← exp_add, ← exp_add]

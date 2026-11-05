@@ -15,8 +15,7 @@ public import Mathlib.LinearAlgebra.Matrix.Notation
 Lecture 13 determines the rate–distortion region of the quadratic Gaussian distributed source coding
 problem and of the Gaussian CEO problem. The coding theorems concern continuous sources and need the
 conditional entropy power inequality, which are not in this library. This file proves the formulas
-and
-the algebra of the proofs, with the rates in nats.
+and the algebra of the proofs, with the rates in nats.
 
 ## Main definitions
 
@@ -61,8 +60,7 @@ def qgG (ρ R D : ℝ) : ℝ := qgR ((1 - ρ ^ 2 + ρ ^ 2 * exp (-(2 * R))) / D)
 def qgPhi (ρ D₁ D₂ : ℝ) : ℝ := 1 + √(1 + 4 * ρ ^ 2 * D₁ * D₂ / (1 - ρ ^ 2) ^ 2)
 
 /-- **Theorem 3 of Lecture 13 of [elgamal2010], page 13-16.** The rate–distortion region of the
-quadratic
-Gaussian problem, in nats: the intersection of `R₁(D₁)`, `R₂(D₂)` and `R₁₂(D₁, D₂)`. -/
+quadratic Gaussian problem, in nats: the intersection of `R₁(D₁)`, `R₂(D₂)` and `R₁₂(D₁, D₂)`. -/
 def qgRegion (ρ D₁ D₂ : ℝ) : Set (ℝ × ℝ) :=
   {R | qgG ρ R.2 D₁ ≤ R.1 ∧ qgG ρ R.1 D₂ ≤ R.2 ∧
     qgR ((1 - ρ ^ 2) * qgPhi ρ D₁ D₂ / (2 * D₁ * D₂)) ≤ R.1 + R.2}
@@ -88,8 +86,7 @@ lemma qgDelta_pos (hρ : ρ ^ 2 < 1) (h₁ : 0 < N₁) (h₂ : 0 < N₂) : 0 < q
 
 /-- **Lemma 4 of Lecture 13, page 13-22.** The error covariance of the MMSE estimate of `X` given
 `Uⱼ = Xⱼ + Vⱼ` has the inverse `K_X⁻¹ + K_V⁻¹`: the matrix with the diagonal `(D₁, D₂)` and the
-off-diagonal
-term `ρ N₁ N₂ / Δ` is the inverse of `K_X⁻¹ + diag(1 / N₁, 1 / N₂)`. -/
+off-diagonal term `ρ N₁ N₂ / Δ` is the inverse of `K_X⁻¹ + diag(1 / N₁, 1 / N₂)`. -/
 theorem qg_lemma4 (hρ : ρ ^ 2 < 1) (h₁ : 0 < N₁) (h₂ : 0 < N₂) :
     !![qgD₁ ρ N₁ N₂, ρ * N₁ * N₂ / qgDelta ρ N₁ N₂; ρ * N₁ * N₂ / qgDelta ρ N₁ N₂, qgD₂ ρ N₁ N₂] *
       !![1 / (1 - ρ ^ 2) + 1 / N₁, -ρ / (1 - ρ ^ 2); -ρ / (1 - ρ ^ 2), 1 / (1 - ρ ^ 2) + 1 / N₂] =
@@ -145,11 +142,10 @@ theorem qgD_ratio (hρ : ρ ^ 2 < 1) (h₁ : 0 < N₁) (h₂ : 0 < N₂) :
   ring
 
 /-- **Lecture 13, page 13-20.** In case 1, the test channel with `N₁ = D₁ / (1 - D₁)` and `U₂`
-constant has
-the distortions `1 - 1 / (1 + N₁) = D₁` and `1 - ρ² / (1 + N₁) = 1 - ρ² + ρ² D₁`. -/
+constant has the distortions `1 - 1 / (1 + N₁) = D₁` and `1 - ρ² / (1 + N₁) = 1 - ρ² + ρ² D₁`. -/
 theorem qg_case1 {D₁ : ℝ} (hD₁ : D₁ < 1) :
-    1 - 1 / (1 + D₁ / (1 - D₁)) = D₁ ∧ 1 - ρ ^ 2 / (1 + D₁ / (1 - D₁)) = 1 - ρ ^ 2 + ρ ^ 2 * D₁ :=
-      by
+    1 - 1 / (1 + D₁ / (1 - D₁)) = D₁ ∧ 1 - ρ ^ 2 / (1 + D₁ / (1 - D₁)) = 1 - ρ ^ 2 + ρ ^ 2 *
+      D₁ := by
   have h : 1 - D₁ ≠ 0 := by linarith
   have e : 1 + D₁ / (1 - D₁) = 1 / (1 - D₁) := by
     field_simp
@@ -204,8 +200,7 @@ private lemma phi_div_anti {a k D D' : ℝ} (ha : 0 < a) (hk : 0 ≤ k) (hD : 0 
   nlinarith [mul_le_mul_of_nonneg_left hDD ha.le]
 
 /-- **Lemma 3 of Lecture 13, page 13-20.** If `1 - D₂ ≤ ρ² (1 - D₁)`, the rate pairs of `R₁(D₁)` are
-in
-`R₁₂(D₁, D₂)` and, with nonnegative rates, in `R₂(D₂)`. -/
+in `R₁₂(D₁, D₂)` and, with nonnegative rates, in `R₂(D₂)`. -/
 theorem qg_lemma3 (hρ : ρ ^ 2 < 1) (hD₁ : 0 < D₁) (hc : 1 - D₂ ≤ ρ ^ 2 * (1 - D₁)) {R₁ R₂ : ℝ}
     (hR₂0 : 0 ≤ R₂) (hR : qgG ρ R₂ D₁ ≤ R₁) :
     qgR ((1 - ρ ^ 2) * qgPhi ρ D₁ D₂ / (2 * D₁ * D₂)) ≤ R₁ + R₂ ∧ qgG ρ R₁ D₂ ≤ R₂ := by
@@ -336,8 +331,7 @@ variable (hρ0 : 0 < ρ) (hρ1 : ρ < 1) (hD₁ : 0 < D₁) (hD₂ : 0 < D₂)
 
 include hρ0 hD₁ hD₂ in
 /-- **Lecture 13, page 13-22.** `θ*` is the root of `ρ s θ² + (1 - ρ²) θ - ρ s = 0`, with
-`s = √(D₁ D₂)`:
-this says that `K(θ)⁻¹ - K_X⁻¹` is diagonal. -/
+`s = √(D₁ D₂)`: this says that `K(θ)⁻¹ - K_X⁻¹` is diagonal. -/
 theorem qgTheta_quadratic :
     (1 - ρ ^ 2) * qgTheta ρ D₁ D₂ = ρ * √(D₁ * D₂) * (1 - qgTheta ρ D₁ D₂ ^ 2) := by
   have hs : 0 < √(D₁ * D₂) := sqrt_pos.2 (mul_pos hD₁ hD₂)
@@ -446,8 +440,7 @@ theorem qgR2_theta : qgR2 ρ D₁ D₂ (qgTheta ρ D₁ D₂) = qgR1 ρ D₁ D�
 
 include hρ0 hρ1 hD₁ hD₂ in
 /-- **Lecture 13, pages 13-31 and 13-32.** `min_θ max {R₁(θ), R₂(θ)} = R((1 - ρ²) φ / (2 D₁ D₂))`:
-for
-every `θ ∈ (-1, 1)`, one of the two lower bounds is at least the sum rate of Theorem 3. -/
+for every `θ ∈ (-1, 1)`, one of the two lower bounds is at least the sum rate of Theorem 3. -/
 theorem qg_le_max (hθ0 : -1 < θ) (hθ1 : θ < 1) :
     qgR ((1 - ρ ^ 2) * qgPhi ρ D₁ D₂ / (2 * D₁ * D₂)) ≤ max (qgR1 ρ D₁ D₂ θ) (qgR2 ρ D₁ D₂ θ) := by
   have ha : 0 < 1 - ρ ^ 2 := by nlinarith
@@ -493,8 +486,7 @@ section Case
 variable {ρ D₁ D₂ θ : ℝ}
 
 /-- **Lecture 13, pages 13-22 and 13-23.** With `1 / Nⱼ = 1 / (Dⱼ (1 - θ²)) - 1 / (1 - ρ²)`, for the
-root `θ`
-of the quadratic equation, the sum rate of the left corner point is `R(|K_X| / |K(θ)|)`:
+root `θ` of the quadratic equation, the sum rate of the left corner point is `R(|K_X| / |K(θ)|)`:
 `((1 + N₁)(1 + N₂) - ρ²) / (N₁ N₂) = (1 - ρ²) / (D₁ D₂ (1 - θ²))`. -/
 theorem qg_case2_sum {s A₁ A₂ : ℝ} (ha : 1 - ρ ^ 2 ≠ 0) (hD₁ : D₁ ≠ 0) (hD₂ : D₂ ≠ 0)
     (hs : s ^ 2 = D₁ * D₂) (hu : 1 - θ ^ 2 ≠ 0)
@@ -543,8 +535,7 @@ theorem qg_case2_sum {s A₁ A₂ : ℝ} (ha : 1 - ρ ^ 2 ≠ 0) (hD₁ : D₁ �
   ring
 
 /-- **Lecture 13, page 13-30.** The Markov chain `X₁ → Y → X₂`: the conditional covariance of `X₁`
-and `X₂`
-given `Y = μ₁ X₁ + μ₂ X₂ + Z` vanishes for `N = (1 - ρ²) μ₁ μ₂ / ρ`. -/
+and `X₂` given `Y = μ₁ X₁ + μ₂ X₂ + Z` vanishes for `N = (1 - ρ²) μ₁ μ₂ / ρ`. -/
 theorem qg_markov {μ₁ μ₂ N : ℝ} (hρ : ρ ≠ 0) (hN : N = (1 - ρ ^ 2) * (μ₁ * μ₂) / ρ) :
     ρ * (μ₁ ^ 2 + 2 * ρ * (μ₁ * μ₂) + μ₂ ^ 2 + N) = (μ₁ + ρ * μ₂) * (ρ * μ₁ + μ₂) := by
   subst hN
@@ -561,8 +552,7 @@ theorem qg_alpha {N : ℝ} (h : 2 * (1 + θ) + N ≠ 0) :
   linear_combination (-2 : ℝ) * e
 
 /-- **Lecture 13, page 13-54, step 3 of Lemma 5.** If `b₁, b₂ ≥ 0` and `diag(b₁, b₂) ≼ [a c; c a]`,
-then
-`b₁ b₂ ≤ (a - c)²`. -/
+then `b₁ b₂ ≤ (a - c)²`. -/
 theorem qg_lemma5_step3 {b₁ b₂ a c : ℝ} (h₁ : 0 ≤ b₁) (h₂ : 0 ≤ b₂)
     (h : ∀ x y : ℝ, b₁ * x ^ 2 + b₂ * y ^ 2 ≤ a * x ^ 2 + 2 * c * (x * y) + a * y ^ 2) :
     b₁ * b₂ ≤ (a - c) ^ 2 := by
@@ -581,8 +571,7 @@ section CEO
 variable {P D N₁ N₂ : ℝ}
 
 /-- **The rate–distortion region of the Gaussian CEO problem (Lecture 13 of [elgamal2010], page
-13-35)**, in
-nats. -/
+13-35)**, in nats. -/
 def ceoRegion (P N₁ N₂ D : ℝ) : Set (ℝ × ℝ) :=
   {R | ∃ r₁ r₂ : ℝ, 0 ≤ r₁ ∧ 0 ≤ r₂ ∧
     r₁ + 1 / 2 * log (1 / D) - 1 / 2 * log (1 / P + (1 - exp (-(2 * r₂))) / N₂) ≤ R.1 ∧
@@ -592,8 +581,8 @@ def ceoRegion (P N₁ N₂ D : ℝ) : Set (ℝ × ℝ) :=
 
 /-- **Lecture 13, page 13-38.** The bound of the converse in the two forms of the notes. -/
 theorem ceo_bound_eq {x : ℝ} (hP : 0 < P) (hD : 0 < D) (hx : 0 ≤ x) :
-    1 / 2 * log (P / D) - 1 / 2 * log (1 + P * x) = 1 / 2 * log (1 / D) - 1 / 2 * log (1 / P + x) :=
-      by
+    1 / 2 * log (P / D) - 1 / 2 * log (1 + P * x) = 1 / 2 * log (1 / D) - 1 / 2 *
+      log (1 / P + x) := by
   have h1 : 0 < 1 + P * x := by positivity
   have h2 : 0 < 1 / P + x := by positivity
   have e : 1 + P * x = P * (1 / P + x) := by
@@ -602,8 +591,7 @@ theorem ceo_bound_eq {x : ℝ} (hP : 0 < P) (hD : 0 < D) (hx : 0 ≤ x) :
   ring
 
 /-- **Lecture 13, page 13-35.** The Gaussian test channel of the achievability: `Uⱼ = Yⱼ + Vⱼ` with
-noise
-power `Q = N / (e^{2r} - 1)` has `I(Yⱼ; Uⱼ | X) = r` and the precision
+noise power `Q = N / (e^{2r} - 1)` has `I(Yⱼ; Uⱼ | X) = r` and the precision
 `1 / (N + Q) = (1 - e^{-2r}) / N`. -/
 theorem ceo_test_channel {N r : ℝ} (hN : 0 < N) (hr : 0 < r) :
     1 / (N + N / (exp (2 * r) - 1)) = (1 - exp (-(2 * r))) / N ∧

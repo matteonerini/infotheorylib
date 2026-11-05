@@ -13,8 +13,7 @@ public import InfoTheoryLib.RateDistortion.SideInfoConverse
 
 With `U₂ = X₂`, the inner bound of Lecture 13 reduces to the rates `R₁ > I(X₁; U₁ | X₂)`,
 `R₂ > H(X₂ | U₁)` and `R₁ + R₂ > I(X₁; U₁) + H(X₂ | U₁)`, for the Hamming distortion of the second
-source
-at `D₂ = 0`. This contains the Wyner–Ziv rates, and the Slepian–Wolf rates with `U₁ = X₁`.
+source at `D₂ = 0`. This contains the Wyner–Ziv rates, and the Slepian–Wolf rates with `U₁ = X₁`.
 
 ## Main statements
 
@@ -136,9 +135,8 @@ lemma btRate₁₂_identity [DecidableEq α₂] :
   ring
 
 /-- **Lecture 13, page 13-5.** When `d₂` is the Hamming distortion and `D₂ = 0`, the inner bound
-gives the
-rates `R₁ > I(X₁; U₁ | X₂)`, `R₂ > H(X₂ | U₁)` and `R₁ + R₂ > I(X₁; U₁) + H(X₂ | U₁)`, in bits, for
-`p(u₁ | x₁)` and `x̂₁(u₁, x₂)` with `E d₁(X₁, X̂₁) ≤ D₁`. -/
+gives the rates `R₁ > I(X₁; U₁ | X₂)`, `R₂ > H(X₂ | U₁)` and `R₁ + R₂ > I(X₁; U₁) + H(X₂ | U₁)`, in
+bits, for `p(u₁ | x₁)` and `x̂₁(u₁, x₂)` with `E d₁(X₁, X̂₁) ≤ D₁`. -/
 theorem isAchievableDL_of_side [Finite β₁] (hP : IsPMF P) (hd₁ : ∀ x y, 0 ≤ d₁ x y)
     (h₁ : IsChannel κ₁) (f : υ₁ → α₂ → β₁) {R₁ R₂ D₁ : ℝ}
     (hc : sideCost P κ₁ (fun u x y => d₁ x (f u y)) ≤ D₁) (hR₁ : sideRate 1 P κ₁ / log 2 < R₁)
@@ -151,8 +149,8 @@ theorem isAchievableDL_of_side [Finite β₁] (hP : IsPMF P) (hd₁ : ∀ x y, 0
   have hcost₁ : btCost₁ P κ₁ identityKernel d₁ f = sideCost P κ₁ fun u x y => d₁ x (f u y) := by
     rw [btCost₁, btLaw_identity]
     exact sum_dist_mul (siLaw P κ₁) caseMap fun z => d₁ z.1.1.1 (f z.1.1.2 z.2)
-  have hcost₂ : btCost₂ P κ₁ identityKernel hammingDistortion (fun (_ : υ₁) (u₂ : α₂) => u₂) = 0 :=
-    by
+  have hcost₂ : btCost₂ P κ₁ identityKernel hammingDistortion (fun (_ : υ₁) (u₂ : α₂) => u₂) =
+    0 := by
     rw [btCost₂, btLaw_identity]
     refine (sum_dist_mul (siLaw P κ₁) caseMap fun z => hammingDistortion z.1.2 z.2).trans ?_
     refine sum_eq_zero fun w _ => ?_
@@ -164,8 +162,7 @@ theorem isAchievableDL_of_side [Finite β₁] (hP : IsPMF P) (hd₁ : ∀ x y, 0
   · rwa [btRate₁₂_identity h₁ hP]
 
 /-- **Lecture 13, page 13-5.** When there is no rate limit for `X₂`, the inner bound gives the
-Wyner–Ziv
-rate: `R₁ > R_SI-D(D₁)` and `R₂ > H(X₂)`, in bits. -/
+Wyner–Ziv rate: `R₁ > R_SI-D(D₁)` and `R₂ > H(X₂)`, in bits. -/
 theorem isAchievableDL_of_wyner_ziv [Finite β₁] [Nonempty β₁] (hP : IsPMF P)
     (hd₁ : ∀ x y, 0 ≤ d₁ x y) {R₁ R₂ D₁ : ℝ} (hD : minDistortion (margFst P) d₁ ≤ D₁)
     (hR₁ : wzRD P d₁ D₁ / log 2 < R₁) (hR₂ : H[Prod.snd ; P] / log 2 < R₂) :
@@ -199,8 +196,7 @@ theorem isAchievableDL_of_wyner_ziv [Finite β₁] [Nonempty β₁] (hP : IsPMF 
     linarith
 
 /-- **Lecture 13, page 13-5.** With `U₁ = X₁` and `U₂ = X₂`, the inner bound gives the Slepian–Wolf
-rates,
-at the Hamming distortion `0`. -/
+rates, at the Hamming distortion `0`. -/
 theorem isAchievableDL_slepian_wolf (hP : IsPMF P) {R₁ R₂ : ℝ}
     (hR₁ : H[Prod.fst | Prod.snd ; P] / log 2 < R₁) (hR₂ : H[Prod.snd | Prod.fst ; P] / log 2 < R₂)
     (hR₁₂ : entropy P / log 2 < R₁ + R₂) :

@@ -14,9 +14,8 @@ public import InfoTheoryLib.Network.SourceHelperConverse
 # El Gamal & Kim, Lecture 11: Distributed Lossless Source Coding
 
 This file indexes the formalization of Lecture 11 of [elgamal2010] and contains the lecture's
-examples.
-We prove the Slepian–Wolf theorem, for two sources and for `k` sources (Theorem 3), and the optimal
-rate region of lossless source coding with a helper (Theorem 2).
+examples. We prove the Slepian–Wolf theorem, for two sources and for `k` sources (Theorem 3), and
+the optimal rate region of lossless source coding with a helper (Theorem 2).
 
 ## Conventions
 
@@ -37,8 +36,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The inner bound and the corner point: `entropy_mem_swRegionBits`, `corner_mem_swRegionBits`.
 * The DSBS: `entropy_dsbsPMF`, `condEntropy_dsbsPMF`, `swRegionBits_dsbsPMF` (here).
 * The second example: `triPMF`, `entropy_triPMF`, `condEntropy_fst_triPMF`,
-  `condEntropy_snd_triPMF`,
-  `swRegionBits_triPMF`, `log_three_lt_separate` (here).
+  `condEntropy_snd_triPMF`, `swRegionBits_triPMF`, `log_three_lt_separate` (here).
 
 ### Lossless source coding with a helper
 * The codes: `HelperCode`, `IsAchievableHelperBits`, `helperOptimalRegionBits`
@@ -62,8 +60,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 * The single-source random binning proof on pages 11-12 to 11-14 as a separate statement: it is the
   case of one source of `exists_many_code_le`, and `isAchievableLosslessRate_of_lt` of Lecture 3
-  proves
-  the theorem by another code.
+  proves the theorem by another code.
 * Random linear binning on pages 11-15 and 11-20, and the scheme for the DSBS with a parity check
   matrix.
 * The remark on zero-error coding on page 11-19, and the extension to stationary ergodic sources on
@@ -74,20 +71,17 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ## Issues in the notes
 
 * **Page 11-20.** The last formula is `Ŷ₂ⁿ = X₂ⁿ ⊕ Ẑⁿ = X₂ⁿ`; it should be `X̂₂ⁿ = X₁ⁿ ⊕ Ẑⁿ = X₂ⁿ`,
-  as the
-  decoder knows `X₁ⁿ` and not `X₂ⁿ`.
+  as the decoder knows `X₁ⁿ` and not `X₂ⁿ`.
 * **Page 11-19.** "doubly symmetric binary symmetric sources".
 * **Page 11-27.** The covering lemma gives `R₂ > I(Y; U) + δ(ε')`, not `- δ(ε')`
   (`exists_helper_code_le` has the plus sign).
 * **Page 11-32.** The figure has "Encoder N" for the encoder `k`.
 * **Page 11-33.** In Theorem 4, `H(X(S) | U, X(S))` should be `H(X(S) | U, X(Sᶜ))`, and
-  `S ∈ [1 : k]` should
-  be `S ⊆ [1 : k]`.
+  `S ∈ [1 : k]` should be `S ⊆ [1 : k]`.
 * **The converse on page 11-29.** The step (a) uses a Markov chain, which the proof of
   `HelperCode.exists_kernel_le` avoids: with `Zᵢ = (Xᵢ, Yᵢ)`,
   `I(Yᵢ; Uᵢ) = I(Yᵢ; M₂ | Zⁱ⁻¹) ≤ I(Zᵢ; M₂ | Zⁱ⁻¹)`, and the chain rule gives the bound. This is not
-  an
-  error in the notes.
+  an error in the notes.
 
 ## References
 
@@ -262,8 +256,7 @@ theorem swRegionBits_triPMF :
     entropy_triPMF, e]
 
 /-- **Example (Lecture 11), page 11-11.** Compressing separately needs the sum rate `2 H(1/3)`,
-which
-is strictly more than `log 3`, as `2⁴ < 3³`. -/
+which is strictly more than `log 3`, as `2⁴ < 3³`. -/
 theorem log_three_lt_separate : log 3 < 2 * binEntropy (1 / 3) := by
   have h : log ((2 : ℝ) ^ 4) < log ((3 : ℝ) ^ 3) := log_lt_log (by norm_num) (by norm_num)
   rw [log_pow, log_pow] at h
@@ -307,8 +300,7 @@ private lemma dist_xor_helperLaw (κ : Bool → k → ℝ) (z y : Bool) (u : k) 
   ring
 
 /-- **Example (Lecture 11), page 11-24.** The bound by Mrs. Gerber's lemma: for every `p(u | y)`
-there
-is `α ∈ [0, 1/2]` with `H(X | U) ≥ H(α ∗ p)` and `I(Y; U) = log 2 - H(α)`. -/
+there is `α ∈ [0, 1/2]` with `H(X | U) ≥ H(α ∗ p)` and `I(Y; U) = log 2 - H(α)`. -/
 theorem exists_binEntropy_le_helperCond (h0 : 0 ≤ p) (h1 : p ≤ 1) (hκ : ∀ y, IsPMF (κ y)) :
     ∃ a ∈ Set.Icc (0 : ℝ) (1 / 2), binEntropy (binConv a p) ≤ helperCond (dsbsPMF p) κ ∧
       log 2 - binEntropy a = helperInfo (dsbsPMF p) κ := by

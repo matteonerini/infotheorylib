@@ -270,8 +270,8 @@ theorem sum_nncBlock_test_le (hpx : ∀ k, IsPMF (px k)) (hW : IsChannel W)
     have h₃ := sum_piLaw_mul_eval₂ (ν := fun _ : NNCBr M K k => nncRow (px k) (q k) n (K k))
       (fun _ => nncRow_isPMF (hpx k) (hqc k)) hne fun r r' => ind (r.1 = x k) *
         ind ((r'.1, r'.2 (idx k r (yOf k y))) = c)
-    have hval' : μ k c = iidPMF (px k) n (x k) * (iidPMF (px k) n c.1 * seqChan (q k) n c.1 c.2) :=
-      by
+    have hval' : μ k c = iidPMF (px k) n (x k) *
+      (iidPMF (px k) n c.1 * seqChan (q k) n c.1 c.2) := by
       rw [hval]
       refine h₃.trans ?_
       have h₄ : ∀ r : NNCRow n (K k) (X k) (V k), ∑ r', nncRow (px k) (q k) n (K k) r *

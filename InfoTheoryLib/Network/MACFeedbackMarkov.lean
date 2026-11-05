@@ -227,11 +227,10 @@ lemma msgL_fst (f : Fin B → Fin Mb) (g g' : Fin B → Fin Mm) (j : ℕ) :
   cases j <;> rfl
 
 /-- **The code of all the blocks.** -/
-theorem CLBlock.exists_code_le [Nonempty Y] (C : CLBlock Mb Mm (Fin n → X₁) (Fin n → X₂) (Fin n →
-  Y))
-    (hB : 0 < B) (hW : IsChannel W) :
-    ∃ c : MACFBCode (Mm ^ B) (Mb ^ B) ((B + 1) * n) X₁ X₂ Y,
-      c.errProb W ≤ ((B : ℝ) + 1) * C.avgErr (macSeq W n) := by
+theorem CLBlock.exists_code_le [Nonempty Y]
+    (C : CLBlock Mb Mm (Fin n → X₁) (Fin n → X₂) (Fin n → Y)) (hB : 0 < B) (hW : IsChannel W) : ∃
+    c : MACFBCode (Mm ^ B) (Mb ^ B) ((B + 1) * n) X₁ X₂ Y, c.errProb W ≤ ((B : ℝ) + 1) *
+    C.avgErr (macSeq W n) := by
   classical
   let e₁ : Fin (Mm ^ B) ≃ (Fin B → Fin Mm) := (Fintype.equivFinOfCardEq (by simp)).symm
   let e₂ : Fin (Mb ^ B) ≃ (Fin B → Fin Mb) := (Fintype.equivFinOfCardEq (by simp)).symm
@@ -297,8 +296,7 @@ theorem MACFBCode.errProb_pad (c : MACFBCode M₁ M₂ N X₁ X₂ Y) (hW : IsCh
   exact key m
 
 /-- **Fewer messages.** A code still works with fewer messages: the best rectangle of messages has
-  at
-most the average error. -/
+at most the average error. -/
 theorem MACFBCode.exists_sub [NeZero M₁] [NeZero M₂] (c : MACFBCode M₁ M₂ N X₁ X₂ Y) {M₁' M₂' : ℕ}
     (h₁' : 0 < M₁') (h₂' : 0 < M₂') (h₁ : M₁' ≤ M₁) (h₂ : M₂' ≤ M₂) (hW : IsChannel W) :
     ∃ c' : MACFBCode M₁' M₂' N X₁ X₂ Y, c'.errProb W ≤ c.errProb W := by
@@ -394,8 +392,8 @@ lemma two_pow_ceil_le_of_exp {ρ R η : ℝ} {B₁ n N M₀ : ℕ} (hρ0 : 0 ≤
       push_cast
       rw [← exp_log (by norm_num : (0 : ℝ) < 2), ← exp_nat_mul]
       refine exp_le_exp.mpr ?_
-      have h₃ : (B₁ : ℝ) * ((N : ℝ) / ((B₁ : ℝ) + 1) * ρ) = (N : ℝ) * ((B₁ : ℝ) / (B₁ + 1) * ρ) :=
-        by
+      have h₃ : (B₁ : ℝ) * ((N : ℝ) / ((B₁ : ℝ) + 1) * ρ) = (N : ℝ) *
+        ((B₁ : ℝ) / (B₁ + 1) * ρ) := by
         field_simp
       have h₄ : (N : ℝ) / ((B₁ : ℝ) + 1) * ρ ≤ ((n : ℝ) + 1) * ρ :=
         mul_le_mul_of_nonneg_right hNreal.le hρ0

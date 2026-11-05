@@ -44,8 +44,7 @@ variable {α β₀ β₁ β₂ : Type*} [Fintype α] [Fintype β₀] [Fintype β
 
 /-- **Lecture 14 of [elgamal2010], page 14-6.** The simple outer bound holds at `(R₁, R₂)` and
 `(D₀, D₁, D₂)`: for some `p(x̂₀, x̂₁, x̂₂|x)` we have `E dⱼ(X, X̂ⱼ) ≤ Dⱼ` and, with the rates in
-  bits,
-`R₁ ≥ I(X; X̂₁)`, `R₂ ≥ I(X; X̂₂)` and `R₁ + R₂ ≥ I(X; X̂₀, X̂₁, X̂₂)`. -/
+bits, `R₁ ≥ I(X; X̂₁)`, `R₂ ≥ I(X; X̂₂)` and `R₁ + R₂ ≥ I(X; X̂₀, X̂₁, X̂₂)`. -/
 def mdOuterAt (P : α → ℝ) (d₀ : α → β₀ → ℝ) (d₁ : α → β₁ → ℝ) (d₂ : α → β₂ → ℝ)
     (R₁ R₂ D₀ D₁ D₂ : ℝ) : Prop :=
   ∃ κ : α → β₀ × β₁ × β₂ → ℝ, IsChannel κ ∧
@@ -112,8 +111,8 @@ theorem mutualInfo_mix_le (hP : IsPMF P) (hn : 0 < n) {τ σ : Type*} [Fintype �
     condEntropy_le_condEntropy_comp hν _ _ fun s : Σ _ : Fin n, τ => Y s.1 s.2
   have h3 := condEntropy_pi_le_sum hμ (id : (Fin n → α) → Fin n → α) M
   -- The entropy of the source.
-  have h4 : H[fun z : (Fin n → α) × Fin n => z.1 z.2 ; mixLaw (iidPMF P n) (Fin n)] = entropy P :=
-    by
+  have h4 : H[fun z : (Fin n → α) × Fin n => z.1 z.2 ; mixLaw (iidPMF P n) (Fin n)] =
+    entropy P := by
     rw [entropyRV, dist_mix_coord hP hn]
   have h5 : H[id ; iidPMF P n] = n * entropy P := by
     rw [entropyRV, dist_id, entropy_iidPMF hP]

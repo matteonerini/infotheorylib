@@ -12,12 +12,11 @@ public import InfoTheoryLib.DifferentialEntropy.Joint
 
 An additive noise channel adds to its input `X` an independent noise `Z` with density `g`: the
 output is `Y = X + Z`. If `X` has density `f` with respect to `μ`, the pair `(X, Y)` has density
-`f(x) g(y - x)` with respect to `μ × ν`, where `ν` is a translation invariant measure (the
-Lebesgue measure). Comparing the conditional density `g(y - x)` of the output with any other
-density `q` bounds the mutual information:
-`I(X; Y) ≤ ∫ f(x) g(y - x) log (g(y - x)/q(y))`, with equality when `q` is the density of `Y`.
-This is how the capacity of the Gaussian channel is computed: with `q` normal, the right side is
-explicit.
+`f(x) g(y - x)` with respect to `μ × ν`, where `ν` is a translation invariant measure (the Lebesgue
+measure). Comparing the conditional density `g(y - x)` of the output with any other density `q`
+bounds the mutual information: `I(X; Y) ≤ ∫ f(x) g(y - x) log (g(y - x)/q(y))`, with equality when
+`q` is the density of `Y`. This is how the capacity of the Gaussian channel is computed: with `q`
+normal, the right side is explicit.
 
 ## Main definitions
 

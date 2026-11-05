@@ -157,8 +157,8 @@ def gkInterf (ν P : ℝ) : ℝ := P * (∑' j, gkOne ν j + ∑' p, gkTwo ν p)
 this is `a₁ L ^ (-ν / 2)`. -/
 theorem gkInterference_eq (P : ℝ) {L : ℝ} (hL : 0 < L) :
     (∑' j : ℕ, 2 * P / (((3 * (j : ℝ) + 1) ^ 2 * L) ^ (ν / 2))) +
-      (∑' p : ℕ × ℕ, 4 * P / ((((3 * (p.1 : ℝ) + 1) ^ 2 + (3 * (p.2 : ℝ) + 2) ^ 2) * L) ^ (ν / 2)))
-        =
+      (∑' p : ℕ × ℕ, 4 * P / ((((3 * (p.1 : ℝ) + 1) ^ 2 + (3 * (p.2 : ℝ) + 2) ^ 2) * L) ^
+        (ν / 2))) =
     gkInterf ν P * L ^ (-(ν / 2)) := by
   have hpow : L ^ (-(ν / 2)) = (L ^ (ν / 2))⁻¹ := rpow_neg hL.le _
   have h₁ : ∀ j : ℕ, 2 * P / (((3 * (j : ℝ) + 1) ^ 2 * L) ^ (ν / 2)) =
@@ -168,8 +168,8 @@ theorem gkInterference_eq (P : ℝ) {L : ℝ} (hL : 0 < L) :
     have : 0 < L ^ (ν / 2) := rpow_pos_of_pos hL _
     have h₃ : 0 < ((3 * (j : ℝ) + 1) ^ 2) ^ (ν / 2) := by positivity
     field_simp
-  have h₂ : ∀ p : ℕ × ℕ, 4 * P / (((3 * (p.1 : ℝ) + 1) ^ 2 + (3 * (p.2 : ℝ) + 2) ^ 2) * L) ^ (ν / 2)
-    =
+  have h₂ : ∀ p : ℕ × ℕ, 4 * P /
+    (((3 * (p.1 : ℝ) + 1) ^ 2 + (3 * (p.2 : ℝ) + 2) ^ 2) * L) ^ (ν / 2) =
       gkTwo ν p * (P * L ^ (-(ν / 2))) := by
     intro p
     rw [mul_rpow (by positivity) hL.le, hpow, gkTwo]

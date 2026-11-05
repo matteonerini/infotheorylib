@@ -18,15 +18,13 @@ jointly typical with its source sequence, and we show that the two selected code
 typical with the two source sequences.
 
 The first codeword of a random codebook in a set `A` has exactly the law of a codeword conditioned
-on
-`A`, which is Lemma 2 of the notes in a sharper form. The Markov lemma then gives the joint
+on `A`, which is Lemma 2 of the notes in a sharper form. The Markov lemma then gives the joint
 typicality.
 
 ## Main definitions
 
 * `DistLossyCode M₁ M₂ n α₁ α₂ β₁ β₂`, `IsAchievableDL`, `dlRegion`: the codes and the
-  rate–distortion
-  region.
+  rate–distortion region.
 * `btLaw P κ₁ κ₂`: the law `p(x₁, x₂) p(u₁ | x₁) p(u₂ | x₂)` of `((X₁, U₁), X₂), U₂)`.
 * `firstIn S C l₀`: the first codeword of the codebook `C` in `S`.
 
@@ -79,16 +77,15 @@ def DistLossyCode.distortion₂ [Fintype α₁] [Fintype α₂] {M₁ M₂ n : �
   ∑ ω, iidPMF P n ω * seqDistortion d₂ (sndSeq ω) (c.output ω).2
 
 /-- **Lecture 13 of [elgamal2010], page 13-3.** A rate pair, in bits, is achievable with the
-distortion
-pair `(D₁, D₂)` if there are `(2^{nR₁}, 2^{nR₂}, n)` codes with `limsup E dⱼ(Xⱼⁿ, X̂ⱼⁿ) ≤ Dⱼ`. -/
+distortion pair `(D₁, D₂)` if there are `(2^{nR₁}, 2^{nR₂}, n)` codes with
+`limsup E dⱼ(Xⱼⁿ, X̂ⱼⁿ) ≤ Dⱼ`. -/
 def IsAchievableDL [Fintype α₁] [Fintype α₂] (P : α₁ × α₂ → ℝ) (d₁ : α₁ → β₁ → ℝ)
     (d₂ : α₂ → β₂ → ℝ) (R₁ R₂ D₁ D₂ : ℝ) : Prop :=
   0 ≤ R₁ ∧ 0 ≤ R₂ ∧ ∃ c : ∀ n : ℕ, DistLossyCode (2 ^ ⌊n * R₁⌋₊) (2 ^ ⌊n * R₂⌋₊) n α₁ α₂ β₁ β₂,
     ∀ ε > 0, ∀ᶠ n in atTop, (c n).distortion₁ P d₁ ≤ D₁ + ε ∧ (c n).distortion₂ P d₂ ≤ D₂ + ε
 
 /-- **Lecture 13 of [elgamal2010], page 13-3.** The rate–distortion region `R(D₁, D₂)`: the closure
-of
-the set of the achievable rate pairs. -/
+of the set of the achievable rate pairs. -/
 def dlRegion [Fintype α₁] [Fintype α₂] (P : α₁ × α₂ → ℝ) (d₁ : α₁ → β₁ → ℝ) (d₂ : α₂ → β₂ → ℝ)
     (D₁ D₂ : ℝ) : Set (ℝ × ℝ) :=
   closure {R | IsAchievableDL P d₁ d₂ R.1 R.2 D₁ D₂}
@@ -101,8 +98,7 @@ variable {X : Type*} [Fintype X] {L : ℕ}
 
 open Classical in
 /-- **Lecture 13 of [elgamal2010], page 13-9.** The first index of the codebook `C` whose codeword
-is in
-`S`, and `l₀` if there is none. -/
+is in `S`, and `l₀` if there is none. -/
 def firstIn (S : Finset X) (C : Fin L → X) (l₀ : Fin L) : Fin L :=
   if h : (univ.filter fun l => C l ∈ S).Nonempty then (univ.filter fun l => C l ∈ S).min' h else l₀
 
@@ -149,8 +145,7 @@ private lemma ite_exists_le_sum {S : Finset X} {f : X → ℝ} (hf : ∀ z, 0 �
   · exact sum_nonneg fun l _ => hsum l
 
 /-- **Lemma 2 of Lecture 13, pages 13-11 and 13-49.** The first codeword of a random codebook in a
-set
-`S` of probability `a > 0` has at most the law of a codeword conditioned on `S`:
+set `S` of probability `a > 0` has at most the law of a codeword conditioned on `S`:
 `E f(Uⁿ(L)) ≤ (1 / a) ∑_{u ∈ S} p(u) f(u)` on the event that some codeword is in `S`. -/
 theorem sum_codebook_firstIn_le {μ : X → ℝ} (hμ : IsPMF μ) {S : Finset X} (hS : 0 < prob μ S)
     {f : X → ℝ} (hf : ∀ z, 0 ≤ f z) (l₀ : Fin L) :
@@ -314,8 +309,7 @@ def coverExp (J : α₂ × υ₂ → ℝ) (ε : ℝ) : ℝ :=
   I[Prod.snd : Prod.fst ; J] + ε * (H[Prod.snd ; J] + H[Prod.snd | Prod.fst ; J])
 
 /-- **Lecture 13, page 13-11.** For `(x₁ⁿ, u₁ⁿ, x₂ⁿ)` typical, the codeword of encoder 2 is typical
-with
-`(x₁ⁿ, u₁ⁿ, x₂ⁿ)`, over the random codebooks, by the Markov lemma and Lemma 2. -/
+with `(x₁ⁿ, u₁ⁿ, x₂ⁿ)`, over the random codebooks, by the Markov lemma and Lemma 2. -/
 theorem sum_codebook_markov_le (hP : IsPMF P) (h₁ : IsChannel κ₁) (h₂ : IsChannel κ₂)
     (hε : ε₁ < ε) (hε1 : ε - ε₁ ≤ 1) (hε₂ : ε₂ ≤ 1 / 2) (hn : 0 < n) (l₀ : Fin L)
     {a : Fin n → α₁ × υ₁} {x₂ : Fin n → α₂}
@@ -496,9 +490,8 @@ lemma channelExt_condPMF_btQ₃ [Finite υ₁] (hPW : ∀ x y, P (x, y) = margFs
 
 open Classical in
 /-- **Lecture 13, page 13-11.** For a fixed `x₁ⁿ` and a random codebook, `(x₁ⁿ, U₁ⁿ(L₁), X₂ⁿ)` is
-typical
-for `X₂ⁿ` from the channel `W`, except if no codeword is typical with `x₁ⁿ`, by the conditional
-typicality lemma. -/
+typical for `X₂ⁿ` from the channel `W`, except if no codeword is typical with `x₁ⁿ`, by the
+conditional typicality lemma. -/
 theorem sum_codebook_cond_le (hP : IsPMF P) (h₁ : IsChannel κ₁) (hW : IsChannel W)
     (hPW : ∀ x y, P (x, y) = margFst P x * W x y) (hε : ε₂ < ε₁) (hn : 0 < n) (l₀ : Fin L₁)
     (x₁ : Fin n → α₁) (C : Fin L₁ → Fin n → υ₁) :
@@ -608,9 +601,8 @@ lemma condExpBound_nonneg {α β : Type*} [Fintype α] [Fintype β] (q : α × �
 
 open Classical in
 /-- **Lecture 13, pages 13-10 and 13-11.** The errors `E₁`, `E₂` and `E₃`: over the two random
-codebooks,
-the selected codewords are jointly typical with the two source sequences, except with probability
-`btCoverBound`. -/
+codebooks, the selected codewords are jointly typical with the two source sequences, except with
+probability `btCoverBound`. -/
 theorem sum_two_codebooks_le (hP : IsPMF P) (h₁ : IsChannel κ₁) (h₂ : IsChannel κ₂)
     (hε₁₂ : ε₂ < ε₁) (hε : ε₁ < ε) (hε1 : ε - ε₁ ≤ 1) (hε₂ : ε₂ ≤ 1 / 2) (hn : 0 < n)
     (l₁ : Fin L₁) (l₂ : Fin L₂)

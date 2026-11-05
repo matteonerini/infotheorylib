@@ -102,8 +102,8 @@ theorem sum_row_le {Ma Mb : ℕ} (hq : IsPMF pq) (hPa : IsChannel Pa) (hPb : IsC
           (∑ ζ, V (ta i, b) ζ * ind (¬ T q (ta i) b ζ) + ∑ i' ∈ univ.filter (· ≠ i),
             ∑ ζ, V (ta i, b) ζ * ind (T q (ta i') b ζ)) :=
           sum_le_sum fun ta _ => mul_le_mul_of_nonneg_left (hpt ta) ((hta q).nonneg ta)
-      _ = ∑ ta : Fin Ma → A, piLaw (fun _ => Pa q) ta * ∑ ζ, V (ta i, b) ζ * ind (¬ T q (ta i) b ζ)
-        +
+      _ = ∑ ta : Fin Ma → A, piLaw (fun _ => Pa q) ta * ∑ ζ, V (ta i, b) ζ *
+        ind (¬ T q (ta i) b ζ) +
           ∑ i' ∈ univ.filter (· ≠ i), ∑ ta : Fin Ma → A, piLaw (fun _ => Pa q) ta *
             ∑ ζ, V (ta i, b) ζ * ind (T q (ta i') b ζ) := by
           simp only [mul_add, sum_add_distrib]
@@ -350,9 +350,9 @@ theorem sum_fresh_tw (hμ : IsPMF μ) {r : Ω → R} {q : Ω → Q} {x : Ω → 
     simp [pair, hk]
   have e₂ : (fun z : R × F => k z.1) ∘ pair r x = q := funext hk
   have e₃ : dist (dist μ (pair r x)) (fun z : R × F => (k z.1, z.2)) = dist μ (pair q x) := by
-    rw [← dist_dist_comp, e₁]
+    rw [← dist_comp_eq, e₁]
   have e₄ : dist (dist μ (pair r x)) (fun z : R × F => k z.1) = dist μ q := by
-    rw [← dist_dist_comp, e₂]
+    rw [← dist_comp_eq, e₂]
   have h := sum_fresh_point (hμ.dist (pair r x)) k (κ := κ)
     (fun a t => by rw [e₃, e₄]; exact hκ a t) hκc (n := n) (ε := ε)
     (fun s t => (fun i => (s i, t i)) ∈ robustTypicalSet (dist μ (pair r x)) n ε)
@@ -377,15 +377,15 @@ lemma tw_cond (hμ : IsPMF μ) {q : Ω → Q} {c : Ω → C} {x : Ω → F} {pq 
       H[x | pair q c ; μ] = H[x | q ; μ] := by
   have hc : dist μ (pair q c) = jointOf pq B := by
     have h := dist_jointOf_fst (p := jointOf pq B) (W := fun v : Q × C => A v.1) fun _ => hA _
-    rw [← H, ← dist_dist_comp] at h
+    rw [← H, ← dist_comp_eq] at h
     exact h
   have hqd : dist μ q = pq := by
     have h := dist_jointOf_fst (p := pq) (W := B) hB
-    rw [← hc, ← dist_dist_comp] at h
+    rw [← hc, ← dist_comp_eq] at h
     exact h
   have hx : dist μ (pair q x) = jointOf pq A := by
     have h := dist_jointOf_map (Q := jointOf pq B) (Prod.fst : Q × C → Q) A
-    rw [← H, ← dist_dist_comp, dist_jointOf_fst hB] at h
+    rw [← H, ← dist_comp_eq, dist_jointOf_fst hB] at h
     exact h
   refine ⟨fun k t => ?_, ?_⟩
   · rw [hx, hqd]
@@ -400,11 +400,11 @@ lemma tw_condEntropy (hμ : IsPMF μ) {q : Ω → Q} {c : Ω → C} {x : Ω → 
     H[x | q ; μ] = ∑ k, pq k * entropy (A k) := by
   have hc : dist μ (pair q c) = jointOf pq B := by
     have h := dist_jointOf_fst (p := jointOf pq B) (W := fun v : Q × C => A v.1) fun _ => hA _
-    rw [← H, ← dist_dist_comp] at h
+    rw [← H, ← dist_comp_eq] at h
     exact h
   have hx : dist μ (pair q x) = jointOf pq A := by
     have h := dist_jointOf_map (Q := jointOf pq B) (Prod.fst : Q × C → Q) A
-    rw [← H, ← dist_dist_comp, dist_jointOf_fst hB] at h
+    rw [← H, ← dist_comp_eq, dist_jointOf_fst hB] at h
     exact h
   rw [← condEntropy_jointOf hq hA]
   refine condEntropy_eq_of_dist_pair_eq hμ (jointOf_isPMF hq hA) (hx.trans ?_)
@@ -485,7 +485,7 @@ lemma twLaw_dist₂ (hW : IsChannel W) :
   have e : dist (twLaw pq A B W) Prod.fst = twIn pq A B := dist_jointOf_fst fun _ => hW _
   have e' : pair (pair (fun z : (Q × (X₁ × X₂)) × (Y₁ × Y₂) => z.1.1) fun z => z.1.2.2)
       (fun z => z.1.2.1) = (fun t : Q × (X₁ × X₂) => ((t.1, t.2.2), t.2.1)) ∘ Prod.fst := rfl
-  rw [e', dist_dist_comp, e, dist_twIn₂]
+  rw [e', dist_comp_eq, e, dist_twIn₂]
 
 /-- The law of `((Q, X₁), X₂)`. -/
 lemma twLaw_dist₁ (hW : IsChannel W) :
@@ -494,7 +494,7 @@ lemma twLaw_dist₁ (hW : IsChannel W) :
   have e : dist (twLaw pq A B W) Prod.fst = twIn pq A B := dist_jointOf_fst fun _ => hW _
   have e' : pair (pair (fun z : (Q × (X₁ × X₂)) × (Y₁ × Y₂) => z.1.1) fun z => z.1.2.1)
       (fun z => z.1.2.2) = (fun t : Q × (X₁ × X₂) => ((t.1, t.2.1), t.2.2)) ∘ Prod.fst := rfl
-  rw [e', dist_dist_comp, e, dist_twIn₁]
+  rw [e', dist_comp_eq, e, dist_twIn₁]
 
 /-- A sum over sequences of tuples is a sum over the sequences of the components. -/
 lemma sum_tw_split (F : (Fin n → (Q × (X₁ × X₂)) × (Y₁ × Y₂)) → ℝ) :
@@ -671,7 +671,7 @@ theorem isAchievableTWC_of_lt (hq : IsPMF pq) (hA : IsChannel A) (hB : IsChannel
     linarith
   have hprob := tendsto_prob_robustTypicalSet hμ hεpos
   have hexp : Tendsto (fun n : ℕ => exp (-(n * ε))) atTop (𝓝 0) :=
-    tendsto_exp_neg_mul_natCast hεpos
+    tendsto_exp_neg_mul_nat hεpos
   have hlim : Tendsto (fun n : ℕ => 2 * (1 - prob (iidPMF μ n) (robustTypicalSet μ n ε)) +
       2 * exp (-(n * ε)) + 2 * exp (-(n * ε))) atTop (𝓝 (2 * (1 - 1) + 2 * 0 + 2 * 0)) :=
     (((tendsto_const_nhds.sub hprob).const_mul _).add (hexp.const_mul _)).add (hexp.const_mul _)

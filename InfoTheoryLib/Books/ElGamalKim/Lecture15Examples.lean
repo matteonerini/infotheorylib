@@ -23,15 +23,12 @@ This file proves the examples of Lecture 15 for the binary sources `(U₁, U₂)
 ## Main statements
 
 * `isLosslessMAC_jsTriPMF`, `erasure_sum_le`, `entropy_jsTriPMF_gt_erasure`: over the binary erasure
-  MAC
-  the sources can be sent uncoded, although `H(U₁, U₂) > I(X₁, X₂; Y)`, pages 15-5 and 15-6.
+  MAC the sources can be sent uncoded, although `H(U₁, U₂) > I(X₁, X₂; Y)`, pages 15-5 and 15-6.
 * `gkCommon_jsTriPMF`, `mutualInfo_jsTriPMF`, `wynerJ_jsTriPMF`, `common_information_strict`: the
-  values
-  `K = 0`, `I = log 3 - (4/3) log 2` and `J = (2/3) log 2`, and the strict inequalities on page
-    15-25.
+  values `K = 0`, `I = log 3 - (4/3) log 2` and `J = (2/3) log 2`, and the strict inequalities on
+  page 15-25.
 * `isLosslessBC_jsTriPMF`, `gray_wyner_blackwell`: over the Blackwell channel the sources can be
-  sent
-  uncoded, but no rate triple of the Gray–Wyner region fits the channel, page 15-29.
+  sent uncoded, but no rate triple of the Gray–Wyner region fits the channel, page 15-29.
 
 ## References
 
@@ -125,8 +122,7 @@ lemma binEntropy_le_quadratic {s : ℝ} (h0 : 0 ≤ s) (h1 : s ≤ 1) :
   nlinarith [sq_nonneg (s - 1 / 2)]
 
 /-- **Lecture 15, page 15-5.** `max_{p(x₁) p(x₂)} I(X₁, X₂; Y) ≤ 3/2` bits for the binary erasure
-  MAC.
-The sum capacity is attained at `X₁, X₂ ∼ Bern(1/2)`, by `macInfo₁₂_binaryErasureMAC`. -/
+MAC. The sum capacity is attained at `X₁, X₂ ∼ Bern(1/2)`, by `macInfo₁₂_binaryErasureMAC`. -/
 theorem erasure_sum_le {p q : ℝ} (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hq0 : 0 ≤ q) (hq1 : q ≤ 1) :
     mutualInfoOf (prodDist (bernoulliPMF p) (bernoulliPMF q)) binaryErasureMAC ≤ 3 / 2 * log 2 := by
   have hP : IsPMF (prodDist (bernoulliPMF p) (bernoulliPMF q)) :=
@@ -162,8 +158,8 @@ theorem erasure_sum_le {p q : ℝ} (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hq0 : 0 ≤ 
     have hp : p = 0 := by rw [hs] at hs₀; linarith
     have hq : q = 0 := by rw [hs] at hs₀; linarith
     rw [hent, hp, hq]
-    have e : negMulLog ((1 - 0) * (1 - 0)) + negMulLog (0 + 0 - 2 * (0 * 0)) + negMulLog (0 * 0) = 0
-      := by
+    have e : negMulLog ((1 - 0) * (1 - 0)) + negMulLog (0 + 0 - 2 * (0 * 0)) + negMulLog (0 * 0) =
+      0 := by
       simp [negMulLog]
     rw [e]
     positivity
@@ -172,8 +168,8 @@ theorem erasure_sum_le {p q : ℝ} (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hq0 : 0 ≤ 
     have hp : p = 1 := by rw [hs] at hs₁; linarith
     have hq : q = 1 := by rw [hs] at hs₁; linarith
     rw [hent, hp, hq]
-    have e : negMulLog ((1 - 1) * (1 - 1)) + negMulLog (1 + 1 - 2 * (1 * 1)) + negMulLog (1 * 1) = 0
-      := by
+    have e : negMulLog ((1 - 1) * (1 - 1)) + negMulLog (1 + 1 - 2 * (1 * 1)) + negMulLog (1 * 1) =
+      0 := by
       norm_num [negMulLog]
     rw [e]
     positivity
@@ -310,8 +306,8 @@ lemma two_thirds_le {q : ℝ} (h0 : 0 ≤ q) (h1 : q ≤ 1) :
   linarith
 
 /-- **Lecture 15, page 15-26: the lower bound.** If `I(U₁; U₂|V) = 0`, then `I(U₁, U₂; V) ≥ 2/3`
-  bits.
-Conditionally on `V = v`, the pair `(1, 0)` of probability zero forces `U₁ = 0` or `U₂ = 1`. -/
+bits. Conditionally on `V = v`, the pair `(1, 0)` of probability zero forces `U₁ = 0` or
+`U₂ = 1`. -/
 theorem two_thirds_le_gwInfo {υ : Type*} [Fintype υ] {κ : Bool × Bool → υ → ℝ} (hκ : IsChannel κ)
     (h : gwResidual jsTriPMF κ = 0) : 2 / 3 * log 2 ≤ gwInfo jsTriPMF κ := by
   classical
@@ -325,12 +321,12 @@ theorem two_thirds_le_gwInfo {υ : Type*} [Fintype υ] {κ : Bool × Bool → υ
     rw [condMutualInfo_eq_gwResidual hP hκ]
     exact h
   -- The value of the law on the pairs.
-  have hle₁ : ∀ a b v, jsTriPMF (a, b) * κ (a, b) v ≤ dist μ (pair U₁ Prod.snd) (a, v) := fun a b v
-    => by
+  have hle₁ : ∀ a b v, jsTriPMF (a, b) * κ (a, b) v ≤ dist μ (pair U₁ Prod.snd) (a, v) :=
+    fun a b v => by
     have := le_dist_apply hμ (pair U₁ Prod.snd) ((a, b), v)
     exact this
-  have hle₂ : ∀ a b v, jsTriPMF (a, b) * κ (a, b) v ≤ dist μ (pair U₂ Prod.snd) (b, v) := fun a b v
-    => by
+  have hle₂ : ∀ a b v, jsTriPMF (a, b) * κ (a, b) v ≤ dist μ (pair U₂ Prod.snd) (b, v) :=
+    fun a b v => by
     have := le_dist_apply hμ (pair U₂ Prod.snd) ((a, b), v)
     exact this
   -- For every `v`, `P{U₁ = 1, V = v} = 0` or `P{U₂ = 0, V = v} = 0`.

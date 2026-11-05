@@ -41,12 +41,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### The DMC with feedback (pages 18-3 to 18-18)
 * **Theorem 1**: `fbCapacity_eq_capacity` (`ChannelCoding.Converse`). Here: `theorem_18_1`.
 * **Schalkwijk–Kailath** (`GaussianChannel.SchalkwijkKailath`): the coefficients `skV`, `skG`,
-  `skA`;
-  the code `AddFBCode`, `skCode`; the power constraint `skCode_power_le`; the Chebyshev bound for
-    any
-  noise of mean zero and unit variance `skCode_err_le`, and the doubly exponential bound for
-    Gaussian
-  noise `skCode_err_gaussian_le`; all the rates below the capacity `isAchievableAddFB_of_lt`.
+  `skA`; the code `AddFBCode`, `skCode`; the power constraint `skCode_power_le`; the Chebyshev bound
+  for any noise of mean zero and unit variance `skCode_err_le`, and the doubly exponential bound for
+  Gaussian noise `skCode_err_gaussian_le`; all the rates below the capacity
+  `isAchievableAddFB_of_lt`.
 
 ### The multiple access channel with feedback (pages 18-19 to 18-38)
 * The code, the capacity region and the **cooperative outer bound**: `MACFBCode`,
@@ -95,9 +93,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ### Directed information (pages 18-53 to 18-60)
 * **Directed information** (`Network.DirectedInfo`): `directedInfo`, `causalDirectedInfo`,
-  **Massey's
-  inequality** `directedInfo_le_mutualInfo`, and `condMutualInfo_markov_step`, which replaces the
-  "check!" on page 18-57.
+  **Massey's inequality** `directedInfo_le_mutualInfo`, and `condMutualInfo_markov_step`, which
+  replaces the "check!" on page 18-57.
 * **Theorem 7**: `Strat`, `stratW`, `twcMultiRegion`, `TWCCode.exists_strat`,
   `IsAchievableTWC.mem_closure_iUnion_twcMultiRegion` (`Network.TwoWayStrategy`);
   `blockCode`, `isAchievableTWC_of_multi`, **`twcCapacityRegion_eq_closure_iUnion`**
@@ -108,8 +105,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 * **Schalkwijk–Kailath.** We define the scheme by an explicit linear recursion with explicit
   coefficients, not by MMSE estimates, and the message point lies in `[-√P, √P]`. The power is `P`
-    in
-  each use, also in the first one, so that the total power is at most `(n + 1) P` rather than
+  in each use, also in the first one, so that the total power is at most `(n + 1) P` rather than
   `1 + n P`. The error bounds come from the second moment and from the moment generating function of
   the linear combination of the noises, not from mutual information.
 * **Cover–Leung.** The notes use one codebook per block and induction. We use one code for all the
@@ -118,21 +114,19 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * **Binary erasure MAC.** We use `Vⱼ ∼ Bern(1/4)`, for which the entropies are explicit, and prove
   the symmetric rate `25 / 32`. The notes use `Vⱼ ∼ Bern(0.2377)` and state `0.7911`.
 * **Binary multiplier channel.** We prove the symmetric rate `3 / 5` from `p₁ = p₂ = 3 / 4`. The
-  notes
-  state the numbers `0.6170`, `0.6942`, `0.6463`, `0.6191` and `0.6306`, which we do not prove.
+  notes state the numbers `0.6170`, `0.6942`, `0.6463`, `0.6191` and `0.6306`, which we do not
+  prove.
 * **Dueck's example.** The bound without feedback is by counting, and it gives a strong converse.
 * **Outer bounds.** The cooperative, Shannon and dependence balance outer bounds are stated with a
   closure: a code gives `(R₁ - εₙ, R₂ - εₙ)` in the region, and we do not prove that the region is
   closed.
 * **Theorem 6.** We take `U = (Q, Y^{Q-1})` with an arbitrary finite alphabet: the bound `|U| ≤ 3`
-  is
-  not proved.
+  is not proved.
 * **Theorem 7.** The regions use independent random strategies of length `k` in place of the
   causally conditional laws `p(x₁ᵏ || yᵏ⁻¹) p(x₂ᵏ || yᵏ⁻¹)` of the notes, and the theorem has a
   closure. That each such law comes from a random strategy is the functional representation of a
   causally conditional law, which we do not prove. We prove achievability by Shannon's inner bound
-    on
-  the super-channel of the strategies, not by multiplexing over the states.
+  on the super-channel of the strategies, not by multiplexing over the states.
   `cInfo_stratW_eq_causalDirectedInfo` identifies the rates with the directed informations.
 
 ## Not formalized
@@ -195,9 +189,9 @@ theorem theorem_18_2 [Nonempty X₁] [Nonempty X₂] [Nonempty Y] {W : X₁ × X
 
 /-- **Theorem 4, page 18-39.** Feedback does not increase the capacity region of a physically
 degraded broadcast channel. -/
-theorem theorem_18_4 {α' : Type*} [Finite α'] [Nonempty α'] {W : α' → Y₁ × Y₂ → ℝ} (hW : IsChannel
-  W)
-    (hd : IsPhysicallyDegraded W) : bcfbCapacityRegion W = bcCapacityRegionBits W :=
+theorem theorem_18_4 {α' : Type*} [Finite α'] [Nonempty α'] {W : α' → Y₁ × Y₂ → ℝ}
+    (hW : IsChannel W) (hd : IsPhysicallyDegraded W) : bcfbCapacityRegion W = bcCapacityRegionBits
+    W :=
   bcfbCapacityRegion_eq hW hd
 
 /-- **Theorem 5, page 18-44.** The capacity of the relay channel with feedback. -/

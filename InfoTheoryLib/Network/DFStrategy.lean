@@ -20,7 +20,8 @@ node to the first gives a tuple with law `p(xᴺ)`.
 
 * `fillGe d₀ j x`: the tuple `x` with the entries before `j` replaced by a default value.
 * `buildAt s j`: the tuple built by the strategies `s` of the nodes from `j` on.
-* `dfKernel`: the conditional law of `X_k` given `X_{k+1}, …, X_N`.
+* `prod_kernel_eq`: the law of a tuple is the product of the conditional laws of `X_k` given
+  `X_{k+1}, …, X_N`.
 * `netStratLaw`: the law of a random strategy.
 
 ## Main statements
@@ -62,8 +63,8 @@ termination_by N - j
 variable [∀ k, DecidableEq (X k)] (d₀ : ∀ l, X l)
 
 lemma buildAt_of_lt (s : ∀ k, NetStrat X k) {j : ℕ} (h : j < N) :
-    buildAt d₀ s j = Function.update (buildAt d₀ s (j + 1)) ⟨j, h⟩ (s ⟨j, h⟩ (buildAt d₀ s (j + 1)))
-      := by
+    buildAt d₀ s j = Function.update (buildAt d₀ s (j + 1)) ⟨j, h⟩
+      (s ⟨j, h⟩ (buildAt d₀ s (j + 1))) := by
   rw [buildAt, dite_eq_left h]
 
 lemma buildAt_of_ge (s : ∀ k, NetStrat X k) {j : ℕ} (h : N ≤ j) : buildAt d₀ s j = d₀ := by
@@ -233,7 +234,7 @@ theorem prod_kernel_eq {κ : ∀ k, (∀ l, X l) → X k → ℝ} (hp : IsPMF p)
       simp only [hiff]
       congr
     have h₂ : marg (dfJoint p d₀ k) (fillGe d₀ (k + 1) x) = P (k + 1) := by
-      rw [marg_eq_dist, dfJoint, ← dist_dist_comp]
+      rw [marg_eq_dist, dfJoint, ← dist_comp_eq]
       simp only [P]
       have e : (Prod.fst ∘ fun x : ∀ l, X l => (fillGe d₀ (k + 1) x, x k)) = fillGe d₀ (k + 1) :=
         rfl
@@ -298,8 +299,8 @@ lemma netStratLaw_isPMF {k : Fin N} {κ : (∀ l, X l) → X k → ℝ} (hκ : I
 theorem sum_strat_build {κ : ∀ k, (∀ l, X l) → X k → ℝ} (hp : IsPMF p)
     (hκc : ∀ k, IsChannel (κ k))
     (hκ : ∀ k c a, dfJoint p d₀ k (c, a) = marg (dfJoint p d₀ k) c * κ k c a) (x : ∀ l, X l) :
-    ∑ s : ∀ k, NetStrat X k, prodLaw (fun k => netStratLaw (κ k)) s * ind (buildAt d₀ s 0 = x) = p x
-      := by
+    ∑ s : ∀ k, NetStrat X k, prodLaw (fun k => netStratLaw (κ k)) s * ind (buildAt d₀ s 0 = x) =
+      p x := by
   classical
   have h₁ : ∀ s : ∀ k, NetStrat X k, prodLaw (fun k => netStratLaw (κ k)) s * ind (buildAt d₀ s 0 =
     x) =

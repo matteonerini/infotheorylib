@@ -13,10 +13,9 @@ public import Mathlib.Analysis.Real.Pi.Bounds
 /-!
 # Combinatorial bounds on entropy
 
-Tight bounds on binomial coefficients (Lemma 17.5.1, after Wozencraft and Reiffen): for
-`0 < k < n` and `p = k/n`,
-`1/√(8npq) ≤ C(n, k) e^{-n H(p)} ≤ 1/√(πnpq)`, where `q = 1 - p` and `H` is the binary entropy
-in nats.
+Tight bounds on binomial coefficients (Lemma 17.5.1, after Wozencraft and Reiffen): for `0 < k < n`
+and `p = k/n`, `1/√(8npq) ≤ C(n, k) e^{-n H(p)} ≤ 1/√(πnpq)`, where `q = 1 - p` and `H` is the
+binary entropy in nats.
 
 Write `sₙ = n!/(√(2n) (n/e)ⁿ)` for Mathlib's Stirling sequence. Then
 `C(n, k) pᵏ q^{n-k} = sₙ/(sₖ s_{n-k}) · 1/√(2npq)`, and the bounds follow from

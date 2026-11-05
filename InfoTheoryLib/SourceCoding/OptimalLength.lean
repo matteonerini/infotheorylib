@@ -392,9 +392,8 @@ theorem minExpectedLength_iid_bounds {α : Type*} [Fintype α] {D : ℕ} (hD : 2
   · rw [le_div_iff₀ hn']; linarith
   · rw [div_lt_iff₀ hn', add_mul, one_div_mul_cancel hn'.ne']; linarith
 
-/-- **(5.38)–(5.39)** For a stochastic process, the optimal expected length per symbol of codes
-for blocks of `n` symbols satisfies
-`H_D(X₁, …, Xₙ)/n ≤ L*ₙ/n ≤ H_D(X₁, …, Xₙ)/n + 1/n`. -/
+/-- **(5.38)–(5.39)** For a stochastic process, the optimal expected length per symbol of codes for
+blocks of `n` symbols satisfies `H_D(X₁, …, Xₙ)/n ≤ L*ₙ/n ≤ H_D(X₁, …, Xₙ)/n + 1/n`. -/
 theorem minExpectedLength_process_bounds {α : Type*} [Fintype α] {D : ℕ} (hD : 2 ≤ D)
     (P : StochasticProcess α) {n : ℕ} (hn : 0 < n) :
     P.jointEntropy n / log D / n ≤ minExpectedLength D (P.law n) / n ∧

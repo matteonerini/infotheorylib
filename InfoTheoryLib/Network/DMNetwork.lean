@@ -161,7 +161,7 @@ lemma sum_condEntropy_view_le {ι : Type*} [Fintype ι] {w : ι → ℝ} (hw : I
       · simp
     have h₁ : pair (Prod.snd ∘ fun z : ι × (α × β) => (z.1, B z.2.1)) (fun z => z.2.2) =
         (pair (fun z : α × β => B z.1) Prod.snd) ∘ Prod.snd := rfl
-    rw [h₁, dist_dist_comp, hd]
+    rw [h₁, dist_comp_eq, hd]
   rw [← hmix, ← hmarg]
   exact hle
 
@@ -215,7 +215,7 @@ lemma cutInfo_eq (hp : IsPMF p) (hW : IsChannel W) (S : Finset (Fin N)) :
     have e' : pair (fun z : (∀ k, X k) × (∀ k : (Sᶜ : Finset (Fin N)), Y k) => restr Sᶜ z.1)
         Prod.snd = fun t : (∀ k, X k) × (∀ k : (Sᶜ : Finset (Fin N)), Y k) =>
           (restr Sᶜ t.1, t.2) := rfl
-    rw [e, dist_dist_comp, hview, e']
+    rw [e, dist_comp_eq, hview, e']
     rfl
   · have h₁ : H[fun z : (∀ k, X k) × (∀ k, Y k) => restr Sᶜ z.2 | pair (fun z => restr Sᶜ z.1)
         (fun z => restr S z.1) ; jointOf p W] =
@@ -417,7 +417,7 @@ theorem DMNCode.mutualInfo_cutObs_succ_le (c : DMNCode M n X Y) (hM : ∀ k, 0 <
     have e' : pair (fun z : (∀ k, X k) × (∀ k : (Sᶜ : Finset (Fin N)), Y k) => restr Sᶜ z.1)
         Prod.snd = fun t : (∀ k, X k) × (∀ k : (Sᶜ : Finset (Fin N)), Y k) =>
           (restr Sᶜ t.1, t.2) := rfl
-    rw [e, dist_dist_comp, hd, e']
+    rw [e, dist_comp_eq, hd, e']
   have h10 := cutInfo_eq hp hW S
   have h11 : I[fun z : (∀ k, Fin (M k)) × (Fin n → ∀ k, Y k) => restr S z.1 : cutObs S (i + 1) hi ;
       μ] = I[A : cutObs S (i + 1) hi ; μ] := rfl
@@ -548,8 +548,8 @@ lemma DMNCode.one_sub_errProb_mul_le (c : DMNCode M n X Y) (hM : ∀ k, 0 < M k)
   have hHA : ∑ k ∈ T, log (M k : ℝ) ≤ H[A ; μ] := by linarith
   have hI := mutualInfo_eq_entropy_sub_condEntropy hμ A O
   -- data processing
-  have hdp : I[A : O ; μ] ≤ I[fun z : (∀ k, Fin (M k)) × (Fin n → ∀ k, Y k) => restr S z.1 : O ; μ]
-    := by
+  have hdp : I[A : O ; μ] ≤
+    I[fun z : (∀ k, Fin (M k)) × (Fin n → ∀ k, Y k) => restr S z.1 : O ; μ] := by
     rw [mutualInfo_comm hμ A O, mutualInfo_comm hμ _ O]
     exact mutualInfo_comp_le hμ O (fun z : (∀ k, Fin (M k)) × (Fin n → ∀ k, Y k) => restr S z.1)
       fun t (k : T) => t ⟨k, hTS k.2⟩

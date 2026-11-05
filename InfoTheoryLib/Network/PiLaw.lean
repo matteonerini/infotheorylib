@@ -22,7 +22,7 @@ and sequences of blocks.
 ## Main statements
 
 * `sum_prodLaw_comp`: the law of a family of functions of the members of an independent family.
-* `sum_run_trellis`: the expected number of paths through a trellis satisfies a recursion.
+* `sum_runProb`: the probabilities of the runs through a trellis sum to one.
 * `sum_run_exists_le`: the union bound over the blocks.
 
 ## References

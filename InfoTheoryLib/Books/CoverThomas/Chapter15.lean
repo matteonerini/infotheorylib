@@ -308,8 +308,7 @@ def bscBroadcast (p₁ p₂ : ℝ) : Bool → Bool × Bool → ℝ := fun x y =>
 
 lemma bscBroadcast_isChannel {p₁ p₂ : ℝ} (h₁ : 0 ≤ p₁) (h₁' : p₁ ≤ 1) (h₂ : 0 ≤ p₂)
     (h₂' : p₂ ≤ 1) : IsChannel (bscBroadcast p₁ p₂) := fun x =>
-  ⟨fun y => mul_nonneg ((bsc_isChannel h₁ h₁' x).nonneg _) ((bsc_isChannel h₂ h₂' x).nonneg _),
-    by
+  ⟨fun y => mul_nonneg ((bsc_isChannel h₁ h₁' x).nonneg _) ((bsc_isChannel h₂ h₂' x).nonneg _), by
       rw [Fintype.sum_prod_type]
       simp only [bscBroadcast, ← mul_sum, (bsc_isChannel h₂ h₂' x).sum_eq_one, mul_one]
       exact (bsc_isChannel h₁ h₁' x).sum_eq_one⟩

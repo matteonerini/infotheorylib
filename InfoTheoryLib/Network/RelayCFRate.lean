@@ -124,7 +124,7 @@ lemma cfLaw_dist_inputs {β : Type*} (hW : IsChannel W) (hτ : IsChannel τ) (f 
   have e₁ : (fun z : ((X × U) × (Y × S)) × V => f z.1.1) =
       (fun t : (X × U) × (Y × S) => f t.1) ∘ Prod.fst := rfl
   have e₂ : (fun t : (X × U) × (Y × S) => f t.1) = f ∘ Prod.fst := rfl
-  rw [e₁, dist_dist_comp, h₁, e₂, dist_dist_comp, h₂]
+  rw [e₁, dist_comp_eq, h₁, e₂, dist_comp_eq, h₂]
 
 /-- The marginals of the law. -/
 lemma cfLaw_marg (hp : IsPMF p) (hp₁ : IsPMF p₁) (hW : IsChannel W) (hτ : IsChannel τ) :
@@ -144,7 +144,7 @@ lemma sum_cfT₁_le (hμ : IsPMF μ) (hm : dist μ (fun z => z.1.1.2) = p₁) (y
   have h := sum_fresh_const (hμ.dist cfF₁) (n := n) (ε := ε) (fun r t => cfT₁ μ n ε t r)
     (fun _ _ ht => ht) y
   have e : dist (dist μ cfF₁) Prod.snd = p₁ := by
-    rw [← dist_dist_comp]
+    rw [← dist_comp_eq]
     exact hm
   rw [e] at h
   refine h.trans (le_of_eq ?_)
@@ -160,7 +160,7 @@ lemma sum_cfT₂_le (hμ : IsPMF μ) (hm : dist μ (fun z => z.1.1.1) = p) (u : 
     (fun r t => cfT₂ μ n ε t (fun i => (r i).1) (fun i => (r i).2.1) (fun i => (r i).2.2))
     (fun _ _ ht => ht) (fun i => (u i, v i, y i))
   have e : dist (dist μ cfF₂) Prod.snd = p := by
-    rw [← dist_dist_comp]
+    rw [← dist_comp_eq]
     exact hm
   rw [e] at h
   refine h.trans (le_of_eq ?_)
@@ -177,7 +177,7 @@ lemma sum_cfT₄_le (hμ : IsPMF μ) (hm : dist μ (fun z => z.1.1.1) = p) (u : 
     (fun r t => (fun i => (r i, t i)) ∈ robustTypicalSet (dist μ cfF₄) n ε)
     (fun _ _ ht => ht) (fun i => (u i, y i))
   have e : dist (dist μ cfF₄) Prod.snd = p := by
-    rw [← dist_dist_comp]
+    rw [← dist_comp_eq]
     exact hm
   rw [e] at h
   refine h.trans (le_of_eq ?_)
@@ -201,14 +201,14 @@ lemma sum_cfT₃_le (hμ : IsPMF μ) {q : U → V → ℝ} (hq : IsChannel q)
       intro x u y v hv
       have h := comp_mem_robustTypicalSet hv
         fun t : (U × V × Y) × X => (((t.1.1, t.1.2.2), t.2), t.1.2.1)
-      rw [← dist_dist_comp] at h
+      rw [← dist_comp_eq] at h
       exact h
     have h := sum_fresh_point (hμ.dist cfF₃) (K := U) (fun t : (U × Y) × X => t.1.1) (κ := q)
       (fun k t => by
         have e₁ : dist (dist μ cfF₃) (fun z : ((U × Y) × X) × V => (z.1.1.1, z.2)) =
-            dist μ fun z => (z.1.1.2, z.2) := (dist_dist_comp _ _ _).symm
+            dist μ fun z => (z.1.1.2, z.2) := (dist_comp_eq _ _ _).symm
         have e₂ : dist (dist μ cfF₃) (fun z : ((U × Y) × X) × V => z.1.1.1) =
-            dist μ fun z => z.1.1.2 := (dist_dist_comp _ _ _).symm
+            dist μ fun z => z.1.1.2 := (dist_comp_eq _ _ _).symm
         rw [e₁, e₂]
         exact hqd k t) hq (n := n) (ε := ε)
       (fun r t => cfT₂ μ n ε (fun i => (r i).2) (fun i => (r i).1.1) t (fun i => (r i).1.2))
@@ -222,7 +222,7 @@ lemma sum_cfT₃_le (hμ : IsPMF μ) {q : U → V → ℝ} (hq : IsChannel q)
     have : ¬ cfT₂ μ n ε x u v y := by
       intro hv
       have h := comp_mem_robustTypicalSet hv fun t : (U × V × Y) × X => ((t.1.1, t.1.2.2), t.2)
-      rw [← dist_dist_comp] at h
+      rw [← dist_comp_eq] at h
       exact hT h
     rw [ind_of_neg this, mul_zero]
 
@@ -288,7 +288,7 @@ theorem exists_cfBlock_gaps [Nonempty V] (hp : IsPMF p) (hp₁ : IsPMF p₁) (hW
       dist μ (fun z => z.1.1.2) a * q a c := by
     intro a c
     have h := hqd a c
-    rwa [← dist_dist_comp] at h
+    rwa [← dist_comp_eq] at h
   set T₁ := cfT₁ μ n ε with hT₁
   set T := cfT₂ (X := X) μ n ε with hT
   set Tj := cfTj μ n ε with hTj
@@ -310,9 +310,9 @@ theorem exists_cfBlock_gaps [Nonempty V] (hp : IsPMF p) (hp₁ : IsPMF p₁) (hW
     have h := tilt_le (hμ.dist cfFJ) (τ := τ) (q := q) (cfLaw_tilt hτ)
       (fun a c => by
         have e₁ : dist (dist μ cfFJ) (fun z : (U × S) × V => (z.1.1, z.2)) =
-            dist μ fun z => (z.1.1.2, z.2) := (dist_dist_comp _ _ _).symm
+            dist μ fun z => (z.1.1.2, z.2) := (dist_comp_eq _ _ _).symm
         have e₂ : dist (dist μ cfFJ) (fun z : (U × S) × V => z.1.1) =
-            dist μ fun z => z.1.1.2 := (dist_dist_comp _ _ _).symm
+            dist μ fun z => z.1.1.2 := (dist_comp_eq _ _ _).symm
         rw [e₁, e₂]
         exact hqd' a c) hv
     refine le_trans (le_of_eq ?_) h
@@ -440,10 +440,10 @@ theorem eventually_cfBlock [Nonempty V] (hp : IsPMF p) (hp₁ : IsPMF p₁) (hW 
   have hδ₂ : 0 < δ / 2 := by positivity
   have hprob := tendsto_prob_robustTypicalSet hμ hεpos
   have hexp : Tendsto (fun n : ℕ => exp (-(n * (γ / 2)))) atTop (𝓝 0) :=
-    tendsto_exp_neg_mul_natCast (by positivity)
+    tendsto_exp_neg_mul_nat (by positivity)
   have hlim : Tendsto (fun n : ℕ => (1 - prob (iidPMF μ n) (robustTypicalSet μ n ε)) *
-      (2 + 1 / (δ / 2)) + 5 * exp (-(n * (γ / 2)))) atTop (𝓝 ((1 - 1) * (2 + 1 / (δ / 2)) + 5 * 0))
-        :=
+      (2 + 1 / (δ / 2)) + 5 * exp (-(n * (γ / 2)))) atTop
+        (𝓝 ((1 - 1) * (2 + 1 / (δ / 2)) + 5 * 0)) :=
     ((tendsto_const_nhds.sub hprob).mul_const _).add (hexp.const_mul _)
   have hlim' : ∀ᶠ n : ℕ in atTop, (1 - prob (iidPMF μ n) (robustTypicalSet μ n ε)) *
       (2 + 1 / (δ / 2)) + 5 * exp (-(n * (γ / 2))) < δ / 2 := by

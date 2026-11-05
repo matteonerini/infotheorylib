@@ -25,7 +25,7 @@ earlier messages.
 ## Main statements
 
 * `dfEst_eq_of_good`: on the good event, the estimates are the messages.
-* `dfTagD_eq_of_good`: on the good event, the nodes know the tags.
+* `dfX_tagD_eq_of_good`: on the good event, the nodes know the tags.
 
 ## References
 

@@ -63,8 +63,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   product of more capable channels is more capable: `mutualInfoOf_indexedExt_le`,
   `mutualInfoOf_side_indexedExt_le`, `mutualInfoOf_sideOut`.
 * Theorem 1: `icStrongRegionBits`, `icCapacityRegionBits_eq_closure_icStrongRegionBits`
-  (`Network.ICAchievability`), with the converse
-  `IsAchievableICBits.mem_closure_icStrongRegionBits` (`Network.ICStrong`).
+  (`Network.ICAchievability`), with the converse `IsAchievableICBits.mem_closure_icStrongRegionBits`
+  (`Network.ICStrong`).
 
 ### AWGN interference channel (formulas)
 * The region of Theorem 2 and of the simultaneous decoding inner bound: `awgnICRegion` (here).

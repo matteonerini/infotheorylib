@@ -28,7 +28,7 @@ triples with `R₀ ≥ I(U₁, U₂; V)`, `R₁ ≥ H(U₁|V)` and `R₂ ≥ H(U
 * `exists_gw_reduce`: the cardinality bound `|𝒱| ≤ |𝒰₁| |𝒰₂| + 4`.
 * `isClosed_gwSet`: the set of the rate triples is closed.
 * `gwRegion_eq`: **the Gray–Wyner theorem**.
-* `mem_gwRegion_of_channel`, `exists_channel_of_mem_gwRegion`: the two directions, the first one for
+* `mem_gwRegion_of_channel`, `gwRegion_subset_gwSet`: the two directions, the first one for
   `V` on any finite set.
 
 ## Implementation notes

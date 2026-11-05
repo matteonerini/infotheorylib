@@ -14,12 +14,11 @@ public import InfoTheoryLib.Probability.FinitePMF
 # Universal coding of binary sequences
 
 A binary sequence `xⁿ` with `k` ones can be described without any model of its source in about
-`n H(k/n) + ½ log n` nats: either by a two-stage description (the count `k`, then the index of
-`xⁿ` among the `C(n, k)` sequences with `k` ones), or on the fly, by coding with the uniform
-mixture of all Bernoulli distributions,
-`q(xⁿ) = ∫₀¹ θᵏ (1 - θ)ⁿ⁻ᵏ dθ = 1 / ((n + 1) C(n, k))`. The conditional probabilities of this
-mixture are the Laplace estimates `q(1 | xⁱ) = (kᵢ + 1)/(i + 2)`, which can drive an arithmetic
-coder.
+`n H(k/n) + ½ log n` nats: either by a two-stage description (the count `k`, then the index of `xⁿ`
+among the `C(n, k)` sequences with `k` ones), or on the fly, by coding with the uniform mixture of
+all Bernoulli distributions, `q(xⁿ) = ∫₀¹ θᵏ (1 - θ)ⁿ⁻ᵏ dθ = 1 / ((n + 1) C(n, k))`. The conditional
+probabilities of this mixture are the Laplace estimates `q(1 | xⁱ) = (kᵢ + 1)/(i + 2)`, which can
+drive an arithmetic coder.
 
 ## Main definitions
 

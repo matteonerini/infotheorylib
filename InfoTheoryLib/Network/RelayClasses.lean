@@ -247,8 +247,8 @@ lemma rcFunInfo_semi {g : X × X₁ → Y₁} (hg : IsSemiDetRC W g) (hp : IsPMF
 theorem rcCapacity_semiDet [Nonempty X] [Nonempty X₁] [Nonempty Y] [Nonempty Y₁] {g : X × X₁ → Y₁}
     (hg : IsSemiDetRC W g) (hW : IsChannel W) : rcCapacity W = rcSemiBound W / log 2 := by
   refine rcCapacity_eq (fun R hR => ?_) fun R hR => ?_
-  · have hne : {v | ∃ p : X × X₁ → ℝ, IsPMF p ∧ v = min (rcMacInfo p W) (rcSemiInfo p W)}.Nonempty
-    :=
+  · have hne : {v | ∃ p : X × X₁ → ℝ, IsPMF p ∧ v =
+    min (rcMacInfo p W) (rcSemiInfo p W)}.Nonempty :=
       ⟨_, uniformPMF _, uniformPMF_isPMF, rfl⟩
     obtain ⟨_, ⟨p, hp, rfl⟩, hv⟩ := exists_lt_of_lt_csSup hne hR
     exact isAchievableRC_of_fun hp hW g (hv.trans_le (min_le_left _ _))
@@ -454,7 +454,7 @@ lemma condMutualInfo_le_rcDirectBound [Nonempty X] (hp : IsPMF p) (hW : IsChanne
   have hp₁ : ∀ s, dist (jointOf p V) (fun z => z.1.2) s = p₁ s := by
     intro s
     have e : (fun z : (X × X₁) × Y => z.1.2) = (Prod.snd ∘ Prod.fst) := rfl
-    rw [e, dist_dist_comp, dist_jointOf_fst hV]
+    rw [e, dist_comp_eq, dist_jointOf_fst hV]
     simp only [dist, p₁, Fintype.sum_prod_type]
     refine sum_congr rfl fun x _ => ?_
     exact (Finset.sum_eq_single s (fun b _ hb => ite_eq_right hb) (by simp)).trans (ite_eq_left rfl)
@@ -611,7 +611,7 @@ theorem rcCapacity_cascade [Nonempty X] [Nonempty X₁] [Nonempty Y] [Nonempty Y
       rw [dist_pair_fst_snd, hJ]
       have e : pair (fun z : (X × X₁) × (Y × Y₁) => z.1.2) (fun z => z.2.1) ∘
           (fun w : (X × Y₁) × (X₁ × Y) => ((w.1.1, w.2.1), (w.2.2, w.1.2))) = Prod.snd := rfl
-      rw [← dist_dist_comp, e]
+      rw [← dist_comp_eq, e]
       exact dist_prodDist_snd hν₁ (jointOf q₂ κ₂)
     have hDf : rcDfInfo (prodDist q₁ q₂) W = capacity κ₁ := by
       rw [← hc₁, rcDfInfo, hJ, condMutualInfo_dist hPi, condMutualInfo_eq_entropies hPi,

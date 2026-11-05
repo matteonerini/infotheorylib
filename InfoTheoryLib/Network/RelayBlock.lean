@@ -126,9 +126,8 @@ variable {V N K : Type*} [Fintype V] [Fintype N] [Fintype K]
 
 /-- **The bound for a fresh sequence.** Let `(V, T) ∼ L`. Let a sequence `tⁿ` be generated, given
 `vⁿ`, by `n` uses of the conditional law of `T` given `K = g(V)`. Then the probability that
-  `(vⁿ, tⁿ)`
-is jointly typical is about `exp(-n I(T; V | K))`. All the error events of the decoders are of this
-form. -/
+`(vⁿ, tⁿ)` is jointly typical is about `exp(-n I(T; V | K))`. All the error events of the decoders
+are of this form. -/
 theorem sum_fresh_le {L : V × N → ℝ} (hL : IsPMF L) (g : V → K) {κ : K → N → ℝ}
     (hκ : ∀ k t, dist L (fun z => (g z.1, z.2)) (k, t) = dist L (fun z => g z.1) k * κ k t)
     (hκc : IsChannel κ) {n : ℕ} {ε : ℝ} (Test : (Fin n → V) → (Fin n → N) → Prop)

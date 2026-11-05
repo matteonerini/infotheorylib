@@ -245,11 +245,11 @@ lemma ms_info₃ (hp : 0 ≤ p) (hp' : p ≤ 1) (hα : 0 ≤ α) (hα' : α ≤ 
       rintro ⟨⟨a, b⟩, c, d⟩
       cases a <;> cases b <;> cases c <;> cases d <;> rfl)
   -- `(Y', Ŷ₁)` is uniform
-  have h₄ : H[fun z => (z.1.2.1, z.2) ; roν₁ (uniformPMF Bool) (msP p) (bsbcBSC α)] = 2 * log 2 :=
-    by
-    have hd : dist (roν₁ (uniformPMF Bool) (msP p) (bsbcBSC α)) (fun z => (z.1.2.1, z.2)) = msξ₁ :=
-      by
-      rw [← dist_msΦ, ← dist_dist_comp]
+  have h₄ : H[fun z => (z.1.2.1, z.2) ; roν₁ (uniformPMF Bool) (msP p) (bsbcBSC α)] = 2 *
+    log 2 := by
+    have hd : dist (roν₁ (uniformPMF Bool) (msP p) (bsbcBSC α)) (fun z => (z.1.2.1, z.2)) =
+      msξ₁ := by
+      rw [← dist_msΦ, ← dist_comp_eq]
       funext ⟨a, b⟩
       cases a <;> cases b <;>
         simp [dist, Fintype.sum_prod_type, prodDist, msξ₁, msξ₂, msBern, msΦ] <;>
@@ -436,7 +436,7 @@ theorem ms_gerber (hp : 0 ≤ p) (hp' : p ≤ 1) (hκ : IsChannel κ) (hC : capa
     have e : Zv i = (fun ω : Fin n → Bool => ω i) ∘ Prod.fst := by
       funext ω
       simp [Zv]
-    rw [e, dist_dist_comp, hfst, msBern_dist_coord hp hp']
+    rw [e, dist_comp_eq, hfst, msBern_dist_coord hp hp']
   have hZ : ∀ i < n, dist (msΘ c p κ) (Zv i) true = p := by
     intro i hi
     have := hcoord ⟨i, hi⟩
@@ -475,7 +475,7 @@ theorem ms_gerber (hp : 0 ≤ p) (hp' : p ≤ 1) (hκ : IsChannel κ) (hC : capa
         (Fin n → Bool) × ((Fin n → Bool) × (Fin n → Y'')) → _) =
         (pair Prod.snd Prod.fst) ∘ Prod.snd := rfl
     have hsnd : dist (msΘ c p κ) Prod.snd = msΓ c κ := dist_prodDist_snd hν _
-    rw [e, dist_dist_comp, hsnd]
+    rw [e, dist_comp_eq, hsnd]
   have hce := condEntropy_eq_of_dist_pair_eq hΘ hΓ hd
   rw [hce]
   have hI := mutualInfo_eq_entropy_sub_condEntropy hΓ
@@ -545,7 +545,7 @@ theorem ms_info_le (hM : 0 < M) (hp : 0 ≤ p) (hp' : p ≤ 1) (hκ : IsChannel 
       simpa using this
     have e₃ : H[Yb ; msΛ c p κ] = H[fun t => t.2.2 ; msΘ c p κ] := by
       have e : Yb = (fun t => t.2.2) ∘ Prod.snd := rfl
-      rw [e, entropyRV, dist_dist_comp, msΛ, dist_prodDist_snd hUn]
+      rw [e, entropyRV, dist_comp_eq, msΛ, dist_prodDist_snd hUn]
       rfl
     rw [e₁]
     linarith
@@ -605,7 +605,7 @@ lemma ms_info_bc (hp : 0 ≤ p) (hp' : p ≤ 1) :
           zero_le_one _
     have e : (pair (fun z : (Bool × (Bool × Bool)) × Bool => z.1.1) fun z => z.1.2) =
         (pair Prod.fst Prod.snd) ∘ Prod.fst := rfl
-    rw [e, dist_dist_comp, hfst]
+    rw [e, dist_comp_eq, hfst]
   rw [hle]
   refine mutualInfo_eq_of_dist_pair_eq ?_
   funext ⟨x, y, v⟩

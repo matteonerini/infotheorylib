@@ -313,10 +313,8 @@ theorem mem_srRegion_zero_iff (hP : IsPMF P) (hd₀ : ∀ a b, 0 ≤ d₀ a b) (
     exact (mutualInfo_comp_le hμ Prod.fst Prod.snd (fun b : β₀ × β₁ => b.2)).trans a5
 
 /-- **Lecture 14 of [elgamal2010], page 14-24.** A source is successively refinable for the
-  distortion
-measure `d` if, for all `D₀ ≤ D₁`, the rate pair `(R(D₁), R(D₀) - R(D₁))`, in bits, has the
-  distortion
-pair `(D₀, D₁)`. -/
+distortion measure `d` if, for all `D₀ ≤ D₁`, the rate pair `(R(D₁), R(D₀) - R(D₁))`, in bits, has
+the distortion pair `(D₀, D₁)`. -/
 def IsSuccessivelyRefinable (P : α → ℝ) (d : α → β₀ → ℝ) : Prop :=
   ∀ D₀ D₁, minDistortion P d ≤ D₀ → D₀ ≤ D₁ →
     (infoRD P d D₁ / log 2, (infoRD P d D₀ - infoRD P d D₁) / log 2) ∈ srRegion P d d D₀ D₁
@@ -360,8 +358,7 @@ theorem exists_markov_channel_of_rv [Nonempty β₀] {Ω' : Type*} [Fintype Ω']
 
 /-- **Proposition 1 of Lecture 14 of [elgamal2010], page 14-26.** A source is successively refinable
 if and only if, for all `D₀ ≤ D₁`, there is a `p(x̂₀, x̂₁|x)` with `X → X̂₀ → X̂₁`,
-  `E d(X, X̂ⱼ) ≤ Dⱼ`,
-`I(X; X̂₀) = R(D₀)` and `I(X; X̂₁) = R(D₁)`. -/
+`E d(X, X̂ⱼ) ≤ Dⱼ`, `I(X; X̂₀) = R(D₀)` and `I(X; X̂₁) = R(D₁)`. -/
 theorem isSuccessivelyRefinable_iff [Nonempty β₀] (hP : IsPMF P) (hd : ∀ a b, 0 ≤ d₀ a b) :
     IsSuccessivelyRefinable P d₀ ↔ ∀ D₀ D₁, minDistortion P d₀ ≤ D₀ → D₀ ≤ D₁ →
       ∃ κ : α → β₀ × β₀ → ℝ, IsChannel κ ∧
@@ -372,8 +369,8 @@ theorem isSuccessivelyRefinable_iff [Nonempty β₀] (hP : IsPMF P) (hd : ∀ a 
   have hl := log_pos one_lt_two
   have hswap : ∀ κ : α → β₀ × β₀ → ℝ, IsChannel κ →
       I[Prod.fst : Prod.snd ; jointOf P κ] =
-        I[Prod.fst : pair (fun z : α × β₀ × β₀ => z.2.2) (fun z => z.2.1) ; jointOf P κ] := fun κ hκ
-          =>
+        I[Prod.fst : pair (fun z : α × β₀ × β₀ => z.2.2) (fun z => z.2.1) ; jointOf P κ] :=
+          fun κ hκ =>
     mutualInfo_congr_right (jointOf_isPMF hP hκ) _ Prod.swap Prod.swap_injective fun _ => rfl
   have hlow₀ : ∀ {D : ℝ} {κ : α → β₀ × β₀ → ℝ}, IsChannel κ →
       ∑ z, jointOf P κ z * d₀ z.1 z.2.1 ≤ D → infoRD P d₀ D ≤
@@ -479,9 +476,8 @@ lemma mutualInfo_pair_add_eq (hμ : IsPMF μ) :
   have e6 : I[Y₁ : X ; μ] = I[X : Y₁ ; μ] := mutualInfo_comm hμ _ _
   linarith
 
-/-- **Special case 1 of Lecture 14, page 14-4: no combined description.** The region for `D₀ = ∞`
-is the set of the rate pairs with `R₁ ≥ I(X; X̂₁)` and `R₂ ≥ I(X; X̂₂)`, for some
-  `p(x̂₁|x) p(x̂₂|x)`
+/-- **Special case 1 of Lecture 14, page 14-4: no combined description.** The region for `D₀ = ∞` is
+the set of the rate pairs with `R₁ ≥ I(X; X̂₁)` and `R₂ ≥ I(X; X̂₂)`, for some `p(x̂₁|x) p(x̂₂|x)`
 with `E dⱼ(X, X̂ⱼ) ≤ Dⱼ`. -/
 theorem mem_mdRegion_no_combined_iff (hP : IsPMF P) (hd₁ : ∀ a b, 0 ≤ d₁ a b)
     (hd₂ : ∀ a b, 0 ≤ d₂ a b) {D₁ D₂ R₁ R₂ : ℝ} :
@@ -534,8 +530,8 @@ theorem mem_mdRegion_no_combined_iff (hP : IsPMF P) (hd₁ : ∀ a b, 0 ≤ d₁
     have eI₂ : I[Prod.fst : fun z : α × β₁ × β₂ => z.2.2 ; jointOf P κ] = mutualInfoOf P κ₂ := by
       rw [← hm₂, mutualInfoOf_margCh]
     -- The conditional independence.
-    have hci : I[(fun z : α × β₁ × β₂ => z.2.1) : (fun z => z.2.2) | Prod.fst ; jointOf P κ] = 0 :=
-      by
+    have hci : I[(fun z : α × β₁ × β₂ => z.2.1) : (fun z => z.2.2) | Prod.fst ; jointOf P κ] =
+      0 := by
       rw [condMutualInfo_comm hμ, condMutualInfo]
       have hA : IsPMF (dist (jointOf P κ) (fun z : α × β₁ × β₂ => (z.2.1, z.1))) := hμ.dist _
       have hch := condEntropy_eq_comp_of_channel hμ (fun z : α × β₁ × β₂ => (z.2.1, z.1))
@@ -624,21 +620,19 @@ lemma condMutualInfo_comp_cond_le {σ τ ρ : Type*} [Fintype σ] [Fintype τ] [
 omit [Fintype β₀] [Fintype β₁] [Fintype β₂] in
 /-- **Lecture 14, pages 14-30 and 14-31: the alternative form of the Zhang–Berger inner bound.** A
 rate pair is achievable if `R₁ > I(X; U₀, U₁)`, `R₂ > I(X; U₀, U₂)`,
-`R₁ + R₂ > I(X; U₁, U₂|U₀) + 2 I(U₀; X) + I(U₁; U₂|U₀)` and
-`E d₀(X, x̂₀(U₀, U₁, U₂)) ≤ D₀`, `E d₁(X, x̂₁(U₀, U₁)) ≤ D₁`, `E d₂(X, x̂₂(U₀, U₂)) ≤ D₂`. This is
-  the
-inclusion of the alternative region in the inner bound of Theorem 4. -/
-theorem isAchievableMD_of_auxiliary [Finite β₀] [Finite β₁] [Finite β₂] (hμ : IsPMF μ) (hd₀ : ∀ a b,
-  0 ≤ d₀ a b)
-    (hd₁ : ∀ a b, 0 ≤ d₁ a b) (hd₂ : ∀ a b, 0 ≤ d₂ a b) {U₀ : Ω → υ} {U₁ : Ω → κ₁} {U₂ : Ω → κ₂}
-    (f₀ : υ → κ₁ × κ₂ → β₀) (f₁ : υ → κ₁ → β₁) (f₂ : υ → κ₂ → β₂) {R₁ R₂ D₀ D₁ D₂ : ℝ}
-    (h₁ : I[X : pair U₀ U₁ ; μ] < R₁ * log 2) (h₂ : I[X : pair U₀ U₂ ; μ] < R₂ * log 2)
-    (h₁₂ : I[X : pair U₁ U₂ | U₀ ; μ] + 2 * I[U₀ : X ; μ] + I[U₁ : U₂ | U₀ ; μ] <
-      (R₁ + R₂) * log 2)
+`R₁ + R₂ > I(X; U₁, U₂|U₀) + 2 I(U₀; X) + I(U₁; U₂|U₀)` and `E d₀(X, x̂₀(U₀, U₁, U₂)) ≤ D₀`,
+`E d₁(X, x̂₁(U₀, U₁)) ≤ D₁`, `E d₂(X, x̂₂(U₀, U₂)) ≤ D₂`. This is the inclusion of the alternative
+region in the inner bound of Theorem 4. -/
+theorem isAchievableMD_of_auxiliary [Finite β₀] [Finite β₁] [Finite β₂] (hμ : IsPMF μ)
+    (hd₀ : ∀ a b, 0 ≤ d₀ a b) (hd₁ : ∀ a b, 0 ≤ d₁ a b) (hd₂ : ∀ a b, 0 ≤ d₂ a b) {U₀ : Ω → υ}
+    {U₁ : Ω → κ₁} {U₂ : Ω → κ₂} (f₀ : υ → κ₁ × κ₂ → β₀) (f₁ : υ → κ₁ → β₁) (f₂ : υ → κ₂ → β₂)
+    {R₁ R₂ D₀ D₁ D₂ : ℝ} (h₁ : I[X : pair U₀ U₁ ; μ] < R₁ * log 2)
+    (h₂ : I[X : pair U₀ U₂ ; μ] < R₂ * log 2)
+    (h₁₂ : I[X : pair U₁ U₂ | U₀ ; μ] + 2 * I[U₀ : X ; μ] + I[U₁ : U₂ | U₀ ; μ] < (R₁ + R₂) * log 2)
     (hc₀ : ∑ ω, μ ω * d₀ (X ω) (f₀ (U₀ ω) (U₁ ω, U₂ ω)) ≤ D₀)
     (hc₁ : ∑ ω, μ ω * d₁ (X ω) (f₁ (U₀ ω) (U₁ ω)) ≤ D₁)
-    (hc₂ : ∑ ω, μ ω * d₂ (X ω) (f₂ (U₀ ω) (U₂ ω)) ≤ D₂) :
-    IsAchievableMD (dist μ X) d₀ d₁ d₂ R₁ R₂ D₀ D₁ D₂ := by
+    (hc₂ : ∑ ω, μ ω * d₂ (X ω) (f₂ (U₀ ω) (U₂ ω)) ≤ D₂) : IsAchievableMD (dist μ X) d₀ d₁ d₂ R₁
+    R₂ D₀ D₁ D₂ := by
   have := Fintype.ofFinite β₀
   have := Fintype.ofFinite β₁
   have := Fintype.ofFinite β₂

@@ -251,12 +251,12 @@ theorem printed_rCFO_counterexample :
       (fun a b h => hrest₀ (Prod.mk.inj h).1)]
     ring
   have hS₁ : swCondH (α := fun _ : Fin 3 => Bool) bitP {1} = log 2 := by
-    have hφ : Function.Injective (fun a : Bool => (fun _ : {j : Fin 3 // j ∉ ({1} : Finset (Fin 3))}
-      =>
+    have hφ : Function.Injective
+      (fun a : Bool => (fun _ : {j : Fin 3 // j ∉ ({1} : Finset (Fin 3))} =>
         a)) := fun a b h => congrFun h ⟨0, by decide⟩
     have hrest : ∀ w, (swRest (α := fun _ : Fin 3 => Bool) ({1} : Finset (Fin 3)) ∘ bitSrc) w =
-        (fun a : Bool => (fun _ : {j : Fin 3 // j ∉ ({1} : Finset (Fin 3))} => a)) w.1 := fun w =>
-          by
+        (fun a : Bool => (fun _ : {j : Fin 3 // j ∉ ({1} : Finset (Fin 3))} => a)) w.1 :=
+          fun w => by
       funext ⟨j, hj⟩
       have : j ≠ 1 := by simpa using hj
       simp [swRest, bitSrc, this]

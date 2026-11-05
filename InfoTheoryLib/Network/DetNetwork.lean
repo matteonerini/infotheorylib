@@ -45,7 +45,7 @@ variable {Ω Ω' a c : Type*} [Fintype Ω] [Fintype Ω'] [Fintype a] [Fintype c]
 lemma condEntropy_dist_comp {μ : Ω → ℝ} (hμ : IsPMF μ) (g : Ω → Ω') (A : Ω' → a) (C : Ω' → c) :
     H[A | C ; dist μ g] = H[A ∘ g | C ∘ g ; μ] := by
   refine condEntropy_eq_of_dist_pair_eq (hμ.dist g) hμ ?_
-  rw [← dist_dist_comp]
+  rw [← dist_comp_eq]
   rfl
 
 end General

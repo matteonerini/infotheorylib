@@ -24,10 +24,8 @@ theorems.
 ## Conventions
 
 * **Codes.** `RCCode M n X X₁ Y Y₁` has an encoder, a relay encoder that sees the past of `Y₁`, and
-  a
-  decoder. The law of a code is a feedback law, `RCCode.law`, which the converse of Lecture 7
-    already
-  handles.
+  a decoder. The law of a code is a feedback law, `RCCode.law`, which the converse of Lecture 7
+  already handles.
 * **Rates.** Rates are in bits and `IsAchievableRC W R` has `2 ^ ⌈n R⌉` messages. The information
   quantities are in nats, so that a condition is written as `R * log 2 < I`, and a capacity is
   `V / log 2`.
@@ -102,18 +100,15 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `isAchievableRWD_instantaneous`. **Theorem 7**: `IsAchievableRWD.le_rcCutsetBound`. Here:
   `theorem_17_7`.
 * **The Sato channel (pages 17-71 and 17-74)**: `sato_lookCapacity`, `sato_rwdCapacity`,
-  `sato_le_log`
-  (`Books.ElGamalKim.Lecture17Sato`). Both capacities are `log₂ (9/4)`.
+  `sato_le_log` (`Books.ElGamalKim.Lecture17Sato`). Both capacities are `log₂ (9/4)`.
 
 ## Differences from the notes
 
 * **One code for all the blocks, and backward decoding, for decode–forward.** The notes draw a new
   codebook for every block, and use induction over the blocks. We use one fixed code. The genie run
-    in
-  which the relay always decodes correctly has independent blocks, and the actual run coincides with
-  it as long as nothing goes wrong. Theorem 2 and the multi-hop bound are special cases of Theorem
-    3,
-  with no binning: its conditions are `R' < I(U; Y₁ | X₁)`, `R'' < I(X; Y | X₁, U)` and
+  in which the relay always decodes correctly has independent blocks, and the actual run coincides
+  with it as long as nothing goes wrong. Theorem 2 and the multi-hop bound are special cases of
+  Theorem 3, with no binning: its conditions are `R' < I(U; Y₁ | X₁)`, `R'' < I(X; Y | X₁, U)` and
   `R' + R'' < I(X, X₁; Y)`.
 * **Offsets for compress–forward.** The state of the relay is a random function of the past, and is
   not uniform, so the argument above does not apply. The block code is averaged over its states,
@@ -124,10 +119,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   that is jointly typical with `(x₁ⁿ, y₁ⁿ)` and such that `(xⁿ, x₁ⁿ, ŷ₁ⁿ, yⁿ)` is typical with high
   probability given `(x₁ⁿ, y₁ⁿ)`, which holds for most i.i.d. sequences by Markov's inequality.
 * **Random bins.** Since the bins are independent of the codebook, a description other than the
-  chosen
-  one is in its bin with probability `1 / L`, whatever the chosen one is. No analogue of Lemma 1 of
-    the
-  Wyner–Ziv proof is needed (pages 17-44 and 17-45).
+  chosen one is in its bin with probability `1 / L`, whatever the chosen one is. No analogue of
+  Lemma 1 of the Wyner–Ziv proof is needed (pages 17-44 and 17-45).
 * **The relay without delay** is the relay channel whose relay alphabet is the set of maps
   `Y₁ → X₁`, so that Theorem 7 is Theorem 1 for that channel.
 * **Noncausal decode–forward** is the compound channel theorem of Lecture 7, for the two receivers.
@@ -140,44 +133,35 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 * The Gaussian coding theorems, the multi-letter characterization of `C(P)` (page 17-30) and the
   properties of `C(P)` in the Appendix; hence partial decode–forward for the AWGN channel (pages
-    17-38
-  and 17-86 to 17-89, which need the entropy power inequality) and the SFD capacity (page 17-37).
+  17-38 and 17-86 to 17-89, which need the entropy power inequality) and the SFD capacity (page
+  17-37).
 * Theorem 5, the linear relaying capacity of the RFD channel, amplify–forward and the AWGN channels
-  with
-  lookahead or without delay (pages 17-55 to 17-66, 17-72 and 17-75).
+  with lookahead or without delay (pages 17-55 to 17-66, 17-72 and 17-75).
 * The bounds on the cardinalities in Theorems 3 and 4.
 * The other direction of the Appendix on compress–forward (page 17-91), which is an optimization
-  over
-  time sharing, and the time sharing extension (page 17-47). The combination of compress–forward and
-  partial decode–forward (page 17-47) is cited there without a statement.
+  over time sharing, and the time sharing extension (page 17-47). The combination of
+  compress–forward and partial decode–forward (page 17-47) is cited there without a statement.
 * The second term of Theorem 6 (see below), and the numerical values of the Sato channel on page
-  17-19:
-  the rates of the other schemes, and `C = 1.161878`, which the notes cite. So the strict inequality
-  `C < C∞` of page 17-71 is not proved.
+  17-19: the rates of the other schemes, and `C = 1.161878`, which the notes cite. So the strict
+  inequality `C < C∞` of page 17-71 is not proved.
 
 ## Issues in the notes
 
 * **Page 17-31, the cutset bound for the AWGN channel.** The closed form has `√(S + S₁ - S₂)` where
   it should have `√(S (S + S₁ - S₂))`. For `S = 4`, `S₁ = S₂ = 1` the printed formula is `C(9/5)`,
-    which
-  is even below the direct rate `C(4)`, while the optimum is `C(5)`: `awgn_cutset_notes_ne`. The
-  statement `awgn_cutset` has the correct form.
+  which is even below the direct rate `C(4)`, while the optimum is `C(5)`: `awgn_cutset_notes_ne`.
+  The statement `awgn_cutset` has the correct form.
 * **Page 17-52, the cutset bound is not tight.** The notes claim strict inequality if `p ∈ (0, 1)`
-  and
-  `1 - H(p) ≤ C₀`. It fails for `C₀ = 1`, where `H⁻¹(1 - C₀) = 0` and the capacity is `1 - H(p)`,
-    and
-  for `p = 1/2`, where both are `0`. The statement `modSum_lt_cutset` has `p ∈ (0, 1/2)` and
-  `0 < C₀ < 1`, and needs no comparison between `1 - H(p)` and `C₀`.
+  and `1 - H(p) ≤ C₀`. It fails for `C₀ = 1`, where `H⁻¹(1 - C₀) = 0` and the capacity is
+  `1 - H(p)`, and for `p = 1/2`, where both are `0`. The statement `modSum_lt_cutset` has
+  `p ∈ (0, 1/2)` and `0 < C₀ < 1`, and needs no comparison between `1 - H(p)` and `C₀`.
 * **Page 17-70, Theorem 6.** With `Y₁ ∼ p(y₁ | x)` the bound does not make sense for a law
   `p(x, x₁)`: for `Y₁` uniform and independent of `X` and `Y = X ⊕ X₁ ⊕ Y₁`, the first term vanishes
-    for
-  all `p(x, x₁)`, while the relay can send `X₁ = Y₁` and the capacity is `1` bit. The law must allow
-  `X₁` to depend on `Y₁`, that is `p(x) p(x₁ | x, y₁)`. We prove the part that is needed for the
-    Sato
-  channel: `C∞` is at most the capacity of the channel from `(X, X₁, Y₁)` to `Y`.
+  for all `p(x, x₁)`, while the relay can send `X₁ = Y₁` and the capacity is `1` bit. The law must
+  allow `X₁` to depend on `Y₁`, that is `p(x) p(x₁ | x, y₁)`. We prove the part that is needed for
+  the Sato channel: `C∞` is at most the capacity of the channel from `(X, X₁, Y₁)` to `Y`.
 * **Page 17-68.** The index shift `p(y₁ᵢ | x_{i+d})` is inconsistent with unlimited lookahead, and
-  we use
-  no shift.
+  we use no shift.
 * **Page 17-73.** The pmf `p(v, x), x₁(u, y₁)` has `v` for `u`.
 
 ## References

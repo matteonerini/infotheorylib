@@ -44,7 +44,6 @@ open Real Finset Filter Topology
 
 namespace InfoTheory
 
-
 /-! ### The telescoping identity -/
 
 section Hybrid

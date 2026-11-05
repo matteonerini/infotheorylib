@@ -13,16 +13,13 @@ public import InfoTheoryLib.Typicality.Conditional
 Let `X → Y → Z` be a Markov chain, `(xⁿ, yⁿ)` be typical, and let `Zⁿ` be drawn from a law `φ` on
 sequences that is not a product law, but is concentrated on the typical set `T(Z | yⁿ)` and assigns
 to each of its sequences a mass of about `e^{-n H(Z | Y)}`. The Markov lemma says that
-`(xⁿ, yⁿ, Zⁿ)`
-is typical with probability tending to `1`.
+`(xⁿ, yⁿ, Zⁿ)` is typical with probability tending to `1`.
 
 The notes prove it by comparing with a hypergeometric random variable. We use a change of measure
 instead. On `T(Z | yⁿ)`, the law `φ` is within a factor `e^{2nδ}` of the product law
-`∏ᵢ p(zᵢ | yᵢ)`,
-with `δ → 0` as the typicality parameter of `T(Z | yⁿ)` tends to `0`. By the Chernoff bound, the
-product law gives probability at most `e^{-nc}` to the atypical sequences, with `c` that depends
-only
-on the typicality parameters of `(xⁿ, yⁿ, Zⁿ)` and of `(xⁿ, yⁿ)`.
+`∏ᵢ p(zᵢ | yᵢ)`, with `δ → 0` as the typicality parameter of `T(Z | yⁿ)` tends to `0`. By the
+Chernoff bound, the product law gives probability at most `e^{-nc}` to the atypical sequences, with
+`c` that depends only on the typicality parameters of `(xⁿ, yⁿ, Zⁿ)` and of `(xⁿ, yⁿ)`.
 
 ## Main statements
 
@@ -309,10 +306,9 @@ lemma channelExt_condPMF_of_markov
 open Classical in
 /-- **The Markov lemma (Lecture 13, page 13-6).** Let `X → Y → Z` be a Markov chain with
 `p(z | y) = κ(z | y)`, and `(xⁿ, yⁿ) ∈ T_{ε'}^(n)`. Let `φ` be a nonnegative function on the
-sequences
-`zⁿ` with `φ(zⁿ) ≤ e^{-n E'}` on a set `A` on which `κ(zⁿ | yⁿ) ≥ e^{-n E}`. Then the mass under `φ`
-of
-the sequences not typical with `(xⁿ, yⁿ)` is at most `φ(Aᶜ) + e^{n (E - E')} condExpBound`. -/
+sequences `zⁿ` with `φ(zⁿ) ≤ e^{-n E'}` on a set `A` on which `κ(zⁿ | yⁿ) ≥ e^{-n E}`. Then the mass
+under `φ` of the sequences not typical with `(xⁿ, yⁿ)` is at most
+`φ(Aᶜ) + e^{n (E - E')} condExpBound`. -/
 theorem sum_not_mem_condRobust_le (hqP : IsPMF q) (hκ : IsChannel κ)
     (hq : ∀ a b c, q ((a, b), c) = marg q (a, b) * κ b c) (hεε : ε' < ε) (hε1 : ε - ε' ≤ 1)
     (hn : 0 < n) (hxy : zipSeq x y ∈ robustTypicalSet (margFst q) n ε')

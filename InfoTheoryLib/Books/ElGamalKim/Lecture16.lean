@@ -21,9 +21,8 @@ multicast network; the cutset outer bound; and all the examples of the lecture.
   only if `j < k`. A pair that is not an edge has capacity `0`. Page 16-23 assumes this order, and
   every finite acyclic graph has one. The examples have nodes `Fin N`, numbered from `0`.
 * **Codes.** There is one kind of code, `NetCode`, the one of page 16-24. Relay and multicast
-  networks
-  are the case with one nonzero rate (`singleRate`) and one set of destinations (`multicastD`), as
-  the notes say on page 16-23. A message that nobody decodes can have any rate.
+  networks are the case with one nonzero rate (`singleRate`) and one set of destinations
+  (`multicastD`), as the notes say on page 16-23. A message that nobody decodes can have any rate.
 * **Rates.** They are in bits. Messages have `2 ^ ⌈n R⌉` values and an edge carries `2 ^ ⌊n C⌋`
   indices. The decoder has no error symbol, since it would never help.
 
@@ -92,8 +91,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `unicastCode_correct`, `unicast_isAchievableZE`, `unicast_le_one`, `unicast_iff`,
   `unicast_routing_bound`, `unicast_routing_le`, `printed_unicast_routing`.
 * Pages 16-27 and 16-28, the cutset bound is loose: `yeungNet`, `yeungD`, `yeungRate`,
-  `yeung_count`,
-  `yeung_le`, `yeungScheme`, `yeung_isRoutingAchievable`, `yeung_capacityRegion`,
+  `yeung_count`, `yeung_le`, `yeungScheme`, `yeung_isRoutingAchievable`, `yeung_capacityRegion`,
   `yeung_cutsetRegion`, `yeung_cutset_loose`.
 
 ## Not formalized
@@ -119,9 +117,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   Here it comes from the same proof as the network coding theorem, by a flow with supplies at the
   sources and a source of all sources.
 * **Lemma 1** follows from the Schwartz–Zippel lemma of Mathlib. The remark `n ≤ ⌈log(|D| R + 1)⌉`
-  is
-  proved from the bound `R` on the degree of `|A(x)|` in each indeterminate, and the combinatorial
-  Nullstellensatz of Mathlib.
+  is proved from the bound `R` on the degree of `|A(x)|` in each indeterminate, and the
+  combinatorial Nullstellensatz of Mathlib.
 * **Real capacities.** For block length `n` we use the multigraph with `⌊K C⌋` edges, for a fixed
   large `K`, over the field `𝔽_{2^m}` with `m = ⌊n / K⌋`. So every large `n` has a code, without
   concatenating blocks.

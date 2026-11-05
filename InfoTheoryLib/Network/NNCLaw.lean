@@ -183,7 +183,7 @@ lemma nncTest_iid_le (hL : IsPMF L) {d : Fin N} {ε : ℝ}
   have hm := comp_mem_robustTypicalSet h fun t : (∀ k, X k) × Y d × (∀ k, V k) => t.1 k
   have e : dist (nncLd L d) (fun t : (∀ k, X k) × Y d × (∀ k, V k) => t.1 k) =
       dist L fun ω : NNCΩ X Y V => ω.1 k := by
-    rw [nncLd, ← dist_dist_comp]
+    rw [nncLd, ← dist_comp_eq]
     rfl
   rw [e] at hm
   exact iidPMF_le_of_mem_robustTypicalSet (hL.dist _) hm
@@ -199,7 +199,7 @@ lemma nncTest_chan_le (hL : IsPMF L) {d : Fin N} {ε : ℝ} {q : ∀ k, X k → 
   have hm := comp_mem_robustTypicalSet h fun t : (∀ k, X k) × Y d × (∀ k, V k) => (t.1 k, t.2.2 k)
   have e : dist (nncLd L d) (fun t : (∀ k, X k) × Y d × (∀ k, V k) => (t.1 k, t.2.2 k)) =
       nncRho L k := by
-    rw [nncLd, ← dist_dist_comp]
+    rw [nncLd, ← dist_comp_eq]
     rfl
   rw [e] at hm
   have hρ : IsPMF (nncRho L k) := hL.dist _
@@ -214,7 +214,7 @@ lemma nncTest_chan_le (hL : IsPMF L) {d : Fin N} {ε : ℝ} {q : ∀ k, X k → 
   have hρ₁ : marg (nncRho L k) ((c k).1 i) = dist L (fun ω : NNCΩ X Y V => ω.1 k) ((c k).1 i) := by
     rw [marg_eq_dist]
     have : dist (nncRho L k) Prod.fst = dist L fun ω : NNCΩ X Y V => ω.1 k := by
-      rw [nncRho, ← dist_dist_comp]
+      rw [nncRho, ← dist_comp_eq]
       rfl
     rw [this]
   have hne : dist L (fun ω : NNCΩ X Y V => ω.1 k) ((c k).1 i) ≠ 0 := by
@@ -276,7 +276,7 @@ lemma card_nnc_fresh_le (hL : IsPMF L) (S : Finset (Fin N)) (d : Fin N) (ε : �
       (((restr Sᶜ t.1, restr Sᶜ t.2.2), t.2.1), (restr S t.1, restr S t.2.2))
     have e : dist (nncLd L d) (fun t : (∀ k, X k) × Y d × (∀ k, V k) =>
         (((restr Sᶜ t.1, restr Sᶜ t.2.2), t.2.1), (restr S t.1, restr S t.2.2))) = L' := by
-      rw [nncLd, ← dist_dist_comp]
+      rw [nncLd, ← dist_comp_eq]
       rfl
     rw [e] at hm
     refine mem_condRobustTypicalSet.mpr ?_

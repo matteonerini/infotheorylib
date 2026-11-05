@@ -551,9 +551,9 @@ theorem isAchievableMW_of_lt (hp : IsPMF p) {A : Finset ι} {R : ι → ℝ} (hR
           rw [sum_const, nsmul_eq_mul]
 
 /-- **Theorem 3 of Lecture 21 of [elgamal2010], page 21-16.** The optimal rate region of
-  communication
-for omniscience is the set of nonnegative rate tuples with `∑_{j ∈ S} Rⱼ ≥ H(X(S) | X(Sᶜ))` for all
-`S` and `k ∈ A` with `k ∉ S`, in bits. In particular, interaction does not help. -/
+communication for omniscience is the set of nonnegative rate tuples with
+`∑_{j ∈ S} Rⱼ ≥ H(X(S) | X(Sᶜ))` for all `S` and `k ∈ A` with `k ∉ S`, in bits. In particular,
+interaction does not help. -/
 theorem mwOptimalRegion_eq (hp : IsPMF p) (A : Finset ι) : mwOptimalRegion p A = mwRegion p A := by
   refine subset_antisymm (closure_minimal (fun R hR => ?_) (isClosed_mwRegion p A)) ?_
   · exact IsAchievableMW.mem_mwRegion hp hR

@@ -13,8 +13,7 @@ public import InfoTheoryLib.Network.Gaussian
 
 The rate regions of the Gaussian vector MAC and BC in terms of covariance matrices. The coding
 theorems are not formalized: they are for continuous alphabets, and the converse for the BC needs
-the
-vector entropy power inequality. What is proved here is the matrix analysis of Lecture 10.
+the vector entropy power inequality. What is proved here is the matrix analysis of Lecture 10.
 
 ## Main definitions
 
@@ -35,8 +34,7 @@ vector entropy power inequality. What is proved here is the matrix analysis of L
 ## Implementation notes
 
 The regions are for nonnegative rates and use non-strict inequalities, so that the convex hull of
-the
-two dirty paper coding regions is the dual MAC region as it stands, without the closure.
+the two dirty paper coding regions is the dual MAC region as it stands, without the closure.
 
 ## References
 
@@ -216,8 +214,8 @@ lemma det_le_det_mac (hK₁ : K₁.PosSemidef) (hK₂ : K₂.PosSemidef) :
   exact posSemidef_mul_mul_transpose hK₂ G₂
 
 /-- **Lecture 10, page 10-67.** The corner point of the pentagon with the message of sender 2
-decoded
-first: `R₁ = ½ log |G₁ K₁ G₁ᵀ + I|`, `R₂ = ½ log (|G₁ K₁ G₁ᵀ + G₂ K₂ G₂ᵀ + I| / |G₁ K₁ G₁ᵀ + I|)`.
+decoded first: `R₁ = ½ log |G₁ K₁ G₁ᵀ + I|`,
+`R₂ = ½ log (|G₁ K₁ G₁ᵀ + G₂ K₂ G₂ᵀ + I| / |G₁ K₁ G₁ᵀ + I|)`.
 -/
 theorem corner₁_mem_gvMACRates (hK₁ : K₁.PosSemidef) (hK₂ : K₂.PosSemidef) :
     (gvRate G₁ K₁,
@@ -418,10 +416,8 @@ private lemma trace_inv_mul_kkt {r t : Type*} [Fintype r] [DecidableEq r] [Finty
 
 /-- **Lecture 10 of [elgamal2010], page 10-19.** If `K₁`, `K₂` satisfy the KKT conditions of the
 single-user water-filling problems, each against the noise `G K Gᵀ + I` of the other sender, then
-they
-maximize the sum rate `log |G₁ K₁ G₁ᵀ + G₂ K₂ G₂ᵀ + I|` under the individual power constraints.
-These
-are the fixed points of iterative water-filling. -/
+they maximize the sum rate `log |G₁ K₁ G₁ᵀ + G₂ K₂ G₂ᵀ + I|` under the individual power constraints.
+These are the fixed points of iterative water-filling. -/
 theorem log_det_mac_le_of_kkt {K₁ U₁ : Matrix t₁ t₁ ℝ} {K₂ U₂ : Matrix t₂ t₂ ℝ}
     (h₁ : K₁.PosSemidef) (h₂ : K₂.PosSemidef) (hU₁ : U₁.PosSemidef) (hU₂ : U₂.PosSemidef)
     {l₁ l₂ P₁ P₂ : ℝ} (hl₁ : 0 ≤ l₁) (hl₂ : 0 ≤ l₂)
@@ -769,8 +765,7 @@ theorem gvSumMACRegion_subset_convexHull (P : ℝ) :
 
 /-- **The MAC–BC duality lemma (Lecture 10 of [elgamal2010], page 10-41).** The dirty paper coding
 region is the capacity formula of the dual MAC under the sum power constraint: `R_DPC = C_DMAC`.
-With
-non-strict inequalities in the regions, no closure is needed. -/
+With non-strict inequalities in the regions, no closure is needed. -/
 theorem convexHull_dpcRegion_eq (P : ℝ) :
     convexHull ℝ (dpcRegion₁ G₁ G₂ P ∪ dpcRegion₂ G₁ G₂ P) = gvSumMACRegion G₁ᵀ G₂ᵀ P :=
   Set.Subset.antisymm

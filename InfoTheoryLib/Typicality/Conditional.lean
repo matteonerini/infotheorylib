@@ -306,8 +306,8 @@ def condTypicalityConst (q : α × β → ℝ) (ε' ε : ℝ) : ℝ :=
   ∑ z ∈ univ.filter (fun z => 0 < q z), 1 / ((ε - ε') * q z) ^ 2
 
 /-- **Conditional typicality lemma (Lecture 2)**, quantitative form. Let `ε' < ε` and
-`xⁿ ∈ T_{ε'}^(n)(X)`. If `Yⁿ ∼ ∏ᵢ p(yᵢ|xᵢ)`, then
-`P{(xⁿ, Yⁿ) ∈ T_ε^(n)(X, Y)} ≥ 1 - K/n` with `K = condTypicalityConst q ε' ε`. -/
+`xⁿ ∈ T_{ε'}^(n)(X)`. If `Yⁿ ∼ ∏ᵢ p(yᵢ|xᵢ)`, then `P{(xⁿ, Yⁿ) ∈ T_ε^(n)(X, Y)} ≥ 1 - K/n` with
+`K = condTypicalityConst q ε' ε`. -/
 theorem one_sub_div_le_prob_condRobustTypicalSet (hq : IsPMF q) {ε' : ℝ} (hεε : ε' < ε)
     (hn : 0 < n) (hx : x ∈ robustTypicalSet (margFst q) n ε') :
     1 - condTypicalityConst q ε' ε / n ≤

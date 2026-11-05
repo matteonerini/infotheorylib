@@ -21,8 +21,8 @@ the noisy network coding bound, the determinant of the interference example, and
 * `gvRate_le_of_trace_le`, `gvRate_scale_le`, `cutset_relax`: **the relaxation of page 20-5**.
 * `nnc_gap_le`: the gap of page 20-7.
 * `det_interference`, `gvRate_interference`: the determinant of page 20-12.
-* `det_rankOne`: the rank one matrix of page 20-16.
-* `relay_upper_le`, `relay_interference_le`, `relay_multihop_ge`: the bounds of pages 20-15 and
+* `det_smul_one_add_allOnes`: the rank one matrix of page 20-16.
+* `relay_upper_le`, `relayInterference_le`, `relay_multihop_ge`: the bounds of pages 20-15 and
   20-17.
 
 ## References
@@ -104,8 +104,8 @@ theorem gvRate_scale_le (G : Matrix r t ℝ) {T s : ℝ} (hT : 0 ≤ T) (hs : 1 
     (PosSemidef.one.smul (mul_nonneg hs0.le hT)) G (r := r) (t := t))
   have e₁ : G * ((s * T) • (1 : Matrix t t ℝ)) * Gᵀ = s • (G * (T • (1 : Matrix t t ℝ)) * Gᵀ) := by
     rw [mul_smul, Matrix.mul_smul, Matrix.smul_mul]
-  have e₂ : s • B - (G * ((s * T) • (1 : Matrix t t ℝ)) * Gᵀ + 1) = (s - 1) • (1 : Matrix r r ℝ) :=
-    by
+  have e₂ : s • B - (G * ((s * T) • (1 : Matrix t t ℝ)) * Gᵀ + 1) = (s - 1) •
+    (1 : Matrix r r ℝ) := by
     rw [hBd, e₁, smul_add, sub_smul]
     simp only [one_smul]
     abel
@@ -191,8 +191,8 @@ def icGain (N : ℕ) (a : ℝ) : Matrix (Fin N) (Fin N) ℝ :=
 /-- The matrix with all the entries equal to `1`. -/
 def allOnes (N : ℕ) : Matrix (Fin N) (Fin N) ℝ := Matrix.of fun _ _ => 1
 
-lemma icGain_eq (a : ℝ) : icGain N a = (1 - a) • (1 : Matrix (Fin N) (Fin N) ℝ) + a • allOnes N :=
-  by
+lemma icGain_eq (a : ℝ) : icGain N a = (1 - a) • (1 : Matrix (Fin N) (Fin N) ℝ) + a • allOnes N
+    := by
   ext i j
   by_cases h : i = j
   · subst h
@@ -346,8 +346,8 @@ theorem relayInterference_le (hν : 1 < ν) (N j : ℕ) {P : ℝ} (hP : 0 ≤ P)
   have hsum := summable_zetaTerm hν
   set A := (range (N + 1)).filter (fun k => k + 1 ≠ j ∧ k ≠ j) with hA
   -- the transmitters after and before the receiver
-  have hval₁ : ∀ k, j < k → P / (|(k : ℝ) - j|) ^ ν = P * (1 / (((k - j - 1 : ℕ) : ℝ) + 1) ^ ν) :=
-    by
+  have hval₁ : ∀ k, j < k → P / (|(k : ℝ) - j|) ^ ν = P *
+    (1 / (((k - j - 1 : ℕ) : ℝ) + 1) ^ ν) := by
     intro k hk
     have h₁ : (((k - j - 1 : ℕ) : ℝ) + 1) = (k : ℝ) - j := by
       have : k - j - 1 + 1 = k - j := by omega
@@ -358,8 +358,8 @@ theorem relayInterference_le (hν : 1 < ν) (N j : ℕ) {P : ℝ} (hP : 0 ≤ P)
       have : (j : ℝ) ≤ k := by exact_mod_cast hk.le
       linarith
     rw [h₁, abs_of_nonneg hnn, mul_one_div]
-  have hval₂ : ∀ k, k < j → P / (|(k : ℝ) - j|) ^ ν = P * (1 / (((j - k - 1 : ℕ) : ℝ) + 1) ^ ν) :=
-    by
+  have hval₂ : ∀ k, k < j → P / (|(k : ℝ) - j|) ^ ν = P *
+    (1 / (((j - k - 1 : ℕ) : ℝ) + 1) ^ ν) := by
     intro k hk
     have h₁ : (((j - k - 1 : ℕ) : ℝ) + 1) = (j : ℝ) - k := by
       have : j - k - 1 + 1 = j - k := by omega
@@ -421,8 +421,8 @@ theorem tendsto_relay_direct (hν : 0 < ν) (P : ℝ) :
   have h₁ : Filter.Tendsto (fun N : ℕ => P / (N : ℝ) ^ ν) Filter.atTop (nhds 0) :=
     Filter.Tendsto.div_atTop tendsto_const_nhds
       ((tendsto_rpow_atTop hν).comp tendsto_natCast_atTop_atTop)
-  have h₂ : Filter.Tendsto (fun x : ℝ => 1 / 2 * log (1 + x)) (nhds 0) (nhds (1 / 2 * log (1 + 0)))
-    :=
+  have h₂ : Filter.Tendsto (fun x : ℝ => 1 / 2 * log (1 + x)) (nhds 0)
+    (nhds (1 / 2 * log (1 + 0))) :=
     ((continuousAt_const.add continuousAt_id).log (by norm_num)).const_mul _
   simp only [add_zero, log_one, mul_zero] at h₂
   exact h₂.comp h₁

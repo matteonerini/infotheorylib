@@ -85,16 +85,13 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ## Differences from the notes
 
 * **The cutset bound** is proved directly for many sources. Time sharing is replaced by the
-  concavity
-  of the information across a cut, and by compactness there is one input law for all the cuts, also
-  for the closure of the achievable rates.
+  concavity of the information across a cut, and by compactness there is one input law for all the
+  cuts, also for the closure of the achievable rates.
 * **Decode–forward.** The notes draw each codeword given the codewords of the nodes after it. We
-  draw
-  random strategies, with independent entries, and the tuple built by them has law `p(xᴺ)`
+  draw random strategies, with independent entries, and the tuple built by them has law `p(xᴺ)`
   (`sum_strat_build`). The notes bound the error "by induction": we use a genie run, whose blocks
-    are
-  independent, and which coincides with the actual run on the good event. The messages need not be
-  uniform: the bound holds for each sequence of messages.
+  are independent, and which coincides with the actual run on the good event. The messages need not
+  be uniform: the bound holds for each sequence of messages.
 * **Covering in noisy network coding.** The notes use the Markov lemma, with no details. We use a
   hybrid argument: the nodes switch from the true conditional law to their codebooks one at a time,
   and each node looks for a sequence for which the conditional probability of a bad tuple is small
@@ -107,8 +104,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   of the sequences of the nodes that are not fresh (`sum_nnc_fresh_le`). The same bound covers the
   labels of `Sᶜ` that differ from the true index, which the notes leave to "(check!)" on page 19-33.
 * **Theorem 5** has the weaker hypothesis: the cuts in which all the rates are `0` are not needed,
-  so
-  that Theorem 3 is a special case. It is stated for nonnegative rates.
+  so that Theorem 3 is a special case. It is stated for nonnegative rates.
 * **The exponent.** The identity on page 19-35 is proved as the inequality `nncInfo_le`, which is
   enough and needs no independence.
 * **Degradedness** is stated as the Markov chains that the notes use on page 19-8, for all the input
@@ -131,14 +127,12 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 * **Page 19-21: the capacity of a finite-field network** is printed as
   `min_{k ∈ D} max_{S} rank(G(S)) log q`, and should have a minimum over `S`, as on page 19-19.
-    Here:
-  `printed_ffd_counterexample`, a network with capacity `0` for which the printed value is `log 2`.
-  The formula was confirmed against the PDF.
+  Here: `printed_ffd_counterexample`, a network with capacity `0` for which the printed value is
+  `log 2`. The formula was confirmed against the PDF.
 * The following were read from the extracted text.
 * Page 19-7: `I(X_Q(S), Y_Q(Sᶜ) | …)`, twice, and `I(X(S), Y(Sᶜ) | X(Sᶜ))`, should have a colon.
 * Page 19-12: `R < I(X₁; Y₃ | X₂) + I(X₂; Y₃) = I(X₁, X₂; Y₃) - 2 δ(ε)` should have the term
-  `2 δ(ε)`
-  on both sides.
+  `2 δ(ε)` on both sides.
 * Page 19-15: "Node `N` sends `x_Nⁿ(j)` in block `j ∈ [1 : N]`" should have `[1 : b]`.
 * Page 19-24: "the sender transmits `xⁿ(j, m)` is block `j`" should read `x₁ⁿ(j, m)` in block `j`.
 * Page 19-33: `I₁(S) := (I(X(S); Ŷ(Sᶜ) | X(Sᶜ))` has an unmatched parenthesis.

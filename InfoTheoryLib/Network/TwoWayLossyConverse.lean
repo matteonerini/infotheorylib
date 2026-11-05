@@ -43,10 +43,9 @@ variable {Ω a κ σ β : Type*} [Fintype Ω] [Fintype a] [Fintype κ] [Fintype 
 omit [Fintype β] in
 /-- **Claim (a) of page 21-25 of [elgamal2010].** If `X → C → B` is a Markov chain, a reconstruction
 of `X` from `(C, B)` can be replaced by one from `C` with no larger expected distortion. -/
-theorem exists_estimator_le [Finite β] (hν : IsPMF ν) (X : Ω → a) (C : Ω → κ) (B : Ω → σ) (g : κ × σ
-  → β)
-    (d : a → β → ℝ) (h : I[X : B | C ; ν] = 0) :
-    ∃ f : κ → β, ∑ ω, ν ω * d (X ω) (f (C ω)) ≤ ∑ ω, ν ω * d (X ω) (g (C ω, B ω)) := by
+theorem exists_estimator_le [Finite β] (hν : IsPMF ν) (X : Ω → a) (C : Ω → κ) (B : Ω → σ)
+    (g : κ × σ → β) (d : a → β → ℝ) (h : I[X : B | C ; ν] = 0) : ∃ f : κ → β, ∑ ω, ν ω * d (X ω)
+    (f (C ω)) ≤ ∑ ω, ν ω * d (X ω) (g (C ω, B ω)) := by
   have := Fintype.ofFinite β
   classical
   have hlaw := (condIndep_iff_dist_eq hν X B C).1 ((condMutualInfo_eq_zero_iff hν X B C).1 h)
@@ -122,8 +121,8 @@ theorem condEntropy_le_sum_of_order {γ : Type*} [Fintype γ] [Nonempty γ] [Non
     simp [hY]
   rw [hYk]
   have hne : Nonempty (τ (ord k)) := ⟨F _ (Classical.arbitrary Ω)⟩
-  obtain ⟨G, hG⟩ : ∃ G : κ × (Fin k → γ) → τ (ord k), ∀ ω, F (ord k) ω = G (pair C (prefixRV Y k) ω)
-    := by
+  obtain ⟨G, hG⟩ : ∃ G : κ × (Fin k → γ) → τ (ord k), ∀ ω, F (ord k) ω =
+    G (pair C (prefixRV Y k) ω) := by
     refine exists_factor fun ω ω' h => ?_
     obtain ⟨h₁, h₂⟩ := Prod.mk.inj h
     refine hF _ _ _ h₁ fun t ht => ?_
@@ -176,8 +175,7 @@ namespace KaspiCode
 variable (c : KaspiCode spk M n α₁ α₂ β₁ β₂)
 
 /-- **Page 21-25 of [elgamal2010]: the auxiliary letter** of the round `l`, at the time `z.2`, in
-  all
-the rounds with the side information. -/
+all the rounds with the side information. -/
 def kU (l : Fin q) (z : (Fin n → α₁ × α₂) × Fin n) : KUps n M α₁ α₂ :=
   (z.2, (kSide z.2 z.1).1, (kSide z.2 z.1).2, ⟨l, c.tr z.1 l⟩)
 
@@ -192,12 +190,11 @@ lemma hist_of_lt (ω : Fin n → α₁ × α₂) {r : ℕ} {l : Fin q} (h : (l :
   exact h₁
 
 /-- The past of the auxiliary letters is the side information and the past of the indices. -/
-lemma truncU_kUs_iff {a : Type*} [Fintype a] {ν : (Fin n → α₁ × α₂) → ℝ} (hν : IsPMF ν) {b x :
-  Type*}
-    [Fintype b] [Fintype x] (X : (Fin n → α₁ × α₂) → b) (Y : (Fin n → α₁ × α₂) → x)
+lemma truncU_kUs_iff {a : Type*} [Fintype a] {ν : (Fin n → α₁ × α₂) → ℝ} (hν : IsPMF ν)
+    {b x : Type*} [Fintype b] [Fintype x] (X : (Fin n → α₁ × α₂) → b) (Y : (Fin n → α₁ × α₂) → x)
     (S : (Fin n → α₁ × α₂) → a) (i : Fin n) {l : ℕ} (hl : 0 < l) :
     I[X : Y | pair (fun ω => c.hist ω l) (pair S (kSide i)) ; ν] =
-      I[X : Y | pair S (fun ω => truncU l (c.kUs (ω, i))) ; ν] := by
+    I[X : Y | pair S (fun ω => truncU l (c.kUs (ω, i))) ; ν] := by
   classical
   have l₀ : (0 : ℕ) < q := Nat.pos_of_ne_zero (NeZero.ne q)
   refine condMutualInfo_congr_comp hν X Y
@@ -973,11 +970,9 @@ variable {α₁ α₂ : Type u} {β₁ β₂ : Type*} [Fintype α₁] [Fintype �
 omit [Fintype β₁] [Fintype β₂] in
 /-- **Theorem 4 of Lecture 21 of [elgamal2010], page 21-22: the converse.** A rate pair of the
 `q`-round rate–distortion region satisfies the bounds up to `ε`. The notes bound the alphabets of
-  the
-auxiliary letters; we do not prove this bound. -/
-theorem exists_kaspiInner_of_mem_kaspiRegion [Finite β₁] [Finite β₂] (hq : 0 < q) (hP : IsPMF P) {D₁
-  D₂ : ℝ} {R : ℝ × ℝ}
-    (h : R ∈ kaspiRegion P spk d₁ d₂ D₁ D₂) {ε : ℝ} (hε : 0 < ε) :
+the auxiliary letters; we do not prove this bound. -/
+theorem exists_kaspiInner_of_mem_kaspiRegion [Finite β₁] [Finite β₂] (hq : 0 < q) (hP : IsPMF P)
+    {D₁ D₂ : ℝ} {R : ℝ × ℝ} (h : R ∈ kaspiRegion P spk d₁ d₂ D₁ D₂) {ε : ℝ} (hε : 0 < ε) :
     (R.1 + ε, R.2 + ε) ∈ kaspiInner P spk d₁ d₂ (D₁ + ε) (D₂ + ε) := by
   have := Fintype.ofFinite β₁
   have := Fintype.ofFinite β₂

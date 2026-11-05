@@ -139,8 +139,8 @@ theorem RCCode.exists_sub [NeZero M] (c : RCCode M N X X₁ Y Y₁) {M' : ℕ} (
     change (if hy : ∃ t, ι t = c.dec fun i => (z i).1 then Classical.choose hy else 0) = t
     rw [dite_eq_left hy]
     exact hι ((Classical.choose_spec hy).trans heq)
-  have hc' : c'.errProb W = (∑ t, ∑ z : Fin N → Y × Y₁, (∏ i : Fin N, W (c'.fbEnc i t fun u : Fin i
-    =>
+  have hc' : c'.errProb W =
+    (∑ t, ∑ z : Fin N → Y × Y₁, (∏ i : Fin N, W (c'.fbEnc i t fun u : Fin i =>
       z ⟨u, u.2.trans i.2⟩) (z i)) * ind (c'.dec (fun i => (z i).1) ≠ t)) / M' := by
     rw [errProb_eq, Fintype.sum_prod_type, sum_div]
     refine sum_congr rfl fun w _ => ?_
@@ -196,8 +196,8 @@ instance (a : ℕ) : NeZero (2 ^ a) := ⟨by positivity⟩
 omit [Fintype X] [Fintype X₁] [Nonempty Y] [Nonempty Y₁] in
 /-- **Codes of many blocks give achievable rates.** For every number of blocks `B₁ + 1` and for all
 large `n`, let there be codes of `(B₁ + 1) n` uses of the channel, with error as small as we wish
-  and
-at least `exp (B₁ n ρ)` messages. Then every rate `R`, in bits, with `R log 2 < ρ` is achievable. -/
+and at least `exp (B₁ n ρ)` messages. Then every rate `R`, in bits, with `R log 2 < ρ` is
+achievable. -/
 theorem isAchievableRC_of_codes {ρ R : ℝ} (hρ0 : 0 ≤ ρ) (hR : R * log 2 < ρ) (hW : IsChannel W)
     (hcode : ∀ B₁ : ℕ, 0 < B₁ → ∀ ε > 0, ∀ᶠ n : ℕ in atTop, ∃ (M₀ : ℕ)
       (c : RCCode M₀ ((B₁ + 1) * n) X X₁ Y Y₁), 0 < M₀ ∧
@@ -260,8 +260,8 @@ theorem isAchievableRC_of_codes {ρ R : ℝ} (hρ0 : 0 ≤ ρ) (hR : R * log 2 <
           push_cast
           rw [← exp_log (by norm_num : (0 : ℝ) < 2), ← exp_nat_mul]
           refine exp_le_exp.mpr ?_
-          have h₃ : (B₁ : ℝ) * ((N : ℝ) / ((B₁ : ℝ) + 1) * ρ) = (N : ℝ) * ((B₁ : ℝ) / (B₁ + 1) * ρ)
-            := by
+          have h₃ : (B₁ : ℝ) * ((N : ℝ) / ((B₁ : ℝ) + 1) * ρ) = (N : ℝ) *
+            ((B₁ : ℝ) / (B₁ + 1) * ρ) := by
             field_simp
           have h₄ : (N : ℝ) / ((B₁ : ℝ) + 1) * ρ ≤ ((n : ℝ) + 1) * ρ :=
             mul_le_mul_of_nonneg_right hNreal.le hρ0

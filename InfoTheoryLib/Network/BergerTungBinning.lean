@@ -11,10 +11,10 @@ public import InfoTheoryLib.Network.BergerTung
 # Distributed lossy source coding: binning
 
 The encoders of Berger–Tung coding send the bin indices of their codewords, and the decoder finds
-the
-unique jointly typical pair of the two bins. This file bounds the probability of the corresponding
-error event, by the mutual packing lemma. As in Lecture 12, we bin at random, independently of the
-codebooks, which avoids the analogue of Lemma 1 of Lecture 12 used on page 13-12.
+the unique jointly typical pair of the two bins. This file bounds the probability of the
+corresponding error event, by the mutual packing lemma. As in Lecture 12, we bin at random,
+independently of the codebooks, which avoids the analogue of Lemma 1 of Lecture 12 used on page
+13-12.
 
 ## Main definitions
 
@@ -65,8 +65,7 @@ def btPackExp {a b : Type*} [Fintype a] [Fintype b] (J : a × b → ℝ) (ε : �
 variable {a b : Type*} [Fintype a] [Fintype b] {J : a × b → ℝ} {n : ℕ} {ε : ℝ}
 
 /-- **The mutual packing lemma, for one sequence (Lecture 13, page 13-12).** An independent `Uⁿ` is
-typical
-with a given sequence with probability at most `e^{-n (I(U₁; U₂) - δ(ε))}`. -/
+typical with a given sequence with probability at most `e^{-n (I(U₁; U₂) - δ(ε))}`. -/
 theorem sum_iidPMF_snd_typical_le (hJ : IsPMF J) (hε : 0 ≤ ε) (u : Fin n → a) :
     ∑ v, iidPMF (margSnd J) n v *
         (open Classical in if zipSeq u v ∈ robustTypicalSet J n ε then (1 : ℝ) else 0) ≤
@@ -110,8 +109,8 @@ theorem sum_iidPMF_fst_typical_le (hJ : IsPMF J) (hε : 0 ≤ ε) (v : Fin n →
     rw [← dist_comp_eq]
     rfl
   have hexp : btPackExp (dist J Prod.swap) ε = btPackExp J ε := by
-    have hp : dist (dist J Prod.swap) (pair Prod.fst Prod.snd) = dist J (pair Prod.snd Prod.fst) :=
-      by
+    have hp : dist (dist J Prod.swap) (pair Prod.fst Prod.snd) =
+      dist J (pair Prod.snd Prod.fst) := by
       rw [dist_pair_fst_snd]
       rfl
     have hIeq : I[Prod.fst : Prod.snd ; dist J Prod.swap] = I[Prod.fst : Prod.snd ; J] := by
@@ -148,13 +147,10 @@ theorem sum_iidPMF_fst_typical_le (hJ : IsPMF J) (hε : 0 ≤ ε) (v : Fin n →
 
 open Classical in
 /-- **The mutual packing lemma (Lecture 13, page 13-12).** Let `U₁ⁿ(l₁)` and `U₂ⁿ(l₂)` be two
-independent
-families of random sequences, with arbitrary dependence inside each family and with each sequence of
-the second family distributed according to `∏ᵢ p(uᵢ)`. Then some pair of sequences is jointly
-typical
-with probability at most `L₁ L₂ e^{-n (I(U₁; U₂) - δ(ε))}`. The notes also assume the law of the
-first
-family, which the proof does not use. -/
+independent families of random sequences, with arbitrary dependence inside each family and with each
+sequence of the second family distributed according to `∏ᵢ p(uᵢ)`. Then some pair of sequences is
+jointly typical with probability at most `L₁ L₂ e^{-n (I(U₁; U₂) - δ(ε))}`. The notes also assume
+the law of the first family, which the proof does not use. -/
 theorem prob_mutual_packing_le (hJ : IsPMF J) (hε : 0 ≤ ε) {L₁ L₂ : ℕ}
     {ρ₁ : (Fin L₁ → Fin n → a) → ℝ} {ρ₂ : (Fin L₂ → Fin n → b) → ℝ} (hρ₁ : IsPMF ρ₁)
     (hρ₂ : IsPMF ρ₂)
@@ -281,8 +277,8 @@ def btIndex (B₁ : Fin L₁ → Fin M₁) (B₂ : Fin L₂ → Fin M₂) (R : F
 open Classical in
 omit [Fintype α₁] [Fintype α₂] [Fintype υ₁] [Fintype υ₂] in
 /-- **Lecture 13, page 13-10.** The decoder recovers the indices `(l₁, l₂)` unless their codewords
-are
-not typical with the sources, or another pair of the bins is jointly typical (the event `E₄`). -/
+are not typical with the sources, or another pair of the bins is jointly typical (the event
+`E₄`). -/
 theorem btIndex_not_mem_le {B₁ : Fin L₁ → Fin M₁} {B₂ : Fin L₂ → Fin M₂}
     {R : Finset (Fin n → υ₁ × υ₂)} {C₁ : Fin L₁ → Fin n → υ₁} {C₂ : Fin L₂ → Fin n → υ₂}
     (l₀ : Fin L₁ × Fin L₂) (l₁ : Fin L₁) (l₂ : Fin L₂)
@@ -450,8 +446,7 @@ lemma sum_codebook_count_le {X : Type*} [Fintype X] {r : X → ℝ} (hr : IsPMF 
 
 open Classical in
 /-- **Lecture 13, pages 13-10 to 13-13.** The bound on the probability of error of Berger–Tung
-coding:
-for any numbers of codewords and bins, there are a code and a typicality decoder with
+coding: for any numbers of codewords and bins, there are a code and a typicality decoder with
 `(X₁ⁿ, U₁ⁿ, X₂ⁿ, U₂ⁿ)` typical except with probability at most
 `btCoverBound + (L₁ / M₁ + L₂ / M₂ + L₁ L₂ / (M₁ M₂)) e^{-n (I(U₁; U₂) - δ(ε))}`. -/
 theorem exists_bt_code_le {ε ε₁ ε₂ ε₃ : ℝ} (hP : IsPMF P) (h₁ : IsChannel κ₁) (h₂ : IsChannel κ₂)

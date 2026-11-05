@@ -19,8 +19,7 @@ codebook does not cover a given typical sequence:
 
 1. a codebook of `uⁿ` sequences, by the covering lemma;
 2. two conditionally independent codebooks of `x̂₁ⁿ` and `x̂₂ⁿ` sequences given `uⁿ`, by a
-  conditional
-   version of the multivariate covering lemma, proved with the second moment method;
+   conditional version of the multivariate covering lemma, proved with the second moment method;
 3. a codebook of `x̂₀ⁿ` sequences given `(uⁿ, x̂₁ⁿ, x̂₂ⁿ)`, by the covering lemma.
 
 ## Main definitions
@@ -176,8 +175,7 @@ variable {α : Type*} [Fintype α]
 
 open Classical in
 /-- **The first layer.** For `xⁿ` typical and `L` codewords `Uⁿ(m)` drawn i.i.d. from `∏ᵢ p(uᵢ)`,
-  the
-probability that no codeword is jointly typical with `xⁿ` is at most
+the probability that no codeword is jointly typical with `xⁿ` is at most
 `exp(-L (1 - ε) e^{-n(I(X; U) + 2 ε log |𝒰|)})`. -/
 theorem eventually_sum_first_codebook_le (hμ : IsPMF μ) (X : Ω → α) (U : Ω → υ) {ε₀ : ℝ}
     (hεε : ε₀ < ε) (hε : 0 < ε) (hε1 : ε ≤ 1) :
@@ -273,8 +271,7 @@ independent sequences drawn from `∏ᵢ p(x̂₁ᵢ|uᵢ)` and from `∏ᵢ p(x
 no pair of them is jointly typical with `(uⁿ, xⁿ)` is at most
 `4 (e^{n(J + 2δ)}/(L₁ L₂) + e^{n(I(X; X̂₁|U) + 3δ)}/L₁ + e^{n(I(X; X̂₂|U) + 3δ)}/L₂)`, where
 `J = I(X; X̂₁, X̂₂|U) + I(X̂₁; X̂₂|U)` and `δ = 2 ε (log |𝒳̂₁| + log |𝒳̂₂|)`. The law `J` is given
-  in
-its two forms, one for each order of the codebooks. -/
+in its two forms, one for each order of the codebooks. -/
 theorem eventually_sum_two_codebooks_le (hμ : IsPMF μ) {ε₁ ε' : ℝ} (hε₁ : ε₁ < ε') (hε' : ε' < ε)
     (hε'0 : 0 < ε') (hε : ε ≤ 1 / 2) {J : ℝ}
     (hJ : J = I[X : Y₁ | U ; μ] + I[pair X Y₁ : Y₂ | U ; μ])

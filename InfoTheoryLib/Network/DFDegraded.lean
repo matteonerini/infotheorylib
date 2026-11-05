@@ -265,8 +265,8 @@ theorem cutInfo_eq_dfInfo (hW : IsChannel W) {p : (∀ k, X k) → ℝ} (hp : Is
           exact h) fun _ => rfl
     rw [← e₁]
     have e₂ : H[fun ω : (∀ l, X l) × (∀ l, Y l) => ω.2 d | pair (fun ω => restr Sᶜ ω.1)
-        (fun ω => restr S ω.1) ; L₀] = H[fun ω : (∀ l, X l) × (∀ l, Y l) => ω.2 d | Prod.fst ; L₀]
-          :=
+        (fun ω => restr S ω.1) ; L₀] =
+          H[fun ω : (∀ l, X l) × (∀ l, Y l) => ω.2 d | Prod.fst ; L₀] :=
       condEntropy_congr_right hL _ (fun x : ∀ l, X l => (restr Sᶜ x, restr S x))
         (restr_compl_restr_injective S) fun _ => rfl
     have e₃ : H[fun ω : (∀ l, X l) × (∀ l, Y l) => ω.2 d | pair (fun ω => restr (dfLt d)ᶜ ω.1)
@@ -279,9 +279,8 @@ theorem cutInfo_eq_dfInfo (hW : IsChannel W) {p : (∀ k, X k) → ℝ} (hp : Is
     condMutualInfo_eq' hL, h₁, h₂]
 
 /-- **Page 19-9 of [elgamal2010]: the relay channel with two destinations.** Both the relay and the
-receiver decode the message: the capacity is
-`max_{p(x₁, x₂)} min {I(X₁; Y₂ | X₂), I(X₁, X₂; Y₃)}`. The nodes are numbered from `0`, and the last
-node has one input. -/
+receiver decode the message: the capacity is `max_{p(x₁, x₂)} min {I(X₁; Y₂ | X₂), I(X₁, X₂; Y₃)}`.
+The nodes are numbered from `0`, and the last node has one input. -/
 theorem mnCapacity_relay_both {X Y : Fin 3 → Type*} [∀ k, Fintype (X k)] [∀ k, Fintype (Y k)]
     [∀ k, Nonempty (X k)] [Subsingleton (X 2)] {W : (∀ k, X k) → (∀ k, Y k) → ℝ}
     (hW : IsChannel W) : mnCapacity W 0 {1, 2} * log 2 = dfBound W := by
