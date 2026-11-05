@@ -34,7 +34,7 @@ to organize them by topic, in the spirit of Mathlib for mathematics and Physlib 
 
 | Lecture of El Gamal & Kim | Status |
 |---|---|
-| 1. Introduction | Formalized: the notation (including the `DSBS(p)` pmf and the functions `C(x)` and `R(x)`), with pointers to Shannon's four theorems in Lecture 3; the max-flow min-cut theorem, proved in Lecture 16, is not formalized (see the lecture file) |
+| 1. Introduction and Preview | Formalized: all definitions and examples, with pointers to the later chapters for the announced results |
 | 2. Entropy, Mutual Information, and Typicality | Formalized: entropy, differential entropy and mutual information with their inequalities, Mrs. Gerber's lemma in the notes' `H⁻¹` form (scalar and vector), the Csiszár sum identity, robust typicality with the typical average lemma, the properties of jointly typical sequences, the conditional typicality lemma, joint typicality for Markov chains, the joint typicality lemma (parts 1 and 2), and weak typicality; the entropy power inequality, the conditional maximum differential entropy lemma and the Stirling appendix are not formalized (see the lecture file, which also lists the issues found in the notes) |
 | 3. Point-to-Point Information Theory | Formalized: the channel coding theorem with the notes' definitions (rates in bits, average probability of error) and its examples, the packing lemma, channel coding with cost (Theorem 2), the AWGN channel (Theorem 3), lossless and lossy source coding with the Bernoulli examples and `R* = R(0)`, the covering lemma, the quadratic Gaussian rate–distortion function (Theorem 6, informational form), source–channel separation for `r = 1` and uncoded transmission; linear codes, Lemma 2 and the operational Gaussian source coding theorem are not formalized (see the lecture file) |
 | 4. Multiple Access Channels | Formalized: the notes' definitions in bits, the time-division inner bound and the outer bound with `C₁`, `C₂`, `C₁₂`, the binary multiplier MAC (exact region) and the binary erasure MAC, the multi-letter characterization (Theorem 1), time sharing and convexity, the single-letter characterization (Theorem 2), the sum capacity, and the AWGN-MAC formulas (corner points, TDMA with power control); the cardinality bound \|Q\| ≤ 2 (Theorem 3), the AWGN-MAC coding theorem (Theorem 4) and the `k`-sender MAC (Theorem 5) are not formalized (see the lecture file) |
@@ -44,6 +44,7 @@ to organize them by topic, in the spirit of Mathlib for mathematics and Physlib 
 | 8. Fading Channels | Formalized for finitely many fading states: the slow-fading compound capacity `min_g C(g²P)` as a coding theorem, also with the gain at the encoder; the rest at the level of the formulas, as the notes mostly cite the proofs: water-filling in time with its optimality and the water level, the high-SNR limit, the outage and broadcasting metrics and their order, the MAC regions and sum capacities with their order, the BC regions, and for the fading IC the comparison of time division, treating interference as noise and interference alignment, with conjugate gain matrices and the pairwise converse step. Not formalized: the coding theorems of fast fading (ergodic capacities), general stationary ergodic gains, the operational meaning of the metrics, the Fourier–Motzkin elimination on page 8-19. |
 | 9. General Broadcast Channels | Formalized for two receivers: the capacity region with degraded message sets (Theorem 1), the mutual covering lemma, Marton's inner bound (Theorem 2), also for random mappings `p(x \| u₁, u₂)`, the Cover–van der Meulen inner bound, the capacity regions of the semi-deterministic and deterministic channels, the outer bound with `U₂ = U`, the Blackwell channel and the formulas of the multilevel product example. Not formalized: the multilevel capacity region with indirect decoding (Theorem 5), Marton's bound with a common message (Theorem 3), the Nair–El Gamal outer bound in general (Theorem 4), the BSC–BEC and skew-symmetric examples, dirty paper coding for the AWGN-BC, and more than 2 receivers. The notes' region of the Blackwell channel is wrong, with a formal counterexample; see the lecture's index. |
 | 10. Gaussian Vector Channels | Formalized: the capacity of the Gaussian vector channel as a coding theorem (Theorem 1), by rotating to parallel channels and coding along the singular directions; the rest at the level of the formulas: the SVD and water-filling, the reciprocity lemma, sufficiency of the KKT conditions, Theorem 2 for finitely many fading states with its low and high SNR limits, the GV-MAC and spectral BC regions, the fixed points of iterative water-filling, the MMSE formula for vector dirty paper, the MAC–BC duality `R_DPC = C_DMAC`, and the algebra of the enhanced degraded channel. Not formalized: the coding theorems for the GV-MAC (Theorem 3), the spectral BC, vector dirty paper and the GV-BC capacity (the second Theorem 4, whose Lemma 4 needs the vector entropy power inequality), the product of reversely degraded DM-BCs, the uniqueness of the supporting hyperplane, and more than two receivers. |
+| 11. Distributed Lossless Source Coding | Formalized: the Slepian–Wolf theorem in bits, with the DSBS and the second example; lossless source coding with a helper (Theorem 2), with its achievability by covering and binning, its converse, and the region for the DSBS by Mrs. Gerber's lemma; and the Slepian–Wolf theorem for `k` sources (Theorem 3). Not formalized: random linear binning, zero-error coding, stationary ergodic sources, the cardinality bound on `U`, and Theorem 4. |
 
 The library contains no `sorry` and builds without warnings under Mathlib's linter set.
 
@@ -117,6 +118,9 @@ in the [API documentation](https://matteonerini.github.io/infotheorylib/docs/).
 | Reciprocity lemma (Lecture 10) | `exists_reciprocal` | `GaussianChannel.Vector` |
 | Isotropic fading: `K* = (P/t) I` (Lecture 10, Theorem 2) | `gvFadingCapacity_eq` | `GaussianChannel.VectorFading` |
 | MAC–BC duality `R_DPC = C_DMAC` (Lecture 10) | `convexHull_dpcRegion_eq` | `Network.GaussianVector` |
+| Slepian–Wolf theorem in bits (Lecture 11) | `swOptimalRegionBits_eq` | `Network.SlepianWolfBits` |
+| Lossless source coding with a helper (Lecture 11, Theorem 2) | `helperOptimalRegionBits_eq` | `Network.SourceHelperConverse` |
+| Slepian–Wolf theorem for `k` sources (Lecture 11, Theorem 3) | `manyOptimalRegionBits_eq` | `Network.SlepianWolfMany` |
 
 ## Getting started
 
@@ -347,6 +351,10 @@ InfoTheoryLib/
     MACBounds.lean       simple inner and outer bounds on the MAC region, the sum capacity
     MACMultiLetter.lean  the multi-letter characterization of the MAC region
     SlepianWolf.lean     distributed source codes, random binning, Theorem 15.4.1
+    SlepianWolfBits.lean  the Slepian–Wolf theorem in bits
+    SlepianWolfMany.lean  the Slepian–Wolf theorem for `k` sources
+    SourceHelper.lean    source coding with a helper: random binning and achievability
+    SourceHelperConverse.lean  source coding with a helper: the converse and the theorem
     Broadcast.lean       broadcast codes, Theorem 15.6.1, degraded broadcast channels
     BCBits.lean          the BC in bits, the superposition and degraded regions
     BCTimeSharing.lean   BC codes, bits versus nats, Lemma 1, time sharing
@@ -425,6 +433,7 @@ InfoTheoryLib/
     Lecture8.lean        index of Lecture 8, the example with two fading states
     Lecture9.lean        index of Lecture 9, the Blackwell channel, the multilevel product example
     Lecture10.lean       index of Lecture 10, the product channel, beamforming to one antenna
+    Lecture11.lean       index of Lecture 11, the DSBS, the helper for the DSBS
 docs/
   references.bib       bibliography, cited in docstrings as `[cover2006]`
 ```
@@ -459,7 +468,7 @@ files.
 
 Chapters 1–17 of Cover & Thomas are done: every chapter has a topic folder and a
 `Books/CoverThomas/ChapterN.lean` index. The formalization of El Gamal & Kim's lecture notes is
-in progress: Lectures 1–10 are done, and the remaining networks will reuse the typicality, packing
+in progress: Lectures 1–11 are done, and the remaining networks will reuse the typicality, packing
 and covering lemmas of Lectures 2 and 3. The remaining work is
 listed in the "Not formalized" section of each chapter file.
 
