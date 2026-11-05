@@ -48,7 +48,7 @@ variable {Ω τ γ δ β : Type*} [Fintype Ω] [Fintype τ] [Fintype γ] [Fintyp
 omit [Fintype τ] [Fintype γ] [Fintype δ] [Fintype β] in
 /-- If `Y` is produced from `T` by the channel `K ∘ ρ`, it is produced by `K ∘ f` from any
 coarsening `G(T)` that still determines `ρ(T) = f(G(T))`. -/
-private lemma dist_pair_comp_of_channel [Finite τ] [Finite β] {ι : Type*} {T : Ω → τ} {Y : Ω → β}
+lemma dist_pair_comp_of_channel [Finite τ] [Finite β] {ι : Type*} {T : Ω → τ} {Y : Ω → β}
     {ρ : τ → ι}
     {K : ι → β → ℝ} (h : ∀ t y, dist μ (pair T Y) (t, y) = dist μ T t * K (ρ t) y)
     (G : τ → γ) (f : γ → ι) (hf : ∀ t, f (G t) = ρ t) (c : γ) (y : β) :
@@ -88,7 +88,7 @@ private lemma dist_mixture {ι : Type*} [Fintype ι] (w : ι → ℝ) (μ : ι �
 
 /-- **Time sharing.** Conditioning on the time-sharing variable `Q`: under the mixture
 `w(i) μᵢ(ω)`, `H(Y_Q | Q, C_Q) = ∑ᵢ w(i) H(Yᵢ | Cᵢ)`. -/
-private lemma condEntropy_mixture {ι : Type*} [Fintype ι] (w : ι → ℝ) (μ : ι → Ω → ℝ)
+lemma condEntropy_mixture {ι : Type*} [Fintype ι] (w : ι → ℝ) (μ : ι → Ω → ℝ)
     (Y : ι → Ω → β) (C : ι → Ω → γ) :
     H[fun z : ι × Ω => Y z.1 z.2 | fun z => (z.1, C z.1 z.2) ;
       fun z : ι × Ω => w z.1 * μ z.1 z.2] = ∑ i, w i * H[Y i | C i ; μ i] := by

@@ -50,6 +50,7 @@ to organize them by topic, in the spirit of Mathlib for mathematics and Physlib 
 | 14. Multiple Descriptions | Formalized: the Zhang–Berger inner bound (Theorem 4), proved by a conditional multivariate covering lemma with the codebooks chosen one layer at a time; the El Gamal–Cover inner bound (Theorem 1) as its special case with a time sharing variable; the simple outer bound with exact distortions; the three special cases; successive refinement (Theorem 3); Proposition 1; the Bernoulli example without excess rate; the successive refinability of a binary source; and the formulas and algebra of the quadratic Gaussian problem, including a counterexample showing that the formula of Theorem 2 as printed needs the condition `1/D₀ + 1/P ≥ 1/D₁ + 1/D₂`. Not formalized: the cardinality bound of Theorem 4, the convexity of the Zhang–Berger region and one inclusion of its alternative form, the tightness results cited from the literature, the Gaussian coding theorems (which need the conditional entropy power inequality), and more than two descriptions. |
 | 15. Joint Source–Channel Coding | Formalized: the joint source–channel coding theorems for the DM-MAC (Theorem 2, for any common function, and Theorem 1 as its special case); the Gray–Wyner theorem (Theorem 3) with a cardinality bound; the common part, `K(U₁; U₂)` as the largest common rate, Wyner's `J(U₁; U₂)` as the smallest one, and `K ≤ I ≤ J ≤ H`; the binary example with `J = 2/3` bits, and the two examples where separation fails, over the binary erasure MAC and the Blackwell channel. Not formalized: Theorem 4 (Han–Costa) and Lemma 1, the separation results over the DM-BC, the DM-MAC with common message, the characterization of `K = I = J`, and the value of `J` for the DSBS. |
 | 16. Noiseless Networks | Formalized: the max-flow min-cut theorem, both for flows with real and integer capacities and as a coding theorem achieved by routing; the case where every node wants the message; the network coding theorem by the method of Koetter and Médard, with Lemma 1, the determinant criterion, the size of the field and random linear codes; the capacity region of multi-source multicast networks; the cutset outer bound as a strong converse; and all the examples: the butterfly network (capacity `2`, and rate `3/2` for routing with copies at the source), its multiple unicast variant, and the network whose capacity region is strictly inside the cutset bound. Not formalized: networks with cycles (Lecture 19), the algorithms and complexity results cited, and the cited example where linear codes are suboptimal. |
+| 17. Relay Channels | Formalized: the cutset bound (Theorem 1); direct transmission and multi-hop; decode–forward and partial decode–forward (Theorems 2 and 3), by block Markov coding with one fixed code; compress–forward (Theorem 4) and one direction of the equivalence with its original characterization; the capacity of the degraded, reversely degraded, semi-deterministic and cascade channels, of the channels with orthogonal sender components and of the receiver-orthogonal semi-deterministic channel; the modulo-2 sum channel, whose capacity is proved by compress–forward and the vector Mrs. Gerber's lemma and is strictly below the cutset bound; the relay without delay (Theorem 7), instantaneous relaying and noncausal decode–forward; the Sato channel with unlimited lookahead and without delay; and the closed forms of the bounds for the AWGN and RFD channels. Not formalized: the Gaussian coding theorems, Theorem 5 and amplify–forward, the second term of Theorem 6, time sharing and the cardinality bounds. See `Books/ElGamalKim/Lecture17.lean`. |
 
 The library contains no `sorry` and builds without warnings under Mathlib's linter set.
 
@@ -148,6 +149,13 @@ in the [API documentation](https://matteonerini.github.io/infotheorylib/docs/).
 | Network coding theorem (Lecture 16) | `network_coding_theorem` | `Network.NetworkCoding` |
 | Capacity region of multi-source multicast networks (Lecture 16) | `capacityRegion_multisource` | `Network.NetworkCoding` |
 | Cutset outer bound for noiseless networks (Lecture 16) | `IsAchievable.mem_cutsetRegion` | `Network.NoiselessCode` |
+| Cutset bound for the relay channel (Lecture 17) | `IsAchievableRC.le_rcCutsetBound` | `Network.RelayCode` |
+| Decode–forward lower bound (Lecture 17) | `isAchievableRC_of_lt_rcDfBound` | `Network.RelayDF` |
+| Partial decode–forward lower bound (Lecture 17) | `isAchievableRC_of_pmf` | `Network.RelayDF` |
+| Compress–forward lower bound (Lecture 17) | `isAchievableRC_compressForward` | `Network.RelayCF` |
+| Capacity of the degraded relay channel (Lecture 17) | `rcCapacity_degraded` | `Network.RelayClasses` |
+| Capacity with orthogonal sender components (Lecture 17) | `rcCapacity_os` | `Network.RelayOrthSender` |
+| Capacity of the modulo-2 sum relay channel; the cutset bound is not tight (Lecture 17) | `rcCapacity_modSum`, `modSum_lt_cutset` | `Network.RelayModSum` |
 
 ## Getting started
 
@@ -416,6 +424,24 @@ InfoTheoryLib/
     NoiselessRouting.lean  routing and the max-flow min-cut theorem
     LinearNetworkCode.lean  linear codes, the polynomial `|A(x)|`, the size of the field
     NetworkCoding.lean   the network coding theorem and multi-source multicast
+    RelayCode.lean       relay channel codes and the cutset bound
+    RelayBlock.lean      the block code of decode–forward and its random coding bound
+    RelayBlockIID.lean   the exponents of the block code of decode–forward
+    RelayMarkov.lean     block Markov coding and backward decoding
+    RelayRates.lean      from the codes of many blocks to achievable rates
+    RelayDF.lean         partial decode–forward, decode–forward, multi-hop
+    RelayClasses.lean    degraded, reversely degraded, semi-deterministic, cascade channels
+    RelayLookahead.lean  the relay without delay and with unlimited lookahead
+    RelayCFBlock.lean    block Markov coding for compress–forward, with offsets
+    RelayCFTest.lean     the bounds on the tests of compress–forward
+    RelayCFCover.lean    the covering step of compress–forward
+    RelayCFRandom.lean   the random code of compress–forward
+    RelayCFRate.lean     codes for one block of compress–forward
+    RelayCF.lean         the compress–forward lower bound
+    RelayOrth.lean       orthogonal receiver components, the semi-deterministic case
+    RelayOrthSender.lean  the capacity with orthogonal sender components
+    RelayModSum.lean     the modulo-2 sum channel, the cutset bound is not tight
+    RelayGaussian.lean   the closed forms of the bounds for the AWGN relay channel
     Broadcast.lean       broadcast codes, Theorem 15.6.1, degraded broadcast channels
     BCBits.lean          the BC in bits, the superposition and degraded regions
     BCTimeSharing.lean   BC codes, bits versus nats, Lemma 1, time sharing
@@ -505,6 +531,8 @@ InfoTheoryLib/
     Lecture16.lean       index of Lecture 16
     Lecture16Examples.lean  the butterfly networks and the linear code of Lecture 16
     Lecture16Yeung.lean  the network of Lecture 16 for which the cutset bound is loose
+    Lecture17.lean       index of Lecture 17
+    Lecture17Sato.lean   the Sato relay channel
 docs/
   references.bib       bibliography, cited in docstrings as `[cover2006]`
 ```
@@ -539,7 +567,7 @@ files.
 
 Chapters 1–17 of Cover & Thomas are done: every chapter has a topic folder and a
 `Books/CoverThomas/ChapterN.lean` index. The formalization of El Gamal & Kim's lecture notes is
-in progress: Lectures 1–16 are done, and the remaining networks will reuse the typicality, packing
+in progress: Lectures 1–17 are done, and the remaining networks will reuse the typicality, packing
 and covering lemmas of Lectures 2 and 3. The remaining work is
 listed in the "Not formalized" section of each chapter file.
 
