@@ -47,6 +47,7 @@ to organize them by topic, in the spirit of Mathlib for mathematics and Physlib 
 | 11. Distributed Lossless Source Coding | Formalized: the Slepian–Wolf theorem in bits, with the DSBS and the second example; lossless source coding with a helper (Theorem 2), with its achievability by covering and binning, its converse, and the region for the DSBS by Mrs. Gerber's lemma; and the Slepian–Wolf theorem for `k` sources (Theorem 3). Not formalized: random linear binning, zero-error coding, stationary ergodic sources, the cardinality bound on `U`, and Theorem 4. |
 | 12. Source Coding with Side Information | Formalized: Theorem 1 (causal side information), the Wyner–Ziv theorem and Theorem 2 (lossless causal coding) as coding theorems, with the minimum attained for `\|𝒰\| ≤ \|𝒳\| + 3`; the cases of side information at the encoder or at both ends; `R_SI-ED ≤ R_SI-D ≤ R_CSI-D ≤ R`; the closed forms for the DSBS; and the formulas of the quadratic Gaussian case. Not formalized: the bound `\|𝒰\| ≤ \|𝒳\| + 1`, source coding when side information may be absent, and the coding theorems of the quadratic Gaussian case. |
 | 13. Distributed Lossy Source Coding | Formalized: the Berger–Tung inner bound (Theorem 1) with the Markov lemma, Lemma 2, the mutual packing lemma and time sharing; the Berger–Tung outer bound (Theorem 2); the Wyner–Ziv and Slepian–Wolf special cases; and the formulas and algebra of the quadratic Gaussian and CEO problems. Not formalized: the cardinality bounds, the tightness statements, the DSBS counterexample, the Gaussian coding theorems (which need the conditional entropy power inequality), and more than two sources. |
+| 14. Multiple Descriptions | Formalized: the Zhang–Berger inner bound (Theorem 4), proved by a conditional multivariate covering lemma with the codebooks chosen one layer at a time; the El Gamal–Cover inner bound (Theorem 1) as its special case with a time sharing variable; the simple outer bound with exact distortions; the three special cases; successive refinement (Theorem 3); Proposition 1; the Bernoulli example without excess rate; the successive refinability of a binary source; and the formulas and algebra of the quadratic Gaussian problem, including a counterexample showing that the formula of Theorem 2 as printed needs the condition `1/D₀ + 1/P ≥ 1/D₁ + 1/D₂`. Not formalized: the cardinality bound of Theorem 4, the convexity of the Zhang–Berger region and one inclusion of its alternative form, the tightness results cited from the literature, the Gaussian coding theorems (which need the conditional entropy power inequality), and more than two descriptions. |
 
 The library contains no `sorry` and builds without warnings under Mathlib's linter set.
 
@@ -131,6 +132,12 @@ in the [API documentation](https://matteonerini.github.io/infotheorylib/docs/).
 | Mutual packing lemma (Lecture 13) | `prob_mutual_packing_le` | `Network.BergerTungBinning` |
 | Berger–Tung inner bound (Lecture 13, Theorem 1) | `isAchievableDL_of_lt_sharing` | `Network.BergerTungSharing` |
 | Berger–Tung outer bound (Lecture 13, Theorem 2) | `IsAchievableDL.dlOuterAt` | `Network.BergerTungOuter` |
+| Conditional multivariate covering lemma (Lectures 9 and 14) | `eventually_sum_two_codebooks_le` | `Network.MDCovering` |
+| Zhang–Berger inner bound (Lecture 14, Theorem 4) | `isAchievableMD_zhangBerger` | `Network.ZhangBerger` |
+| El Gamal–Cover inner bound (Lecture 14, Theorem 1) | `isAchievableMD_elGamalCover` | `Network.MDCases` |
+| Simple outer bound for multiple descriptions (Lecture 14) | `mdRegion_subset_mdOuter` | `Network.MDOuter` |
+| Successive refinement (Lecture 14, Theorem 3) | `mem_srRegion_iff` | `Network.MDCases` |
+| Successively refinable sources (Lecture 14, Proposition 1) | `isSuccessivelyRefinable_iff` | `Network.MDCases` |
 
 ## Getting started
 
@@ -379,6 +386,12 @@ InfoTheoryLib/
     BergerTungOuter.lean  the outer bound, Theorem 2 of Lecture 13
     BergerTungCases.lean  the Wyner–Ziv and Slepian–Wolf cases of the inner bound
     QuadraticGaussian.lean  the formulas of the quadratic Gaussian and CEO problems
+    MultipleDescriptions.lean  multiple description codes, the choice of one layer of codebooks
+    MDCovering.lean      the covering bounds of the three layers of Zhang–Berger coding
+    ZhangBerger.lean     the Zhang–Berger inner bound, Theorem 4 of Lecture 14
+    MDOuter.lean         the simple outer bound
+    MDCases.lean         the El Gamal–Cover inner bound, special cases, successive refinement
+    MDGaussian.lean      the formulas of the quadratic Gaussian problem, Ozarow's theorem
     Broadcast.lean       broadcast codes, Theorem 15.6.1, degraded broadcast channels
     BCBits.lean          the BC in bits, the superposition and degraded regions
     BCTimeSharing.lean   BC codes, bits versus nats, Lemma 1, time sharing
@@ -461,6 +474,8 @@ InfoTheoryLib/
     Lecture12.lean       index of Lecture 12, lossless examples, the quadratic Gaussian case
     Lecture12DSBS.lean   the rate–distortion functions of Lecture 12 for the DSBS
     Lecture13.lean       index of Lecture 13
+    Lecture14.lean       index of Lecture 14
+    Lecture14Binary.lean  the binary examples of Lecture 14
 docs/
   references.bib       bibliography, cited in docstrings as `[cover2006]`
 ```
@@ -495,7 +510,7 @@ files.
 
 Chapters 1–17 of Cover & Thomas are done: every chapter has a topic folder and a
 `Books/CoverThomas/ChapterN.lean` index. The formalization of El Gamal & Kim's lecture notes is
-in progress: Lectures 1–13 are done, and the remaining networks will reuse the typicality, packing
+in progress: Lectures 1–14 are done, and the remaining networks will reuse the typicality, packing
 and covering lemmas of Lectures 2 and 3. The remaining work is
 listed in the "Not formalized" section of each chapter file.
 

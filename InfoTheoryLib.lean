@@ -28,6 +28,8 @@ public import InfoTheoryLib.Books.ElGamalKim.Lecture11
 public import InfoTheoryLib.Books.ElGamalKim.Lecture12
 public import InfoTheoryLib.Books.ElGamalKim.Lecture12DSBS
 public import InfoTheoryLib.Books.ElGamalKim.Lecture13
+public import InfoTheoryLib.Books.ElGamalKim.Lecture14
+public import InfoTheoryLib.Books.ElGamalKim.Lecture14Binary
 public import InfoTheoryLib.Books.ElGamalKim.Lecture2
 public import InfoTheoryLib.Books.ElGamalKim.Lecture3
 public import InfoTheoryLib.Books.ElGamalKim.Lecture4
@@ -166,6 +168,11 @@ public import InfoTheoryLib.Network.MACCode
 public import InfoTheoryLib.Network.MACConverse
 public import InfoTheoryLib.Network.MACMultiLetter
 public import InfoTheoryLib.Network.MACRegion
+public import InfoTheoryLib.Network.MDCases
+public import InfoTheoryLib.Network.MDCovering
+public import InfoTheoryLib.Network.MDGaussian
+public import InfoTheoryLib.Network.MDOuter
+public import InfoTheoryLib.Network.MultipleDescriptions
 public import InfoTheoryLib.Network.QuadraticGaussian
 public import InfoTheoryLib.Network.SlepianWolf
 public import InfoTheoryLib.Network.SlepianWolfBits
@@ -173,6 +180,7 @@ public import InfoTheoryLib.Network.SlepianWolfMany
 public import InfoTheoryLib.Network.SourceHelper
 public import InfoTheoryLib.Network.SourceHelperConverse
 public import InfoTheoryLib.Network.Typicality
+public import InfoTheoryLib.Network.ZhangBerger
 public import InfoTheoryLib.Probability.Channel
 public import InfoTheoryLib.Probability.Conditional
 public import InfoTheoryLib.Probability.Event
