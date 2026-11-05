@@ -52,6 +52,7 @@ to organize them by topic, in the spirit of Mathlib for mathematics and Physlib 
 | 16. Noiseless Networks | Formalized: the max-flow min-cut theorem, both for flows with real and integer capacities and as a coding theorem achieved by routing; the case where every node wants the message; the network coding theorem by the method of Koetter and Médard, with Lemma 1, the determinant criterion, the size of the field and random linear codes; the capacity region of multi-source multicast networks; the cutset outer bound as a strong converse; and all the examples: the butterfly network (capacity `2`, and rate `3/2` for routing with copies at the source), its multiple unicast variant, and the network whose capacity region is strictly inside the cutset bound. Not formalized: networks with cycles (Lecture 19), the algorithms and complexity results cited, and the cited example where linear codes are suboptimal. |
 | 17. Relay Channels | Formalized: the cutset bound (Theorem 1); direct transmission and multi-hop; decode–forward and partial decode–forward (Theorems 2 and 3), by block Markov coding with one fixed code; compress–forward (Theorem 4) and one direction of the equivalence with its original characterization; the capacity of the degraded, reversely degraded, semi-deterministic and cascade channels, of the channels with orthogonal sender components and of the receiver-orthogonal semi-deterministic channel; the modulo-2 sum channel, whose capacity is proved by compress–forward and the vector Mrs. Gerber's lemma and is strictly below the cutset bound; the relay without delay (Theorem 7), instantaneous relaying and noncausal decode–forward; the Sato channel with unlimited lookahead and without delay; and the closed forms of the bounds for the AWGN and RFD channels. Not formalized: the Gaussian coding theorems, Theorem 5 and amplify–forward, the second term of Theorem 6, time sharing and the cardinality bounds. See `Books/ElGamalKim/Lecture17.lean`. |
 | 18. Interactive Communication | Formalized: the feedback capacity of the DMC (Theorem 1); the Schalkwijk–Kailath scheme, with the Chebyshev bound for any noise of unit variance and the doubly exponential bound for Gaussian noise; the cooperative outer bound and the Cover–Leung inner bound (Theorem 2) for the MAC with feedback, with the binary erasure MAC, for which feedback strictly enlarges the region; the capacity region of the physically degraded BC with feedback (Theorem 4) and Dueck's example; the capacity of the relay channel with feedback (Theorem 5); Shannon's inner and outer bounds for the two-way channel, the decoupled channel and the binary multiplier channel; the dependence balance bound (Theorem 6); directed information, Massey's inequality and the multi-letter capacity region (Theorem 7), with strategies. Not formalized: Horstein and Weldon coding, the coding theorems for the AWGN MAC with feedback (Theorem 3, formulas only), the cardinality bounds and the numerical values. See `Books/ElGamalKim/Lecture18.lean`. |
+| 19. Discrete Memoryless Networks | Formalized: the cutset bounds (Theorems 1 and 4), for one input law and all the cuts; the decode–forward lower bound with sliding window decoding, for any number of nodes (Theorem 2); the noisy network coding lower bound (Theorem 3) and inner bound (Theorem 5, without the time sharing variable); the capacity of physically degraded networks and of the relay channel with two destinations; deterministic networks: the lower bounds, and the capacity of finite-field networks and of networks with no interference. Not formalized: time sharing in Theorem 5, the optimization over orders of the nodes, and identifications with the earlier models. |
 
 The library contains no `sorry` and builds without warnings under Mathlib's linter set.
 
@@ -165,6 +166,11 @@ in the [API documentation](https://matteonerini.github.io/infotheorylib/docs/).
 | Shannon's inner and outer bounds for the two-way channel (Lecture 18) | `isAchievableTWC_of_lt`, `IsAchievableTWC.mem_closure_twcOuterRegion` | `Network.TwoWayInner`, `Network.TwoWayCode` |
 | Dependence balance outer bound (Lecture 18) | `IsAchievableTWC.mem_closure_twcDepRegion` | `Network.DependenceBalance` |
 | Multi-letter capacity region of the two-way channel; directed information (Lecture 18) | `twcCapacityRegion_eq_closure_iUnion`, `cInfo_stratW_eq_causalDirectedInfo` | `Network.TwoWayMultiLetter`, `Network.DirectedInfo` |
+| Cutset bounds for discrete memoryless networks (Lecture 19) | `IsAchievableMN.exists_cutset`, `IsAchievableDMN.exists_cutset` | `Network.DMNetwork` |
+| Decode–forward lower bound with sliding window decoding (Lecture 19) | `isAchievableMN_df` | `Network.DFTheorem` |
+| Noisy network coding lower bound and inner bound (Lecture 19) | `isAchievableMN_nnc`, `isAchievableDMN_nnc` | `Network.NNCTheorem` |
+| Capacity of physically degraded networks (Lecture 19) | `mnCapacity_of_degraded` | `Network.DFDegraded` |
+| Capacity of finite-field and no-interference deterministic networks (Lecture 19) | `mnCapacity_ffd`, `mnCapacity_ni` | `Network.DetFiniteField`, `Network.DetNoInterference` |
 
 ## Getting started
 
@@ -462,6 +468,25 @@ InfoTheoryLib/
     TwoWayStrategy.lean  strategies and the multi-letter outer bound
     TwoWayMultiLetter.lean  the multi-letter capacity region
     DirectedInfo.lean    directed information
+    DMNetwork.lean       codes for networks and the cutset bounds
+    PiLaw.lean           independent families and trellises
+    NNCLaw.lean          noisy network coding: the law and the fresh nodes
+    NNCCover.lean        noisy network coding: covering at all the nodes
+    NNCBlock.lean        noisy network coding: the random code of one block
+    NNCTrellis.lean      noisy network coding: the trellis of the compression indices
+    NNCCode.lean         noisy network coding: the code of all the blocks
+    NNCRate.lean         noisy network coding: the information across a cut
+    NNCTheorem.lean      the noisy network coding theorems
+    DFStrategy.lean      decode–forward: strategies for a correlated input law
+    DFBlock.lean         decode–forward: the random code of one block
+    DFCode.lean          decode–forward: sliding window decoding
+    DFGenie.lean         decode–forward: the genie run
+    DFRun.lean           decode–forward: the code of all the blocks
+    DFTheorem.lean       the decode–forward lower bound
+    DFDegraded.lean      physically degraded networks
+    DetNetwork.lean      deterministic networks
+    DetFiniteField.lean  finite-field deterministic networks
+    DetNoInterference.lean  deterministic networks with no interference
     MACFeedback.lean     the MAC with feedback and the cooperative outer bound
     MACFeedbackBlock.lean  the block code of the Cover–Leung bound
     MACFeedbackMarkov.lean  the Cover–Leung inner bound
@@ -557,6 +582,7 @@ InfoTheoryLib/
     Lecture16Yeung.lean  the network of Lecture 16 for which the cutset bound is loose
     Lecture17.lean       index of Lecture 17
     Lecture18.lean       index of Lecture 18
+    Lecture19.lean       index of Lecture 19
     Lecture18Examples.lean  the binary erasure MAC with feedback
     Lecture17Sato.lean   the Sato relay channel
 docs/
@@ -593,7 +619,7 @@ files.
 
 Chapters 1–17 of Cover & Thomas are done: every chapter has a topic folder and a
 `Books/CoverThomas/ChapterN.lean` index. The formalization of El Gamal & Kim's lecture notes is
-in progress: Lectures 1–18 are done, and the remaining networks will reuse the typicality, packing
+in progress: Lectures 1–19 are done, and the remaining networks will reuse the typicality, packing
 and covering lemmas of Lectures 2 and 3. The remaining work is
 listed in the "Not formalized" section of each chapter file.
 

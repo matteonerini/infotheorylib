@@ -148,7 +148,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   book's form (rates in nats); superposition coding and the converse for degraded broadcast
   channels are indexed above, in the form of the lecture notes.
 * The relay channel (Section 15.7, Theorems 15.7.1–15.7.2), and the cut-set bound for general
-  networks (Section 15.10, Theorem 15.10.1).
+  networks (Section 15.10, Theorem 15.10.1), which has a message for each pair of nodes; the bound
+  with one message at each node is `IsAchievableDMN.exists_cutset`.
 * The bounds `|𝒰| ≤ |𝒴| + 2` of Theorem 15.8.1 and `|𝒲| ≤ |𝒳| + 1` of Theorem 15.9.1, and the Markov
   lemma with the strong typical sets of the book (Lemma 15.8.1); `sum_jointIid_not_mem_le` is the
   form with robust typicality that we use.
