@@ -27,6 +27,7 @@ public import InfoTheoryLib.Books.ElGamalKim.Lecture10
 public import InfoTheoryLib.Books.ElGamalKim.Lecture11
 public import InfoTheoryLib.Books.ElGamalKim.Lecture12
 public import InfoTheoryLib.Books.ElGamalKim.Lecture12DSBS
+public import InfoTheoryLib.Books.ElGamalKim.Lecture13
 public import InfoTheoryLib.Books.ElGamalKim.Lecture2
 public import InfoTheoryLib.Books.ElGamalKim.Lecture3
 public import InfoTheoryLib.Books.ElGamalKim.Lecture4
@@ -140,6 +141,12 @@ public import InfoTheoryLib.Network.BCSemiDeterministic
 public import InfoTheoryLib.Network.BCSuperposition
 public import InfoTheoryLib.Network.BCSuperpositionLaws
 public import InfoTheoryLib.Network.BCTimeSharing
+public import InfoTheoryLib.Network.BergerTung
+public import InfoTheoryLib.Network.BergerTungBinning
+public import InfoTheoryLib.Network.BergerTungCases
+public import InfoTheoryLib.Network.BergerTungInner
+public import InfoTheoryLib.Network.BergerTungOuter
+public import InfoTheoryLib.Network.BergerTungSharing
 public import InfoTheoryLib.Network.BinarySymmetricBC
 public import InfoTheoryLib.Network.Broadcast
 public import InfoTheoryLib.Network.Fading
@@ -159,6 +166,7 @@ public import InfoTheoryLib.Network.MACCode
 public import InfoTheoryLib.Network.MACConverse
 public import InfoTheoryLib.Network.MACMultiLetter
 public import InfoTheoryLib.Network.MACRegion
+public import InfoTheoryLib.Network.QuadraticGaussian
 public import InfoTheoryLib.Network.SlepianWolf
 public import InfoTheoryLib.Network.SlepianWolfBits
 public import InfoTheoryLib.Network.SlepianWolfMany
@@ -239,5 +247,6 @@ public import InfoTheoryLib.Typicality.Basic
 public import InfoTheoryLib.Typicality.Conditional
 public import InfoTheoryLib.Typicality.Covering
 public import InfoTheoryLib.Typicality.JointTypicalityLemma
+public import InfoTheoryLib.Typicality.MarkovLemma
 public import InfoTheoryLib.Typicality.MutualCovering
 public import InfoTheoryLib.Typicality.Packing
