@@ -48,6 +48,7 @@ to organize them by topic, in the spirit of Mathlib for mathematics and Physlib 
 | 12. Source Coding with Side Information | Formalized: Theorem 1 (causal side information), the Wyner–Ziv theorem and Theorem 2 (lossless causal coding) as coding theorems, with the minimum attained for `\|𝒰\| ≤ \|𝒳\| + 3`; the cases of side information at the encoder or at both ends; `R_SI-ED ≤ R_SI-D ≤ R_CSI-D ≤ R`; the closed forms for the DSBS; and the formulas of the quadratic Gaussian case. Not formalized: the bound `\|𝒰\| ≤ \|𝒳\| + 1`, source coding when side information may be absent, and the coding theorems of the quadratic Gaussian case. |
 | 13. Distributed Lossy Source Coding | Formalized: the Berger–Tung inner bound (Theorem 1) with the Markov lemma, Lemma 2, the mutual packing lemma and time sharing; the Berger–Tung outer bound (Theorem 2); the Wyner–Ziv and Slepian–Wolf special cases; and the formulas and algebra of the quadratic Gaussian and CEO problems. Not formalized: the cardinality bounds, the tightness statements, the DSBS counterexample, the Gaussian coding theorems (which need the conditional entropy power inequality), and more than two sources. |
 | 14. Multiple Descriptions | Formalized: the Zhang–Berger inner bound (Theorem 4), proved by a conditional multivariate covering lemma with the codebooks chosen one layer at a time; the El Gamal–Cover inner bound (Theorem 1) as its special case with a time sharing variable; the simple outer bound with exact distortions; the three special cases; successive refinement (Theorem 3); Proposition 1; the Bernoulli example without excess rate; the successive refinability of a binary source; and the formulas and algebra of the quadratic Gaussian problem, including a counterexample showing that the formula of Theorem 2 as printed needs the condition `1/D₀ + 1/P ≥ 1/D₁ + 1/D₂`. Not formalized: the cardinality bound of Theorem 4, the convexity of the Zhang–Berger region and one inclusion of its alternative form, the tightness results cited from the literature, the Gaussian coding theorems (which need the conditional entropy power inequality), and more than two descriptions. |
+| 15. Joint Source–Channel Coding | Formalized: the joint source–channel coding theorems for the DM-MAC (Theorem 2, for any common function, and Theorem 1 as its special case); the Gray–Wyner theorem (Theorem 3) with a cardinality bound; the common part, `K(U₁; U₂)` as the largest common rate, Wyner's `J(U₁; U₂)` as the smallest one, and `K ≤ I ≤ J ≤ H`; the binary example with `J = 2/3` bits, and the two examples where separation fails, over the binary erasure MAC and the Blackwell channel. Not formalized: Theorem 4 (Han–Costa) and Lemma 1, the separation results over the DM-BC, the DM-MAC with common message, the characterization of `K = I = J`, and the value of `J` for the DSBS. |
 
 The library contains no `sorry` and builds without warnings under Mathlib's linter set.
 
@@ -138,6 +139,9 @@ in the [API documentation](https://matteonerini.github.io/infotheorylib/docs/).
 | Simple outer bound for multiple descriptions (Lecture 14) | `mdRegion_subset_mdOuter` | `Network.MDOuter` |
 | Successive refinement (Lecture 14, Theorem 3) | `mem_srRegion_iff` | `Network.MDCases` |
 | Successively refinable sources (Lecture 14, Proposition 1) | `isSuccessivelyRefinable_iff` | `Network.MDCases` |
+| Sources over a DM-MAC (Lecture 15, Theorems 1 and 2) | `isLosslessMAC_of_lt_time`, `isLosslessMAC_of_lt` | `Network.JSCCMAC` |
+| Gray–Wyner theorem (Lecture 15, Theorem 3) | `gwRegion_eq` | `Network.GrayWynerConverse` |
+| `K ≤ I ≤ J ≤ H` for the notions of common information (Lecture 15) | `common_information_chain` | `Network.CommonInformation` |
 
 ## Getting started
 
@@ -392,6 +396,13 @@ InfoTheoryLib/
     MDOuter.lean         the simple outer bound
     MDCases.lean         the El Gamal–Cover inner bound, special cases, successive refinement
     MDGaussian.lean      the formulas of the quadratic Gaussian problem, Ozarow's theorem
+    GrayWyner.lean       Gray–Wyner codes and the direct part of the theorem
+    GrayWynerConverse.lean  the converse, the cardinality bound and Theorem 3 of Lecture 15
+    CommonInformation.lean  the common part, the two notions of common information
+    JSCCRandomCode.lean  the random coding bound for sources over a MAC, independent tables
+    JSCCMACLaw.lean      the law of the scheme and the exponents of its error events
+    JSCCMAC.lean         Theorems 1 and 2 of Lecture 15, uncoded transmission
+    JSCCBC.lean          joint source–channel codes over a BC, uncoded transmission
     Broadcast.lean       broadcast codes, Theorem 15.6.1, degraded broadcast channels
     BCBits.lean          the BC in bits, the superposition and degraded regions
     BCTimeSharing.lean   BC codes, bits versus nats, Lemma 1, time sharing
@@ -476,6 +487,8 @@ InfoTheoryLib/
     Lecture13.lean       index of Lecture 13
     Lecture14.lean       index of Lecture 14
     Lecture14Binary.lean  the binary examples of Lecture 14
+    Lecture15.lean       index of Lecture 15
+    Lecture15Examples.lean  the binary sources of Lecture 15: separation fails, `J = 2/3`
 docs/
   references.bib       bibliography, cited in docstrings as `[cover2006]`
 ```
@@ -510,7 +523,7 @@ files.
 
 Chapters 1–17 of Cover & Thomas are done: every chapter has a topic folder and a
 `Books/CoverThomas/ChapterN.lean` index. The formalization of El Gamal & Kim's lecture notes is
-in progress: Lectures 1–14 are done, and the remaining networks will reuse the typicality, packing
+in progress: Lectures 1–15 are done, and the remaining networks will reuse the typicality, packing
 and covering lemmas of Lectures 2 and 3. The remaining work is
 listed in the "Not formalized" section of each chapter file.
 
