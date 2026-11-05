@@ -731,13 +731,11 @@ lemma identityKernel_isChannel [DecidableEq α] : IsChannel (identityKernel (α 
   refine ⟨fun u => by unfold identityKernel; split_ifs <;> norm_num, ?_⟩
   simp [identityKernel]
 
-/-- **The lossless case of the Wyner–Ziv theorem (Lecture 12, pages 12-16 and 12-25).** The optimal
-rate of lossless source coding with noncausal side information is `R*_SI-D = H(X | Y)`, in bits: the
-corner point of the Slepian–Wolf theorem is a special case of the Wyner–Ziv theorem. -/
-theorem losslessWZBits_eq (hP : IsPMF P) :
-    sInf {R | IsLosslessWZBits P R} = H[Prod.fst | Prod.snd ; P] / log 2 := by
+/-- Any rate above `H(X | Y)` is achievable for lossless source coding with side information at the
+decoder. -/
+theorem isLosslessWZBits_of_condEntropy_lt (hP : IsPMF P) {R : ℝ}
+    (hR : H[Prod.fst | Prod.snd ; P] / log 2 < R) : IsLosslessWZBits P R := by
   classical
-  have hl := log_pos one_lt_two
   have hid : IsChannel (identityKernel (α := α)) := identityKernel_isChannel
   have hf : ∀ z : (α × γ) × α, siLaw P identityKernel z ≠ 0 →
       (fun (u : α) (_ : γ) => u) z.2 z.1.2 = z.1.1 := fun z hz => by
@@ -747,8 +745,16 @@ theorem losslessWZBits_eq (hP : IsPMF P) :
   have hrate : sideRate 1 P (identityKernel (α := α)) = H[Prod.fst | Prod.snd ; P] :=
     sideRate_one_eq_of_support hP hid
       ((condEntropy_XUY_eq_zero_iff hP hid).2 ⟨fun u _ => u, hf⟩)
+  exact isLosslessWZBits_of_lt hP hid (fun u _ => u) hf (by rw [hrate]; exact hR)
+
+/-- **The lossless case of the Wyner–Ziv theorem (Lecture 12, pages 12-16 and 12-25).** The optimal
+rate of lossless source coding with noncausal side information is `R*_SI-D = H(X | Y)`, in bits: the
+corner point of the Slepian–Wolf theorem is a special case of the Wyner–Ziv theorem. -/
+theorem losslessWZBits_eq (hP : IsPMF P) :
+    sInf {R | IsLosslessWZBits P R} = H[Prod.fst | Prod.snd ; P] / log 2 := by
+  have hl := log_pos one_lt_two
   have hach : ∀ R, H[Prod.fst | Prod.snd ; P] / log 2 < R → IsLosslessWZBits P R := fun R hR =>
-    isLosslessWZBits_of_lt hP hid (fun u _ => u) hf (by rw [hrate]; exact hR)
+    isLosslessWZBits_of_condEntropy_lt hP hR
   refine csInf_eq_of_forall_ge_of_forall_gt_exists_lt ⟨_, hach _ (lt_add_one _)⟩ (fun R hR => ?_)
     fun w hw => ⟨(H[Prod.fst | Prod.snd ; P] / log 2 + w) / 2, hach _ (by linarith), by linarith⟩
   obtain ⟨q, f, hq, hc, hr⟩ := (hR.isAchievable hP).exists_kernel hP

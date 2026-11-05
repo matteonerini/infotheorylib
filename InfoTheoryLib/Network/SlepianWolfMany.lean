@@ -167,7 +167,7 @@ lemma condEntropy_iid_swPart (hq : IsPMF q) (n : ℕ) (S : Finset ι) :
   ring
 
 /-- `H(f(X) | Y) ≤ H(X | Y)`. -/
-private lemma condEntropy_comp_le' {Ω a b c : Type*} [Fintype Ω] [Fintype a] [Fintype b]
+lemma condEntropy_comp_le' {Ω a b c : Type*} [Fintype Ω] [Fintype a] [Fintype b]
     [Fintype c] {μ : Ω → ℝ} (hμ : IsPMF μ) (X : Ω → a) (Y : Ω → b) (f : a → c) :
     H[f ∘ X | Y ; μ] ≤ H[X | Y ; μ] := by
   rw [condEntropy_eq_sub hμ, condEntropy_eq_sub hμ]
@@ -253,21 +253,21 @@ section Binning
 variable {q : (∀ j, α j) → ℝ} {M : ι → ℕ} {n : ℕ}
 
 /-- The number of sequences of the source `j`. -/
-private abbrev seqN (α : ι → Type*) [∀ j, Fintype (α j)] (n : ℕ) (j : ι) : ℕ :=
+abbrev seqN (α : ι → Type*) [∀ j, Fintype (α j)] (n : ℕ) (j : ι) : ℕ :=
   Fintype.card (Fin n → α j)
 
 /-- The law of the bin assignments, independent for each source. -/
-private def manyBinLaw (M : ι → ℕ) (n : ℕ) (α : ι → Type*) [∀ j, Fintype (α j)]
+def manyBinLaw (M : ι → ℕ) (n : ℕ) (α : ι → Type*) [∀ j, Fintype (α j)]
     (B : ∀ j, Fin (seqN α n j) → Fin (M j)) : ℝ :=
   ∏ j, iidPMF (uniformPMF (Fin (M j))) (seqN α n j) (B j)
 
 /-- The bin of a sequence of the source `j`. -/
-private def manyBin (B : ∀ j, Fin (seqN α n j) → Fin (M j)) (ω : Fin n → ∀ j, α j) (j : ι) :
+def manyBin (B : ∀ j, Fin (seqN α n j) → Fin (M j)) (ω : Fin n → ∀ j, α j) (j : ι) :
     Fin (M j) :=
   B j (Fintype.equivFin (Fin n → α j) fun i => ω i j)
 
 /-- The sum over the bin assignments of a product of a function of each. -/
-private lemma sum_manyBinLaw_prod
+lemma sum_manyBinLaw_prod
     (g : ∀ j, (Fin (seqN α n j) → Fin (M j)) → ℝ) :
     ∑ B, manyBinLaw M n α B * ∏ j, g j (B j) =
       ∏ j, ∑ Bj, iidPMF (uniformPMF (Fin (M j))) (seqN α n j) Bj * g j Bj := by
@@ -275,7 +275,7 @@ private lemma sum_manyBinLaw_prod
   exact (Fintype.prod_sum fun j Bj =>
     iidPMF (uniformPMF (Fin (M j))) (seqN α n j) Bj * g j Bj).symm
 
-private lemma manyBinLaw_isPMF (hM : ∀ j, 0 < M j) : IsPMF (manyBinLaw M n α) := by
+lemma manyBinLaw_isPMF (hM : ∀ j, 0 < M j) : IsPMF (manyBinLaw M n α) := by
   have hne : ∀ j, Nonempty (Fin (M j)) := fun j => ⟨⟨0, hM j⟩⟩
   refine ⟨fun B => prod_nonneg fun j _ => iidPMF_nonneg
     (uniformPMF_isPMF (α := Fin (M j))).nonneg _, ?_⟩
@@ -288,7 +288,7 @@ private lemma manyBinLaw_isPMF (hM : ∀ j, 0 < M j) : IsPMF (manyBinLaw M n α)
 open Classical in
 /-- **Theorem 3 of Lecture 11, achievability.** Two different sequences fall in the same bins with
 probability `∏_{j ∈ S} 1/Mⱼ`, where `S` is the set of the sources on which they differ. -/
-private lemma sum_manyBinLaw_collision (hM : ∀ j, 0 < M j) (ω ω' : Fin n → ∀ j, α j) :
+lemma sum_manyBinLaw_collision (hM : ∀ j, 0 < M j) (ω ω' : Fin n → ∀ j, α j) :
     ∑ B, manyBinLaw M n α B * (if ∀ j, manyBin B ω' j = manyBin B ω j then 1 else 0) =
       ∏ j ∈ univ.filter fun j => (fun i => ω' i j) ≠ fun i => ω i j, (1 / (M j : ℝ)) := by
   have hne : ∀ j, Nonempty (Fin (M j)) := fun j => ⟨⟨0, hM j⟩⟩
@@ -358,11 +358,11 @@ private lemma manyDec_ne_le (T : Finset (Fin n → ∀ j, α j)) (B : ∀ j, Fin
     split_ifs <;> linarith
 
 /-- The joint law of `(X(Sᶜ), X(S))`. -/
-private def swJoint (q : (∀ j, α j) → ℝ) (S : Finset ι) :
+def swJoint (q : (∀ j, α j) → ℝ) (S : Finset ι) :
     (∀ j : {j // j ∉ S}, α j) × (∀ j : S, α j) → ℝ :=
   dist q fun x => (swRest S x, swPart S x)
 
-private lemma swCondH_eq (hq : IsPMF q) (S : Finset ι) :
+lemma swCondH_eq (hq : IsPMF q) (S : Finset ι) :
     swCondH q S = H[Prod.snd | Prod.fst ; swJoint q S] := by
   refine condEntropy_eq_of_dist_pair_eq hq (hq.dist _) ?_
   rw [dist_pair_fst_snd]
@@ -371,7 +371,7 @@ private lemma swCondH_eq (hq : IsPMF q) (S : Finset ι) :
 open Classical in
 /-- **Lecture 11, page 11-18, for `k` sources.** The number of typical sequences that differ from
 `ω` exactly on the sources in `S`. -/
-private lemma card_filter_diff_le (hq : IsPMF q) {ε : ℝ} (ω : Fin n → ∀ j, α j) (S : Finset ι) :
+lemma card_filter_diff_le (hq : IsPMF q) {ε : ℝ} (ω : Fin n → ∀ j, α j) (S : Finset ι) :
     ((((robustTypicalSet q n ε).erase ω).filter fun ω' =>
       (univ.filter fun j => (fun i => ω' i j) ≠ fun i => ω i j) = S).card : ℝ) ≤
       exp (n * (swCondH q S + ε * swCondH q S)) := by

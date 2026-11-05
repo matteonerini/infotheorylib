@@ -54,6 +54,7 @@ to organize them by topic, in the spirit of Mathlib for mathematics and Physlib 
 | 18. Interactive Communication | Formalized: the feedback capacity of the DMC (Theorem 1); the Schalkwijk–Kailath scheme, with the Chebyshev bound for any noise of unit variance and the doubly exponential bound for Gaussian noise; the cooperative outer bound and the Cover–Leung inner bound (Theorem 2) for the MAC with feedback, with the binary erasure MAC, for which feedback strictly enlarges the region; the capacity region of the physically degraded BC with feedback (Theorem 4) and Dueck's example; the capacity of the relay channel with feedback (Theorem 5); Shannon's inner and outer bounds for the two-way channel, the decoupled channel and the binary multiplier channel; the dependence balance bound (Theorem 6); directed information, Massey's inequality and the multi-letter capacity region (Theorem 7), with strategies. Not formalized: Horstein and Weldon coding, the coding theorems for the AWGN MAC with feedback (Theorem 3, formulas only), the cardinality bounds and the numerical values. See `Books/ElGamalKim/Lecture18.lean`. |
 | 19. Discrete Memoryless Networks | Formalized: the cutset bounds (Theorems 1 and 4), for one input law and all the cuts; the decode–forward lower bound with sliding window decoding, for any number of nodes (Theorem 2); the noisy network coding lower bound (Theorem 3) and inner bound (Theorem 5, without the time sharing variable); the capacity of physically degraded networks and of the relay channel with two destinations; deterministic networks: the lower bounds, and the capacity of finite-field networks and of networks with no interference. Not formalized: time sharing in Theorem 5, the optimization over orders of the nodes, and identifications with the earlier models. |
 | 20. Gaussian Networks | Formalized for networks without relaying: the cutset bound as a converse, the symmetric capacity of the `N`-sender MAC, the bounds of the interference example, the upper bound `D(N)` for a fixed positive semidefinite gain matrix. At the level of the rates: the constant gap of noisy network coding, the order of the `N`-relay network, and the Gupta–Kumar scaling bounds, with Lemma 1 (for routes along rows and columns) and Lemma 2 as probabilistic theorems. Not formalized: coding theorems with continuous relays, treating interference as noise, the geometry of the mirror network; the positive semidefiniteness is a hypothesis. |
+| 21. Source Coding over Noiseless Networks | Formalized: the cutset bound for multiple description networks; Theorem 1 for the line network, with the converse for any tree; Theorem 2 for the triangular network (inner bound, converse with `ε`); Theorem 3 on communication for omniscience, with the two- and three-node examples; Theorem 4 of Kaspi on interactive lossy coding for any order of the speakers (inner bound, converse with `ε`), with Lemma 1; the minimum sum rate of two-way lossless coding through a relay. Not formalized: achievability for trees with branches and the ring, the cardinality bound of Theorem 4, the Gaussian examples, the linear program for `R_CFO`. |
 
 The library contains no `sorry` and builds without warnings under Mathlib's linter set.
 
@@ -176,6 +177,11 @@ in the [API documentation](https://matteonerini.github.io/infotheorylib/docs/).
 | Constant gap of noisy network coding in Gaussian networks, at the level of the rates (Lecture 20) | `gvRate_le_nncGaussRate_add` | `Network.GaussianNetBounds` |
 | Gupta–Kumar network: Lemma 1, lower bound on the rate (Lecture 20) | `gk_lemma1`, `gkRate_whp` | `Network.GuptaKumarCells` |
 | Gupta–Kumar network: Lemma 2, upper bound on the capacity (Lecture 20) | `gkD_whp`, `gk_capacity_upper_whp` | `Network.GuptaKumarLemma2` |
+| Multiple description line networks: the rate–distortion region (Lecture 21) | `mdnRegion_line_eq` | `Network.MDLine` |
+| Multiple description triangular network: inner bound and converse (Lecture 21) | `triInner_subset_mdnRegion`, `exists_triInner_of_mem_mdnRegion` | `Network.MDTriangle` |
+| Communication for omniscience: the optimal rate region (Lecture 21) | `mwOptimalRegion_eq` | `Network.MultiWay` |
+| Kaspi's interactive lossy source coding: inner bound and converse (Lecture 21) | `kaspiInner_subset_kaspiRegion`, `exists_kaspiInner_of_mem_kaspiRegion` | `Network.TwoWayLossyInner`, `Network.TwoWayLossyConverse` |
+| Two-way lossless source coding through a relay: the minimum sum rate (Lecture 21) | `twrOptimalRegion_eq`, `twrSumRate_eq` | `Network.TwoWayRelay` |
 
 ## Getting started
 
@@ -526,6 +532,20 @@ InfoTheoryLib/
     ICStrong.lean        strong interference, products of more capable channels, the converse
     ICSuperLetter.lean   compound random coding, independent letters as one super-letter
     ICAchievability.lean  coded time sharing by super-letters, the inner bound, Theorem 1
+    Transcript.lean      transcripts: the indices of all the rounds in one tuple
+    MultiWay.lean        multi-way lossless source coding, communication for omniscience
+    MultiWayExamples.lean  communication for omniscience: two and three nodes
+    TwoWayRelay.lean     two-way lossless source coding through a relay
+    MDNetwork.lean       multiple description networks: codes and the cutset bound
+    MDLine.lean          multiple description networks: the line network
+    MDTriangle.lean      multiple description networks: the triangular network
+    TwoWayLossy.lean     interactive lossy source coding: codes, the region, Lemma 1
+    TwoWayLossyLetters.lean  interactive lossy source coding: Lemma 1 for a code
+    TwoWayLossyConverse.lean  interactive lossy source coding: the converse
+    TwoWayLossyRound.lean  interactive lossy source coding: one round of achievability
+    TwoWayLossyProtocol.lean  interactive lossy source coding: the protocol of a codebook
+    TwoWayLossyBook.lean  interactive lossy source coding: choice of the codebooks
+    TwoWayLossyInner.lean  interactive lossy source coding: the inner bound
   StateChannel/
     Basic.lean           codes for the DMC with state, the scenarios, strategies, known state
     Multicoding.lean     random coding with subcodebooks, universal packing and covering bounds
@@ -595,6 +615,7 @@ InfoTheoryLib/
     Lecture18.lean       index of Lecture 18
     Lecture19.lean       index of Lecture 19
     Lecture20.lean       index of Lecture 20
+    Lecture21.lean       index of Lecture 21
     Lecture18Examples.lean  the binary erasure MAC with feedback
     Lecture17Sato.lean   the Sato relay channel
 docs/
@@ -631,7 +652,7 @@ files.
 
 Chapters 1–17 of Cover & Thomas are done: every chapter has a topic folder and a
 `Books/CoverThomas/ChapterN.lean` index. The formalization of El Gamal & Kim's lecture notes is
-in progress: Lectures 1–20 are done, and the remaining networks will reuse the typicality, packing
+in progress: Lectures 1–21 are done, and the remaining networks will reuse the typicality, packing
 and covering lemmas of Lectures 2 and 3. The remaining work is
 listed in the "Not formalized" section of each chapter file.
 
