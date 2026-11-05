@@ -148,7 +148,7 @@ private lemma dist_codeLaw_pair_letter (hW : IsChannel W) (i : Fin n)
     (hW (x w i)).sum_eq_one, one_mul]
 
 /-- **Chain rule along the past outputs.** `H(Zⁿ | A) = ∑ᵢ H(Zᵢ | Z^{i-1}, A)`. -/
-private lemma condEntropy_eq_sum_past {Ω γ δ : Type*} [Fintype Ω] [Fintype γ] [Fintype δ]
+lemma condEntropy_eq_sum_past {Ω γ δ : Type*} [Fintype Ω] [Fintype γ] [Fintype δ]
     {μ : Ω → ℝ} (hμ : IsPMF μ) (Z : Ω → Fin n → γ) (A : Ω → δ) :
     H[Z | A ; μ] = ∑ i : Fin n,
       H[fun ω => Z ω i | pair (fun ω => degradedBCPast (i : ℕ) (Z ω)) A ; μ] := by
@@ -437,7 +437,7 @@ section Converse
 variable {α β₁ β₂ : Type*} [Fintype α] [Fintype β₁] [Fintype β₂] {W : α → β₁ × β₂ → ℝ}
 
 /-- The arithmetic of the converse: a bound on `log 2^⌈nR⌉` is a bound on `R` in bits. -/
-private lemma degradedBC_rate_le {R S P Pj : ℝ} {n b : ℕ} (hn : 0 < n) (hP : 0 ≤ P) (hPj : Pj ≤ P)
+lemma degradedBC_rate_le {R S P Pj : ℝ} {n b : ℕ} (hn : 0 < n) (hP : 0 ≤ P) (hPj : Pj ≤ P)
     (h : log ((2 ^ ⌈(n : ℝ) * R⌉₊ : ℕ) : ℝ) ≤ S + log 2 +
       Pj * log ((2 ^ ⌈(n : ℝ) * R⌉₊ : ℕ) : ℝ)) :
     R - (1 + P * ((⌈(n : ℝ) * R⌉₊ : ℝ) + b)) / n ≤ S / n / log 2 := by
@@ -465,7 +465,7 @@ private lemma degradedBC_rate_le {R S P Pj : ℝ} {n b : ℕ} (hn : 0 < n) (hP :
     _ ≤ (S + (1 + P * ((a + b : ℝ))) * log 2) * n := mul_le_mul_of_nonneg_right h3 hn'.le
     _ = _ := by ring
 
-private lemma degradedBC_sum_uniform {n : ℕ} (I : Fin n → ℝ) :
+lemma degradedBC_sum_uniform {n : ℕ} (I : Fin n → ℝ) :
     ∑ i, uniformPMF (Fin n) i * I i = (∑ i, I i) / n := by
   simp only [uniformPMF, Fintype.card_fin]
   rw [← mul_sum, one_div_mul_eq_div]

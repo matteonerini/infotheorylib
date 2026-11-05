@@ -51,6 +51,7 @@ to organize them by topic, in the spirit of Mathlib for mathematics and Physlib 
 | 15. Joint Source–Channel Coding | Formalized: the joint source–channel coding theorems for the DM-MAC (Theorem 2, for any common function, and Theorem 1 as its special case); the Gray–Wyner theorem (Theorem 3) with a cardinality bound; the common part, `K(U₁; U₂)` as the largest common rate, Wyner's `J(U₁; U₂)` as the smallest one, and `K ≤ I ≤ J ≤ H`; the binary example with `J = 2/3` bits, and the two examples where separation fails, over the binary erasure MAC and the Blackwell channel. Not formalized: Theorem 4 (Han–Costa) and Lemma 1, the separation results over the DM-BC, the DM-MAC with common message, the characterization of `K = I = J`, and the value of `J` for the DSBS. |
 | 16. Noiseless Networks | Formalized: the max-flow min-cut theorem, both for flows with real and integer capacities and as a coding theorem achieved by routing; the case where every node wants the message; the network coding theorem by the method of Koetter and Médard, with Lemma 1, the determinant criterion, the size of the field and random linear codes; the capacity region of multi-source multicast networks; the cutset outer bound as a strong converse; and all the examples: the butterfly network (capacity `2`, and rate `3/2` for routing with copies at the source), its multiple unicast variant, and the network whose capacity region is strictly inside the cutset bound. Not formalized: networks with cycles (Lecture 19), the algorithms and complexity results cited, and the cited example where linear codes are suboptimal. |
 | 17. Relay Channels | Formalized: the cutset bound (Theorem 1); direct transmission and multi-hop; decode–forward and partial decode–forward (Theorems 2 and 3), by block Markov coding with one fixed code; compress–forward (Theorem 4) and one direction of the equivalence with its original characterization; the capacity of the degraded, reversely degraded, semi-deterministic and cascade channels, of the channels with orthogonal sender components and of the receiver-orthogonal semi-deterministic channel; the modulo-2 sum channel, whose capacity is proved by compress–forward and the vector Mrs. Gerber's lemma and is strictly below the cutset bound; the relay without delay (Theorem 7), instantaneous relaying and noncausal decode–forward; the Sato channel with unlimited lookahead and without delay; and the closed forms of the bounds for the AWGN and RFD channels. Not formalized: the Gaussian coding theorems, Theorem 5 and amplify–forward, the second term of Theorem 6, time sharing and the cardinality bounds. See `Books/ElGamalKim/Lecture17.lean`. |
+| 18. Interactive Communication | Formalized: the feedback capacity of the DMC (Theorem 1); the Schalkwijk–Kailath scheme, with the Chebyshev bound for any noise of unit variance and the doubly exponential bound for Gaussian noise; the cooperative outer bound and the Cover–Leung inner bound (Theorem 2) for the MAC with feedback, with the binary erasure MAC, for which feedback strictly enlarges the region; the capacity region of the physically degraded BC with feedback (Theorem 4) and Dueck's example; the capacity of the relay channel with feedback (Theorem 5); Shannon's inner and outer bounds for the two-way channel, the decoupled channel and the binary multiplier channel; the dependence balance bound (Theorem 6); directed information, Massey's inequality and the multi-letter capacity region (Theorem 7), with strategies. Not formalized: Horstein and Weldon coding, the coding theorems for the AWGN MAC with feedback (Theorem 3, formulas only), the cardinality bounds and the numerical values. See `Books/ElGamalKim/Lecture18.lean`. |
 
 The library contains no `sorry` and builds without warnings under Mathlib's linter set.
 
@@ -156,6 +157,14 @@ in the [API documentation](https://matteonerini.github.io/infotheorylib/docs/).
 | Capacity of the degraded relay channel (Lecture 17) | `rcCapacity_degraded` | `Network.RelayClasses` |
 | Capacity with orthogonal sender components (Lecture 17) | `rcCapacity_os` | `Network.RelayOrthSender` |
 | Capacity of the modulo-2 sum relay channel; the cutset bound is not tight (Lecture 17) | `rcCapacity_modSum`, `modSum_lt_cutset` | `Network.RelayModSum` |
+| The Schalkwijk–Kailath scheme (Lecture 18) | `isAchievableAddFB_of_lt`, `skCode_err_gaussian_le` | `GaussianChannel.SchalkwijkKailath` |
+| Cover–Leung inner bound for the MAC with feedback (Lecture 18) | `isAchievableMACFB_coverLeung` | `Network.MACFeedbackMarkov` |
+| Feedback enlarges the capacity region of the binary erasure MAC (Lecture 18) | `feedback_enlarges_binaryErasureMAC` | `Books.ElGamalKim.Lecture18Examples` |
+| Physically degraded broadcast channel with feedback (Lecture 18) | `bcfbCapacityRegion_eq` | `Network.BCFeedback` |
+| Capacity of the relay channel with feedback (Lecture 18) | `rcfbCapacity_eq` | `Network.RelayFeedback` |
+| Shannon's inner and outer bounds for the two-way channel (Lecture 18) | `isAchievableTWC_of_lt`, `IsAchievableTWC.mem_closure_twcOuterRegion` | `Network.TwoWayInner`, `Network.TwoWayCode` |
+| Dependence balance outer bound (Lecture 18) | `IsAchievableTWC.mem_closure_twcDepRegion` | `Network.DependenceBalance` |
+| Multi-letter capacity region of the two-way channel; directed information (Lecture 18) | `twcCapacityRegion_eq_closure_iUnion`, `cInfo_stratW_eq_causalDirectedInfo` | `Network.TwoWayMultiLetter`, `Network.DirectedInfo` |
 
 ## Getting started
 
@@ -442,6 +451,21 @@ InfoTheoryLib/
     RelayOrthSender.lean  the capacity with orthogonal sender components
     RelayModSum.lean     the modulo-2 sum channel, the cutset bound is not tight
     RelayGaussian.lean   the closed forms of the bounds for the AWGN relay channel
+    RelayFeedback.lean   the relay channel with feedback
+    FeedbackLaw.lean     the memoryless property of the laws with feedback
+    BCFeedback.lean      the degraded broadcast channel with feedback
+    BCFeedbackExample.lean  Dueck's example
+    TwoWayCode.lean      two-way channel codes and Shannon's outer bound
+    TwoWayInner.lean     Shannon's inner bound
+    TwoWayExamples.lean  decoupled channels and the binary multiplier channel
+    DependenceBalance.lean  the dependence balance outer bound
+    TwoWayStrategy.lean  strategies and the multi-letter outer bound
+    TwoWayMultiLetter.lean  the multi-letter capacity region
+    DirectedInfo.lean    directed information
+    MACFeedback.lean     the MAC with feedback and the cooperative outer bound
+    MACFeedbackBlock.lean  the block code of the Cover–Leung bound
+    MACFeedbackMarkov.lean  the Cover–Leung inner bound
+    MACFeedbackGaussian.lean  the formulas for the AWGN MAC with feedback
     Broadcast.lean       broadcast codes, Theorem 15.6.1, degraded broadcast channels
     BCBits.lean          the BC in bits, the superposition and degraded regions
     BCTimeSharing.lean   BC codes, bits versus nats, Lemma 1, time sharing
@@ -532,6 +556,8 @@ InfoTheoryLib/
     Lecture16Examples.lean  the butterfly networks and the linear code of Lecture 16
     Lecture16Yeung.lean  the network of Lecture 16 for which the cutset bound is loose
     Lecture17.lean       index of Lecture 17
+    Lecture18.lean       index of Lecture 18
+    Lecture18Examples.lean  the binary erasure MAC with feedback
     Lecture17Sato.lean   the Sato relay channel
 docs/
   references.bib       bibliography, cited in docstrings as `[cover2006]`
@@ -567,7 +593,7 @@ files.
 
 Chapters 1–17 of Cover & Thomas are done: every chapter has a topic folder and a
 `Books/CoverThomas/ChapterN.lean` index. The formalization of El Gamal & Kim's lecture notes is
-in progress: Lectures 1–17 are done, and the remaining networks will reuse the typicality, packing
+in progress: Lectures 1–18 are done, and the remaining networks will reuse the typicality, packing
 and covering lemmas of Lectures 2 and 3. The remaining work is
 listed in the "Not formalized" section of each chapter file.
 

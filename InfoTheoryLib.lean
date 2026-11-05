@@ -37,6 +37,8 @@ public import InfoTheoryLib.Books.ElGamalKim.Lecture16Examples
 public import InfoTheoryLib.Books.ElGamalKim.Lecture16Yeung
 public import InfoTheoryLib.Books.ElGamalKim.Lecture17
 public import InfoTheoryLib.Books.ElGamalKim.Lecture17Sato
+public import InfoTheoryLib.Books.ElGamalKim.Lecture18
+public import InfoTheoryLib.Books.ElGamalKim.Lecture18Examples
 public import InfoTheoryLib.Books.ElGamalKim.Lecture2
 public import InfoTheoryLib.Books.ElGamalKim.Lecture3
 public import InfoTheoryLib.Books.ElGamalKim.Lecture4
@@ -99,6 +101,7 @@ public import InfoTheoryLib.GaussianChannel.Fading
 public import InfoTheoryLib.GaussianChannel.FadingCompound
 public import InfoTheoryLib.GaussianChannel.Feedback
 public import InfoTheoryLib.GaussianChannel.Parallel
+public import InfoTheoryLib.GaussianChannel.SchalkwijkKailath
 public import InfoTheoryLib.GaussianChannel.Vector
 public import InfoTheoryLib.GaussianChannel.VectorCode
 public import InfoTheoryLib.GaussianChannel.VectorFading
@@ -146,6 +149,8 @@ public import InfoTheoryLib.Network.BCCutSet
 public import InfoTheoryLib.Network.BCDegraded
 public import InfoTheoryLib.Network.BCDegradedLaws
 public import InfoTheoryLib.Network.BCDegradedMessages
+public import InfoTheoryLib.Network.BCFeedback
+public import InfoTheoryLib.Network.BCFeedbackExample
 public import InfoTheoryLib.Network.BCMarton
 public import InfoTheoryLib.Network.BCMoreCapable
 public import InfoTheoryLib.Network.BCMoreCapableLaws
@@ -162,7 +167,10 @@ public import InfoTheoryLib.Network.BergerTungSharing
 public import InfoTheoryLib.Network.BinarySymmetricBC
 public import InfoTheoryLib.Network.Broadcast
 public import InfoTheoryLib.Network.CommonInformation
+public import InfoTheoryLib.Network.DependenceBalance
+public import InfoTheoryLib.Network.DirectedInfo
 public import InfoTheoryLib.Network.Fading
+public import InfoTheoryLib.Network.FeedbackLaw
 public import InfoTheoryLib.Network.Gaussian
 public import InfoTheoryLib.Network.GaussianVector
 public import InfoTheoryLib.Network.GaussianVectorBC
@@ -184,6 +192,10 @@ public import InfoTheoryLib.Network.MACBounds
 public import InfoTheoryLib.Network.MACCapacity
 public import InfoTheoryLib.Network.MACCode
 public import InfoTheoryLib.Network.MACConverse
+public import InfoTheoryLib.Network.MACFeedback
+public import InfoTheoryLib.Network.MACFeedbackBlock
+public import InfoTheoryLib.Network.MACFeedbackGaussian
+public import InfoTheoryLib.Network.MACFeedbackMarkov
 public import InfoTheoryLib.Network.MACMultiLetter
 public import InfoTheoryLib.Network.MACRegion
 public import InfoTheoryLib.Network.MDCases
@@ -206,6 +218,7 @@ public import InfoTheoryLib.Network.RelayCFTest
 public import InfoTheoryLib.Network.RelayClasses
 public import InfoTheoryLib.Network.RelayCode
 public import InfoTheoryLib.Network.RelayDF
+public import InfoTheoryLib.Network.RelayFeedback
 public import InfoTheoryLib.Network.RelayGaussian
 public import InfoTheoryLib.Network.RelayLookahead
 public import InfoTheoryLib.Network.RelayMarkov
@@ -218,6 +231,11 @@ public import InfoTheoryLib.Network.SlepianWolfBits
 public import InfoTheoryLib.Network.SlepianWolfMany
 public import InfoTheoryLib.Network.SourceHelper
 public import InfoTheoryLib.Network.SourceHelperConverse
+public import InfoTheoryLib.Network.TwoWayCode
+public import InfoTheoryLib.Network.TwoWayExamples
+public import InfoTheoryLib.Network.TwoWayInner
+public import InfoTheoryLib.Network.TwoWayMultiLetter
+public import InfoTheoryLib.Network.TwoWayStrategy
 public import InfoTheoryLib.Network.Typicality
 public import InfoTheoryLib.Network.ZhangBerger
 public import InfoTheoryLib.Probability.Channel
