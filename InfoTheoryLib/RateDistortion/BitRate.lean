@@ -5,6 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
+public import InfoTheoryLib.RateDistortion.Binary
 public import InfoTheoryLib.RateDistortion.Theorem
 
 /-!
@@ -149,17 +150,6 @@ theorem rateDistortionBits_eq [Nonempty β] (hp : IsPMF p) (hd : ∀ x y, 0 ≤ 
         by linarith⟩
 
 /-! ### Lossless source coding as a special case -/
-
-/-- The Hamming distortion has `D_min = 0`. -/
-lemma minDistortion_hammingDistortion (p : α → ℝ) :
-    minDistortion p (hammingDistortion (α := α)) = 0 := by
-  classical
-  refine sum_eq_zero fun x _ => ?_
-  have h1 : ⨅ y, hammingDistortion x y ≤ 0 := by
-    simpa [hammingDistortion] using ciInf_le_distortion hammingDistortion x x
-  have h2 : 0 ≤ ⨅ y, hammingDistortion x y :=
-    Real.iInf_nonneg fun y => by unfold hammingDistortion; split_ifs <;> norm_num
-  rw [le_antisymm h1 h2, mul_zero]
 
 /-- **Lossless source coding revisited (Lecture 3).** For the Hamming distortion,
 `R(0) = min_{p(x̂|x) : E d(X, X̂) = 0} I(X; X̂) = H(X)`. -/

@@ -25,6 +25,8 @@ public import InfoTheoryLib.Books.CoverThomas.Chapter9
 public import InfoTheoryLib.Books.ElGamalKim.Lecture1
 public import InfoTheoryLib.Books.ElGamalKim.Lecture10
 public import InfoTheoryLib.Books.ElGamalKim.Lecture11
+public import InfoTheoryLib.Books.ElGamalKim.Lecture12
+public import InfoTheoryLib.Books.ElGamalKim.Lecture12DSBS
 public import InfoTheoryLib.Books.ElGamalKim.Lecture2
 public import InfoTheoryLib.Books.ElGamalKim.Lecture3
 public import InfoTheoryLib.Books.ElGamalKim.Lecture4
@@ -66,6 +68,7 @@ public import InfoTheoryLib.ForMathlib.Log
 public import InfoTheoryLib.ForMathlib.MatrixBlock
 public import InfoTheoryLib.ForMathlib.MatrixDet
 public import InfoTheoryLib.ForMathlib.MatrixSVD
+public import InfoTheoryLib.ForMathlib.SupportLemma
 public import InfoTheoryLib.ForMathlib.WeakLaw
 public import InfoTheoryLib.Gambling.DataCompression
 public import InfoTheoryLib.Gambling.DependentRaces
@@ -180,6 +183,11 @@ public import InfoTheoryLib.RateDistortion.BlahutArimoto
 public import InfoTheoryLib.RateDistortion.Converse
 public import InfoTheoryLib.RateDistortion.Gaussian
 public import InfoTheoryLib.RateDistortion.ParallelGaussian
+public import InfoTheoryLib.RateDistortion.SideInfo
+public import InfoTheoryLib.RateDistortion.SideInfoAchievability
+public import InfoTheoryLib.RateDistortion.SideInfoCases
+public import InfoTheoryLib.RateDistortion.SideInfoConverse
+public import InfoTheoryLib.RateDistortion.SideInfoCovering
 public import InfoTheoryLib.RateDistortion.SourceChannel
 public import InfoTheoryLib.RateDistortion.Theorem
 public import InfoTheoryLib.RelativeEntropy.Basic

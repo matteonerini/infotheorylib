@@ -101,6 +101,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * (15.154)–(15.157): `SWCode`, `SWCode.errProb`, `IsAchievableSW`, `swAchievableRegion`
   (`Network.SlepianWolf`).
 * Theorem 15.4.1 (Slepian–Wolf), (15.158)–(15.160): `swRegion`, `swAchievableRegion_eq`.
+* Theorem 15.4.2 (Slepian–Wolf for many sources), in bits, in the form of El Gamal and Kim's lecture
+  notes: `manyRegionBits`, `manyOptimalRegionBits_eq` (`Network.SlepianWolfMany`).
 * Example 15.4.1: `weatherPMF`, `example_15_4_1` (here). Example 15.4.2: `example_15_4_2` (here).
 * Section 15.4.1 (achievability), (15.167)–(15.177): `swTypicalDecode`, `swTypicalDecode_ne_le`,
   `binLaw`, `sum_bins_errProb_le`, `isAchievableSW_of_lt`.
@@ -121,6 +123,15 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `superpositionRegionBits_subset` (`Network.BCSuperposition`),
   `bcCapacityRegionBits_eq_closure_degradedBCRegionBits` (`Network.BCCapacity`).
 
+### 15.8 Source coding with side information
+* Theorem 15.8.1, in bits and up to closure, in the form of El Gamal and Kim's lecture notes:
+  `helperRegionBits`, `helperOptimalRegionBits_eq` (`Network.SourceHelperConverse`).
+
+### 15.9 Rate distortion with side information
+* Theorem 15.9.1 (Wyner–Ziv), (15.288), in bits, in the form of El Gamal and Kim's lecture notes:
+  `wzRD`, `rateWZBits`, `rateWZBits_eq` (`RateDistortion.SideInfoConverse`).
+* Lemma 15.9.1: `sideRD_antitoneOn`, `sideRD_convexOn` (`RateDistortion.SideInfo`), for `θ = 1`.
+
 ## Not formalized
 
 * The coding theorems for the Gaussian channels of Section 15.1, which the book states without
@@ -131,16 +142,16 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Examples 15.3.1 and 15.3.3, the `m`-user multiple-access channel (Theorem 15.3.6) and the bound
   `|Q| ≤ 4` (we prove Carathéodory's theorem in the plane, which gives three points of the union
   of the pentagons).
-* The Slepian–Wolf theorem for many sources (Theorem 15.4.2), the interpretation of
-  Section 15.4.4 and the duality of Section 15.5.
+* The interpretation of Section 15.4.4 and the duality of Section 15.5.
 * Examples 15.6.1–15.6.4, the rates (15.231)–(15.237) of Example 15.6.5, the broadcast channel
   with common information, the bound on the alphabet of `U`, and Theorems 15.6.2–15.6.4 in the
   book's form (rates in nats); superposition coding and the converse for degraded broadcast
   channels are indexed above, in the form of the lecture notes.
-* The relay channel (Section 15.7, Theorems 15.7.1–15.7.2), source coding with side information
-  (Section 15.8, Theorem 15.8.1 and Lemma 15.8.1), rate distortion with side information
-  (Section 15.9, Theorem 15.9.1 and Lemma 15.9.1) and the cut-set bound for general networks
-  (Section 15.10, Theorem 15.10.1).
+* The relay channel (Section 15.7, Theorems 15.7.1–15.7.2), and the cut-set bound for general
+  networks (Section 15.10, Theorem 15.10.1).
+* The bounds `|𝒰| ≤ |𝒴| + 2` of Theorem 15.8.1 and `|𝒲| ≤ |𝒳| + 1` of Theorem 15.9.1, and the Markov
+  lemma with the strong typical sets of the book (Lemma 15.8.1); `sum_jointIid_not_mem_le` is the
+  form with robust typicality that we use.
 -/
 
 open Real Finset Filter Topology

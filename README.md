@@ -45,6 +45,7 @@ to organize them by topic, in the spirit of Mathlib for mathematics and Physlib 
 | 9. General Broadcast Channels | Formalized for two receivers: the capacity region with degraded message sets (Theorem 1), the mutual covering lemma, Marton's inner bound (Theorem 2), also for random mappings `p(x \| u₁, u₂)`, the Cover–van der Meulen inner bound, the capacity regions of the semi-deterministic and deterministic channels, the outer bound with `U₂ = U`, the Blackwell channel and the formulas of the multilevel product example. Not formalized: the multilevel capacity region with indirect decoding (Theorem 5), Marton's bound with a common message (Theorem 3), the Nair–El Gamal outer bound in general (Theorem 4), the BSC–BEC and skew-symmetric examples, dirty paper coding for the AWGN-BC, and more than 2 receivers. The notes' region of the Blackwell channel is wrong, with a formal counterexample; see the lecture's index. |
 | 10. Gaussian Vector Channels | Formalized: the capacity of the Gaussian vector channel as a coding theorem (Theorem 1), by rotating to parallel channels and coding along the singular directions; the rest at the level of the formulas: the SVD and water-filling, the reciprocity lemma, sufficiency of the KKT conditions, Theorem 2 for finitely many fading states with its low and high SNR limits, the GV-MAC and spectral BC regions, the fixed points of iterative water-filling, the MMSE formula for vector dirty paper, the MAC–BC duality `R_DPC = C_DMAC`, and the algebra of the enhanced degraded channel. Not formalized: the coding theorems for the GV-MAC (Theorem 3), the spectral BC, vector dirty paper and the GV-BC capacity (the second Theorem 4, whose Lemma 4 needs the vector entropy power inequality), the product of reversely degraded DM-BCs, the uniqueness of the supporting hyperplane, and more than two receivers. |
 | 11. Distributed Lossless Source Coding | Formalized: the Slepian–Wolf theorem in bits, with the DSBS and the second example; lossless source coding with a helper (Theorem 2), with its achievability by covering and binning, its converse, and the region for the DSBS by Mrs. Gerber's lemma; and the Slepian–Wolf theorem for `k` sources (Theorem 3). Not formalized: random linear binning, zero-error coding, stationary ergodic sources, the cardinality bound on `U`, and Theorem 4. |
+| 12. Source Coding with Side Information | Formalized: Theorem 1 (causal side information), the Wyner–Ziv theorem and Theorem 2 (lossless causal coding) as coding theorems, with the minimum attained for `\|𝒰\| ≤ \|𝒳\| + 3`; the cases of side information at the encoder or at both ends; `R_SI-ED ≤ R_SI-D ≤ R_CSI-D ≤ R`; the closed forms for the DSBS; and the formulas of the quadratic Gaussian case. Not formalized: the bound `\|𝒰\| ≤ \|𝒳\| + 1`, source coding when side information may be absent, and the coding theorems of the quadratic Gaussian case. |
 
 The library contains no `sorry` and builds without warnings under Mathlib's linter set.
 
@@ -121,6 +122,10 @@ in the [API documentation](https://matteonerini.github.io/infotheorylib/docs/).
 | Slepian–Wolf theorem in bits (Lecture 11) | `swOptimalRegionBits_eq` | `Network.SlepianWolfBits` |
 | Lossless source coding with a helper (Lecture 11, Theorem 2) | `helperOptimalRegionBits_eq` | `Network.SourceHelperConverse` |
 | Slepian–Wolf theorem for `k` sources (Lecture 11, Theorem 3) | `manyOptimalRegionBits_eq` | `Network.SlepianWolfMany` |
+| Rate–distortion with causal side information (Lecture 12, Theorem 1) | `rateCausalBits_eq` | `RateDistortion.SideInfoConverse` |
+| Wyner–Ziv theorem (Lecture 12; 15.9.1) | `rateWZBits_eq` | `RateDistortion.SideInfoConverse` |
+| Lossless source coding with causal side information (Lecture 12, Theorem 2) | `losslessCausalBits_eq` | `RateDistortion.SideInfoConverse` |
+| Side information at both ends: `R_SI-ED(D) = min I(X; X̂ \| Y)` (Lecture 12) | `rateBothBits_eq` | `RateDistortion.SideInfoCases` |
 
 ## Getting started
 
@@ -181,6 +186,7 @@ InfoTheoryLib/
     WeakLaw.lean         the weak law of large numbers for product measures
     MatrixDet.lean       determinant inequalities for positive semidefinite matrices
     MatrixSVD.lean       the singular value decomposition, the tangent bound and concavity of `log |A|`
+    SupportLemma.lean    Carathéodory's theorem in the form of a support lemma
     MatrixBlock.lean     block diagonal positive definite matrices
   Probability/         finite probability spaces
     FinitePMF.lean       pmfs (`IsPMF`), random variables, laws (`dist`), `AbsCont`, uniform pmf
@@ -316,6 +322,11 @@ InfoTheoryLib/
     SourceChannel.lean   source–channel separation with distortion
     BlahutArimoto.lean   `R(D)` as a double minimization, the Blahut–Arimoto algorithm
     BitRate.lean         rates in bits with `2^⌊nR⌋` indices, `R(0) = H(X)` for Hamming distortion
+    SideInfo.lean        `R_CSI-D` and `R_SI-D` as single-letter functions: cardinality, minimum, convexity
+    SideInfoCovering.lean  covering and random binning for typical triples
+    SideInfoAchievability.lean  the codes of Lecture 12 and achievability
+    SideInfoConverse.lean  Theorems 1 and 2 of Lecture 12 and the Wyner–Ziv theorem
+    SideInfoCases.lean   side information at the encoder or at both ends, the inequalities
   Statistics/
     SufficientStatistic.lean  sufficient and minimal sufficient statistics
     Bernoulli.lean       Bernoulli trials, the number of ones as a sufficient statistic
@@ -434,6 +445,8 @@ InfoTheoryLib/
     Lecture9.lean        index of Lecture 9, the Blackwell channel, the multilevel product example
     Lecture10.lean       index of Lecture 10, the product channel, beamforming to one antenna
     Lecture11.lean       index of Lecture 11, the DSBS, the helper for the DSBS
+    Lecture12.lean       index of Lecture 12, lossless examples, the quadratic Gaussian case
+    Lecture12DSBS.lean   the rate–distortion functions of Lecture 12 for the DSBS
 docs/
   references.bib       bibliography, cited in docstrings as `[cover2006]`
 ```
@@ -468,7 +481,7 @@ files.
 
 Chapters 1–17 of Cover & Thomas are done: every chapter has a topic folder and a
 `Books/CoverThomas/ChapterN.lean` index. The formalization of El Gamal & Kim's lecture notes is
-in progress: Lectures 1–11 are done, and the remaining networks will reuse the typicality, packing
+in progress: Lectures 1–12 are done, and the remaining networks will reuse the typicality, packing
 and covering lemmas of Lectures 2 and 3. The remaining work is
 listed in the "Not formalized" section of each chapter file.
 
