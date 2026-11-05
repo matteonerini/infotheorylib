@@ -16,7 +16,8 @@ public import InfoTheoryLib.Statistics.Bernoulli
 This file indexes the formalization of Lecture 1 of [elgamal2010]. The lecture is an informal
 introduction: it states the max-flow min-cut theorem and Shannon's four point-to-point theorems,
 outlines the lecture notes, and fixes the notation. Shannon's theorems are formalized in
-`Books.ElGamalKim.Lecture3`; this file gives the notation that the library defines, with the
+`Books.ElGamalKim.Lecture3` and the max-flow min-cut theorem in `Books.ElGamalKim.Lecture16`; this
+file gives the notation that the library defines, with the
 definitions of the notes that are not in the library elsewhere: the `DSBS(p)` pmf and the
 relation between `C(x)` and `R(x)`. The lecture has no numbered results, so there are no aliases.
 
@@ -68,8 +69,6 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ## Not formalized
 
-* The max-flow min-cut theorem for noiseless unicast networks, which the notes prove in
-  Lecture 16.
 * The separation theorem for `k` source symbols per `n` channel uses with `k ≠ n`.
 * The outline, the dependency graph and the informal discussion.
 * `Binom(n, p)`, `Q(x)`, and the `WGN(P)`, `2-WGN(P, ρ)` and vector `WGN(K)` processes as

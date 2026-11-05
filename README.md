@@ -34,7 +34,7 @@ to organize them by topic, in the spirit of Mathlib for mathematics and Physlib 
 
 | Lecture of El Gamal & Kim | Status |
 |---|---|
-| 1. Introduction and Preview | Formalized: all definitions and examples, with pointers to the later chapters for the announced results |
+| 1. Introduction | Formalized: the notation (including the `DSBS(p)` pmf and the functions `C(x)` and `R(x)`), with pointers to Shannon's four theorems in Lecture 3 and the max-flow min-cut theorem in Lecture 16 |
 | 2. Entropy, Mutual Information, and Typicality | Formalized: entropy, differential entropy and mutual information with their inequalities, Mrs. Gerber's lemma in the notes' `H⁻¹` form (scalar and vector), the Csiszár sum identity, robust typicality with the typical average lemma, the properties of jointly typical sequences, the conditional typicality lemma, joint typicality for Markov chains, the joint typicality lemma (parts 1 and 2), and weak typicality; the entropy power inequality, the conditional maximum differential entropy lemma and the Stirling appendix are not formalized (see the lecture file, which also lists the issues found in the notes) |
 | 3. Point-to-Point Information Theory | Formalized: the channel coding theorem with the notes' definitions (rates in bits, average probability of error) and its examples, the packing lemma, channel coding with cost (Theorem 2), the AWGN channel (Theorem 3), lossless and lossy source coding with the Bernoulli examples and `R* = R(0)`, the covering lemma, the quadratic Gaussian rate–distortion function (Theorem 6, informational form), source–channel separation for `r = 1` and uncoded transmission; linear codes, Lemma 2 and the operational Gaussian source coding theorem are not formalized (see the lecture file) |
 | 4. Multiple Access Channels | Formalized: the notes' definitions in bits, the time-division inner bound and the outer bound with `C₁`, `C₂`, `C₁₂`, the binary multiplier MAC (exact region) and the binary erasure MAC, the multi-letter characterization (Theorem 1), time sharing and convexity, the single-letter characterization (Theorem 2), the sum capacity, and the AWGN-MAC formulas (corner points, TDMA with power control); the cardinality bound \|Q\| ≤ 2 (Theorem 3), the AWGN-MAC coding theorem (Theorem 4) and the `k`-sender MAC (Theorem 5) are not formalized (see the lecture file) |
@@ -49,6 +49,7 @@ to organize them by topic, in the spirit of Mathlib for mathematics and Physlib 
 | 13. Distributed Lossy Source Coding | Formalized: the Berger–Tung inner bound (Theorem 1) with the Markov lemma, Lemma 2, the mutual packing lemma and time sharing; the Berger–Tung outer bound (Theorem 2); the Wyner–Ziv and Slepian–Wolf special cases; and the formulas and algebra of the quadratic Gaussian and CEO problems. Not formalized: the cardinality bounds, the tightness statements, the DSBS counterexample, the Gaussian coding theorems (which need the conditional entropy power inequality), and more than two sources. |
 | 14. Multiple Descriptions | Formalized: the Zhang–Berger inner bound (Theorem 4), proved by a conditional multivariate covering lemma with the codebooks chosen one layer at a time; the El Gamal–Cover inner bound (Theorem 1) as its special case with a time sharing variable; the simple outer bound with exact distortions; the three special cases; successive refinement (Theorem 3); Proposition 1; the Bernoulli example without excess rate; the successive refinability of a binary source; and the formulas and algebra of the quadratic Gaussian problem, including a counterexample showing that the formula of Theorem 2 as printed needs the condition `1/D₀ + 1/P ≥ 1/D₁ + 1/D₂`. Not formalized: the cardinality bound of Theorem 4, the convexity of the Zhang–Berger region and one inclusion of its alternative form, the tightness results cited from the literature, the Gaussian coding theorems (which need the conditional entropy power inequality), and more than two descriptions. |
 | 15. Joint Source–Channel Coding | Formalized: the joint source–channel coding theorems for the DM-MAC (Theorem 2, for any common function, and Theorem 1 as its special case); the Gray–Wyner theorem (Theorem 3) with a cardinality bound; the common part, `K(U₁; U₂)` as the largest common rate, Wyner's `J(U₁; U₂)` as the smallest one, and `K ≤ I ≤ J ≤ H`; the binary example with `J = 2/3` bits, and the two examples where separation fails, over the binary erasure MAC and the Blackwell channel. Not formalized: Theorem 4 (Han–Costa) and Lemma 1, the separation results over the DM-BC, the DM-MAC with common message, the characterization of `K = I = J`, and the value of `J` for the DSBS. |
+| 16. Noiseless Networks | Formalized: the max-flow min-cut theorem, both for flows with real and integer capacities and as a coding theorem achieved by routing; the case where every node wants the message; the network coding theorem by the method of Koetter and Médard, with Lemma 1, the determinant criterion, the size of the field and random linear codes; the capacity region of multi-source multicast networks; the cutset outer bound as a strong converse; and all the examples: the butterfly network (capacity `2`, and rate `3/2` for routing with copies at the source), its multiple unicast variant, and the network whose capacity region is strictly inside the cutset bound. Not formalized: networks with cycles (Lecture 19), the algorithms and complexity results cited, and the cited example where linear codes are suboptimal. |
 
 The library contains no `sorry` and builds without warnings under Mathlib's linter set.
 
@@ -142,6 +143,11 @@ in the [API documentation](https://matteonerini.github.io/infotheorylib/docs/).
 | Sources over a DM-MAC (Lecture 15, Theorems 1 and 2) | `isLosslessMAC_of_lt_time`, `isLosslessMAC_of_lt` | `Network.JSCCMAC` |
 | Gray–Wyner theorem (Lecture 15, Theorem 3) | `gwRegion_eq` | `Network.GrayWynerConverse` |
 | `K ≤ I ≤ J ≤ H` for the notions of common information (Lecture 15) | `common_information_chain` | `Network.CommonInformation` |
+| Max-flow min-cut theorem, for flows (Lecture 16) | `maxFlow_minCut` | `ForMathlib.MaxFlow` |
+| Max-flow min-cut theorem, for codes (Lecture 16) | `relay_capacity` | `Network.NoiselessRouting` |
+| Network coding theorem (Lecture 16) | `network_coding_theorem` | `Network.NetworkCoding` |
+| Capacity region of multi-source multicast networks (Lecture 16) | `capacityRegion_multisource` | `Network.NetworkCoding` |
+| Cutset outer bound for noiseless networks (Lecture 16) | `IsAchievable.mem_cutsetRegion` | `Network.NoiselessCode` |
 
 ## Getting started
 
@@ -203,6 +209,9 @@ InfoTheoryLib/
     MatrixDet.lean       determinant inequalities for positive semidefinite matrices
     MatrixSVD.lean       the singular value decomposition, the tangent bound and concavity of `log |A|`
     SupportLemma.lean    Carathéodory's theorem in the form of a support lemma
+    MaxFlow.lean         flows, cuts and the max-flow min-cut theorem
+    FlowDecomposition.lean  an integer flow on an acyclic network carries individual units
+    PolyFiniteField.lean  nonzero polynomials over large finite fields, Schwartz–Zippel
     MatrixBlock.lean     block diagonal positive definite matrices
   Probability/         finite probability spaces
     FinitePMF.lean       pmfs (`IsPMF`), random variables, laws (`dist`), `AbsCont`, uniform pmf
@@ -403,6 +412,10 @@ InfoTheoryLib/
     JSCCMACLaw.lean      the law of the scheme and the exponents of its error events
     JSCCMAC.lean         Theorems 1 and 2 of Lecture 15, uncoded transmission
     JSCCBC.lean          joint source–channel codes over a BC, uncoded transmission
+    NoiselessCode.lean   noiseless networks, their codes and the cutset bound
+    NoiselessRouting.lean  routing and the max-flow min-cut theorem
+    LinearNetworkCode.lean  linear codes, the polynomial `|A(x)|`, the size of the field
+    NetworkCoding.lean   the network coding theorem and multi-source multicast
     Broadcast.lean       broadcast codes, Theorem 15.6.1, degraded broadcast channels
     BCBits.lean          the BC in bits, the superposition and degraded regions
     BCTimeSharing.lean   BC codes, bits versus nats, Lemma 1, time sharing
@@ -489,6 +502,9 @@ InfoTheoryLib/
     Lecture14Binary.lean  the binary examples of Lecture 14
     Lecture15.lean       index of Lecture 15
     Lecture15Examples.lean  the binary sources of Lecture 15: separation fails, `J = 2/3`
+    Lecture16.lean       index of Lecture 16
+    Lecture16Examples.lean  the butterfly networks and the linear code of Lecture 16
+    Lecture16Yeung.lean  the network of Lecture 16 for which the cutset bound is loose
 docs/
   references.bib       bibliography, cited in docstrings as `[cover2006]`
 ```
@@ -523,7 +539,7 @@ files.
 
 Chapters 1–17 of Cover & Thomas are done: every chapter has a topic folder and a
 `Books/CoverThomas/ChapterN.lean` index. The formalization of El Gamal & Kim's lecture notes is
-in progress: Lectures 1–15 are done, and the remaining networks will reuse the typicality, packing
+in progress: Lectures 1–16 are done, and the remaining networks will reuse the typicality, packing
 and covering lemmas of Lectures 2 and 3. The remaining work is
 listed in the "Not formalized" section of each chapter file.
 

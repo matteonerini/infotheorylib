@@ -32,6 +32,9 @@ public import InfoTheoryLib.Books.ElGamalKim.Lecture14
 public import InfoTheoryLib.Books.ElGamalKim.Lecture14Binary
 public import InfoTheoryLib.Books.ElGamalKim.Lecture15
 public import InfoTheoryLib.Books.ElGamalKim.Lecture15Examples
+public import InfoTheoryLib.Books.ElGamalKim.Lecture16
+public import InfoTheoryLib.Books.ElGamalKim.Lecture16Examples
+public import InfoTheoryLib.Books.ElGamalKim.Lecture16Yeung
 public import InfoTheoryLib.Books.ElGamalKim.Lecture2
 public import InfoTheoryLib.Books.ElGamalKim.Lecture3
 public import InfoTheoryLib.Books.ElGamalKim.Lecture4
@@ -68,11 +71,14 @@ public import InfoTheoryLib.Entropy.Concavity
 public import InfoTheoryLib.Entropy.Conditional
 public import InfoTheoryLib.Entropy.Fano
 public import InfoTheoryLib.Entropy.MrsGerber
+public import InfoTheoryLib.ForMathlib.FlowDecomposition
 public import InfoTheoryLib.ForMathlib.Integral
 public import InfoTheoryLib.ForMathlib.Log
 public import InfoTheoryLib.ForMathlib.MatrixBlock
 public import InfoTheoryLib.ForMathlib.MatrixDet
 public import InfoTheoryLib.ForMathlib.MatrixSVD
+public import InfoTheoryLib.ForMathlib.MaxFlow
+public import InfoTheoryLib.ForMathlib.PolyFiniteField
 public import InfoTheoryLib.ForMathlib.SupportLemma
 public import InfoTheoryLib.ForMathlib.WeakLaw
 public import InfoTheoryLib.Gambling.DataCompression
@@ -169,6 +175,7 @@ public import InfoTheoryLib.Network.JSCCBC
 public import InfoTheoryLib.Network.JSCCMAC
 public import InfoTheoryLib.Network.JSCCMACLaw
 public import InfoTheoryLib.Network.JSCCRandomCode
+public import InfoTheoryLib.Network.LinearNetworkCode
 public import InfoTheoryLib.Network.MACAchievability
 public import InfoTheoryLib.Network.MACBits
 public import InfoTheoryLib.Network.MACBounds
@@ -182,6 +189,9 @@ public import InfoTheoryLib.Network.MDCovering
 public import InfoTheoryLib.Network.MDGaussian
 public import InfoTheoryLib.Network.MDOuter
 public import InfoTheoryLib.Network.MultipleDescriptions
+public import InfoTheoryLib.Network.NetworkCoding
+public import InfoTheoryLib.Network.NoiselessCode
+public import InfoTheoryLib.Network.NoiselessRouting
 public import InfoTheoryLib.Network.QuadraticGaussian
 public import InfoTheoryLib.Network.SlepianWolf
 public import InfoTheoryLib.Network.SlepianWolfBits
