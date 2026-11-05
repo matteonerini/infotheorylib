@@ -41,6 +41,7 @@ public import InfoTheoryLib.Books.ElGamalKim.Lecture18
 public import InfoTheoryLib.Books.ElGamalKim.Lecture18Examples
 public import InfoTheoryLib.Books.ElGamalKim.Lecture19
 public import InfoTheoryLib.Books.ElGamalKim.Lecture2
+public import InfoTheoryLib.Books.ElGamalKim.Lecture20
 public import InfoTheoryLib.Books.ElGamalKim.Lecture3
 public import InfoTheoryLib.Books.ElGamalKim.Lecture4
 public import InfoTheoryLib.Books.ElGamalKim.Lecture5
@@ -184,10 +185,16 @@ public import InfoTheoryLib.Network.DirectedInfo
 public import InfoTheoryLib.Network.Fading
 public import InfoTheoryLib.Network.FeedbackLaw
 public import InfoTheoryLib.Network.Gaussian
+public import InfoTheoryLib.Network.GaussianNetBounds
+public import InfoTheoryLib.Network.GaussianNetCode
+public import InfoTheoryLib.Network.GaussianNetTDM
 public import InfoTheoryLib.Network.GaussianVector
 public import InfoTheoryLib.Network.GaussianVectorBC
 public import InfoTheoryLib.Network.GrayWyner
 public import InfoTheoryLib.Network.GrayWynerConverse
+public import InfoTheoryLib.Network.GuptaKumar
+public import InfoTheoryLib.Network.GuptaKumarCells
+public import InfoTheoryLib.Network.GuptaKumarLemma2
 public import InfoTheoryLib.Network.ICAchievability
 public import InfoTheoryLib.Network.ICBounds
 public import InfoTheoryLib.Network.ICCode

@@ -53,6 +53,7 @@ to organize them by topic, in the spirit of Mathlib for mathematics and Physlib 
 | 17. Relay Channels | Formalized: the cutset bound (Theorem 1); direct transmission and multi-hop; decode–forward and partial decode–forward (Theorems 2 and 3), by block Markov coding with one fixed code; compress–forward (Theorem 4) and one direction of the equivalence with its original characterization; the capacity of the degraded, reversely degraded, semi-deterministic and cascade channels, of the channels with orthogonal sender components and of the receiver-orthogonal semi-deterministic channel; the modulo-2 sum channel, whose capacity is proved by compress–forward and the vector Mrs. Gerber's lemma and is strictly below the cutset bound; the relay without delay (Theorem 7), instantaneous relaying and noncausal decode–forward; the Sato channel with unlimited lookahead and without delay; and the closed forms of the bounds for the AWGN and RFD channels. Not formalized: the Gaussian coding theorems, Theorem 5 and amplify–forward, the second term of Theorem 6, time sharing and the cardinality bounds. See `Books/ElGamalKim/Lecture17.lean`. |
 | 18. Interactive Communication | Formalized: the feedback capacity of the DMC (Theorem 1); the Schalkwijk–Kailath scheme, with the Chebyshev bound for any noise of unit variance and the doubly exponential bound for Gaussian noise; the cooperative outer bound and the Cover–Leung inner bound (Theorem 2) for the MAC with feedback, with the binary erasure MAC, for which feedback strictly enlarges the region; the capacity region of the physically degraded BC with feedback (Theorem 4) and Dueck's example; the capacity of the relay channel with feedback (Theorem 5); Shannon's inner and outer bounds for the two-way channel, the decoupled channel and the binary multiplier channel; the dependence balance bound (Theorem 6); directed information, Massey's inequality and the multi-letter capacity region (Theorem 7), with strategies. Not formalized: Horstein and Weldon coding, the coding theorems for the AWGN MAC with feedback (Theorem 3, formulas only), the cardinality bounds and the numerical values. See `Books/ElGamalKim/Lecture18.lean`. |
 | 19. Discrete Memoryless Networks | Formalized: the cutset bounds (Theorems 1 and 4), for one input law and all the cuts; the decode–forward lower bound with sliding window decoding, for any number of nodes (Theorem 2); the noisy network coding lower bound (Theorem 3) and inner bound (Theorem 5, without the time sharing variable); the capacity of physically degraded networks and of the relay channel with two destinations; deterministic networks: the lower bounds, and the capacity of finite-field networks and of networks with no interference. Not formalized: time sharing in Theorem 5, the optimization over orders of the nodes, and identifications with the earlier models. |
+| 20. Gaussian Networks | Formalized for networks without relaying: the cutset bound as a converse, the symmetric capacity of the `N`-sender MAC, the bounds of the interference example, the upper bound `D(N)` for a fixed positive semidefinite gain matrix. At the level of the rates: the constant gap of noisy network coding, the order of the `N`-relay network, and the Gupta–Kumar scaling bounds, with Lemma 1 (for routes along rows and columns) and Lemma 2 as probabilistic theorems. Not formalized: coding theorems with continuous relays, treating interference as noise, the geometry of the mirror network; the positive semidefiniteness is a hypothesis. |
 
 The library contains no `sorry` and builds without warnings under Mathlib's linter set.
 
@@ -171,6 +172,10 @@ in the [API documentation](https://matteonerini.github.io/infotheorylib/docs/).
 | Noisy network coding lower bound and inner bound (Lecture 19) | `isAchievableMN_nnc`, `isAchievableDMN_nnc` | `Network.NNCTheorem` |
 | Capacity of physically degraded networks (Lecture 19) | `mnCapacity_of_degraded` | `Network.DFDegraded` |
 | Capacity of finite-field and no-interference deterministic networks (Lecture 19) | `mnCapacity_ffd`, `mnCapacity_ni` | `Network.DetFiniteField`, `Network.DetNoInterference` |
+| Symmetric capacity of the `N`-sender AWGN MAC (Lecture 20) | `gnSymCapacity_mac` | `Network.GaussianNetTDM` |
+| Constant gap of noisy network coding in Gaussian networks, at the level of the rates (Lecture 20) | `gvRate_le_nncGaussRate_add` | `Network.GaussianNetBounds` |
+| Gupta–Kumar network: Lemma 1, lower bound on the rate (Lecture 20) | `gk_lemma1`, `gkRate_whp` | `Network.GuptaKumarCells` |
+| Gupta–Kumar network: Lemma 2, upper bound on the capacity (Lecture 20) | `gkD_whp`, `gk_capacity_upper_whp` | `Network.GuptaKumarLemma2` |
 
 ## Getting started
 
@@ -487,6 +492,12 @@ InfoTheoryLib/
     DetNetwork.lean      deterministic networks
     DetFiniteField.lean  finite-field deterministic networks
     DetNoInterference.lean  deterministic networks with no interference
+    GaussianNetBounds.lean  Gaussian networks: constant gap, interference, relay formulas
+    GaussianNetCode.lean  Gaussian networks without relaying: codes and the cutset bound
+    GaussianNetTDM.lean  time division, the N-sender MAC, the interference example
+    GuptaKumar.lean      Gupta–Kumar network: interference, rate, matrix chain of the upper bound
+    GuptaKumarCells.lean  Gupta–Kumar network: Chernoff bound, cells, Lemma 1
+    GuptaKumarLemma2.lean  Gupta–Kumar network: Lemma 2, upper bound with high probability
     MACFeedback.lean     the MAC with feedback and the cooperative outer bound
     MACFeedbackBlock.lean  the block code of the Cover–Leung bound
     MACFeedbackMarkov.lean  the Cover–Leung inner bound
@@ -583,6 +594,7 @@ InfoTheoryLib/
     Lecture17.lean       index of Lecture 17
     Lecture18.lean       index of Lecture 18
     Lecture19.lean       index of Lecture 19
+    Lecture20.lean       index of Lecture 20
     Lecture18Examples.lean  the binary erasure MAC with feedback
     Lecture17Sato.lean   the Sato relay channel
 docs/
@@ -619,7 +631,7 @@ files.
 
 Chapters 1–17 of Cover & Thomas are done: every chapter has a topic folder and a
 `Books/CoverThomas/ChapterN.lean` index. The formalization of El Gamal & Kim's lecture notes is
-in progress: Lectures 1–19 are done, and the remaining networks will reuse the typicality, packing
+in progress: Lectures 1–20 are done, and the remaining networks will reuse the typicality, packing
 and covering lemmas of Lectures 2 and 3. The remaining work is
 listed in the "Not formalized" section of each chapter file.
 
