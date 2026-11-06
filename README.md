@@ -14,7 +14,7 @@ by topic, following two texts:
 
 ## Status
 
-All 17 chapters of Cover & Thomas and Lectures 1–23 of El Gamal & Kim are formalized, with some
+All 17 chapters of Cover & Thomas and Lectures 1–24 of El Gamal & Kim are formalized, with some
 omissions. Each [chapter](InfoTheoryLib/Books/CoverThomas/) and
 [lecture](InfoTheoryLib/Books/ElGamalKim/) file indexes what is proved and has a "Not formalized"
 section listing what is not. Many lecture files also record the differences from the notes and the
@@ -63,6 +63,7 @@ with theorem numbers, and EGK is El Gamal & Kim, with lecture numbers.
 | Orlitsky–Roche theorem (EGK Lecture 22) | `losslessFunBits_eq_condGraphEntropy` | `RateDistortion.GraphEntropy` |
 | Secrecy capacity of the wiretap channel (EGK Lecture 23) | `wiretapCapacity_eq` | `Secrecy.WiretapAchievability` |
 | Multi-node secret key capacity (EGK Lecture 23) | `multiKeyCapacity_eq` | `Secrecy.KeyMultiNodeCapacity` |
+| Capacity region of the totally asynchronous MAC (EGK Lecture 24) | `asyncCapacityRegionBits_eq` | `Networking.AsyncMACAchievability` |
 
 ## Getting started
 
@@ -145,6 +146,7 @@ InfoTheoryLib/
   Inequalities/           Han's inequalities and determinant inequalities
   StateChannel/           channels with state, the compound channel, Gelfand–Pinsker
   Network/                multi-user channels, distributed source coding, networks
+  Networking/             random data arrival, the asynchronous MAC, the random access channel
   Books/
     CoverThomas/          ChapterN.lean: index, worked examples and aliases for each chapter
     ElGamalKim/           LectureN.lean: index, worked examples and aliases for each lecture
