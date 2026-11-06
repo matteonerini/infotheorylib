@@ -317,6 +317,29 @@ end Rep
 
 section Reduce
 
+/-- A mixture `w(j) z(x | j)` with the mean `p(x)` comes from a kernel `p(u' | x)`. -/
+lemma exists_kernel_of_mean {n : ℕ} (hP : IsPMF P) {w' : Fin n → ℝ} {z : Fin n → α → ℝ}
+    (hw' : IsPMF w') (hz : IsChannel z) (h1 : ∀ x, ∑ j, w' j * z j x = margFst P x) :
+    ∃ q' : α → Fin n → ℝ, IsChannel q' ∧ ∀ x j, margFst P x * q' x j = w' j * z j x := by
+  classical
+  set q' : α → Fin n → ℝ := fun x j =>
+    if margFst P x = 0 then w' j else w' j * z j x / margFst P x with hq'
+  have hp0 : ∀ x, 0 ≤ margFst P x := (hP.dist _).nonneg
+  refine ⟨q', fun x => ?_, fun x j => ?_⟩
+  · by_cases hx : margFst P x = 0
+    · simp only [hq', hx, ite_true]
+      exact hw'
+    · simp only [hq', hx, ite_false]
+      refine ⟨fun j => div_nonneg (mul_nonneg (hw'.nonneg j) ((hz j).nonneg x)) (hp0 x), ?_⟩
+      rw [← sum_div, h1, div_self hx]
+  · by_cases hx : margFst P x = 0
+    · have h0 : ∀ j ∈ univ, 0 ≤ w' j * z j x := fun j _ =>
+        mul_nonneg (hw'.nonneg j) ((hz j).nonneg x)
+      have := (sum_eq_zero_iff_of_nonneg h0).1 ((h1 x).trans hx) j (mem_univ j)
+      rw [this, hx, zero_mul]
+    · simp only [hq', hx, ite_false]
+      field_simp
+
 /-- **The cardinality bound (Lecture 12, pages 12-6 and 12-17, and Appendix C).** The rate of
 `p(u | x)` is that of a `p(u' | x)` with `|𝒰'| = |𝒳| + 1`, and the cost is no larger, by the support
 lemma: the rate and the best cost `min_{u₀} E[c(u₀, X, Y) | U = u]` are means under `p(u)` of
@@ -359,24 +382,7 @@ theorem exists_side_reduce (hP : IsPMF P) (hq : IsChannel q) (θ : ℝ) (c : υ 
   choose g hg using fun j => (exists_mem_eq_inf' (s := (univ : Finset υ)) univ_nonempty
     fun u => sideG W (c u) (z j))
   -- The new kernel.
-  set q' : α → Fin _ → ℝ := fun x j =>
-    if margFst P x = 0 then w' j else w' j * z j x / margFst P x with hq'
-  have hp0 : ∀ x, 0 ≤ margFst P x := (hP.dist _).nonneg
-  have hq'P : IsChannel q' := fun x => by
-    by_cases hx : margFst P x = 0
-    · simp only [hq', hx, ite_true]
-      exact hw'
-    · simp only [hq', hx, ite_false]
-      refine ⟨fun j => div_nonneg (mul_nonneg (hw'.nonneg j) ((hz j).nonneg x)) (hp0 x), ?_⟩
-      rw [← sum_div, h1, div_self hx]
-  have hrep' : ∀ x j, margFst P x * q' x j = w' j * z j x := fun x j => by
-    by_cases hx : margFst P x = 0
-    · have h0 : ∀ j ∈ univ, 0 ≤ w' j * z j x := fun j _ =>
-        mul_nonneg (hw'.nonneg j) ((hz j).nonneg x)
-      have := (sum_eq_zero_iff_of_nonneg h0).1 ((h1 x).trans hx) j (mem_univ j)
-      rw [this, hx, zero_mul]
-    · simp only [hq', hx, ite_false]
-      field_simp
+  obtain ⟨q', hq'P, hrep'⟩ := exists_kernel_of_mean hP hw' hz h1
   refine ⟨q', fun j => g j, hq'P, ?_, ?_⟩
   · rw [sideRate_eq_of_rep hP hq'P hW hPW hw'.nonneg (fun j => hz j) hrep' θ,
       sideRate_eq_of_rep hP hq hW hPW hw hr hrep θ, h2]
@@ -387,6 +393,36 @@ theorem exists_side_reduce (hP : IsPMF P) (hq : IsChannel q) (θ : ℝ) (c : υ 
     refine sum_le_sum fun u _ => mul_le_mul_of_nonneg_left ?_ (hw u)
     simp only [hbest]
     exact inf'_le _ (mem_univ u)
+
+/-- **The cardinality bound for two rates.** The rates `I(X; U)` and `I(Y; U)` of `p(u | x)` are
+those of a `p(u' | x)` with `|𝒰'| = |𝒳| + 1`. -/
+theorem exists_side_reduce₂ (hP : IsPMF P) (hq : IsChannel q) {N : ℕ}
+    (hN : N = Fintype.card α + 1) :
+    ∃ q' : α → Fin N → ℝ, IsChannel q' ∧ sideRate 0 P q' = sideRate 0 P q ∧
+      sideRate 1 P q' = sideRate 1 P q := by
+  classical
+  obtain ⟨W, hW, hPW⟩ := exists_side_channel hP
+  obtain ⟨w, r, hw, hr, hrep⟩ := exists_side_rep hP hq
+  have hwP := isPMF_of_rep hP hq hw hr hrep
+  obtain ⟨z₀⟩ : Nonempty (α × γ) := Fintype.card_pos_iff.1 (card_pos_of_isPMF hP)
+  have hα : Nonempty α := ⟨z₀.1⟩
+  have hαpos : 0 < Fintype.card α := Fintype.card_pos
+  have hc : ∀ θ, Continuous (sideF θ W) := fun θ => by
+    unfold sideF
+    exact continuous_entropy.sub (continuous_const.mul (continuous_entropy_outDist W))
+  obtain ⟨w', z, hw', hz, hmean, hmix⟩ := exists_mixture_preserving_mean (κ := Bool)
+    (f := fun b => sideF (if b then 1 else 0) W) (fun b => (hc _).continuousOn) hwP
+    (fun u => hr u) (n := N) (by rw [Fintype.card_bool, hN]; omega)
+  have h1 : ∀ x, ∑ j, w' j * z j x = margFst P x := fun x => by
+    rw [hmean, ← mul_one (margFst P x), ← (hq x).sum_eq_one, mul_sum]
+    exact (sum_congr rfl fun u _ => hrep x u).symm
+  obtain ⟨q', hq'P, hrep'⟩ := exists_kernel_of_mean hP hw' hz h1
+  have e := fun θ => sideRate_eq_of_rep hP hq'P hW hPW hw'.nonneg (fun j => hz j) hrep' θ
+  have e' := fun θ => sideRate_eq_of_rep hP hq hW hPW hw hr hrep θ
+  have m₀ := hmix false
+  have m₁ := hmix true
+  simp only [Bool.false_eq_true, ite_false, ite_true] at m₀ m₁
+  exact ⟨q', hq'P, by rw [e, e', m₀], by rw [e, e', m₁]⟩
 
 /-- The cardinality bound for a distortion measure: `|𝒰'| = |𝒳| + 1`. -/
 theorem exists_side_reduce₁ (hP : IsPMF P) (hq : IsChannel q) (θ : ℝ) (d : α → β → ℝ)

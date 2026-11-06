@@ -180,6 +180,7 @@ public import InfoTheoryLib.Network.BCSuperpositionLaws
 public import InfoTheoryLib.Network.BCTimeSharing
 public import InfoTheoryLib.Network.BergerTung
 public import InfoTheoryLib.Network.BergerTungBinning
+public import InfoTheoryLib.Network.BergerTungCardinality
 public import InfoTheoryLib.Network.BergerTungCases
 public import InfoTheoryLib.Network.BergerTungInner
 public import InfoTheoryLib.Network.BergerTungOuter
@@ -288,6 +289,7 @@ public import InfoTheoryLib.Network.SlepianWolf
 public import InfoTheoryLib.Network.SlepianWolfBits
 public import InfoTheoryLib.Network.SlepianWolfMany
 public import InfoTheoryLib.Network.SourceHelper
+public import InfoTheoryLib.Network.SourceHelperCardinality
 public import InfoTheoryLib.Network.SourceHelperConverse
 public import InfoTheoryLib.Network.Transcript
 public import InfoTheoryLib.Network.TwoWayCode

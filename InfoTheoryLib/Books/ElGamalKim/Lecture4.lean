@@ -9,6 +9,8 @@ public import InfoTheoryLib.Books.CoverThomas.Chapter7
 public import InfoTheoryLib.GaussianChannel.AWGN
 public import InfoTheoryLib.Network.Gaussian
 public import InfoTheoryLib.Network.MACMultiLetter
+public import InfoTheoryLib.RelativeEntropy.Pinsker
+public import InfoTheoryLib.Statistics.Bernoulli
 
 /-!
 # El Gamal & Kim, Lecture 4: Multiple Access Channels
@@ -54,6 +56,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The binary erasure DM-MAC, where they do not: `binaryErasureMAC`,
   `pentagon_subset_macCapacityRegionBits_binaryErasureMAC`,
   `macCapacityRegionBits_binaryErasureMAC_subset`, `binaryErasureMAC_not_timeDivision` (here).
+* Its capacity region, the pentagon with `R₁ + R₂ ≤ 3/2`: `macInfo₁₂_binaryErasureMAC_le`,
+  `macCapacityRegionBits_binaryErasureMAC` (here).
 
 ### Multi-letter characterization
 * Theorem 1: `macExt`, `macChannel₁`, `macChannel₂`, `macMultiLetterRegionBits`,
@@ -106,8 +110,6 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   achieved by simultaneous decoding and time sharing.
 * The remark on the maximal probability of error, the push-to-talk MAC, and the computational
   remark on the sum capacity.
-* For the binary erasure MAC, the sum-rate bound `C₁₂ = 3/2` bits (the maximum of `H(X₁ + X₂)`
-  over product inputs), so that the pentagon is the whole capacity region.
 * Theorem 4 as a coding theorem for the AWGN-MAC, the computation `I(X₁; Y | X₂) = C(S₁)` for
   Gaussian inputs, and the TDMA scheme without power control.
 * Theorem 5, the `k`-sender DM-MAC, and the operational `k`-sender AWGN-MAC.
@@ -282,6 +284,175 @@ theorem binaryErasureMAC_not_timeDivision :
   dsimp only at h₁ h₂
   nlinarith [mul_le_mul_of_nonneg_left c₁ ht0,
     mul_le_mul_of_nonneg_left c₂ (by linarith : 0 ≤ 1 - t)]
+
+/-- The tangent bound `-x log x ≤ r - x - x log r`, the elementary step of Gibbs's inequality. -/
+private lemma negMulLog_le_tangent {x r : ℝ} (hx : 0 ≤ x) (hr : 0 < r) :
+    negMulLog x ≤ r - x - x * log r := by
+  rcases hx.eq_or_lt with rfl | hx'
+  · simpa using hr.le
+  · have h := log_le_sub_one_of_pos (div_pos hr hx')
+    rw [log_div hr.ne' hx'.ne'] at h
+    have h' := mul_le_mul_of_nonneg_left h hx
+    have e : x * (r / x - 1) = r - x := by field_simp
+    rw [e] at h'
+    simp only [negMulLog]
+    nlinarith
+
+/-- The entropy of `Bern(s)` is at most `log 2 - (2 s - 1)² / 2`, by Pinsker's inequality. -/
+private lemma binaryEntropy_le {s : ℝ} (h0 : 0 < s) (h1 : s < 1) :
+    negMulLog s + negMulLog (1 - s) ≤ log 2 - (2 * s - 1) ^ 2 / 2 := by
+  have hP := bernoulliPMF_isPMF h0.le h1.le
+  have hU := uniformPMF_isPMF (α := Bool)
+  have hp := pinsker hP hU (fun x hx => by simp [uniformPMF] at hx)
+  have hl1 : l1Dist (bernoulliPMF s) (uniformPMF Bool) ^ 2 = (2 * s - 1) ^ 2 := by
+    have e : l1Dist (bernoulliPMF s) (uniformPMF Bool) = |s - 1 / 2| + |1 - s - 1 / 2| := by
+      simp [l1Dist, bernoulliPMF, uniformPMF]
+    have e₂ : |1 - s - 1 / 2| = |s - 1 / 2| := by
+      rw [← abs_neg]
+      congr 1
+      ring
+    rw [e, e₂, ← two_mul, mul_pow, sq_abs]
+    ring
+  have hrel : relEntropyReal (bernoulliPMF s) (uniformPMF Bool) =
+      log 2 - (negMulLog s + negMulLog (1 - s)) := by
+    have h1s : 0 < 1 - s := by linarith
+    simp only [relEntropyReal, Fintype.sum_bool, bernoulliPMF, uniformPMF, ite_true,
+      Bool.false_eq_true, ite_false, Fintype.card_bool, negMulLog]
+    have e₁ : s / (1 / ((2 : ℕ) : ℝ)) = 2 * s := by norm_num; ring
+    have e₂ : (1 - s) / (1 / ((2 : ℕ) : ℝ)) = 2 * (1 - s) := by norm_num; ring
+    rw [e₁, e₂, log_mul two_ne_zero h0.ne', log_mul two_ne_zero h1s.ne']
+    ring
+  rw [hl1, hrel] at hp
+  linarith
+
+/-- **The sum rate of the binary erasure MAC, as an inequality.** With `P(Xⱼ = 1)` equal to `p` and
+`q`, the entropy of `X₁ + X₂` is at most `3/2` bits. We compare with `Bin(2, s)` for
+`s = (p + q) / 2`, which reduces the claim to the bound on the entropy of `Bern(s)`. -/
+private lemma erasure_entropy_le {p q : ℝ} (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hq0 : 0 ≤ q) (hq1 : q ≤ 1) :
+    negMulLog ((1 - p) * (1 - q)) + negMulLog (p * (1 - q) + q * (1 - p)) + negMulLog (p * q) ≤
+      3 / 2 * log 2 := by
+  have hl := log_pos one_lt_two
+  have hl2 : log 2 ≤ 2 := by linarith [log_two_lt_d9]
+  by_cases h₀ : p = 0 ∧ q = 0
+  · obtain ⟨rfl, rfl⟩ := h₀
+    simp only [sub_zero, mul_one, zero_mul, add_zero, negMulLog_one, negMulLog_zero]
+    linarith
+  by_cases h₁ : p = 1 ∧ q = 1
+  · obtain ⟨rfl, rfl⟩ := h₁
+    simp only [sub_self, mul_zero, add_zero, mul_one, negMulLog_one, negMulLog_zero]
+    linarith
+  set s := (p + q) / 2 with hs
+  have hs0 : 0 < s := by
+    by_contra hn
+    apply h₀
+    constructor <;> linarith
+  have hs1 : s < 1 := by
+    by_contra hn
+    apply h₁
+    constructor <;> linarith
+  have h1s : 0 < 1 - s := by linarith
+  set a := (1 - p) * (1 - q) with ha
+  set b := p * (1 - q) + q * (1 - p) with hb
+  set c := p * q with hc
+  have ha0 : 0 ≤ a := mul_nonneg (by linarith) (by linarith)
+  have hb0 : 0 ≤ b := add_nonneg (mul_nonneg hp0 (by linarith)) (mul_nonneg hq0 (by linarith))
+  have hc0 : 0 ≤ c := mul_nonneg hp0 hq0
+  have t₀ := negMulLog_le_tangent ha0 (show 0 < (1 - s) ^ 2 by positivity)
+  have t₁ := negMulLog_le_tangent hb0 (show 0 < 2 * s * (1 - s) by positivity)
+  have t₂ := negMulLog_le_tangent hc0 (show 0 < s ^ 2 by positivity)
+  rw [log_pow] at t₀ t₂
+  rw [log_mul (by positivity) h1s.ne', log_mul two_ne_zero hs0.ne'] at t₁
+  have hsum : (1 - s) ^ 2 + 2 * s * (1 - s) + s ^ 2 = a + b + c := by
+    simp only [ha, hb, hc, hs]
+    ring
+  have e₁ : 2 * a + b = 2 * (1 - s) := by
+    simp only [ha, hb, hs]
+    ring
+  have e₂ : b + 2 * c = 2 * s := by
+    simp only [hb, hc, hs]
+    ring
+  have hB : 2 * s * (1 - s) ≤ b := by
+    have : b - 2 * s * (1 - s) = (p - q) ^ 2 / 2 := by
+      simp only [hb, hs]
+      ring
+    nlinarith [sq_nonneg (p - q)]
+  have hH := binaryEntropy_le hs0 hs1
+  -- The cross entropy with `Bin(2, s)` is `2 H(s) - b log 2`.
+  have hcross : negMulLog a + negMulLog b + negMulLog c ≤
+      2 * (negMulLog s + negMulLog (1 - s)) - b * log 2 := by
+    have l₁ : (2 * a + b) * log (1 - s) = 2 * (1 - s) * log (1 - s) := by rw [e₁]
+    have l₂ : (b + 2 * c) * log s = 2 * s * log s := by rw [e₂]
+    simp only [negMulLog] at t₀ t₁ t₂ ⊢
+    push_cast at t₀ t₂
+    nlinarith
+  have hfin : 2 * (log 2 - (2 * s - 1) ^ 2 / 2) - 2 * s * (1 - s) * log 2 ≤ 3 / 2 * log 2 := by
+    have e : 2 * s * (1 - s) = (1 - (2 * s - 1) ^ 2) / 2 := by ring
+    rw [e]
+    nlinarith [sq_nonneg (2 * s - 1), mul_nonneg (sq_nonneg (2 * s - 1)) (sub_nonneg.2 hl2)]
+  have hbl : 2 * s * (1 - s) * log 2 ≤ b * log 2 := mul_le_mul_of_nonneg_right hB hl.le
+  linarith
+
+/-- **Example (Lecture 4): binary erasure MAC.** The sum rate is at most `3/2` bits, for any product
+input: `I(X₁, X₂; Y) ≤ 3/2`. -/
+theorem macInfo₁₂_binaryErasureMAC_le {p₁ p₂ : Bool → ℝ} (hp₁ : IsPMF p₁) (hp₂ : IsPMF p₂) :
+    macInfo₁₂ p₁ p₂ binaryErasureMAC ≤ 3 / 2 * log 2 := by
+  have hW := binaryErasureMAC_isChannel
+  have hP := hp₁.prodDist hp₂
+  have hf₁ : p₁ false = 1 - p₁ true := by
+    have := hp₁.sum_eq_one
+    rw [Fintype.sum_bool] at this
+    linarith
+  have hf₂ : p₂ false = 1 - p₂ true := by
+    have := hp₂.sum_eq_one
+    rw [Fintype.sum_bool] at this
+    linarith
+  have ht₁ : p₁ true ≤ 1 := by linarith [hp₁.nonneg false]
+  have ht₂ : p₂ true ≤ 1 := by linarith [hp₂.nonneg false]
+  have hle : macInfo₁₂ p₁ p₂ binaryErasureMAC ≤
+      entropy (outDist (prodDist p₁ p₂) binaryErasureMAC) := by
+    change mutualInfoOf (prodDist p₁ p₂) binaryErasureMAC ≤ _
+    rw [mutualInfoOf_eq hP hW]
+    have : 0 ≤ ∑ x, prodDist p₁ p₂ x * entropy (binaryErasureMAC x) :=
+      sum_nonneg fun x _ => mul_nonneg (hP.nonneg x) (entropy_nonneg (hW x))
+    linarith
+  refine hle.trans ?_
+  have h := erasure_entropy_le (hp₁.nonneg true) ht₁ (hp₂.nonneg true) ht₂
+  have e₀ : outDist (prodDist p₁ p₂) binaryErasureMAC 0 = (1 - p₁ true) * (1 - p₂ true) := by
+    simp [outDist, binaryErasureMAC, detMAC, binaryErasureMACOut, prodDist, Fintype.sum_prod_type,
+      hf₁, hf₂]
+  have e₁ : outDist (prodDist p₁ p₂) binaryErasureMAC 1 =
+      p₁ true * (1 - p₂ true) + p₂ true * (1 - p₁ true) := by
+    simp [outDist, binaryErasureMAC, detMAC, binaryErasureMACOut, prodDist, Fintype.sum_prod_type,
+      hf₁, hf₂]
+    ring
+  have e₂ : outDist (prodDist p₁ p₂) binaryErasureMAC 2 = p₁ true * p₂ true := by
+    simp [outDist, binaryErasureMAC, detMAC, binaryErasureMACOut, prodDist, Fintype.sum_prod_type]
+  rw [entropy_eq_sum_negMulLog, Fin.sum_univ_three, e₀, e₁, e₂]
+  exact h
+
+/-- **Example (Lecture 4): binary erasure MAC.** The capacity region is the pentagon `R₁ ≤ 1`,
+`R₂ ≤ 1`, `R₁ + R₂ ≤ 3/2`, in bits. -/
+theorem macCapacityRegionBits_binaryErasureMAC :
+    macCapacityRegionBits binaryErasureMAC =
+      {R : ℝ × ℝ | R.1 ≤ 1 ∧ R.2 ≤ 1 ∧ R.1 + R.2 ≤ 3 / 2} := by
+  have hl := log_pos one_lt_two
+  refine Subset.antisymm (fun R hR => ?_) pentagon_subset_macCapacityRegionBits_binaryErasureMAC
+  obtain ⟨h₁, h₂⟩ := macCapacityRegionBits_binaryErasureMAC_subset hR
+  refine ⟨h₁, h₂, ?_⟩
+  rw [macCapacityRegionBits_eq binaryErasureMAC_isChannel] at hR
+  have hT : Convex ℝ {R : ℝ × ℝ | R.1 + R.2 ≤ 3 / 2} := by
+    intro x hx y hy a b ha hb hab
+    simp only [mem_ofPred_eq, Prod.fst_add, Prod.snd_add, Prod.smul_fst, Prod.smul_snd,
+      smul_eq_mul] at hx hy ⊢
+    nlinarith
+  have hc : IsClosed {R : ℝ × ℝ | R.1 + R.2 ≤ 3 / 2} :=
+    isClosed_le (continuous_fst.add continuous_snd) continuous_const
+  have hsub : macPentagonsBits binaryErasureMAC ⊆ {R : ℝ × ℝ | R.1 + R.2 ≤ 3 / 2} := by
+    rintro R ⟨p₁, p₂, hp₁, hp₂, -, -, h₃⟩
+    refine h₃.trans ?_
+    rw [div_le_iff₀ hl]
+    exact macInfo₁₂_binaryErasureMAC_le hp₁ hp₂
+  exact closure_minimal (convexHull_min hsub hT) hc hR
 
 /-! ## The AWGN multiple access channel -/
 

@@ -73,6 +73,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   (`RateDistortion.SideInfoFunction`).
 * `|𝒱| ≤ |𝒰₁| |𝒰₂| + 2` for the Gray–Wyner system: `exists_gw_reduce`
   (`Network.GrayWynerConverse`).
+* `|𝒰| ≤ |𝒴| + 1` for source coding with a helper, with no closure:
+  `helperOptimalRegionBits_eq_card` (`Network.SourceHelperCardinality`).
+* `|𝒰ⱼ| ≤ |𝒳ⱼ| + 3` for the Berger–Tung inner bound, one less than the notes:
+  `exists_bt_reduce`, `exists_bt_sharing_card` (`Network.BergerTungCardinality`).
 
 ### The perturbation method (pages C-9 to C-11; `Network.MartonCardinality`)
 * The objective in terms of entropies, page C-10: `martonSum`, `martonPhi`,
@@ -118,7 +122,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   cite; only the sum rate is treated, as in the notes.
 * The bound `|𝒬| ≤ 2` of Lecture 4, which page C-8 mentions and this technique does not give.
 * The other cardinality bounds of the notes, which this technique would give and which remain on the
-  "Not formalized" lists of their lectures, such as `|𝒰ⱼ| ≤ |𝒳ⱼ| + 4` in Lecture 13.
+  "Not formalized" lists of their lectures, such as `|𝒰| ≤ |𝒳| + 5` in Lecture 14.
 
 ## Issues in the notes
 

@@ -20,8 +20,9 @@ the optimal rate region of lossless source coding with a helper (Theorem 2).
 ## Conventions
 
 * **Rates.** In bits, with the index sets `[1 : 2^{nR}) = {1, …, 2^⌊nR⌋}` of the notes.
-* **Auxiliary random variables.** `U` takes values in `Fin k` for some `k`, in place of the bound
-  `|U| ≤ |Y| + 1`, so that the region of Theorem 2 is stated up to closure.
+* **Auxiliary random variables.** `U` takes values in `Fin k` for some `k`, so that the region of
+  Theorem 2 is stated up to closure, and `helperOptimalRegionBits_eq_card`
+  (`Network.SourceHelperCardinality`) states it with `|U| ≤ |Y| + 1` and no closure.
 
 ## Index
 
@@ -41,6 +42,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### Lossless source coding with a helper
 * The codes: `HelperCode`, `IsAchievableHelperBits`, `helperOptimalRegionBits`
   (`Network.SourceHelper`).
+* The bound `|U| ≤ |Y| + 1` and no closure: `exists_helper_reduce`, `helperRegionCardBits`,
+  `helperRegionBits_eq_card`, `isClosed_helperRegionCardBits`, `helperOptimalRegionBits_eq_card`
+  (`Network.SourceHelperCardinality`).
 * **Theorem 2**: `helperLaw`, `helperCond`, `helperInfo`, `helperRegionBits`,
   `helperOptimalRegionBits_eq` (`Network.SourceHelperConverse`).
 * Achievability: `exists_bins_code` (random binning), `helperEnc`, `sum_not_mem_helperEnc_le`,
@@ -65,7 +69,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   matrix.
 * The remark on zero-error coding on page 11-19, and the extension to stationary ergodic sources on
   page 11-20.
-* The bound on the cardinality of `U`, and the convexity of the region of Theorem 2.
+* The convexity of the region of Theorem 2.
 * Theorem 4, with `k` sources and a helper.
 
 ## Issues in the notes

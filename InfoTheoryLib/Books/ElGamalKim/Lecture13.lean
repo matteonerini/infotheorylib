@@ -57,6 +57,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `DistLossyCode.distortion₂_append`, `dlAchievableSet`, `convex_dlAchievableSet`,
   `exists_rate_split`, `IsAchievableDL.mono` (`Network.BergerTungSharing`).
 * **Theorem 1**: `isAchievableDL_of_lt_sharing`, `theorem_13_1` (here).
+* The bound on the alphabets of Theorem 1: `exists_bt_reduce₁`, `exists_bt_reduce₂`,
+  `exists_bt_reduce`, `exists_bt_sharing_card` (`Network.BergerTungCardinality`).
 
 ### The special cases of the inner bound (page 13-5)
 * `D₂ = 0` for the Hamming distortion: `isAchievableDL_of_side` (`Network.BergerTungCases`), with
@@ -83,8 +85,10 @@ All in `Network.QuadraticGaussian`, as formulas.
 
 ## Not formalized
 
-* The bounds `|U₁| ≤ |X₁| + 4` and `|U₂| ≤ |X₂| + 4` of Theorem 1. For the same reason, the outer
-  bound holds with `Dⱼ + ε` for every `ε > 0` in place of `Dⱼ`.
+* A bound on the alphabets in the outer bound of Theorem 2, which the notes do not state either. So
+  we prove the outer bound with `Dⱼ + ε` for every `ε > 0` in place of `Dⱼ`. The technique of
+  Appendix C does not give one: `U₁` and `U₂` have a joint law, so reducing `U₁` has to preserve the
+  law of `(X₁, X₂, U₂)`, whose size depends on `|U₂|`, and the same holds for `U₂`.
 * The tightness statements of pages 13-5 and 13-15, that is the converse of Berger and Yeung for
   `D₂ = 0`, and the outer bound for `X₂` a function of `X₁`.
 * The counterexample for the doubly symmetric binary source (pages 13-39 and 13-40), the
@@ -100,6 +104,9 @@ All in `Network.QuadraticGaussian`, as formulas.
 
 ## Differences from the notes
 
+* **The bound on the alphabets of Theorem 1.** We prove `|Uⱼ| ≤ |Xⱼ| + 3`, one less than the
+  `|Xⱼ| + 4` of the notes. The three rates depend on `I(U₁; X₁)`, `I(U₂; X₂)` and `I(U₁; U₂)` only,
+  so that two functions preserve them when `U₁` is reduced. The distortions may decrease.
 * **The Markov lemma.** The notes bound a hypergeometric random variable.
   `sum_not_mem_condRobust_le` compares the law `φ` of `Zⁿ` with the product law on `T(Z | yⁿ)`,
   within a factor `e^{n (E - E')}`, and uses the Chernoff bound for the product law. Its hypothesis
