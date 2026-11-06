@@ -222,10 +222,10 @@ lemma causalRecon_aux (z₀ : α × γ) (i : Fin n) (ω : Fin n → α × γ) :
 
 include hP in
 /-- **Lecture 12, pages 12-11 and 12-12.** The single-letter bounds: every code gives `p(u | x)` and
-`x̂(u, y)` with `E d(X, X̂) = E d(Xⁿ, X̂ⁿ)` and `n I(X; U) ≤ log M`, with `|𝒰| ≤ |𝒳| + 3`. -/
+`x̂(u, y)` with `E d(X, X̂) ≤ E d(Xⁿ, X̂ⁿ)` and `n I(X; U) ≤ log M`, with `|𝒰| ≤ |𝒳| + 1`. -/
 theorem CausalCode.exists_kernel_le (hn : 0 < n) (d : α → β → ℝ) :
-    ∃ (q : α → Fin (Fintype.card α + 3) → ℝ) (f : Fin (Fintype.card α + 3) → γ → β), IsChannel q ∧
-      sideCost P q (fun u x y => d x (f u y)) = c.distortion P d ∧ n * sideRate 0 P q ≤ log M := by
+    ∃ (q : α → Fin (Fintype.card α + 1) → ℝ) (f : Fin (Fintype.card α + 1) → γ → β), IsChannel q ∧
+      sideCost P q (fun u x y => d x (f u y)) ≤ c.distortion P d ∧ n * sideRate 0 P q ≤ log M := by
   classical
   obtain ⟨z₀⟩ : Nonempty (α × γ) := Fintype.card_pos_iff.1 (card_pos_of_isPMF hP)
   have hμ := iidPMF_isPMF hP n
@@ -300,7 +300,7 @@ theorem CausalCode.exists_kernel_le (hn : 0 < n) (d : α → β → ℝ) :
     rw [mutualInfo_eq_entropy_sub_condEntropy hμ, hsig]
   rw [hexp] at hb
   obtain ⟨q', f', hq', h1, h2⟩ := exists_side_reduce₁ hP hq 0 d (causalRecon c)
-  refine ⟨q', f', hq', h2.trans hcost, ?_⟩
+  refine ⟨q', f', hq', h2.trans hcost.le, ?_⟩
   rw [h1, hrate, mul_sub, ← mul_assoc, mul_inv_cancel₀ hn'.ne', one_mul]
   exact hb
 
@@ -308,20 +308,20 @@ theorem CausalCode.exists_kernel_le (hn : 0 < n) (d : α → β → ℝ) :
 `x̂(u, y)` with `E d(X, X̂) ≤ D` and `I(X; U) ≤ R`, in bits. -/
 theorem IsAchievableCausalBits.exists_kernel [Finite β] (hP : IsPMF P) {d : α → β → ℝ} {R D : ℝ}
     (h : IsAchievableCausalBits P d R D) :
-    ∃ (q : α → Fin (Fintype.card α + 3) → ℝ) (f : Fin (Fintype.card α + 3) → γ → β), IsChannel q ∧
+    ∃ (q : α → Fin (Fintype.card α + 1) → ℝ) (f : Fin (Fintype.card α + 1) → γ → β), IsChannel q ∧
       sideCost P q (fun u x y => d x (f u y)) ≤ D ∧ sideRate 0 P q ≤ R * log 2 := by
   obtain ⟨hR, c, hc⟩ := h
   refine exists_le_of_forall_side hP 0 fun ε hε => ?_
   obtain ⟨n, hn1, hn2⟩ := ((hc ε hε).and (eventually_gt_atTop 0)).exists
   obtain ⟨q, f, hq, h1, h2⟩ := (c n).exists_kernel_le hP hn2 d
   have hn' : (0 : ℝ) < n := by exact_mod_cast hn2
-  exact ⟨q, f, hq, h1.trans_le hn1, le_of_mul_le_mul_left (h2.trans
+  exact ⟨q, f, hq, h1.trans hn1, le_of_mul_le_mul_left (h2.trans
     (by simpa using log_two_pow_floor_le n hR)) hn'⟩
 
 /-- **Theorem 1 of Lecture 12 of [elgamal2010], page 12-6.** The rate–distortion function with side
 information available causally at the decoder is `R_CSI-D(D) = min I(X; U)`, over `p(u | x)` and
 `x̂(u, y)` with `E d(X, X̂) ≤ D`, for `D ≥ D_min`, in bits. By `exists_sideRD_eq`, the minimum is
-attained with `|𝒰| ≤ |𝒳| + 3`. -/
+attained with `|𝒰| ≤ |𝒳| + 1`. -/
 theorem rateCausalBits_eq [Finite β] [Nonempty β] (hP : IsPMF P) {d : α → β → ℝ}
     (hd : ∀ x y, 0 ≤ d x y) {D : ℝ} (hD : minDistortion (margFst P) d ≤ D) :
     rateCausalBits P d D = causalRD P d D / log 2 := by
@@ -524,10 +524,10 @@ theorem WZCode.exists_aux_law (hn : 0 < n) (hM : 0 < M) (enc : (Fin n → α) �
 
 include hP in
 /-- **Lecture 12, pages 12-26 and 12-27.** The single-letter bounds: every code gives `p(u | x)` and
-`x̂(u, y)` with `E d(X, X̂) = E d(Xⁿ, X̂ⁿ)` and `n I(X; U | Y) ≤ log M`, with `|𝒰| ≤ |𝒳| + 3`. -/
+`x̂(u, y)` with `E d(X, X̂) ≤ E d(Xⁿ, X̂ⁿ)` and `n I(X; U | Y) ≤ log M`, with `|𝒰| ≤ |𝒳| + 1`. -/
 theorem WZCode.exists_kernel_le (hn : 0 < n) (hM : 0 < M) (d : α → β → ℝ) :
-    ∃ (q : α → Fin (Fintype.card α + 3) → ℝ) (f : Fin (Fintype.card α + 3) → γ → β), IsChannel q ∧
-      sideCost P q (fun u x y => d x (f u y)) = c.distortion P d ∧ n * sideRate 1 P q ≤ log M := by
+    ∃ (q : α → Fin (Fintype.card α + 1) → ℝ) (f : Fin (Fintype.card α + 1) → γ → β), IsChannel q ∧
+      sideCost P q (fun u x y => d x (f u y)) ≤ c.distortion P d ∧ n * sideRate 1 P q ≤ log M := by
   obtain ⟨y₀, q, hq, he, hr⟩ := WZCode.exists_aux_law hP hn hM c.enc
   have hcost : sideCost P q (fun u x y => d x (wzRecon c u y)) = c.distortion P d := by
     rw [he]
@@ -536,27 +536,27 @@ theorem WZCode.exists_kernel_le (hn : 0 < n) (hM : 0 < M) (d : α → β → ℝ
     simp only [seqDistortion, wzRecon_aux]
     rfl
   obtain ⟨q', f', hq', h1, h2⟩ := exists_side_reduce₁ hP hq 1 d (wzRecon c)
-  exact ⟨q', f', hq', h2.trans hcost, by rwa [h1]⟩
+  exact ⟨q', f', hq', h2.trans hcost.le, by rwa [h1]⟩
 
 /-- **The converse of the Wyner–Ziv theorem.** If `(R, D)` is achievable, there are `p(u | x)` and
 `x̂(u, y)` with `E d(X, X̂) ≤ D` and `I(X; U | Y) ≤ R`, in bits. -/
 theorem IsAchievableWZBits.exists_kernel [Finite β] (hP : IsPMF P) {d : α → β → ℝ} {R D : ℝ}
     (h : IsAchievableWZBits P d R D) :
-    ∃ (q : α → Fin (Fintype.card α + 3) → ℝ) (f : Fin (Fintype.card α + 3) → γ → β), IsChannel q ∧
+    ∃ (q : α → Fin (Fintype.card α + 1) → ℝ) (f : Fin (Fintype.card α + 1) → γ → β), IsChannel q ∧
       sideCost P q (fun u x y => d x (f u y)) ≤ D ∧ sideRate 1 P q ≤ R * log 2 := by
   obtain ⟨hR, c, hc⟩ := h
   refine exists_le_of_forall_side hP 1 fun ε hε => ?_
   obtain ⟨n, hn1, hn2⟩ := ((hc ε hε).and (eventually_gt_atTop 0)).exists
   obtain ⟨q, f, hq, h1, h2⟩ := (c n).exists_kernel_le hP hn2 (by positivity) d
   have hn' : (0 : ℝ) < n := by exact_mod_cast hn2
-  exact ⟨q, f, hq, h1.trans_le hn1, le_of_mul_le_mul_left (h2.trans
+  exact ⟨q, f, hq, h1.trans hn1, le_of_mul_le_mul_left (h2.trans
     (by simpa using log_two_pow_floor_le n hR)) hn'⟩
 
 /-- **The Wyner–Ziv theorem (Lecture 12 of [elgamal2010], page 12-17).** The rate–distortion
 function with side information available only at the decoder is
 `R_SI-D(D) = min (I(X; U) - I(Y; U)) = min I(X; U | Y)`, over `p(u | x)` and `x̂(u, y)` with
 `E d(X, X̂) ≤ D`, for `D ≥ D_min`, in bits. By `exists_sideRD_eq`, the minimum is attained with
-`|𝒰| ≤ |𝒳| + 3`. -/
+`|𝒰| ≤ |𝒳| + 1`. -/
 theorem rateWZBits_eq [Finite β] [Nonempty β] (hP : IsPMF P) {d : α → β → ℝ}
     (hd : ∀ x y, 0 ≤ d x y) {D : ℝ} (hD : minDistortion (margFst P) d ≤ D) :
     rateWZBits P d D = wzRD P d D / log 2 := by

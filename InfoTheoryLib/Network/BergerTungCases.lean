@@ -170,15 +170,15 @@ theorem isAchievableDL_of_wyner_ziv [Finite β₁] [Nonempty β₁] (hP : IsPMF 
   have hl := log_pos one_lt_two
   obtain ⟨q, f, hq, hc, he⟩ := exists_sideRD_eq (θ := 1) hP hD
   have hμ := siLaw_isPMF hP hq
-  have hY : H[fun w : (α₁ × α₂) × Fin (Fintype.card α₁ + 3) => w.1.2 ; siLaw P q] =
+  have hY : H[fun w : (α₁ × α₂) × Fin (Fintype.card α₁ + 1) => w.1.2 ; siLaw P q] =
       H[Prod.snd ; P] := by
     rw [entropyRV, entropyRV, dist_siLaw_Y hq]
-  have hle : H[fun w : (α₁ × α₂) × Fin (Fintype.card α₁ + 3) => w.1.2 | Prod.snd ; siLaw P q] ≤
+  have hle : H[fun w : (α₁ × α₂) × Fin (Fintype.card α₁ + 1) => w.1.2 | Prod.snd ; siLaw P q] ≤
       H[Prod.snd ; P] := by
     rw [← hY]
     exact condEntropy_le_entropy hμ _ _
   have hsum : sideRate 0 P q +
-      H[fun w : (α₁ × α₂) × Fin (Fintype.card α₁ + 3) => w.1.2 | Prod.snd ; siLaw P q] =
+      H[fun w : (α₁ × α₂) × Fin (Fintype.card α₁ + 1) => w.1.2 | Prod.snd ; siLaw P q] =
       sideRate 1 P q + H[Prod.snd ; P] := by
     rw [← hY]
     simp only [sideRate]

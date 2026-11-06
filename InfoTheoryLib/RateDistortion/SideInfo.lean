@@ -5,7 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.ForMathlib.SupportLemma
+public import InfoTheoryLib.Probability.SupportMixture
 public import InfoTheoryLib.MutualInformation.Conditional
 public import InfoTheoryLib.RateDistortion.BitRate
 public import InfoTheoryLib.StateChannel.GPDerandomize
@@ -34,16 +34,16 @@ for both of them with the same proof.
 
 * `sideRate_one`: `I(X; U) - I(Y; U) = I(X; U | Y)`.
 * `exists_side_reduce`: **the cardinality bound**, from the support lemma.
-* `exists_sideRD_eq`: the minimum is attained, with `|𝒰| ≤ |𝒳| + 3`.
+* `exists_sideRD_eq`: the minimum is attained, with `|𝒰| ≤ |𝒳| + 1`.
 * `exists_le_of_forall_side`: the closedness of the set of the rates and distortions.
 * `sideRD_antitoneOn`, `sideRD_convexOn`: the function is nonincreasing and convex in `D`.
 
 ## Implementation notes
 
-The notes state the bound `|𝒰| ≤ |𝒳| + 1`, which uses the Fenchel–Eggleston strengthening of
-Carathéodory's theorem. We prove `|𝒰| ≤ |𝒳| + 3` from Carathéodory's theorem: any finite bound gives
-the compactness needed to attain the minimum and to pass to the limit in the converse, without the
-continuity of the function that the notes use.
+The bound `|𝒰| ≤ |𝒳| + 1` of the notes uses the Fenchel–Eggleston strengthening of Carathéodory's
+theorem, through `exists_mixture_preserving_mean`. The bound gives the compactness needed to attain
+the minimum and to pass to the limit in the converse, without the continuity of the function that
+the notes use.
 
 ## References
 
@@ -317,74 +317,85 @@ end Rep
 
 section Reduce
 
-variable {κ : Type*} [Fintype κ]
-
-/-- **The cardinality bound (Lecture 12, pages 12-6 and 12-17, and Appendix C).** The rate and any
-finite family of costs of `p(u | x)` are those of a `p(u' | x)` with `|𝒰'| = |𝒳| + |κ| + 2`, by the
-support lemma: they are the mean under `p(u)` of functions of the posterior law `p(x | u)`, together
-with `p(x)` itself. -/
-theorem exists_side_reduce (hP : IsPMF P) (hq : IsChannel q) (θ : ℝ) (c : κ → υ → α → γ → ℝ) {N : ℕ}
-    (hN : N = Fintype.card α + Fintype.card κ + 2) :
+/-- **The cardinality bound (Lecture 12, pages 12-6 and 12-17, and Appendix C).** The rate of
+`p(u | x)` is that of a `p(u' | x)` with `|𝒰'| = |𝒳| + 1`, and the cost is no larger, by the support
+lemma: the rate and the best cost `min_{u₀} E[c(u₀, X, Y) | U = u]` are means under `p(u)` of
+continuous functions of the posterior law `p(x | u)`, together with `p(x)`. The cost of `u'` is the
+one of the best `g(u')`. We need the best cost, since a cost that depends on `u` itself is not a
+function of the posterior, and the set of its values need not be connected. -/
+theorem exists_side_reduce (hP : IsPMF P) (hq : IsChannel q) (θ : ℝ) (c : υ → α → γ → ℝ) {N : ℕ}
+    (hN : N = Fintype.card α + 1) :
     ∃ (q' : α → Fin N → ℝ) (g : Fin N → υ), IsChannel q' ∧ sideRate θ P q' = sideRate θ P q ∧
-      ∀ i, sideCost P q' (fun j => c i (g j)) = sideCost P q (c i) := by
+      sideCost P q' (fun j => c (g j)) ≤ sideCost P q c := by
   classical
   obtain ⟨W, hW, hPW⟩ := exists_side_channel hP
   obtain ⟨w, r, hw, hr, hrep⟩ := exists_side_rep hP hq
   have hwP := isPMF_of_rep hP hq hw hr hrep
-  set v : υ → (α → ℝ) × ℝ × (κ → ℝ) := fun u =>
-    (r u, sideF θ W (r u), fun i => sideG W (c i u) (r u))
-  have hdim : N = Module.finrank ℝ ((α → ℝ) × ℝ × (κ → ℝ)) + 1 := by
-    simp only [Module.finrank_prod, Module.finrank_fintype_fun_eq_card, Module.finrank_self, hN]
-    omega
-  subst hdim
-  obtain ⟨g, w', hw0, hw1, hsum⟩ := exists_fin_mean_eq hw hwP.sum_eq_one v
-  have key : ∀ L : ((α → ℝ) × ℝ × (κ → ℝ)) →ₗ[ℝ] ℝ,
-      ∑ j, w' j * L (v (g j)) = ∑ u, w u * L (v u) := fun L => by
-    have e := congrArg L hsum
-    simpa only [map_sum, map_smul, smul_eq_mul] using e
-  have h1 : ∀ x, ∑ j, w' j * r (g j) x = margFst P x := fun x => by
-    have e : ∑ j, w' j * r (g j) x = ∑ u, w u * r u x :=
-      key ((LinearMap.proj x).comp (LinearMap.fst ℝ (α → ℝ) (ℝ × (κ → ℝ))))
-    rw [e, ← mul_one (margFst P x), ← (hq x).sum_eq_one, mul_sum]
+  obtain ⟨z₀⟩ : Nonempty (α × γ) := Fintype.card_pos_iff.1 (card_pos_of_isPMF hP)
+  have hα : Nonempty α := ⟨z₀.1⟩
+  have hαpos : 0 < Fintype.card α := Fintype.card_pos
+  have hυ : Nonempty υ := Fintype.card_pos_iff.1 (card_pos_of_isPMF hwP)
+  -- The best cost, as a function of the posterior law.
+  set best : (α → ℝ) → ℝ := fun t => univ.inf' univ_nonempty fun u => sideG W (c u) t with hbest
+  set F : Bool → (α → ℝ) → ℝ := fun b t => if b then sideF θ W t else best t with hF
+  have hFc : ∀ b, ContinuousOn (F b) {p | IsPMF p} := by
+    rintro (_ | _)
+    · have hb : Continuous best := Continuous.finset_inf'_apply univ_nonempty fun u _ => by
+        have h : Continuous fun t : α → ℝ => ∑ x, t x * ∑ y, W x y * c u x y := by fun_prop
+        exact h
+      simpa [hF] using hb.continuousOn
+    · have hs : Continuous (sideF θ W) := by
+        unfold sideF
+        exact continuous_entropy.sub (continuous_const.mul (continuous_entropy_outDist W))
+      simpa [hF] using hs.continuousOn
+  obtain ⟨w', z, hw', hz, hmean, hmix⟩ := exists_mixture_preserving_mean (κ := Bool) hFc hwP
+    (fun u => hr u) (n := N) (by rw [Fintype.card_bool, hN]; omega)
+  have h2 := hmix true
+  have h3 := hmix false
+  simp only [hF, ite_true, Bool.false_eq_true, ite_false] at h2 h3
+  have h1 : ∀ x, ∑ j, w' j * z j x = margFst P x := fun x => by
+    rw [hmean, ← mul_one (margFst P x), ← (hq x).sum_eq_one, mul_sum]
     exact (sum_congr rfl fun u _ => hrep x u).symm
-  have h2 : ∑ j, w' j * sideF θ W (r (g j)) = ∑ u, w u * sideF θ W (r u) :=
-    key ((LinearMap.fst ℝ ℝ (κ → ℝ)).comp (LinearMap.snd ℝ (α → ℝ) (ℝ × (κ → ℝ))))
-  have h3 : ∀ i, ∑ j, w' j * sideG W (c i (g j)) (r (g j)) = ∑ u, w u * sideG W (c i u) (r u) :=
-    fun i => key ((LinearMap.proj i).comp ((LinearMap.snd ℝ ℝ (κ → ℝ)).comp
-      (LinearMap.snd ℝ (α → ℝ) (ℝ × (κ → ℝ)))))
+  choose g hg using fun j => (exists_mem_eq_inf' (s := (univ : Finset υ)) univ_nonempty
+    fun u => sideG W (c u) (z j))
   -- The new kernel.
   set q' : α → Fin _ → ℝ := fun x j =>
-    if margFst P x = 0 then w' j else w' j * r (g j) x / margFst P x with hq'
+    if margFst P x = 0 then w' j else w' j * z j x / margFst P x with hq'
   have hp0 : ∀ x, 0 ≤ margFst P x := (hP.dist _).nonneg
   have hq'P : IsChannel q' := fun x => by
     by_cases hx : margFst P x = 0
     · simp only [hq', hx, ite_true]
-      exact ⟨hw0, hw1⟩
+      exact hw'
     · simp only [hq', hx, ite_false]
-      refine ⟨fun j => div_nonneg (mul_nonneg (hw0 j) ((hr _).nonneg x)) (hp0 x), ?_⟩
+      refine ⟨fun j => div_nonneg (mul_nonneg (hw'.nonneg j) ((hz j).nonneg x)) (hp0 x), ?_⟩
       rw [← sum_div, h1, div_self hx]
-  have hrep' : ∀ x j, margFst P x * q' x j = w' j * r (g j) x := fun x j => by
+  have hrep' : ∀ x j, margFst P x * q' x j = w' j * z j x := fun x j => by
     by_cases hx : margFst P x = 0
-    · have h0 : ∀ j ∈ univ, 0 ≤ w' j * r (g j) x := fun j _ =>
-        mul_nonneg (hw0 j) ((hr _).nonneg x)
+    · have h0 : ∀ j ∈ univ, 0 ≤ w' j * z j x := fun j _ =>
+        mul_nonneg (hw'.nonneg j) ((hz j).nonneg x)
       have := (sum_eq_zero_iff_of_nonneg h0).1 ((h1 x).trans hx) j (mem_univ j)
       rw [this, hx, zero_mul]
     · simp only [hq', hx, ite_false]
       field_simp
-  refine ⟨q', g, hq'P, ?_, fun i => ?_⟩
-  · rw [sideRate_eq_of_rep hP hq'P hW hPW hw0 (fun j => hr (g j)) hrep' θ,
+  refine ⟨q', fun j => g j, hq'P, ?_, ?_⟩
+  · rw [sideRate_eq_of_rep hP hq'P hW hPW hw'.nonneg (fun j => hz j) hrep' θ,
       sideRate_eq_of_rep hP hq hW hPW hw hr hrep θ, h2]
-  · rw [sideCost_eq_of_rep hPW hrep', sideCost_eq_of_rep hPW hrep, h3]
+  · rw [sideCost_eq_of_rep hPW hrep', sideCost_eq_of_rep hPW hrep]
+    have e : ∀ j, sideG W (c (g j)) (z j) = best (z j) := fun j => (hg j).2.symm
+    simp only [e]
+    rw [h3]
+    refine sum_le_sum fun u _ => mul_le_mul_of_nonneg_left ?_ (hw u)
+    simp only [hbest]
+    exact inf'_le _ (mem_univ u)
 
-/-- The cardinality bound for a distortion measure: `|𝒰'| = |𝒳| + 3`. -/
+/-- The cardinality bound for a distortion measure: `|𝒰'| = |𝒳| + 1`. -/
 theorem exists_side_reduce₁ (hP : IsPMF P) (hq : IsChannel q) (θ : ℝ) (d : α → β → ℝ)
     (f : υ → γ → β) :
-    ∃ (q' : α → Fin (Fintype.card α + 3) → ℝ) (f' : Fin (Fintype.card α + 3) → γ → β),
+    ∃ (q' : α → Fin (Fintype.card α + 1) → ℝ) (f' : Fin (Fintype.card α + 1) → γ → β),
       IsChannel q' ∧ sideRate θ P q' = sideRate θ P q ∧
-        sideCost P q' (fun u x y => d x (f' u y)) = sideCost P q (fun u x y => d x (f u y)) := by
-  obtain ⟨q', g, hq', h1, h2⟩ := exists_side_reduce (κ := Unit) hP hq θ
-    (fun _ u x y => d x (f u y)) (N := Fintype.card α + 3) (by simp only [Fintype.card_unit])
-  exact ⟨q', fun j => f (g j), hq', h1, h2 ()⟩
+        sideCost P q' (fun u x y => d x (f' u y)) ≤ sideCost P q (fun u x y => d x (f u y)) := by
+  obtain ⟨q', g, hq', h1, h2⟩ := exists_side_reduce hP hq θ (fun u x y => d x (f u y)) rfl
+  exact ⟨q', fun j => f (g j), hq', h1, h2⟩
 
 end Reduce
 
@@ -438,19 +449,19 @@ lemma isCompact_side_rates (hP : IsPMF P) (θ : ℝ) (c : Fin N → α → γ �
     isCompact_setOf_isChannel.inter_right (isClosed_le (continuous_sideCost P c) continuous_const)
   exact hS.image_of_continuousOn ((continuousOn_sideRate hP θ).mono fun q hq => hq.1)
 
-/-- The set of all the rates of `(q, f)` with `E d(X, X̂) ≤ D` is that for `|𝒰| = |𝒳| + 3`, which is
+/-- The set of all the rates of `(q, f)` with `E d(X, X̂) ≤ D` is that for `|𝒰| = |𝒳| + 1`, which is
 compact. -/
 lemma sideRD_set_eq (hP : IsPMF P) (θ : ℝ) (d : α → β → ℝ) (D : ℝ) :
     {I | ∃ (k : ℕ) (q : α → Fin k → ℝ) (f : Fin k → γ → β), IsChannel q ∧
       sideCost P q (fun u x y => d x (f u y)) ≤ D ∧ sideRate θ P q = I} =
-    ⋃ f : Fin (Fintype.card α + 3) → γ → β, (fun q : α → Fin (Fintype.card α + 3) → ℝ =>
+    ⋃ f : Fin (Fintype.card α + 1) → γ → β, (fun q : α → Fin (Fintype.card α + 1) → ℝ =>
       sideRate θ P q) '' {q | IsChannel q ∧ sideCost P q (fun u x y => d x (f u y)) ≤ D} := by
   ext I
   simp only [Set.mem_ofPred_eq, Set.mem_iUnion, Set.mem_image]
   constructor
   · rintro ⟨k, q, f, hq, hD, rfl⟩
     obtain ⟨q', f', hq', h1, h2⟩ := exists_side_reduce₁ hP hq θ d f
-    exact ⟨f', q', ⟨hq', h2.le.trans hD⟩, h1⟩
+    exact ⟨f', q', ⟨hq', h2.trans hD⟩, h1⟩
   · rintro ⟨f, q, ⟨hq, hD⟩, rfl⟩
     exact ⟨_, q, f, hq, hD, rfl⟩
 
@@ -466,7 +477,7 @@ theorem sideRD_le [Finite β] (hP : IsPMF P) (hq : IsChannel q) (θ : ℝ) {d : 
     (f : υ → γ → β) {D : ℝ}
     (hD : sideCost P q (fun u x y => d x (f u y)) ≤ D) : sideRD θ P d D ≤ sideRate θ P q := by
   obtain ⟨q', f', hq', h1, h2⟩ := exists_side_reduce₁ hP hq θ d f
-  exact csInf_le (isCompact_sideRD_set hP θ d D).bddBelow ⟨_, q', f', hq', h2.le.trans hD, h1⟩
+  exact csInf_le (isCompact_sideRD_set hP θ d D).bddBelow ⟨_, q', f', hq', h2.trans hD, h1⟩
 
 /-- A test channel `p(x̂ | x)` with `U = X̂` and `x̂(u, y) = u` has the distortion `E d(X, X̂)`. -/
 lemma sideCost_test [Fintype β] (P : α × γ → ℝ) (q : α → β → ℝ) (d : α → β → ℝ) :
@@ -476,11 +487,11 @@ lemma sideCost_test [Fintype β] (P : α × γ → ℝ) (q : α → β → ℝ) 
   simp only [margFst_apply, siLaw, jointOf, sum_mul]
   rw [sum_comm]
 
-/-- **(Lecture 12, pages 12-6 and 12-17.)** The minimum is attained, with `|𝒰| ≤ |𝒳| + 3`, for
+/-- **(Lecture 12, pages 12-6 and 12-17.)** The minimum is attained, with `|𝒰| ≤ |𝒳| + 1`, for
 `D ≥ D_min`. -/
 theorem exists_sideRD_eq [Finite β] [Nonempty β] (hP : IsPMF P) (θ : ℝ) {d : α → β → ℝ} {D : ℝ}
     (hD : minDistortion (margFst P) d ≤ D) :
-    ∃ (q : α → Fin (Fintype.card α + 3) → ℝ) (f : Fin (Fintype.card α + 3) → γ → β),
+    ∃ (q : α → Fin (Fintype.card α + 1) → ℝ) (f : Fin (Fintype.card α + 1) → γ → β),
       IsChannel q ∧ sideCost P q (fun u x y => d x (f u y)) ≤ D ∧
         sideRate θ P q = sideRD θ P d D := by
   have := Fintype.ofFinite β
@@ -488,8 +499,8 @@ theorem exists_sideRD_eq [Finite β] [Nonempty β] (hP : IsPMF P) (θ : ℝ) {d 
       sideCost P q (fun u x y => d x (f u y)) ≤ D ∧ sideRate θ P q = I}.Nonempty := by
     obtain ⟨q₀, hq₀, he₀⟩ := exists_expDistortion_eq_minDistortion (margFst P) d
     obtain ⟨q', f', hq', -, h2⟩ := exists_side_reduce₁ hP hq₀ θ d fun u _ => u
-    refine ⟨_, _, q', f', hq', ?_, rfl⟩
-    rw [h2, sideCost_test, he₀]
+    refine ⟨_, _, q', f', hq', h2.trans ?_, rfl⟩
+    rw [sideCost_test, he₀]
     exact hD
   have hmem := (isCompact_sideRD_set hP θ d D).sInf_mem hne
   rw [sideRD_set_eq hP] at hmem

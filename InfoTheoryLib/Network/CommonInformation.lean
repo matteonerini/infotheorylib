@@ -575,10 +575,10 @@ def wynerSet (P : α₁ × α₂ → ℝ) : Set ℝ :=
 `J(U₁; U₂) = min I(U₁, U₂; V)` over the `p(v|u₁, u₂)` with `I(U₁; U₂|V) = 0`, in nats. -/
 def wynerJ (P : α₁ × α₂ → ℝ) : ℝ := sInf (wynerSet P)
 
-/-- A value of `I(U₁, U₂; V)` for `V` on `Fin N`, with `N = |𝒰₁| |𝒰₂| + 4`, for any feasible `V`. -/
+/-- A value of `I(U₁, U₂; V)` for `V` on `Fin N`, with `N = |𝒰₁| |𝒰₂| + 2`, for any feasible `V`. -/
 lemma exists_wyner_reduce {υ : Type*} [Fintype υ] {κ : α₁ × α₂ → υ → ℝ} (hP : IsPMF P)
     (hκ : IsChannel κ) (h : gwResidual P κ = 0) :
-    ∃ κ' : α₁ × α₂ → Fin (Fintype.card (α₁ × α₂) + 4) → ℝ, IsChannel κ' ∧ gwResidual P κ' = 0 ∧
+    ∃ κ' : α₁ × α₂ → Fin (Fintype.card (α₁ × α₂) + 2) → ℝ, IsChannel κ' ∧ gwResidual P κ' = 0 ∧
       gwInfo P κ' = gwInfo P κ := by
   obtain ⟨κ', hκ', e0, e1, e2⟩ := exists_gw_reduce hP hκ rfl
   refine ⟨κ', hκ', ?_, e0⟩
@@ -618,9 +618,9 @@ lemma wynerSet_nonempty (hP : IsPMF P) : (wynerSet P).Nonempty := by
 /-- **Lecture 15, page 15-25.** The minimum is attained: `J(U₁; U₂)` is a minimum over a compact
 set of test channels. -/
 theorem exists_wyner_min (hP : IsPMF P) :
-    ∃ κ : α₁ × α₂ → Fin (Fintype.card (α₁ × α₂) + 4) → ℝ, IsChannel κ ∧ gwResidual P κ = 0 ∧
+    ∃ κ : α₁ × α₂ → Fin (Fintype.card (α₁ × α₂) + 2) → ℝ, IsChannel κ ∧ gwResidual P κ = 0 ∧
       gwInfo P κ = wynerJ P := by
-  set N := Fintype.card (α₁ × α₂) + 4
+  set N := Fintype.card (α₁ × α₂) + 2
   have hc : ContinuousOn (fun κ : α₁ × α₂ → Fin N → ℝ => gwInfo P κ) {κ | IsChannel κ} := by
     have h : Continuous fun κ : α₁ × α₂ → Fin N → ℝ =>
         H[Prod.fst ; jointOf P κ] + H[Prod.snd ; jointOf P κ] -

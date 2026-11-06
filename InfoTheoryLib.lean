@@ -220,6 +220,7 @@ public import InfoTheoryLib.Network.GuptaKumarCells
 public import InfoTheoryLib.Network.GuptaKumarLemma2
 public import InfoTheoryLib.Network.ICAchievability
 public import InfoTheoryLib.Network.ICBounds
+public import InfoTheoryLib.Network.ICCardinality
 public import InfoTheoryLib.Network.ICCode
 public import InfoTheoryLib.Network.ICStrong
 public import InfoTheoryLib.Network.ICSuperLetter
@@ -328,6 +329,7 @@ public import InfoTheoryLib.Probability.Jensen
 public import InfoTheoryLib.Probability.MMSE
 public import InfoTheoryLib.Probability.ProbabilityBounds
 public import InfoTheoryLib.Probability.RandomVector
+public import InfoTheoryLib.Probability.SupportMixture
 public import InfoTheoryLib.Probability.Variance
 public import InfoTheoryLib.Probability.WeakLaw
 public import InfoTheoryLib.RateDistortion.Achievability

@@ -16,8 +16,9 @@ This file indexes the formalization of Appendix C of [elgamal2010]: the support 
 application to the degraded DM-BC and to the 3-receiver degraded DM-BC, the time-sharing variable of
 the DM-MAC, and the perturbation method for the sum rate of the Marton inner bound.
 
-Two consequences go beyond the appendix: with a bounded auxiliary alphabet the regions are closed,
-so the capacity regions of the degraded DM-BC and of the DM-MAC hold without a closure.
+One consequence goes beyond the appendix: with a bounded auxiliary alphabet the regions are closed,
+so the capacity regions of the degraded, less noisy and more capable DM-BC, of the DM-MAC and of the
+DM-IC with strong interference hold without a closure.
 
 ## Conventions
 
@@ -37,7 +38,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   compact set of parameters.
 * The form for a finite mixture: `exists_fin_mixture_eq_sum`.
 * The form that also preserves the mean output of a channel, in `|A| - 1` further coordinates:
-  `exists_mixture_preserving` (`Network.CardinalityBound`).
+  `exists_mixture_preserving`, `exists_mixture_preserving_mean` (`Probability.SupportMixture`).
 
 ### The degraded DM-BC (pages C-2 to C-4; `Network.BCCardinality`)
 * `I(X; Y₁ | U)` and `I(U; Y₂)` as means over `U`: `bcInfoXY₁U_kernel`, `bcInfoUY₂_kernel_eq`.
@@ -61,6 +62,17 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The region is closed: `isClosed_macRegionCard`.
 * **The capacity region with `|𝒬| ≤ 3` and no closure:** `macCapacityRegion_eq_card`,
   `macCapacityRegionBits_eq_card`.
+
+### The same technique in the lectures
+* Less noisy and more capable DM-BC: `IsLessNoisy.bcCapacityRegionBits_eq_card`,
+  `IsMoreCapable.bcCapacityRegionBits_eq_card` (`Network.BCCardinality`).
+* `|𝒬| ≤ 4` for the DM-IC with strong interference: `icCapacityRegionBits_eq_card`
+  (`Network.ICCardinality`).
+* `|𝒰| ≤ |𝒳| + 1` for source coding with side information and for computing:
+  `exists_side_reduce` (`RateDistortion.SideInfo`), `exists_fun_reduce`
+  (`RateDistortion.SideInfoFunction`).
+* `|𝒱| ≤ |𝒰₁| |𝒰₂| + 2` for the Gray–Wyner system: `exists_gw_reduce`
+  (`Network.GrayWynerConverse`).
 
 ### The perturbation method (pages C-9 to C-11; `Network.MartonCardinality`)
 * The objective in terms of entropies, page C-10: `martonSum`, `martonPhi`,
@@ -94,6 +106,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   in the notes, `E(φ(U₁) | U₂, Y₂) = 0`, is not needed.
 * **Capacity regions.** The statements without a closure are not in the appendix. They follow since
   a region with a bounded alphabet is closed.
+* **Costs that depend on `u`.** In Lecture 12 the distortion depends on the decoder `x̂(u, y)`, and
+  not only on `p(x | u)`, so the lemma does not apply to it directly. We apply it to the best cost
+  over the decoders, which is continuous in `p(x | u)`. The distortion may then decrease.
 
 ## Not formalized
 
@@ -103,7 +118,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   cite; only the sum rate is treated, as in the notes.
 * The bound `|𝒬| ≤ 2` of Lecture 4, which page C-8 mentions and this technique does not give.
 * The other cardinality bounds of the notes, which this technique would give and which remain on the
-  "Not formalized" lists of their lectures, such as `|𝒰| ≤ |𝒳| + 1` in Lecture 12.
+  "Not formalized" lists of their lectures, such as `|𝒰ⱼ| ≤ |𝒳ⱼ| + 4` in Lecture 13.
 
 ## Issues in the notes
 

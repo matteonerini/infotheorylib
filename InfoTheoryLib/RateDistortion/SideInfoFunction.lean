@@ -81,27 +81,26 @@ section Min
 
 variable {q : α → υ → ℝ} {e : α × γ → β → ℝ}
 
-/-- The cardinality bound for a function: `|𝒰'| = |𝒳| + 3`. -/
+/-- The cardinality bound for a function: `|𝒰'| = |𝒳| + 1`. -/
 theorem exists_fun_reduce (hP : IsPMF P) (hq : IsChannel q) (e : α × γ → β → ℝ) (f : υ → γ → β) :
-    ∃ (q' : α → Fin (Fintype.card α + 3) → ℝ) (f' : Fin (Fintype.card α + 3) → γ → β),
+    ∃ (q' : α → Fin (Fintype.card α + 1) → ℝ) (f' : Fin (Fintype.card α + 1) → γ → β),
       IsChannel q' ∧ sideRate 1 P q' = sideRate 1 P q ∧
-        sideCost P q' (funCost e f') = sideCost P q (funCost e f) := by
-  obtain ⟨q', g, hq', h1, h2⟩ := exists_side_reduce (κ := Unit) hP hq 1
-    (fun _ => funCost e f) (N := Fintype.card α + 3) (by simp only [Fintype.card_unit])
-  exact ⟨q', fun j => f (g j), hq', h1, h2 ()⟩
+        sideCost P q' (funCost e f') ≤ sideCost P q (funCost e f) := by
+  obtain ⟨q', g, hq', h1, h2⟩ := exists_side_reduce hP hq 1 (funCost e f) rfl
+  exact ⟨q', fun j => f (g j), hq', h1, h2⟩
 
-/-- The set of the rates is that for `|𝒰| = |𝒳| + 3`. -/
+/-- The set of the rates is that for `|𝒰| = |𝒳| + 1`. -/
 lemma funRD_set_eq (hP : IsPMF P) (e : α × γ → β → ℝ) (D : ℝ) :
     {I | ∃ (k : ℕ) (q : α → Fin k → ℝ) (f : Fin k → γ → β), IsChannel q ∧
       sideCost P q (funCost e f) ≤ D ∧ sideRate 1 P q = I} =
-    ⋃ f : Fin (Fintype.card α + 3) → γ → β, (fun q : α → Fin (Fintype.card α + 3) → ℝ =>
+    ⋃ f : Fin (Fintype.card α + 1) → γ → β, (fun q : α → Fin (Fintype.card α + 1) → ℝ =>
       sideRate 1 P q) '' {q | IsChannel q ∧ sideCost P q (funCost e f) ≤ D} := by
   ext I
   simp only [Set.mem_ofPred_eq, Set.mem_iUnion, Set.mem_image]
   constructor
   · rintro ⟨k, q, f, hq, hD, rfl⟩
     obtain ⟨q', f', hq', h1, h2⟩ := exists_fun_reduce hP hq e f
-    exact ⟨f', q', ⟨hq', h2.le.trans hD⟩, h1⟩
+    exact ⟨f', q', ⟨hq', h2.trans hD⟩, h1⟩
   · rintro ⟨f, q, ⟨hq, hD⟩, rfl⟩
     exact ⟨_, q, f, hq, hD, rfl⟩
 
@@ -116,7 +115,7 @@ with `U` on any finite set. -/
 theorem funRD_le [Finite β] (hP : IsPMF P) (hq : IsChannel q) (f : υ → γ → β) {D : ℝ}
     (hD : sideCost P q (funCost e f) ≤ D) : funRD P e D ≤ sideRate 1 P q := by
   obtain ⟨q', f', hq', h1, h2⟩ := exists_fun_reduce hP hq e f
-  exact csInf_le (isCompact_funRD_set hP e D).bddBelow ⟨_, q', f', hq', h2.le.trans hD, h1⟩
+  exact csInf_le (isCompact_funRD_set hP e D).bddBelow ⟨_, q', f', hq', h2.trans hD, h1⟩
 
 omit [Fintype υ] in
 /-- `E c(U, X, Y)` for `U = X`. -/
@@ -142,17 +141,17 @@ lemma exists_fun_feasible [Finite β] [Nonempty β] [DecidableEq α] (e : α × 
   rw [minDistortion]
   exact sum_congr rfl fun z _ => by simp only [funCost, hf]
 
-/-- **Lecture 22, page 22-4.** The minimum is attained, with `|𝒰| ≤ |𝒳| + 3`, for `D ≥ D_min`. -/
+/-- **Lecture 22, page 22-4.** The minimum is attained, with `|𝒰| ≤ |𝒳| + 1`, for `D ≥ D_min`. -/
 theorem exists_funRD_eq [Finite β] [Nonempty β] (hP : IsPMF P) {D : ℝ}
     (hD : minDistortion P e ≤ D) :
-    ∃ (q : α → Fin (Fintype.card α + 3) → ℝ) (f : Fin (Fintype.card α + 3) → γ → β),
+    ∃ (q : α → Fin (Fintype.card α + 1) → ℝ) (f : Fin (Fintype.card α + 1) → γ → β),
       IsChannel q ∧ sideCost P q (funCost e f) ≤ D ∧ sideRate 1 P q = funRD P e D := by
   classical
   have hne : {I | ∃ (k : ℕ) (q : α → Fin k → ℝ) (f : Fin k → γ → β), IsChannel q ∧
       sideCost P q (funCost e f) ≤ D ∧ sideRate 1 P q = I}.Nonempty := by
     obtain ⟨f₀, hf₀⟩ := exists_fun_feasible (P := P) e hD
     obtain ⟨q', f', hq', -, h2⟩ := exists_fun_reduce hP (identityKernel_isChannel (α := α)) e f₀
-    exact ⟨_, _, q', f', hq', h2.le.trans hf₀, rfl⟩
+    exact ⟨_, _, q', f', hq', h2.trans hf₀, rfl⟩
   have hmem := (isCompact_funRD_set hP e D).sInf_mem hne
   rw [funRD_set_eq hP] at hmem
   simp only [Set.mem_iUnion, Set.mem_image] at hmem
@@ -329,11 +328,11 @@ section Converse
 variable {e : α × γ → β → ℝ}
 
 /-- **Lecture 22, page 22-4.** The single-letter bounds: every code gives `p(u | x)` and `ẑ(u, y)`
-with `E e(X, Y, Ẑ) = E e(Xⁿ, Yⁿ, Ẑⁿ)` and `n I(X; U | Y) ≤ log M`, with `|𝒰| ≤ |𝒳| + 3`. -/
+with `E e(X, Y, Ẑ) ≤ E e(Xⁿ, Yⁿ, Ẑⁿ)` and `n I(X; U | Y) ≤ log M`, with `|𝒰| ≤ |𝒳| + 1`. -/
 theorem WZCode.exists_fun_kernel_le {M n : ℕ} (c : WZCode M n α γ β) (hP : IsPMF P) (hn : 0 < n)
     (hM : 0 < M) (e : α × γ → β → ℝ) :
-    ∃ (q : α → Fin (Fintype.card α + 3) → ℝ) (f : Fin (Fintype.card α + 3) → γ → β), IsChannel q ∧
-      sideCost P q (funCost e f) = c.funDistortion P e ∧ n * sideRate 1 P q ≤ log M := by
+    ∃ (q : α → Fin (Fintype.card α + 1) → ℝ) (f : Fin (Fintype.card α + 1) → γ → β), IsChannel q ∧
+      sideCost P q (funCost e f) ≤ c.funDistortion P e ∧ n * sideRate 1 P q ≤ log M := by
   obtain ⟨y₀, q, hq, he, hr⟩ := WZCode.exists_aux_law hP hn hM c.enc
   have hcost : sideCost P q (funCost e (wzRecon c)) = c.funDistortion P e := by
     rw [he]
@@ -341,26 +340,26 @@ theorem WZCode.exists_fun_kernel_le {M n : ℕ} (c : WZCode M n α γ β) (hP : 
     congr 1
     simp only [seqDistortion, funCost, wzRecon_aux]
   obtain ⟨q', f', hq', h1, h2⟩ := exists_fun_reduce hP hq e (wzRecon c)
-  exact ⟨q', f', hq', h2.trans hcost, by rwa [h1]⟩
+  exact ⟨q', f', hq', h2.trans hcost.le, by rwa [h1]⟩
 
 /-- **Theorem 1 of Lecture 22, the converse.** If `(R, D)` is achievable, there are `p(u | x)` and
 `ẑ(u, y)` with `E e(X, Y, Ẑ) ≤ D` and `I(X; U | Y) ≤ R`, in bits. -/
 theorem IsAchievableFunBits.exists_kernel [Finite β] (hP : IsPMF P) {R D : ℝ}
     (h : IsAchievableFunBits P e R D) :
-    ∃ (q : α → Fin (Fintype.card α + 3) → ℝ) (f : Fin (Fintype.card α + 3) → γ → β), IsChannel q ∧
+    ∃ (q : α → Fin (Fintype.card α + 1) → ℝ) (f : Fin (Fintype.card α + 1) → γ → β), IsChannel q ∧
       sideCost P q (funCost e f) ≤ D ∧ sideRate 1 P q ≤ R * log 2 := by
   obtain ⟨hR, c, hc⟩ := h
   refine exists_le_of_forall_fun hP fun ε hε => ?_
   obtain ⟨n, hn1, hn2⟩ := ((hc ε hε).and (eventually_gt_atTop 0)).exists
   obtain ⟨q, f, hq, h1, h2⟩ := (c n).exists_fun_kernel_le hP hn2 (by positivity) e
   have hn' : (0 : ℝ) < n := by exact_mod_cast hn2
-  exact ⟨q, f, hq, h1.trans_le hn1, le_of_mul_le_mul_left (h2.trans
+  exact ⟨q, f, hq, h1.trans hn1, le_of_mul_le_mul_left (h2.trans
     (by simpa using log_two_pow_floor_le n hR)) hn'⟩
 
 /-- **Theorem 1 of Lecture 22 of [elgamal2010], page 22-4.** The rate–distortion function for
 computing with side information at the decoder is `R_g(D) = min I(X; U | Y)`, over `p(u | x)` and
 `ẑ(u, y)` with `E e(X, Y, Ẑ) ≤ D`, for `D ≥ D_min`, in bits. By `exists_funRD_eq`, the minimum is
-attained with `|𝒰| ≤ |𝒳| + 3`. For `Z = g(X, Y)` take `e((x, y), ẑ) = d(g(x, y), ẑ)`. -/
+attained with `|𝒰| ≤ |𝒳| + 1`. For `Z = g(X, Y)` take `e((x, y), ẑ) = d(g(x, y), ẑ)`. -/
 theorem rateFunBits_eq [Finite β] [Nonempty β] (hP : IsPMF P) (he : ∀ z b, 0 ≤ e z b) {D : ℝ}
     (hD : minDistortion P e ≤ D) : rateFunBits P e D = funRD P e D / log 2 := by
   have hl := log_pos one_lt_two
@@ -498,7 +497,7 @@ lemma isFunOf_identityKernel [DecidableEq α] (P : α × γ → ℝ) (g : α × 
     exact hz (by simp [siLaw, jointOf, identityKernel, hne])
   simp only [hu]
 
-/-- The set of the rates of lossless computing is compact, and it is the set for `|𝒰| = |𝒳| + 3`. -/
+/-- The set of the rates of lossless computing is compact, and it is the set for `|𝒰| = |𝒳| + 1`. -/
 lemma funLosslessRate_set_eq (hP : IsPMF P) (g : α × γ → β) :
     {I | ∃ (k : ℕ) (q : α → Fin k → ℝ) (f : Fin k → γ → β), IsChannel q ∧ IsFunOf P q g f ∧
       sideRate 1 P q = I} =
@@ -524,7 +523,7 @@ theorem funLosslessRate_le [Finite β] (hP : IsPMF P) (hq : IsChannel q) {g : α
 
 /-- The minimum is attained. -/
 theorem exists_funLosslessRate_eq [Finite β] (hP : IsPMF P) (g : α × γ → β) :
-    ∃ (q : α → Fin (Fintype.card α + 3) → ℝ) (f : Fin (Fintype.card α + 3) → γ → β),
+    ∃ (q : α → Fin (Fintype.card α + 1) → ℝ) (f : Fin (Fintype.card α + 1) → γ → β),
       IsChannel q ∧ IsFunOf P q g f ∧ sideRate 1 P q = funLosslessRate P g := by
   classical
   obtain ⟨z⟩ : Nonempty (α × γ) := Fintype.card_pos_iff.1 (card_pos_of_isPMF hP)

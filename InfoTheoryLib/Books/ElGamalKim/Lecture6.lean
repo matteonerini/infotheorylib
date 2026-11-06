@@ -25,7 +25,9 @@ does not have.
 * **Regions.** Rate regions are sets of pairs `R : ℝ × ℝ`, and are not intersected with
   `R₁, R₂ ≥ 0`. The capacity region is `icCapacityRegionBits W`.
 * **Time sharing.** `Q` takes values in `Fin k`, for some `k`, with `q : Fin k → ℝ`, and the inputs
-  have laws `p₁ i`, `p₂ i` given `Q = i`. As `k` is not bounded, Theorem 1 is stated up to closure.
+  have laws `p₁ i`, `p₂ i` given `Q = i`. As `k` is not bounded, Theorem 1 is stated up to closure,
+  and `icCapacityRegionBits_eq_card` (`Network.ICCardinality`) states it with `|Q| ≤ 4` and no
+  closure.
 
 ## Index
 
@@ -62,6 +64,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Lemma 1: `IsStrongIC.macInfo₁_macExt_le`, `IsStrongIC.macInfo₂_macExt_le`, from the fact that a
   product of more capable channels is more capable: `mutualInfoOf_indexedExt_le`,
   `mutualInfoOf_side_indexedExt_le`, `mutualInfoOf_sideOut`.
+* The bound `|Q| ≤ 4` in Theorem 1: `icStrongRegionCardBits`, `icStrongRegionBits_eq_card`,
+  `isClosed_icStrongRegionCardBits`, `icCapacityRegionBits_eq_card` (`Network.ICCardinality`).
 * Theorem 1: `icStrongRegionBits`, `icCapacityRegionBits_eq_closure_icStrongRegionBits`
   (`Network.ICAchievability`), with the converse `IsAchievableICBits.mem_closure_icStrongRegionBits`
   (`Network.ICStrong`).
@@ -79,7 +83,6 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The time-division inner bound in general (the time-sharing code for the DM-IC), and the
   treat-interference-as-noise inner bound.
 * The tighter inner bound on page 6-7, where a receiver need not decode the other message correctly.
-* The cardinality bound `|Q| ≤ 4` in Theorem 1.
 * The Han–Kobayashi inner bound (Theorem 4). Its example of Fourier–Motzkin elimination in Appendix
   D is `hk_elimination`, without the constraints `0 ≤ R_jj ≤ R_j` of page 6-27.
 * The deterministic IC (Theorem 5), and the semideterministic IC with Lemma 3 and Proposition 5.

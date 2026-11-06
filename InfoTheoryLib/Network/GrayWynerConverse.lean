@@ -5,7 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.ForMathlib.SupportLemma
+public import InfoTheoryLib.Probability.SupportMixture
 public import InfoTheoryLib.Network.BergerTungOuter
 public import InfoTheoryLib.Network.GrayWyner
 public import InfoTheoryLib.Network.MDCases
@@ -25,7 +25,7 @@ triples with `R₀ ≥ I(U₁, U₂; V)`, `R₁ ≥ H(U₁|V)` and `R₂ ≥ H(U
 
 * `GWCode.exists_channel`: the single-letter bounds for one code, with
   `Vᵢ = (M₀, U₁ⁱ⁻¹, U₂ⁱ⁻¹)`.
-* `exists_gw_reduce`: the cardinality bound `|𝒱| ≤ |𝒰₁| |𝒰₂| + 4`.
+* `exists_gw_reduce`: the cardinality bound `|𝒱| ≤ |𝒰₁| |𝒰₂| + 2`.
 * `isClosed_gwSet`: the set of the rate triples is closed.
 * `gwRegion_eq`: **the Gray–Wyner theorem**.
 * `mem_gwRegion_of_channel`, `gwRegion_subset_gwSet`: the two directions, the first one for
@@ -269,60 +269,50 @@ variable {υ : Type*} [Fintype υ] {κ : α₁ × α₂ → υ → ℝ}
 
 /-- **The cardinality bound (Lecture 15, page 15-23, and Appendix C).** The three quantities of the
 Gray–Wyner theorem do not change if `V` is replaced by a random variable with
-`|𝒰₁| |𝒰₂| + 4` values. -/
+`|𝒰₁| |𝒰₂| + 2` values. -/
 theorem exists_gw_reduce (hP : IsPMF P) (hκ : IsChannel κ) {N : ℕ}
-    (hN : N = Fintype.card (α₁ × α₂) + 4) :
+    (hN : N = Fintype.card (α₁ × α₂) + 2) :
     ∃ κ' : α₁ × α₂ → Fin N → ℝ, IsChannel κ' ∧ gwInfo P κ' = gwInfo P κ ∧
       gwCond₁ P κ' = gwCond₁ P κ ∧ gwCond₂ P κ' = gwCond₂ P κ := by
   classical
   obtain ⟨z₀⟩ : Nonempty (α₁ × α₂) := Fintype.card_pos_iff.1 (card_pos_of_isPMF hP)
   have : Nonempty (α₁ × α₂) := ⟨z₀⟩
   obtain ⟨w, r, hw, hr, hrep⟩ := exists_rep_channel hP hκ
-  set v : υ → ((α₁ × α₂) → ℝ) × ℝ × ℝ × ℝ := fun u =>
-    (r u, entropy (r u), entropy (dist (r u) Prod.fst), entropy (dist (r u) Prod.snd)) with hv
-  have hdim : N = Module.finrank ℝ (((α₁ × α₂) → ℝ) × ℝ × ℝ × ℝ) + 1 := by
-    simp only [Module.finrank_prod, Module.finrank_fintype_fun_eq_card, Module.finrank_self, hN]
-  subst hdim
-  obtain ⟨g, w', hw0, hw1, hsum⟩ := exists_fin_mean_eq hw.nonneg hw.sum_eq_one v
-  have key : ∀ L : (((α₁ × α₂) → ℝ) × ℝ × ℝ × ℝ) →ₗ[ℝ] ℝ,
-      ∑ j, w' j * L (v (g j)) = ∑ u, w u * L (v u) := fun L => by
-    have e := congrArg L hsum
-    simpa only [map_sum, map_smul, smul_eq_mul] using e
-  have h1 : ∀ z, ∑ j, w' j * r (g j) z = P z := fun z => by
-    have e : ∑ j, w' j * r (g j) z = ∑ u, w u * r u z :=
-      key ((LinearMap.proj z).comp (LinearMap.fst ℝ ((α₁ × α₂) → ℝ) (ℝ × ℝ × ℝ)))
-    rw [e, ← mul_one (P z), ← (hκ z).sum_eq_one, mul_sum]
-    exact (sum_congr rfl fun u _ => hrep z u).symm
-  have h2 : ∑ j, w' j * entropy (r (g j)) = ∑ u, w u * entropy (r u) :=
-    key ((LinearMap.fst ℝ ℝ (ℝ × ℝ)).comp (LinearMap.snd ℝ ((α₁ × α₂) → ℝ) (ℝ × ℝ × ℝ)))
-  have h3 : ∑ j, w' j * entropy (dist (r (g j)) Prod.fst) =
-      ∑ u, w u * entropy (dist (r u) Prod.fst) :=
-    key ((LinearMap.fst ℝ ℝ ℝ).comp ((LinearMap.snd ℝ ℝ (ℝ × ℝ)).comp
-      (LinearMap.snd ℝ ((α₁ × α₂) → ℝ) (ℝ × ℝ × ℝ))))
-  have h4 : ∑ j, w' j * entropy (dist (r (g j)) Prod.snd) =
-      ∑ u, w u * entropy (dist (r u) Prod.snd) :=
-    key ((LinearMap.snd ℝ ℝ ℝ).comp ((LinearMap.snd ℝ ℝ (ℝ × ℝ)).comp
-      (LinearMap.snd ℝ ((α₁ × α₂) → ℝ) (ℝ × ℝ × ℝ))))
-  have hw'P : IsPMF w' := ⟨hw0, hw1⟩
-  have hr' : IsChannel fun j => r (g j) := fun j => hr (g j)
+  have hcard : 0 < Fintype.card (α₁ × α₂) := Fintype.card_pos
+  set F : Fin 3 → ((α₁ × α₂) → ℝ) → ℝ := ![fun t => entropy t, fun t => entropy (dist t Prod.fst),
+    fun t => entropy (dist t Prod.snd)] with hF
+  have hFc : ∀ k, ContinuousOn (F k) {p | IsPMF p} := by
+    intro k
+    fin_cases k
+    · exact continuous_entropy.continuousOn
+    · exact (continuous_entropy_dist Prod.fst).continuousOn
+    · exact (continuous_entropy_dist Prod.snd).continuousOn
+  obtain ⟨w', r', hw'P, hr', hmean, hmix⟩ := exists_mixture_preserving_mean (κ := Fin 3) hFc hw
+    (fun u => hr u) (n := N) (by rw [Fintype.card_fin, hN]; omega)
+  have h2 := hmix 0
+  have h3 := hmix 1
+  have h4 := hmix 2
+  simp only [hF, Matrix.cons_val] at h2 h3 h4
+  have h1 : ∀ c, ∑ j, w' j * r' j c = P c := fun c => by
+    rw [hmean, ← mul_one (P c), ← (hκ c).sum_eq_one, mul_sum]
+    exact (sum_congr rfl fun u _ => hrep c u).symm
+  have hN0 : 0 < N := by omega
   -- The new channel.
   have hQ := jointOf_isPMF hw'P hr'
-  have hQ' : IsPMF (dist (jointOf w' fun j => r (g j)) Prod.swap) := hQ.dist _
-  obtain ⟨j₀⟩ : Nonempty (Fin (Module.finrank ℝ (((α₁ × α₂) → ℝ) × ℝ × ℝ × ℝ) + 1)) :=
-    ⟨⟨0, Nat.succ_pos _⟩⟩
-  have : Nonempty (Fin (Module.finrank ℝ (((α₁ × α₂) → ℝ) × ℝ × ℝ × ℝ) + 1)) := ⟨j₀⟩
+  have hQ' : IsPMF (dist (jointOf w' fun j => r' j) Prod.swap) := hQ.dist _
+  have : Nonempty (Fin N) := ⟨⟨0, hN0⟩⟩
   obtain ⟨κ', hκ', hk⟩ := exists_kernel hQ'
-  have hval : ∀ z j, dist (jointOf w' fun j => r (g j)) Prod.swap (z, j) = w' j * r (g j) z :=
+  have hval : ∀ z j, dist (jointOf w' fun j => r' j) Prod.swap (z, j) = w' j * r' j z :=
     fun z j => by
-      have := dist_comp_of_injective (jointOf w' fun j => r (g j)) id Prod.swap_injective (j, z)
+      have := dist_comp_of_injective (jointOf w' fun j => r' j) id Prod.swap_injective (j, z)
       rw [dist_id] at this
       exact this
-  have hmarg : ∀ z, dist (dist (jointOf w' fun j => r (g j)) Prod.swap) Prod.fst z = P z :=
+  have hmarg : ∀ z, dist (dist (jointOf w' fun j => r' j) Prod.swap) Prod.fst z = P z :=
     fun z => by
       rw [dist_fst]
       simp only [hval]
       exact h1 z
-  have hrep' : ∀ z j, P z * κ' z j = w' j * r (g j) z := fun z j => by
+  have hrep' : ∀ z j, P z * κ' z j = w' j * r' j z := fun z j => by
     rw [← hval, hk z j, hmarg]
   refine ⟨κ', hκ', ?_, ?_, ?_⟩
   · simp only [gwInfo]
@@ -423,15 +413,15 @@ theorem mem_gwRegion_of_channel {υ : Type*} [Fintype υ] {κ : α₁ × α₂ �
     linarith
 
 /-- **The converse of Theorem 3 of Lecture 15, page 15-23.** A rate triple of the region satisfies
-the bounds for some `V` with `|𝒰₁| |𝒰₂| + 4` values. -/
+the bounds for some `V` with `|𝒰₁| |𝒰₂| + 2` values. -/
 theorem gwRegion_subset_gwSet (hP : IsPMF P) :
-    gwRegion P ⊆ gwSet P (Fintype.card (α₁ × α₂) + 4) := by
+    gwRegion P ⊆ gwSet P (Fintype.card (α₁ × α₂) + 2) := by
   have hl := log_pos one_lt_two
-  have hclosed := isClosed_gwSet hP (Fintype.card (α₁ × α₂) + 4)
+  have hclosed := isClosed_gwSet hP (Fintype.card (α₁ × α₂) + 2)
   refine closure_minimal ?_ hclosed
   rintro ⟨R₀, R₁, R₂⟩ ⟨hR₀, hR₁, hR₂, c, hc⟩
   -- The bound with a margin.
-  have hτ : ∀ τ > 0, (R₀, R₁ + τ, R₂ + τ) ∈ gwSet P (Fintype.card (α₁ × α₂) + 4) := fun τ hτ => by
+  have hτ : ∀ τ > 0, (R₀, R₁ + τ, R₂ + τ) ∈ gwSet P (Fintype.card (α₁ × α₂) + 2) := fun τ hτ => by
     have hτl : 0 < τ * log 2 := mul_pos hτ hl
     have hlim : Tendsto (fun n : ℕ => log 2 / n) atTop (𝓝 0) :=
       tendsto_const_nhds.div_atTop tendsto_natCast_atTop_atTop
@@ -443,7 +433,7 @@ theorem gwRegion_subset_gwSet (hP : IsPMF P) :
       (((tendsto_order.1 hE).2 _ (half_pos hτl)).and (eventually_gt_atTop 0))).exists
     have hn' : (0 : ℝ) < n := by exact_mod_cast hn
     obtain ⟨k, κ, hκ, a0, a1, a2⟩ := (c n).exists_channel hP hn
-    obtain ⟨κ', hκ', e0, e1, e2⟩ := exists_gw_reduce hP hκ (N := Fintype.card (α₁ × α₂) + 4) rfl
+    obtain ⟨κ', hκ', e0, e1, e2⟩ := exists_gw_reduce hP hκ (N := Fintype.card (α₁ × α₂) + 2) rfl
     have hdiv : log 2 = (log 2 / n) * n := (div_mul_cancel₀ _ hn'.ne').symm
     have he0 := GWCode.errProb_nonneg hP (c n)
     have hL₁ : 0 ≤ log (Fintype.card α₁) := log_natCast_nonneg _
@@ -485,8 +475,8 @@ theorem gwRegion_subset_gwSet (hP : IsPMF P) :
 
 /-- **Theorem 3 of Lecture 15 of [elgamal2010], page 15-22: the Gray–Wyner theorem.** The optimal
 rate region is the set of the rate triples with `R₀ ≥ I(U₁, U₂; V)`, `R₁ ≥ H(U₁|V)` and
-`R₂ ≥ H(U₂|V)` for some `p(v|u₁, u₂)`, where `V` has `|𝒰₁| |𝒰₂| + 4` values. -/
-theorem gwRegion_eq (hP : IsPMF P) : gwRegion P = gwSet P (Fintype.card (α₁ × α₂) + 4) := by
+`R₂ ≥ H(U₂|V)` for some `p(v|u₁, u₂)`, where `V` has `|𝒰₁| |𝒰₂| + 2` values. -/
+theorem gwRegion_eq (hP : IsPMF P) : gwRegion P = gwSet P (Fintype.card (α₁ × α₂) + 2) := by
   refine Set.Subset.antisymm (gwRegion_subset_gwSet hP) ?_
   rintro ⟨R₀, R₁, R₂⟩ ⟨κ, hκ, a0, a1, a2⟩
   exact mem_gwRegion_of_channel hP hκ a0 a1 a2

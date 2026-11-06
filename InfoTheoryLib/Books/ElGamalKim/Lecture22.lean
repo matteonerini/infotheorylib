@@ -96,7 +96,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ## Differences from the notes
 
-* **Theorem 1.** The bound on `|𝒰|` is `|𝒳| + 3`, from Carathéodory's theorem, as in Lecture 12.
+* **Theorem 1.** We prove the bound `|𝒰| ≤ |𝒳| + 1`, as in Lecture 12.
 * **Körner and Marton.** The theorem is proved for any law of binary `(X₁, X₂)`, and not only for a
   DSBS. The two encoders use the same matrix, with `k = ⌊n min(R₁, R₂)⌋` rows.
 * **Computing over a MAC.** The notes use two matrices `A` and `B`. For uniform sources, the matrix

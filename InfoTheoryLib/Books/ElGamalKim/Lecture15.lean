@@ -98,7 +98,6 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   1 on pages 15-7 and 15-8 and the example `U₁ = U₂` on page 15-13, as corollaries.
 * The DM-MAC with common message on page 15-17 and the claim that `W` need not be correlated with
   `U₀`; the claim that the scheme is not optimal in general [5].
-* The cardinality bound `|𝒱| ≤ |𝒰₁| |𝒰₂| + 2`. We have `+ 4`, from Carathéodory's theorem.
 * The characterization of `K = I = J` on page 15-25, and the value of `J` for the DSBS on page
   15-26.
 
@@ -187,7 +186,7 @@ theorem theorem_15_2 (hP : IsPMF P) (hτ : IsPMF τ) (h₁ : IsChannel κ₁) (h
   isLosslessMAC_of_lt hP hτ h₁ h₂ hW hg ha hb hc hd
 
 /-- **Theorem 3 of Lecture 15, page 15-22: the Gray–Wyner theorem.** -/
-theorem theorem_15_3 (hP : IsPMF P) : gwRegion P = gwSet P (Fintype.card (α₁ × α₂) + 4) :=
+theorem theorem_15_3 (hP : IsPMF P) : gwRegion P = gwSet P (Fintype.card (α₁ × α₂) + 2) :=
   gwRegion_eq hP
 
 end Aliases

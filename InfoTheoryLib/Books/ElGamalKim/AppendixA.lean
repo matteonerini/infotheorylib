@@ -79,11 +79,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ## Not formalized
 
-Nothing in the appendix is left out. Appendix C applies the theorem, through the support lemma, to
-the degraded DM-BC and the DM-MAC. It is not yet applied to the other cardinality bounds that the
-notes derive from it: Theorem 3 of Lecture 4 and the bound `|𝒰| ≤ |𝒳| + 1` of Lecture 12 are on the
-"Not formalized" lists of those lectures, and `RateDistortion.SideInfo` and
-`Network.GrayWynerConverse` prove larger constants.
+Nothing in the appendix is left out. The theorem is applied, through the support lemma, to the
+cardinality bounds of Appendix C and of `RateDistortion.SideInfo` and `Network.GrayWynerConverse`.
+It is not applied to all the bounds of the notes: Theorem 3 of Lecture 4 is on the "Not formalized"
+list of that lecture.
 
 ## Issues in the notes
 

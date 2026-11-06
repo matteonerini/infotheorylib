@@ -24,7 +24,8 @@ files `Network.BCSuperposition`, `Network.BCDegraded` and `Network.BCCapacity`.
 * **Regions.** Rate regions are sets of pairs `R : ℝ × ℝ`, and are not intersected with
   `R₁, R₂ ≥ 0`. The capacity region is `bcCapacityRegionBits W`, for private messages (`R₀ = 0`).
 * **Auxiliary random variable.** `U` takes values in `Fin k`, for some `k`, and `q : Fin k × 𝒳 → ℝ`
-  is the pmf `p(u, x)`. As `k` is not bounded, Theorem 2 is stated up to closure.
+  is the pmf `p(u, x)`. As `k` is not bounded, Theorem 2 is stated up to closure, and
+  `bcCapacityRegionBits_eq_card` (`Network.BCCardinality`) states it with the bound and no closure.
 
 ## Index
 
@@ -97,8 +98,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Achievability for less noisy channels: `IsLessNoisy.degradedBCRegionBits_subset`
   (`Network.BCCapacity`).
 * The capacity regions: `IsLessNoisy.bcCapacityRegionBits_eq_closure_degradedBCRegionBits`,
-  `bcCapacityRegionBits_eq_closure_superpositionClosedRegionBits` (`Network.BCMoreCapable`), without
-  the cardinality bounds on `U`.
+  `bcCapacityRegionBits_eq_closure_superpositionClosedRegionBits` (`Network.BCMoreCapable`).
+* With a bounded `U` and no closure, by the technique of Appendix C:
+  `IsLessNoisy.bcCapacityRegionBits_eq_card`, with `|𝒰| ≤ min {|𝒳|, |𝒴₂|} + 1`, and
+  `IsMoreCapable.bcCapacityRegionBits_eq_card`, with `|𝒰| ≤ |𝒳| + 1` (`Network.BCCardinality`).
 * The converses, with `Uᵢ = (M₂, Y₁^{i-1}, Y₂_{i+1}ⁿ)` and `Vᵢ = (M₁, Y₁^{i-1}, Y₂_{i+1}ⁿ)`: the
   Csiszár sum identity in telescoped form `condEntropy_sub_condEntropy_eq_sum_moreCapableAux`,
   `BCCode.log_add_log_le_sum_bcInfoXY₁U_add_bcInfoUY₂`, `BCCode.log_add_log_le_sum_bcInfoXY₁`
@@ -115,9 +118,6 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 * The common message: the code with `M₀`, the triples `(R₀, R₁, R₂)`, the common-message capacity
   `C₀`, the degraded message sets, and the extension on page 5-46.
-* The cardinality bounds on `U` for less noisy and more capable channels: these regions use an
-  unbounded `Fin k` and are stated with a closure. For the degraded DM-BC, Theorem 2 has the bound
-  and no closure: `bcCapacityRegionBits_eq_card` (`Network.BCCardinality`, Appendix C).
 * Theorem 3 as a coding theorem for the AWGN-BC. Its converse needs the conditional vector entropy
   power inequality, which the library does not have.
 * The explicit `U ⊕ V` scheme for the BS-BC and successive cancellation decoding; the region is

@@ -22,7 +22,8 @@ examples for the doubly symmetric binary source are in `Books.ElGamalKim.Lecture
   single-letter functions `sideRD`, `causalRD`, `wzRD`, `bothRD` and `infoRD` are in nats, and the
   theorems divide them by `log 2`.
 * **Auxiliary random variables.** `U` takes values in `Fin k` for some `k`; the minimum is attained
-  with `|𝒰| ≤ |𝒳| + 3`, against `|𝒰| ≤ |𝒳| + 1` in the notes.
+  with `|𝒰| ≤ |𝒳| + 1`, as in the notes. The distortion may decrease in the reduction: a cost that
+  depends on `u` is not a function of the posterior law `p(x | u)`, so we keep the best decoder.
 * **Causal and noncausal together.** `sideRD θ` is `min (I(X; U) - θ I(Y; U))`, so that `causalRD`
   is `θ = 0` and `wzRD` is `θ = 1`, and all the properties have one proof.
 
@@ -42,8 +43,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### The single-letter functions (pages 12-6 and 12-17)
 * `siLaw`, `sideRate`, `sideCost`, `sideRD`, `causalRD`, `wzRD`; `I(X; U) - I(Y; U) = I(X; U | Y)`:
   `sideRate_one` (`RateDistortion.SideInfo`).
-* The cardinality bound: `exists_fin_mean_eq` (`ForMathlib.SupportLemma`), `sideRate_eq_of_rep`,
-  `sideCost_eq_of_rep`, `exists_side_reduce`, `exists_side_reduce₁`.
+* The cardinality bound: `exists_mixture_preserving_mean` (`Probability.SupportMixture`),
+  `sideRate_eq_of_rep`, `sideCost_eq_of_rep`, `exists_side_reduce`, `exists_side_reduce₁`.
 * The minimum and the closedness: `exists_sideRD_eq`, `exists_le_of_forall_side`, `sideRD_le`,
   `sideRD_nonneg`.
 * Nonincreasing and convex: `sideRD_antitoneOn`, `sideRD_convexOn`, with `sideMix`,
@@ -100,8 +101,6 @@ All in `Books.ElGamalKim.Lecture12DSBS`.
 
 ## Not formalized
 
-* The bound `|𝒰| ≤ |𝒳| + 1`, which needs the Fenchel–Eggleston strengthening of Carathéodory's
-  theorem: we prove `|𝒰| ≤ |𝒳| + 3`, which is enough for all the theorems.
 * Source coding when side information may be absent (pages 12-30 to 12-33), that is the results of
   Heegard and Berger and of Kaspi with two decoders.
 * The coding theorems of the quadratic Gaussian case, including `R_SI-D(D) = R_SI-ED(D)`: the source

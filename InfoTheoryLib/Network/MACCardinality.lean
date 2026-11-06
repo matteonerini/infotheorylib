@@ -85,28 +85,36 @@ theorem macRegion_eq_card (hW : IsChannel W) : macRegion W = macRegionCard W 3 :
     simp only [hg, Matrix.cons_val] at e
     rwa [e]
 
+/-- The laws of `(Q, X₁, X₂)` with `Q` on `Fin K` and the inputs independent given `Q`. -/
+def timeShareLaws (K : ℕ) (α₁ α₂ : Type*) [Fintype α₁] [Fintype α₂] :
+    Set ((Fin K → ℝ) × (Fin K → α₁ → ℝ) × (Fin K → α₂ → ℝ)) :=
+  {P | IsPMF P.1 ∧ (∀ i, IsPMF (P.2.1 i)) ∧ ∀ i, IsPMF (P.2.2 i)}
+
+/-- The set of these laws is compact. -/
+lemma isCompact_timeShareLaws (K : ℕ) : IsCompact (timeShareLaws K α₁ α₂) := by
+  have e : timeShareLaws K α₁ α₂ = {q : Fin K → ℝ | IsPMF q} ×ˢ
+      (Set.pi Set.univ (fun _ => {p : α₁ → ℝ | IsPMF p}) ×ˢ
+        Set.pi Set.univ fun _ => {p : α₂ → ℝ | IsPMF p}) := by
+    ext P
+    simp [timeShareLaws, Set.mem_prod, Set.mem_pi]
+  rw [e]
+  exact isCompact_setOf_isPMF.prod
+    ((isCompact_univ_pi fun _ => isCompact_setOf_isPMF).prod
+      (isCompact_univ_pi fun _ => isCompact_setOf_isPMF))
+
+/-- A mean over `Q` of a continuous function of the inputs is continuous in the law. -/
+lemma continuousOn_timeShare {K : ℕ} {f : (α₁ → ℝ) × (α₂ → ℝ) → ℝ}
+    (hf : ContinuousOn f {p | IsPMF p.1 ∧ IsPMF p.2}) :
+    ContinuousOn (fun P : (Fin K → ℝ) × (Fin K → α₁ → ℝ) × (Fin K → α₂ → ℝ) =>
+      ∑ i, P.1 i * f (P.2.1 i, P.2.2 i)) (timeShareLaws K α₁ α₂) := by
+  refine continuousOn_finsetSum _ fun i _ => ?_
+  refine (Continuous.continuousOn (by fun_prop)).mul (hf.comp (Continuous.continuousOn ?_) ?_)
+  · fun_prop
+  · exact fun P hP => ⟨hP.2.1 i, hP.2.2 i⟩
+
 /-- With a bounded time-sharing variable the region is closed. -/
 theorem isClosed_macRegionCard (hW : IsChannel W) (K : ℕ) : IsClosed (macRegionCard W K) := by
-  set S : Set ((Fin K → ℝ) × (Fin K → α₁ → ℝ) × (Fin K → α₂ → ℝ)) :=
-    {P | IsPMF P.1 ∧ (∀ i, IsPMF (P.2.1 i)) ∧ ∀ i, IsPMF (P.2.2 i)} with hS
-  have hSc : IsCompact S := by
-    have e : S = {q : Fin K → ℝ | IsPMF q} ×ˢ (Set.pi Set.univ (fun _ => {p : α₁ → ℝ | IsPMF p}) ×ˢ
-        Set.pi Set.univ fun _ => {p : α₂ → ℝ | IsPMF p}) := by
-      ext P
-      simp [hS, Set.mem_prod, Set.mem_pi]
-    rw [e]
-    exact isCompact_setOf_isPMF.prod
-      ((isCompact_univ_pi fun _ => isCompact_setOf_isPMF).prod
-        (isCompact_univ_pi fun _ => isCompact_setOf_isPMF))
-  have hcomp : ∀ {f : (α₁ → ℝ) × (α₂ → ℝ) → ℝ},
-      ContinuousOn f {p | IsPMF p.1 ∧ IsPMF p.2} →
-      ContinuousOn (fun P : (Fin K → ℝ) × (Fin K → α₁ → ℝ) × (Fin K → α₂ → ℝ) =>
-        ∑ i, P.1 i * f (P.2.1 i, P.2.2 i)) S := fun {f} hf => by
-    refine continuousOn_finsetSum _ fun i _ => ?_
-    refine (Continuous.continuousOn (by fun_prop)).mul (hf.comp (Continuous.continuousOn ?_) ?_)
-    · fun_prop
-    · exact fun P hP => ⟨hP.2.1 i, hP.2.2 i⟩
-  have h := isClosed_exists_forall_le (J := Fin 3) (E := ℝ × ℝ) hSc
+  have h := isClosed_exists_forall_le (J := Fin 3) (E := ℝ × ℝ) (isCompact_timeShareLaws K)
     (L := ![fun R => R.1, fun R => R.2, fun R => R.1 + R.2])
     (F := ![fun P => ∑ i, P.1 i * macInfo₁ (P.2.1 i) (P.2.2 i) W,
       fun P => ∑ i, P.1 i * macInfo₂ (P.2.1 i) (P.2.2 i) W,
@@ -120,9 +128,9 @@ theorem isClosed_macRegionCard (hW : IsChannel W) (K : ℕ) : IsClosed (macRegio
     (by
       intro j
       fin_cases j
-      · exact hcomp (continuousOn_macInfo₁ hW)
-      · exact hcomp (continuousOn_macInfo₂ hW)
-      · exact hcomp (continuousOn_macInfo₁₂ hW))
+      · exact continuousOn_timeShare (continuousOn_macInfo₁ hW)
+      · exact continuousOn_timeShare (continuousOn_macInfo₂ hW)
+      · exact continuousOn_timeShare (continuousOn_macInfo₁₂ hW))
   convert h using 1
   ext R
   constructor
