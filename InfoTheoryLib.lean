@@ -43,6 +43,7 @@ public import InfoTheoryLib.Books.ElGamalKim.Lecture19
 public import InfoTheoryLib.Books.ElGamalKim.Lecture2
 public import InfoTheoryLib.Books.ElGamalKim.Lecture20
 public import InfoTheoryLib.Books.ElGamalKim.Lecture21
+public import InfoTheoryLib.Books.ElGamalKim.Lecture22
 public import InfoTheoryLib.Books.ElGamalKim.Lecture3
 public import InfoTheoryLib.Books.ElGamalKim.Lecture4
 public import InfoTheoryLib.Books.ElGamalKim.Lecture5
@@ -78,6 +79,7 @@ public import InfoTheoryLib.Entropy.Concavity
 public import InfoTheoryLib.Entropy.Conditional
 public import InfoTheoryLib.Entropy.Fano
 public import InfoTheoryLib.Entropy.MrsGerber
+public import InfoTheoryLib.ForMathlib.BinaryMatrix
 public import InfoTheoryLib.ForMathlib.FlowDecomposition
 public import InfoTheoryLib.ForMathlib.Integral
 public import InfoTheoryLib.ForMathlib.Log
@@ -169,7 +171,10 @@ public import InfoTheoryLib.Network.BergerTungOuter
 public import InfoTheoryLib.Network.BergerTungSharing
 public import InfoTheoryLib.Network.BinarySymmetricBC
 public import InfoTheoryLib.Network.Broadcast
+public import InfoTheoryLib.Network.CascadeComputing
 public import InfoTheoryLib.Network.CommonInformation
+public import InfoTheoryLib.Network.ComputeMAC
+public import InfoTheoryLib.Network.ComputingGaussian
 public import InfoTheoryLib.Network.DFBlock
 public import InfoTheoryLib.Network.DFCode
 public import InfoTheoryLib.Network.DFDegraded
@@ -183,6 +188,7 @@ public import InfoTheoryLib.Network.DetFiniteField
 public import InfoTheoryLib.Network.DetNetwork
 public import InfoTheoryLib.Network.DetNoInterference
 public import InfoTheoryLib.Network.DirectedInfo
+public import InfoTheoryLib.Network.DistFun
 public import InfoTheoryLib.Network.Fading
 public import InfoTheoryLib.Network.FeedbackLaw
 public import InfoTheoryLib.Network.Gaussian
@@ -266,6 +272,7 @@ public import InfoTheoryLib.Network.SourceHelper
 public import InfoTheoryLib.Network.SourceHelperConverse
 public import InfoTheoryLib.Network.Transcript
 public import InfoTheoryLib.Network.TwoWayCode
+public import InfoTheoryLib.Network.TwoWayComputing
 public import InfoTheoryLib.Network.TwoWayExamples
 public import InfoTheoryLib.Network.TwoWayInner
 public import InfoTheoryLib.Network.TwoWayLossy
@@ -297,12 +304,14 @@ public import InfoTheoryLib.RateDistortion.BitRate
 public import InfoTheoryLib.RateDistortion.BlahutArimoto
 public import InfoTheoryLib.RateDistortion.Converse
 public import InfoTheoryLib.RateDistortion.Gaussian
+public import InfoTheoryLib.RateDistortion.GraphEntropy
 public import InfoTheoryLib.RateDistortion.ParallelGaussian
 public import InfoTheoryLib.RateDistortion.SideInfo
 public import InfoTheoryLib.RateDistortion.SideInfoAchievability
 public import InfoTheoryLib.RateDistortion.SideInfoCases
 public import InfoTheoryLib.RateDistortion.SideInfoConverse
 public import InfoTheoryLib.RateDistortion.SideInfoCovering
+public import InfoTheoryLib.RateDistortion.SideInfoFunction
 public import InfoTheoryLib.RateDistortion.SourceChannel
 public import InfoTheoryLib.RateDistortion.Theorem
 public import InfoTheoryLib.RelativeEntropy.Basic

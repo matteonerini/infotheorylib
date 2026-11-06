@@ -75,14 +75,18 @@ def trans (c : KaspiCode spk M n α₁ α₂ β₁ β₂) (x₁ : Fin n → α�
 
 variable [Fintype α₁] [Fintype α₂]
 
-/-- The expected distortion of the estimate of `X₁ⁿ`. -/
-def distortion₁ (c : KaspiCode spk M n α₁ α₂ β₁ β₂) (P : α₁ × α₂ → ℝ) (d₁ : α₁ → β₁ → ℝ) : ℝ :=
-  ∑ ω : Fin n → α₁ × α₂, iidPMF P n ω * seqDistortion d₁ (fun i => (ω i).1)
+/-- The expected distortion of the estimate at node 2, which may be of `X₁ⁿ` or of a function of
+both sources. -/
+def distortion₁ (c : KaspiCode spk M n α₁ α₂ β₁ β₂) (P : α₁ × α₂ → ℝ)
+    (d₁ : α₁ × α₂ → β₁ → ℝ) : ℝ :=
+  ∑ ω : Fin n → α₁ × α₂, iidPMF P n ω * seqDistortion d₁ ω
     (c.dec₁ (fun i => (ω i).2) (c.trans (fun i => (ω i).1) fun i => (ω i).2))
 
-/-- The expected distortion of the estimate of `X₂ⁿ`. -/
-def distortion₂ (c : KaspiCode spk M n α₁ α₂ β₁ β₂) (P : α₁ × α₂ → ℝ) (d₂ : α₂ → β₂ → ℝ) : ℝ :=
-  ∑ ω : Fin n → α₁ × α₂, iidPMF P n ω * seqDistortion d₂ (fun i => (ω i).2)
+/-- The expected distortion of the estimate at node 1, which may be of `X₂ⁿ` or of a function of
+both sources. -/
+def distortion₂ (c : KaspiCode spk M n α₁ α₂ β₁ β₂) (P : α₁ × α₂ → ℝ)
+    (d₂ : α₁ × α₂ → β₂ → ℝ) : ℝ :=
+  ∑ ω : Fin n → α₁ × α₂, iidPMF P n ω * seqDistortion d₂ ω
     (c.dec₂ (fun i => (ω i).1) (c.trans (fun i => (ω i).1) fun i => (ω i).2))
 
 end KaspiCode
@@ -92,16 +96,16 @@ variable [Fintype α₁] [Fintype α₂]
 /-- **Lecture 21 of [elgamal2010], page 21-20.** A rate pair, in bits, is achievable in the rounds
 of `spk` at the distortions `(D₁, D₂)` if for every `ε` and all large `n` there is a code with
 distortions at most `Dⱼ + ε`. -/
-def IsAchievableKaspi {q : ℕ} (P : α₁ × α₂ → ℝ) (spk : Fin q → Bool) (d₁ : α₁ → β₁ → ℝ)
-    (d₂ : α₂ → β₂ → ℝ) (D₁ D₂ : ℝ) (R : ℝ × ℝ) : Prop :=
+def IsAchievableKaspi {q : ℕ} (P : α₁ × α₂ → ℝ) (spk : Fin q → Bool) (d₁ : α₁ × α₂ → β₁ → ℝ)
+    (d₂ : α₁ × α₂ → β₂ → ℝ) (D₁ D₂ : ℝ) (R : ℝ × ℝ) : Prop :=
   0 ≤ R.1 ∧ 0 ≤ R.2 ∧ ∀ ε > 0, ∀ᶠ n : ℕ in atTop, ∃ (M : Fin q → ℕ) (_ : ∀ l, NeZero (M l))
     (c : KaspiCode spk M n α₁ α₂ β₁ β₂),
     ∏ l with spk l = true, M l ≤ 2 ^ ⌊n * R.1⌋₊ ∧ ∏ l with spk l = false, M l ≤ 2 ^ ⌊n * R.2⌋₊ ∧
       c.distortion₁ P d₁ ≤ D₁ + ε ∧ c.distortion₂ P d₂ ≤ D₂ + ε
 
 /-- **Lecture 21 of [elgamal2010], page 21-20.** The `q`-round rate–distortion region. -/
-def kaspiRegion {q : ℕ} (P : α₁ × α₂ → ℝ) (spk : Fin q → Bool) (d₁ : α₁ → β₁ → ℝ)
-    (d₂ : α₂ → β₂ → ℝ) (D₁ D₂ : ℝ) : Set (ℝ × ℝ) :=
+def kaspiRegion {q : ℕ} (P : α₁ × α₂ → ℝ) (spk : Fin q → Bool) (d₁ : α₁ × α₂ → β₁ → ℝ)
+    (d₂ : α₁ × α₂ → β₂ → ℝ) (D₁ D₂ : ℝ) : Set (ℝ × ℝ) :=
   closure {R | IsAchievableKaspi P spk d₁ d₂ D₁ D₂ R}
 
 /-! ### The laws of Theorem 4 -/
@@ -140,15 +144,16 @@ end Law
 /-- **Theorem 4 of Lecture 21 of [elgamal2010], page 21-22: the region.** The rate pairs with
 `R₁ ≥ I(X₁; U^q | X₂)` and `R₂ ≥ I(X₂; U^q | X₁)`, in bits, for some law and reconstructions with
 the prescribed distortions. The alphabet of `U` is any finite set. -/
-def kaspiInner {q : ℕ} (P : α₁ × α₂ → ℝ) (spk : Fin q → Bool) (d₁ : α₁ → β₁ → ℝ)
-    (d₂ : α₂ → β₂ → ℝ) (D₁ D₂ : ℝ) : Set (ℝ × ℝ) :=
+def kaspiInner {q : ℕ} (P : α₁ × α₂ → ℝ) (spk : Fin q → Bool) (d₁ : α₁ × α₂ → β₁ → ℝ)
+    (d₂ : α₁ × α₂ → β₂ → ℝ) (D₁ D₂ : ℝ) : Set (ℝ × ℝ) :=
   {R | ∃ (υ : Type u) (_ : Fintype υ) (_ : Nonempty υ) (μ : α₁ × α₂ × (Fin q → υ) → ℝ)
     (f₁ : (Fin q → υ) → α₂ → β₁) (f₂ : (Fin q → υ) → α₁ → β₂), IsKaspiLaw P spk μ ∧
     I[fun z : α₁ × α₂ × (Fin q → υ) => z.1 : fun z => z.2.2 | fun z => z.2.1 ; μ] ≤
       R.1 * log 2 ∧
     I[fun z : α₁ × α₂ × (Fin q → υ) => z.2.1 : fun z => z.2.2 | fun z => z.1 ; μ] ≤
       R.2 * log 2 ∧
-    ∑ z, μ z * d₁ z.1 (f₁ z.2.2 z.2.1) ≤ D₁ ∧ ∑ z, μ z * d₂ z.2.1 (f₂ z.2.2 z.1) ≤ D₂}
+    ∑ z, μ z * d₁ (z.1, z.2.1) (f₁ z.2.2 z.2.1) ≤ D₁ ∧
+      ∑ z, μ z * d₂ (z.1, z.2.1) (f₂ z.2.2 z.1) ≤ D₂}
 
 /-! ### Lemma 1 -/
 

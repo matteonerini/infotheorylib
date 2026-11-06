@@ -14,7 +14,7 @@ by topic, following two texts:
 
 ## Status
 
-All 17 chapters of Cover & Thomas and Lectures 1–21 of El Gamal & Kim are formalized, with some
+All 17 chapters of Cover & Thomas and Lectures 1–22 of El Gamal & Kim are formalized, with some
 omissions. Each [chapter](InfoTheoryLib/Books/CoverThomas/) and
 [lecture](InfoTheoryLib/Books/ElGamalKim/) file indexes what is proved and has a "Not formalized"
 section listing what is not. Many lecture files also record the differences from the notes and the
@@ -60,6 +60,7 @@ with theorem numbers, and EGK is El Gamal & Kim, with lecture numbers.
 | Network coding theorem (EGK Lecture 16) | `network_coding_theorem` | `Network.NetworkCoding` |
 | Compress–forward lower bound for the relay channel (EGK Lecture 17) | `isAchievableRC_compressForward` | `Network.RelayCF` |
 | Noisy network coding (EGK Lecture 19) | `isAchievableMN_nnc`, `isAchievableDMN_nnc` | `Network.NNCTheorem` |
+| Orlitsky–Roche theorem (EGK Lecture 22) | `losslessFunBits_eq_condGraphEntropy` | `RateDistortion.GraphEntropy` |
 
 ## Getting started
 

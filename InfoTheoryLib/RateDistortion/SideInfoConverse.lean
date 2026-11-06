@@ -422,11 +422,13 @@ private lemma sum_condEntropy_ge (hP : IsPMF P) (hM : 0 < M) (z₀ : α × γ)
   linarith
 
 include hP in
-/-- **Lecture 12, pages 12-26 and 12-27.** The single-letter bounds: every code gives `p(u | x)` and
-`x̂(u, y)` with `E d(X, X̂) = E d(Xⁿ, X̂ⁿ)` and `n I(X; U | Y) ≤ log M`, with `|𝒰| ≤ |𝒳| + 3`. -/
-theorem WZCode.exists_kernel_le (hn : 0 < n) (hM : 0 < M) (d : α → β → ℝ) :
-    ∃ (q : α → Fin (Fintype.card α + 3) → ℝ) (f : Fin (Fintype.card α + 3) → γ → β), IsChannel q ∧
-      sideCost P q (fun u x y => d x (f u y)) = c.distortion P d ∧ n * sideRate 1 P q ≤ log M := by
+/-- **Lecture 12, pages 12-26 and 12-27.** The auxiliary random variable `(Q, M, Yⁿ \ Y_Q)` of a
+code: its costs are the averages over the coordinates, and `n I(X; U | Y) ≤ log M`. -/
+theorem WZCode.exists_aux_law (hn : 0 < n) (hM : 0 < M) (enc : (Fin n → α) → Fin M) :
+    ∃ (y₀ : γ) (q : α → (Σ _ : Fin n, Fin M × (Fin n → γ)) → ℝ), IsChannel q ∧
+      (∀ e : (Σ _ : Fin n, Fin M × (Fin n → γ)) → α → γ → ℝ, sideCost P q e =
+        ∑ ω, iidPMF P n ω * ((∑ i, e (wzAux y₀ enc i ω) (ω i).1 (ω i).2) / n)) ∧
+      n * sideRate 1 P q ≤ log M := by
   classical
   obtain ⟨z₀⟩ : Nonempty (α × γ) := Fintype.card_pos_iff.1 (card_pos_of_isPMF hP)
   have hμ := iidPMF_isPMF hP n
@@ -434,7 +436,7 @@ theorem WZCode.exists_kernel_le (hn : 0 < n) (hM : 0 < M) (d : α → β → ℝ
   have hn' : (0 : ℝ) < n := by exact_mod_cast hn
   have hcardn : ((Fintype.card (Fin n) : ℕ) : ℝ) = n := by simp
   set V : Fin n → (Fin n → α × γ) → Σ _ : Fin n, Fin M × (Fin n → γ) :=
-    fun i ω => wzAux z₀.2 c.enc i ω with hVd
+    fun i ω => wzAux z₀.2 enc i ω with hVd
   have hV : ∀ i ω (c' : α × γ), c'.1 = (ω i).1 → V i (Function.update ω i c') = V i ω :=
     fun i ω c' hc' => by
       have hf : fstSeq (Function.update ω i c') = fstSeq ω := by
@@ -452,17 +454,11 @@ theorem WZCode.exists_kernel_le (hn : 0 < n) (hM : 0 < M) (d : α → β → ℝ
         · simp [sndSeq, hj]
       simp only [hVd, wzAux, hf, hg]
   obtain ⟨q, hq, hlaw⟩ := exists_mix_kernel hP hn V hV
-  have hcost : sideCost P q (fun u x y => d x (wzRecon c u y)) = c.distortion P d := by
-    rw [sideCost_mix hn hlaw]
-    refine sum_congr rfl fun ω _ => ?_
-    congr 1
-    simp only [seqDistortion, hVd, wzRecon_aux]
-    rfl
   -- The rate.
   set ν := mixLaw (iidPMF P n) (Fin n) with hν
   have hνP : IsPMF ν := mixLaw_isPMF hμ
   have hLaw := siLaw_isPMF hP hq
-  set Me : (Fin n → α × γ) → Fin M := fun ω => c.enc (fstSeq ω) with hMe
+  set Me : (Fin n → α × γ) → Fin M := fun ω => enc (fstSeq ω) with hMe
   have hsig : ∀ i : Fin n, H[fun ω : Fin n → α × γ => (ω i).1 |
       pair (fun ω => ((Me ω, Function.update (sndSeq ω) i z₀.2) : Fin M × (Fin n → γ)))
         (fun ω => (ω i).2) ; iidPMF P n] =
@@ -521,11 +517,26 @@ theorem WZCode.exists_kernel_le (hn : 0 < n) (hM : 0 < M) (d : α → β → ℝ
       refine e3.trans ?_
       congr 1
       exact sum_congr rfl fun i _ => hsig i
-  have hb := sum_condEntropy_ge hP hM z₀ c.enc (n := n)
-  obtain ⟨q', f', hq', h1, h2⟩ := exists_side_reduce₁ hP hq 1 d (wzRecon c)
-  refine ⟨q', f', hq', h2.trans hcost, ?_⟩
-  rw [h1, hrate, mul_sub, ← mul_assoc, mul_inv_cancel₀ hn'.ne', one_mul]
+  have hb := sum_condEntropy_ge hP hM z₀ enc (n := n)
+  refine ⟨z₀.2, q, hq, fun e => sideCost_mix hn hlaw e, ?_⟩
+  rw [hrate, mul_sub, ← mul_assoc, mul_inv_cancel₀ hn'.ne', one_mul]
   linarith
+
+include hP in
+/-- **Lecture 12, pages 12-26 and 12-27.** The single-letter bounds: every code gives `p(u | x)` and
+`x̂(u, y)` with `E d(X, X̂) = E d(Xⁿ, X̂ⁿ)` and `n I(X; U | Y) ≤ log M`, with `|𝒰| ≤ |𝒳| + 3`. -/
+theorem WZCode.exists_kernel_le (hn : 0 < n) (hM : 0 < M) (d : α → β → ℝ) :
+    ∃ (q : α → Fin (Fintype.card α + 3) → ℝ) (f : Fin (Fintype.card α + 3) → γ → β), IsChannel q ∧
+      sideCost P q (fun u x y => d x (f u y)) = c.distortion P d ∧ n * sideRate 1 P q ≤ log M := by
+  obtain ⟨y₀, q, hq, he, hr⟩ := WZCode.exists_aux_law hP hn hM c.enc
+  have hcost : sideCost P q (fun u x y => d x (wzRecon c u y)) = c.distortion P d := by
+    rw [he]
+    refine sum_congr rfl fun ω _ => ?_
+    congr 1
+    simp only [seqDistortion, wzRecon_aux]
+    rfl
+  obtain ⟨q', f', hq', h1, h2⟩ := exists_side_reduce₁ hP hq 1 d (wzRecon c)
+  exact ⟨q', f', hq', h2.trans hcost, by rwa [h1]⟩
 
 /-- **The converse of the Wyner–Ziv theorem.** If `(R, D)` is achievable, there are `p(u | x)` and
 `x̂(u, y)` with `E d(X, X̂) ≤ D` and `I(X; U | Y) ≤ R`, in bits. -/

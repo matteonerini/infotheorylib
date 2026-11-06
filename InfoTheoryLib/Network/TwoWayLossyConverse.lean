@@ -42,26 +42,27 @@ variable {Ω a κ σ β : Type*} [Fintype Ω] [Fintype a] [Fintype κ] [Fintype 
 
 omit [Fintype β] in
 /-- **Claim (a) of page 21-25 of [elgamal2010].** If `X → C → B` is a Markov chain, a reconstruction
-of `X` from `(C, B)` can be replaced by one from `C` with no larger expected distortion. -/
+from `(C, B)` can be replaced by one from `C` with no larger expected distortion. The distortion may
+depend on `C` as well as on `X`. -/
 theorem exists_estimator_le [Finite β] (hν : IsPMF ν) (X : Ω → a) (C : Ω → κ) (B : Ω → σ)
-    (g : κ × σ → β) (d : a → β → ℝ) (h : I[X : B | C ; ν] = 0) : ∃ f : κ → β, ∑ ω, ν ω * d (X ω)
-    (f (C ω)) ≤ ∑ ω, ν ω * d (X ω) (g (C ω, B ω)) := by
+    (g : κ × σ → β) (d : a → κ → β → ℝ) (h : I[X : B | C ; ν] = 0) : ∃ f : κ → β, ∑ ω, ν ω *
+    d (X ω) (C ω) (f (C ω)) ≤ ∑ ω, ν ω * d (X ω) (C ω) (g (C ω, B ω)) := by
   have := Fintype.ofFinite β
   classical
   have hlaw := (condIndep_iff_dist_eq hν X B C).1 ((condMutualInfo_eq_zero_iff hν X B C).1 h)
-  set φ : κ → β → ℝ := fun c y => ∑ x, dist ν (pair C X) (c, x) * d x y with hφ
+  set φ : κ → β → ℝ := fun c y => ∑ x, dist ν (pair C X) (c, x) * d x c y with hφ
   have hex : ∀ c, ∃ y, ∀ y', φ c y ≤ φ c y' := fun c => by
     obtain ⟨y, -, hy⟩ := (univ : Finset β).exists_min_image (φ c) univ_nonempty
     exact ⟨y, fun y' => hy y' (mem_univ _)⟩
   choose f hf using hex
   refine ⟨f, ?_⟩
-  have e₁ : ∑ ω, ν ω * d (X ω) (f (C ω)) = ∑ c, φ c (f c) := by
-    have := sum_dist_mul ν (pair C X) fun t : κ × a => d t.2 (f t.1)
+  have e₁ : ∑ ω, ν ω * d (X ω) (C ω) (f (C ω)) = ∑ c, φ c (f c) := by
+    have := sum_dist_mul ν (pair C X) fun t : κ × a => d t.2 t.1 (f t.1)
     rw [Fintype.sum_prod_type] at this
     exact this.symm
-  have e₂ : ∑ ω, ν ω * d (X ω) (g (C ω, B ω)) = ∑ c, ∑ b,
+  have e₂ : ∑ ω, ν ω * d (X ω) (C ω) (g (C ω, B ω)) = ∑ c, ∑ b,
       dist ν (pair C B) (c, b) / dist ν C c * φ c (g (c, b)) := by
-    have := sum_dist_mul ν (pair C (pair X B)) fun t : κ × a × σ => d t.2.1 (g (t.1, t.2.2))
+    have := sum_dist_mul ν (pair C (pair X B)) fun t : κ × a × σ => d t.2.1 t.1 (g (t.1, t.2.2))
     rw [hlaw] at this
     simp only [pair] at this
     rw [← this, Fintype.sum_prod_type]
@@ -842,15 +843,15 @@ lemma markov_dist₂ (hP : IsPMF P) (a₀ : α₁) (b₀ : α₂) :
 
 /-- **The converse of Theorem 4 of Lecture 21 of [elgamal2010], for one code.** -/
 theorem exists_kaspi_law [Finite β₁] [Finite β₂] [Nonempty β₁] [Nonempty β₂] (hP : IsPMF P)
-    (d₁ : α₁ → β₁ → ℝ) (d₂ : α₂ → β₂ → ℝ) :
+    (d₁ : α₁ × α₂ → β₁ → ℝ) (d₂ : α₁ × α₂ → β₂ → ℝ) :
     ∃ (μ : α₁ × α₂ × (Fin q → KUps n M α₁ α₂) → ℝ) (f₁ : (Fin q → KUps n M α₁ α₂) → α₂ → β₁)
       (f₂ : (Fin q → KUps n M α₁ α₂) → α₁ → β₂), IsKaspiLaw P spk μ ∧
       (n : ℝ) * I[fun z : α₁ × α₂ × (Fin q → KUps n M α₁ α₂) => z.1 : fun z => z.2.2 |
         fun z => z.2.1 ; μ] ≤ log ((∏ l with spk l = true, M l : ℕ) : ℝ) ∧
       (n : ℝ) * I[fun z : α₁ × α₂ × (Fin q → KUps n M α₁ α₂) => z.2.1 : fun z => z.2.2 |
         fun z => z.1 ; μ] ≤ log ((∏ l with spk l = false, M l : ℕ) : ℝ) ∧
-      ∑ z, μ z * d₁ z.1 (f₁ z.2.2 z.2.1) ≤ c.distortion₁ P d₁ ∧
-      ∑ z, μ z * d₂ z.2.1 (f₂ z.2.2 z.1) ≤ c.distortion₂ P d₂ := by
+      ∑ z, μ z * d₁ (z.1, z.2.1) (f₁ z.2.2 z.2.1) ≤ c.distortion₁ P d₁ ∧
+      ∑ z, μ z * d₂ (z.1, z.2.1) (f₂ z.2.2 z.1) ≤ c.distortion₂ P d₂ := by
   have := Fintype.ofFinite β₁
   have := Fintype.ofFinite β₂
   classical
@@ -871,10 +872,12 @@ theorem exists_kaspi_law [Finite β₁] [Finite β₂] [Nonempty β₁] [Nonempt
     c.dec₂ (unmask z₀.1 (Function.update (w.1.1 l₀).2.1 (w.1.1 l₀).1 (some w.1.2)) w.2)
       (fun l => unTag (w.1.1 l).2.2.2 l) (w.1.1 l₀).1
   obtain ⟨f₁, hf₁⟩ := exists_estimator_le hν (fun z : (Fin n → α₁ × α₂) × Fin n => (z.1 z.2).1)
-    (pair (fun z => c.kUs z) (fun z => (z.1 z.2).2)) (fun z => maskLt z.2 (sndSeq z.1)) g₁ d₁
+    (pair (fun z => c.kUs z) (fun z => (z.1 z.2).2)) (fun z => maskLt z.2 (sndSeq z.1)) g₁
+    (fun x t y => d₁ (x, t.2) y)
     (c.markov_dist₁ hP z₀.1 z₀.2)
   obtain ⟨f₂, hf₂⟩ := exists_estimator_le hν (fun z : (Fin n → α₁ × α₂) × Fin n => (z.1 z.2).2)
-    (pair (fun z => c.kUs z) (fun z => (z.1 z.2).1)) (fun z => maskGe (z.2 + 1) (fstSeq z.1)) g₂ d₂
+    (pair (fun z => c.kUs z) (fun z => (z.1 z.2).1)) (fun z => maskGe (z.2 + 1) (fstSeq z.1)) g₂
+    (fun x t y => d₂ (t.2, x) y)
     (c.markov_dist₂ hP z₀.1 z₀.2)
   have hg₁ : ∀ z : (Fin n → α₁ × α₂) × Fin n, g₁ (pair (fun z => c.kUs z)
       (fun z => (z.1 z.2).2) z, maskLt z.2 (sndSeq z.1)) =
@@ -944,14 +947,14 @@ theorem exists_kaspi_law [Finite β₁] [Finite β₂] [Nonempty β₁] [Nonempt
     have h₁ := c.rate₂ hP
     rw [condMutualInfo] at h₁
     exact h₁
-  · rw [sum_dist_mul ν W fun z => d₁ z.1 (f₁ (z.2.2, z.2.1))]
+  · rw [sum_dist_mul ν W fun z => d₁ (z.1, z.2.1) (f₁ (z.2.2, z.2.1))]
     refine hf₁.trans (le_of_eq ?_)
     simp only [hg₁]
-    exact sum_mix_mul hn0 fun ω i => d₁ (ω i).1 (c.dec₁ (sndSeq ω) (c.tr ω) i)
-  · rw [sum_dist_mul ν W fun z => d₂ z.2.1 (f₂ (z.2.2, z.1))]
+    exact sum_mix_mul hn0 fun ω i => d₁ (ω i) (c.dec₁ (sndSeq ω) (c.tr ω) i)
+  · rw [sum_dist_mul ν W fun z => d₂ (z.1, z.2.1) (f₂ (z.2.2, z.1))]
     refine hf₂.trans (le_of_eq ?_)
     simp only [hg₂]
-    exact sum_mix_mul hn0 fun ω i => d₂ (ω i).2 (c.dec₂ (fstSeq ω) (c.tr ω) i)
+    exact sum_mix_mul hn0 fun ω i => d₂ (ω i) (c.dec₂ (fstSeq ω) (c.tr ω) i)
 
 end KaspiCode
 
@@ -964,8 +967,8 @@ section Converse
 universe u
 
 variable {α₁ α₂ : Type u} {β₁ β₂ : Type*} [Fintype α₁] [Fintype α₂] [Fintype β₁] [Fintype β₂]
-  [Nonempty β₁] [Nonempty β₂] {q : ℕ} {spk : Fin q → Bool} {P : α₁ × α₂ → ℝ} {d₁ : α₁ → β₁ → ℝ}
-  {d₂ : α₂ → β₂ → ℝ}
+  [Nonempty β₁] [Nonempty β₂] {q : ℕ} {spk : Fin q → Bool} {P : α₁ × α₂ → ℝ} {d₁ : α₁ × α₂ → β₁ → ℝ}
+  {d₂ : α₁ × α₂ → β₂ → ℝ}
 
 omit [Fintype β₁] [Fintype β₂] in
 /-- **Theorem 4 of Lecture 21 of [elgamal2010], page 21-22: the converse.** A rate pair of the

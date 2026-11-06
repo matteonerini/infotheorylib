@@ -30,6 +30,8 @@ two-way lossless source coding through a relay.
 * **Theorem 4.** The law of `(X₁, X₂, U^q)` is given by the Markov chains
   `X_{j'} → (X_j, U^{l-1}) → U_l` of each round, which are the factorization of the notes by the
   chain rule (`IsKaspiLaw`).
+* **Distortions.** The library's `kaspiRegion` allows distortions that depend on both sources, which
+  Lecture 22 needs. Theorem 4 of this lecture is the case `fun z => d₁ z.1` and `fun z => d₂ z.2`.
 * **Labels.** The node `k` of the notes is the node `k - 1` here: in Theorem 2, `M₁₂` is the index
   on the edge `(0, 1)`, `X̂₂` is the letter of the node `1`, and so on.
 
@@ -334,17 +336,20 @@ theorem theorem_21_4_inner {α₁ α₂ : Type u} [Fintype α₁] [Fintype α₂
     [Finite β₂] [Nonempty β₁] [Nonempty β₂] {q : ℕ} {spk : Fin q → Bool} {P : α₁ × α₂ → ℝ}
     {d₁ : α₁ → β₁ → ℝ} {d₂ : α₂ → β₂ → ℝ} (hP : IsPMF P) (hd₁ : ∀ x y, 0 ≤ d₁ x y)
     (hd₂ : ∀ x y, 0 ≤ d₂ x y) (D₁ D₂ : ℝ) :
-    kaspiInner P spk d₁ d₂ D₁ D₂ ⊆ kaspiRegion P spk d₁ d₂ D₁ D₂ := by
+    kaspiInner P spk (fun z => d₁ z.1) (fun z => d₂ z.2) D₁ D₂ ⊆
+      kaspiRegion P spk (fun z => d₁ z.1) (fun z => d₂ z.2) D₁ D₂ := by
   have := Fintype.ofFinite β₁
   have := Fintype.ofFinite β₂
-  exact kaspiInner_subset_kaspiRegion hP hd₁ hd₂ D₁ D₂
+  exact kaspiInner_subset_kaspiRegion hP (fun z y => hd₁ z.1 y) (fun z y => hd₂ z.2 y) D₁ D₂
 
 /-- **Theorem 4, page 21-22: the converse.** -/
 theorem theorem_21_4_converse {α₁ α₂ : Type u} [Fintype α₁] [Fintype α₂] {β₁ β₂ : Type*}
     [Finite β₁] [Finite β₂] [Nonempty β₁] [Nonempty β₂] {q : ℕ} {spk : Fin q → Bool}
     {P : α₁ × α₂ → ℝ} {d₁ : α₁ → β₁ → ℝ} {d₂ : α₂ → β₂ → ℝ} (hq : 0 < q) (hP : IsPMF P) {D₁ D₂ : ℝ}
-    {R : ℝ × ℝ} (h : R ∈ kaspiRegion P spk d₁ d₂ D₁ D₂) {ε : ℝ} (hε : 0 < ε) :
-    (R.1 + ε, R.2 + ε) ∈ kaspiInner P spk d₁ d₂ (D₁ + ε) (D₂ + ε) := by
+    {R : ℝ × ℝ} (h : R ∈ kaspiRegion P spk (fun z => d₁ z.1) (fun z => d₂ z.2) D₁ D₂) {ε : ℝ}
+    (hε : 0 < ε) :
+    (R.1 + ε, R.2 + ε) ∈ kaspiInner P spk (fun z => d₁ z.1) (fun z => d₂ z.2) (D₁ + ε) (D₂ + ε) :=
+      by
   have := Fintype.ofFinite β₁
   have := Fintype.ofFinite β₂
   exact exists_kaspiInner_of_mem_kaspiRegion hq hP h hε

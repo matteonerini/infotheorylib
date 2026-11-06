@@ -514,20 +514,20 @@ omit [Fintype β₂] [Fintype β₁] in
 open Classical in
 /-- **The distortion of `X₁`**, from the probability that a round is not good. -/
 theorem KBook.distortion₁_le [Finite β₁] (B : KBook L M n υ) (hP : IsPMF P) (hn : 0 < n)
-    [Nonempty β₁] {d₁ : α₁ → β₁ → ℝ} (hd : ∀ x y, 0 ≤ d₁ x y) (hμ : IsPMF μ)
+    [Nonempty β₁] {d₁ : α₁ × α₂ → β₁ → ℝ} (hd : ∀ x y, 0 ≤ d₁ x y) (hμ : IsPMF μ)
     (f₁ : (Fin q → υ) → α₂ → β₁) (f₂ : (Fin q → υ) → α₁ → β₂) {ε : ℝ} (hε : 0 ≤ ε) :
-    ((B.proto spk μ ε₂ εd).code f₁ f₂).distortion₁ P d₁ ≤ (1 + ε) * ∑ z, μ z * d₁ z.1
+    ((B.proto spk μ ε₂ εd).code f₁ f₂).distortion₁ P d₁ ≤ (1 + ε) * ∑ z, μ z * d₁ (z.1, z.2.1)
     (f₁ z.2.2 z.2.1) + maxDistortion d₁ * ∑ ω, iidPMF P n ω *
     (if B.Good spk μ ε₂ εd q ε ω then 0 else 1) := by
   have := Fintype.ofFinite β₁
   obtain ⟨z₀⟩ : Nonempty (α₁ × α₂) := Fintype.card_pos_iff.1 (card_pos_of_isPMF hP)
-  have hneα : Nonempty α₁ := ⟨z₀.1⟩
+  have hneα : Nonempty (α₁ × α₂) := ⟨z₀⟩
   have hw := iidPMF_isPMF hP n
   have hn' : (0 : ℝ) < n := by exact_mod_cast hn
   have hm := maxDistortion_nonneg hd
-  set E := ∑ z, μ z * d₁ z.1 (f₁ z.2.2 z.2.1) with hE
+  set E := ∑ z, μ z * d₁ (z.1, z.2.1) (f₁ z.2.2 z.2.1) with hE
   have hE0 : 0 ≤ E := sum_nonneg fun z _ => mul_nonneg (hμ.nonneg z) (hd _ _)
-  have hpt : ∀ ω : Fin n → α₁ × α₂, seqDistortion d₁ (fun i => (ω i).1)
+  have hpt : ∀ ω : Fin n → α₁ × α₂, seqDistortion d₁ ω
       (((B.proto spk μ ε₂ εd).code f₁ f₂).dec₁ (fun i => (ω i).2)
         (((B.proto spk μ ε₂ εd).code f₁ f₂).trans (fun i => (ω i).1) fun i => (ω i).2)) ≤
       (1 + ε) * E + maxDistortion d₁ * (if B.Good spk μ ε₂ εd q ε ω then 0 else 1) := fun ω => by
@@ -536,28 +536,28 @@ theorem KBook.distortion₁_le [Finite β₁] (B : KBook L M n υ) (hP : IsPMF P
       obtain ⟨h₁, h₂⟩ := (B.proto spk μ ε₂ εd).view_code (f₁ := f₁) (f₂ := f₂)
         (x₁ := fstSeq ω) (x₂ := sndSeq ω) fun l => hg.2 l l.2
       have hs := sum_le_card_mul_of_mem_robustTypicalSet hg.1
-        (g := fun w : (α₁ × α₂) × (Fin q → υ) => d₁ w.1.1 (f₁ w.2 w.1.2)) fun w => hd _ _
+        (g := fun w : (α₁ × α₂) × (Fin q → υ) => d₁ w.1 (f₁ w.2 w.1.2)) fun w => hd _ _
       have e₁ : expect (dist μ (kState q)) (fun w : (α₁ × α₂) × (Fin q → υ) =>
-          d₁ w.1.1 (f₁ w.2 w.1.2)) = E := by
+          d₁ w.1 (f₁ w.2 w.1.2)) = E := by
         rw [expect]
         simp only [mul_comm (d₁ _ _)]
         rw [sum_dist_mul]
         refine sum_congr rfl fun z _ => ?_
         simp only [kState, truncU_top]
       rw [e₁] at hs
-      have e₂ : ∑ i, d₁ (ω i).1 (((B.proto spk μ ε₂ εd).code f₁ f₂).dec₁ (fun i => (ω i).2)
+      have e₂ : ∑ i, d₁ (ω i) (((B.proto spk μ ε₂ εd).code f₁ f₂).dec₁ (fun i => (ω i).2)
           (((B.proto spk μ ε₂ εd).code f₁ f₂).trans (fun i => (ω i).1) fun i => (ω i).2) i) =
-          ∑ i, (fun w : (α₁ × α₂) × (Fin q → υ) => d₁ w.1.1 (f₁ w.2 w.1.2))
+          ∑ i, (fun w : (α₁ × α₂) × (Fin q → υ) => d₁ w.1 (f₁ w.2 w.1.2))
             (zipSeq ω ((B.proto spk μ ε₂ εd).past (fstSeq ω) (sndSeq ω) q) i) := by
         refine sum_congr rfl fun i _ => ?_
-        change d₁ (ω i).1 (f₁ ((B.proto spk μ ε₂ εd).view₂ (sndSeq ω)
+        change d₁ (ω i) (f₁ ((B.proto spk μ ε₂ εd).view₂ (sndSeq ω)
           (((B.proto spk μ ε₂ εd).code f₁ f₂).trans (fstSeq ω) (sndSeq ω)) q i) (ω i).2) = _
         rw [h₂]
         rfl
       rw [e₂]
       linarith
     · rw [ite_eq_right hg, mul_one]
-      have h₁ := seqDistortion_le_maxDistortion d₁ hn (fun i => (ω i).1)
+      have h₁ := seqDistortion_le_maxDistortion d₁ hn ω
         (((B.proto spk μ ε₂ εd).code f₁ f₂).dec₁ (fun i => (ω i).2)
           (((B.proto spk μ ε₂ εd).code f₁ f₂).trans (fun i => (ω i).1) fun i => (ω i).2))
       have h₂ : 0 ≤ (1 + ε) * E := by positivity
@@ -577,20 +577,20 @@ omit [Fintype β₁] [Fintype β₂] in
 open Classical in
 /-- **The distortion of `X₂`**, from the probability that a round is not good. -/
 theorem KBook.distortion₂_le [Finite β₂] (B : KBook L M n υ) (hP : IsPMF P) (hn : 0 < n)
-    [Nonempty β₂] {d₂ : α₂ → β₂ → ℝ} (hd : ∀ x y, 0 ≤ d₂ x y) (hμ : IsPMF μ)
+    [Nonempty β₂] {d₂ : α₁ × α₂ → β₂ → ℝ} (hd : ∀ x y, 0 ≤ d₂ x y) (hμ : IsPMF μ)
     (f₁ : (Fin q → υ) → α₂ → β₁) (f₂ : (Fin q → υ) → α₁ → β₂) {ε : ℝ} (hε : 0 ≤ ε) :
-    ((B.proto spk μ ε₂ εd).code f₁ f₂).distortion₂ P d₂ ≤ (1 + ε) * ∑ z, μ z * d₂ z.2.1
+    ((B.proto spk μ ε₂ εd).code f₁ f₂).distortion₂ P d₂ ≤ (1 + ε) * ∑ z, μ z * d₂ (z.1, z.2.1)
     (f₂ z.2.2 z.1) + maxDistortion d₂ * ∑ ω, iidPMF P n ω *
     (if B.Good spk μ ε₂ εd q ε ω then 0 else 1) := by
   have := Fintype.ofFinite β₂
   obtain ⟨z₀⟩ : Nonempty (α₁ × α₂) := Fintype.card_pos_iff.1 (card_pos_of_isPMF hP)
-  have hneα : Nonempty α₂ := ⟨z₀.2⟩
+  have hneα : Nonempty (α₁ × α₂) := ⟨z₀⟩
   have hw := iidPMF_isPMF hP n
   have hn' : (0 : ℝ) < n := by exact_mod_cast hn
   have hm := maxDistortion_nonneg hd
-  set E := ∑ z, μ z * d₂ z.2.1 (f₂ z.2.2 z.1) with hE
+  set E := ∑ z, μ z * d₂ (z.1, z.2.1) (f₂ z.2.2 z.1) with hE
   have hE0 : 0 ≤ E := sum_nonneg fun z _ => mul_nonneg (hμ.nonneg z) (hd _ _)
-  have hpt : ∀ ω : Fin n → α₁ × α₂, seqDistortion d₂ (fun i => (ω i).2)
+  have hpt : ∀ ω : Fin n → α₁ × α₂, seqDistortion d₂ ω
       (((B.proto spk μ ε₂ εd).code f₁ f₂).dec₂ (fun i => (ω i).1)
         (((B.proto spk μ ε₂ εd).code f₁ f₂).trans (fun i => (ω i).1) fun i => (ω i).2)) ≤
       (1 + ε) * E + maxDistortion d₂ * (if B.Good spk μ ε₂ εd q ε ω then 0 else 1) := fun ω => by
@@ -599,28 +599,28 @@ theorem KBook.distortion₂_le [Finite β₂] (B : KBook L M n υ) (hP : IsPMF P
       obtain ⟨h₁, h₂⟩ := (B.proto spk μ ε₂ εd).view_code (f₁ := f₁) (f₂ := f₂)
         (x₁ := fstSeq ω) (x₂ := sndSeq ω) fun l => hg.2 l l.2
       have hs := sum_le_card_mul_of_mem_robustTypicalSet hg.1
-        (g := fun w : (α₁ × α₂) × (Fin q → υ) => d₂ w.1.2 (f₂ w.2 w.1.1)) fun w => hd _ _
+        (g := fun w : (α₁ × α₂) × (Fin q → υ) => d₂ w.1 (f₂ w.2 w.1.1)) fun w => hd _ _
       have e₁ : expect (dist μ (kState q)) (fun w : (α₁ × α₂) × (Fin q → υ) =>
-          d₂ w.1.2 (f₂ w.2 w.1.1)) = E := by
+          d₂ w.1 (f₂ w.2 w.1.1)) = E := by
         rw [expect]
         simp only [mul_comm (d₂ _ _)]
         rw [sum_dist_mul]
         refine sum_congr rfl fun z _ => ?_
         simp only [kState, truncU_top]
       rw [e₁] at hs
-      have e₂ : ∑ i, d₂ (ω i).2 (((B.proto spk μ ε₂ εd).code f₁ f₂).dec₂ (fun i => (ω i).1)
+      have e₂ : ∑ i, d₂ (ω i) (((B.proto spk μ ε₂ εd).code f₁ f₂).dec₂ (fun i => (ω i).1)
           (((B.proto spk μ ε₂ εd).code f₁ f₂).trans (fun i => (ω i).1) fun i => (ω i).2) i) =
-          ∑ i, (fun w : (α₁ × α₂) × (Fin q → υ) => d₂ w.1.2 (f₂ w.2 w.1.1))
+          ∑ i, (fun w : (α₁ × α₂) × (Fin q → υ) => d₂ w.1 (f₂ w.2 w.1.1))
             (zipSeq ω ((B.proto spk μ ε₂ εd).past (fstSeq ω) (sndSeq ω) q) i) := by
         refine sum_congr rfl fun i _ => ?_
-        change d₂ (ω i).2 (f₂ ((B.proto spk μ ε₂ εd).view₁ (fstSeq ω)
+        change d₂ (ω i) (f₂ ((B.proto spk μ ε₂ εd).view₁ (fstSeq ω)
           (((B.proto spk μ ε₂ εd).code f₁ f₂).trans (fstSeq ω) (sndSeq ω)) q i) (ω i).1) = _
         rw [h₁]
         rfl
       rw [e₂]
       linarith
     · rw [ite_eq_right hg, mul_one]
-      have h₁ := seqDistortion_le_maxDistortion d₂ hn (fun i => (ω i).2)
+      have h₁ := seqDistortion_le_maxDistortion d₂ hn ω
         (((B.proto spk μ ε₂ εd).code f₁ f₂).dec₂ (fun i => (ω i).1)
           (((B.proto spk μ ε₂ εd).code f₁ f₂).trans (fun i => (ω i).1) fun i => (ω i).2))
       have h₂ : 0 ≤ (1 + ε) * E := by positivity
@@ -727,8 +727,8 @@ omit [Fintype β₁] [Fintype β₂] in
 open Classical in
 /-- The code for one length. -/
 lemma exists_kaspi_code [Finite β₁]
-    [Finite β₂] [Nonempty β₁] [Nonempty β₂] (hP : IsPMF P) {d₁ : α₁ → β₁ → ℝ}
-    {d₂ : α₂ → β₂ → ℝ} (hd₁ : ∀ x y, 0 ≤ d₁ x y) (hd₂ : ∀ x y, 0 ≤ d₂ x y)
+    [Finite β₂] [Nonempty β₁] [Nonempty β₂] (hP : IsPMF P) {d₁ : α₁ × α₂ → β₁ → ℝ}
+    {d₂ : α₁ × α₂ → β₂ → ℝ} (hd₁ : ∀ x y, 0 ≤ d₁ x y) (hd₂ : ∀ x y, 0 ≤ d₂ x y)
     (hμ : IsKaspiLaw P spk μ) (f₁ : (Fin q → υ) → α₂ → β₁) (f₂ : (Fin q → υ) → α₁ → β₂)
     {δ η εt : ℝ} (hη : 0 ≤ η) (hεt : 0 ≤ εt) {εs : ℕ → ℝ} (hεsq : εs q = εt)
     {ε₂ : Fin q → ℝ} (hn0 : 0 < n)
@@ -741,15 +741,15 @@ lemma exists_kaspi_code [Finite β₁]
     ∃ (_ : ∀ l : Fin q, NeZero ⌈exp ((n : ℝ) * (kInfoS μ spk l - kInfoO μ spk l + 3 * δ))⌉₊)
       (c : KaspiCode spk (fun l => ⌈exp ((n : ℝ) * (kInfoS μ spk l - kInfoO μ spk l + 3 * δ))⌉₊)
         n α₁ α₂ β₁ β₂),
-      c.distortion₁ P d₁ ≤ (1 + εt) * ∑ z, μ z * d₁ z.1 (f₁ z.2.2 z.2.1) + maxDistortion d₁ *
+      c.distortion₁ P d₁ ≤ (1 + εt) * ∑ z, μ z * d₁ (z.1, z.2.1) (f₁ z.2.2 z.2.1) +
+        maxDistortion d₁ *
         (((q : ℝ) + 1) * η) ∧
-      c.distortion₂ P d₂ ≤ (1 + εt) * ∑ z, μ z * d₂ z.2.1 (f₂ z.2.2 z.1) + maxDistortion d₂ *
+      c.distortion₂ P d₂ ≤ (1 + εt) * ∑ z, μ z * d₂ (z.1, z.2.1) (f₂ z.2.2 z.1) + maxDistortion d₂ *
         (((q : ℝ) + 1) * η) := by
   have := Fintype.ofFinite β₁
   have := Fintype.ofFinite β₂
   obtain ⟨z₀⟩ : Nonempty (α₁ × α₂) := Fintype.card_pos_iff.1 (card_pos_of_isPMF hP)
-  have hneα₁ : Nonempty α₁ := ⟨z₀.1⟩
-  have hneα₂ : Nonempty α₂ := ⟨z₀.2⟩
+  have hneα : Nonempty (α₁ × α₂) := ⟨z₀⟩
   have hLne : ∀ l : Fin q, NeZero ⌈exp ((n : ℝ) * (kInfoS μ spk l + δ))⌉₊ := fun l =>
     ⟨(Nat.ceil_pos.2 (exp_pos _)).ne'⟩
   have hMne : ∀ l : Fin q, NeZero ⌈exp ((n : ℝ) * (kInfoS μ spk l - kInfoO μ spk l + 3 * δ))⌉₊ :=
@@ -772,16 +772,16 @@ omit [Fintype β₁] [Fintype β₂] in
 /-- **Theorem 4 of Lecture 21 of [elgamal2010], pages 21-22 and 21-23: achievability.** A rate pair
 strictly above the bounds of a law is achievable, by Wyner–Ziv coding in each round. -/
 theorem isAchievableKaspi_of_lt [Finite β₁]
-    [Finite β₂] [Nonempty β₁] [Nonempty β₂] (hP : IsPMF P) {d₁ : α₁ → β₁ → ℝ}
-    {d₂ : α₂ → β₂ → ℝ} (hd₁ : ∀ x y, 0 ≤ d₁ x y) (hd₂ : ∀ x y, 0 ≤ d₂ x y)
+    [Finite β₂] [Nonempty β₁] [Nonempty β₂] (hP : IsPMF P) {d₁ : α₁ × α₂ → β₁ → ℝ}
+    {d₂ : α₁ × α₂ → β₂ → ℝ} (hd₁ : ∀ x y, 0 ≤ d₁ x y) (hd₂ : ∀ x y, 0 ≤ d₂ x y)
     (hμ : IsKaspiLaw P spk μ) {f₁ : (Fin q → υ) → α₂ → β₁} {f₂ : (Fin q → υ) → α₁ → β₂} {D₁ D₂ : ℝ}
     {R : ℝ × ℝ}
     (hR₁ : I[fun z : α₁ × α₂ × (Fin q → υ) => z.1 : fun z => z.2.2 | fun z => z.2.1 ; μ] <
       R.1 * log 2)
     (hR₂ : I[fun z : α₁ × α₂ × (Fin q → υ) => z.2.1 : fun z => z.2.2 | fun z => z.1 ; μ] <
       R.2 * log 2)
-    (hE₁ : ∑ z, μ z * d₁ z.1 (f₁ z.2.2 z.2.1) ≤ D₁)
-      (hE₂ : ∑ z, μ z * d₂ z.2.1 (f₂ z.2.2 z.1) ≤ D₂) :
+    (hE₁ : ∑ z, μ z * d₁ (z.1, z.2.1) (f₁ z.2.2 z.2.1) ≤ D₁)
+      (hE₂ : ∑ z, μ z * d₂ (z.1, z.2.1) (f₂ z.2.2 z.1) ≤ D₂) :
     IsAchievableKaspi P spk d₁ d₂ D₁ D₂ R := by
   have := Fintype.ofFinite β₁
   have := Fintype.ofFinite β₂
@@ -789,8 +789,7 @@ theorem isAchievableKaspi_of_lt [Finite β₁]
   have hp := hμ.isPMF
   have hl2 := log_pos one_lt_two
   obtain ⟨z₀⟩ : Nonempty (α₁ × α₂) := Fintype.card_pos_iff.1 (card_pos_of_isPMF hP)
-  have hneα₁ : Nonempty α₁ := ⟨z₀.1⟩
-  have hneα₂ : Nonempty α₂ := ⟨z₀.2⟩
+  have hneα : Nonempty (α₁ × α₂) := ⟨z₀⟩
   obtain ⟨I₁, hI₁⟩ : ∃ I₁, I₁ = I[fun z : α₁ × α₂ × (Fin q → υ) => z.1 : fun z => z.2.2 |
     fun z => z.2.1 ; μ] := ⟨_, rfl⟩
   obtain ⟨I₂, hI₂⟩ : ∃ I₂, I₂ = I[fun z : α₁ × α₂ × (Fin q → υ) => z.2.1 : fun z => z.2.2 |
@@ -819,11 +818,12 @@ theorem isAchievableKaspi_of_lt [Finite β₁]
       rw [mul_div_cancel₀ _ hQ0.ne']
       linarith
   -- the parameters
-  obtain ⟨Bd, hBd⟩ : ∃ Bd, Bd = (∑ z, μ z * d₁ z.1 (f₁ z.2.2 z.2.1)) +
-      (∑ z, μ z * d₂ z.2.1 (f₂ z.2.2 z.1)) + maxDistortion d₁ + maxDistortion d₂ + 1 := ⟨_, rfl⟩
-  have hE₁0 : 0 ≤ ∑ z, μ z * d₁ z.1 (f₁ z.2.2 z.2.1) := sum_nonneg fun z _ =>
+  obtain ⟨Bd, hBd⟩ : ∃ Bd, Bd = (∑ z, μ z * d₁ (z.1, z.2.1) (f₁ z.2.2 z.2.1)) +
+      (∑ z, μ z * d₂ (z.1, z.2.1) (f₂ z.2.2 z.1)) + maxDistortion d₁ + maxDistortion d₂ + 1 :=
+        ⟨_, rfl⟩
+  have hE₁0 : 0 ≤ ∑ z, μ z * d₁ (z.1, z.2.1) (f₁ z.2.2 z.2.1) := sum_nonneg fun z _ =>
     mul_nonneg (hp.nonneg z) (hd₁ _ _)
-  have hE₂0 : 0 ≤ ∑ z, μ z * d₂ z.2.1 (f₂ z.2.2 z.1) := sum_nonneg fun z _ =>
+  have hE₂0 : 0 ≤ ∑ z, μ z * d₂ (z.1, z.2.1) (f₂ z.2.2 z.1) := sum_nonneg fun z _ =>
     mul_nonneg (hp.nonneg z) (hd₂ _ _)
   have hm₁0 := maxDistortion_nonneg hd₁
   have hm₂0 := maxDistortion_nonneg hd₂
@@ -895,8 +895,8 @@ omit [Fintype β₁] [Fintype β₂] in
 /-- **Theorem 4 of Lecture 21 of [elgamal2010], page 21-22: the inner bound.** The region of a law
 is contained in the `q`-round rate–distortion region. -/
 theorem kaspiInner_subset_kaspiRegion [Finite β₁]
-    [Finite β₂] [Nonempty β₁] [Nonempty β₂] (hP : IsPMF P) {d₁ : α₁ → β₁ → ℝ}
-    {d₂ : α₂ → β₂ → ℝ} (hd₁ : ∀ x y, 0 ≤ d₁ x y) (hd₂ : ∀ x y, 0 ≤ d₂ x y) (D₁ D₂ : ℝ) :
+    [Finite β₂] [Nonempty β₁] [Nonempty β₂] (hP : IsPMF P) {d₁ : α₁ × α₂ → β₁ → ℝ}
+    {d₂ : α₁ × α₂ → β₂ → ℝ} (hd₁ : ∀ x y, 0 ≤ d₁ x y) (hd₂ : ∀ x y, 0 ≤ d₂ x y) (D₁ D₂ : ℝ) :
     kaspiInner P spk d₁ d₂ D₁ D₂ ⊆ kaspiRegion P spk d₁ d₂ D₁ D₂ := by
   have := Fintype.ofFinite β₁
   have := Fintype.ofFinite β₂
