@@ -448,4 +448,46 @@ theorem fano_sharp {k : ℕ} (hk : 0 < k) {Pe : ℝ} (h0 : 0 ≤ Pe) (h1 : Pe �
       field_simp
       ring
 
+/-- **`H(g(X)) ≤ H(X)`, the equality case (Lecture 2 of [elgamal2010]).** `H(g(X)) = H(X)` if and
+only if `g` is one-to-one on the support of `X`. -/
+theorem entropyRV_comp_eq_iff {Ω α β : Type*} [Fintype Ω] [Fintype α] [Fintype β] {μ : Ω → ℝ}
+    (hμ : IsPMF μ) (X : Ω → α) (f : α → β) :
+    H[f ∘ X ; μ] = H[X ; μ] ↔ Set.InjOn f {a | dist μ X a ≠ 0} := by
+  classical
+  have hsupp : ∀ ω, μ ω ≠ 0 → dist μ X (X ω) ≠ 0 := fun ω hω h => by
+    have h0 := (sum_eq_zero_iff_of_nonneg fun ω' _ => ?_).1 h ω (mem_univ ω)
+    · simp only [ite_true] at h0
+      exact hω h0
+    · split_ifs
+      exacts [hμ.nonneg ω', le_rfl]
+  have hsupp' : ∀ a, dist μ X a ≠ 0 → ∃ ω, μ ω ≠ 0 ∧ X ω = a := fun a ha => by
+    by_contra hn
+    push Not at hn
+    apply ha
+    refine sum_eq_zero fun ω _ => ?_
+    split_ifs with h
+    · by_contra hω
+      exact hn ω hω h
+    · rfl
+  have hchain : H[X ; μ] = H[f ∘ X ; μ] + H[X | f ∘ X ; μ] := by
+    have h1 := chain_rule hμ X (f ∘ X)
+    have h2 := chain_rule hμ (f ∘ X) X
+    rw [condEntropy_comp_self hμ, add_zero, entropyRV_pair_comm] at h1
+    linarith
+  have hiff : H[f ∘ X ; μ] = H[X ; μ] ↔ H[X | f ∘ X ; μ] = 0 := by
+    constructor <;> intro h <;> linarith
+  rw [hiff, condEntropy_eq_zero_iff hμ]
+  constructor
+  · rintro ⟨g, hg⟩ a ha b hb hab
+    obtain ⟨ω, hω, rfl⟩ := hsupp' a ha
+    obtain ⟨ω', hω', rfl⟩ := hsupp' b hb
+    rw [hg ω hω, hg ω' hω']
+    simp only [Function.comp_apply]
+    rw [hab]
+  · intro hinj
+    obtain ⟨ω₀⟩ : Nonempty Ω := Fintype.card_pos_iff.1 (card_pos_of_isPMF hμ)
+    have hα : Nonempty α := ⟨X ω₀⟩
+    refine ⟨Function.invFunOn f {a | dist μ X a ≠ 0}, fun ω hω => ?_⟩
+    exact (hinj.leftInvOn_invFunOn (hsupp ω hω)).symm
+
 end InfoTheory

@@ -18,6 +18,7 @@ subadditive and the conditional output entropy is additive; independent inputs a
 ## Main definitions
 
 * `prodChannel W₁ W₂`: the product channel.
+* `piChannel W`: the product of `d` channels.
 
 ## Main statements
 
@@ -25,6 +26,7 @@ subadditive and the conditional output entropy is additive; independent inputs a
 * `mutualInfoOf_prodChannel_le`: `I(X₁, X₂; Y₁, Y₂) ≤ I(X₁; Y₁) + I(X₂; Y₂)`.
 * `mutualInfoOf_prodDist_prodChannel`: equality for independent inputs.
 * `capacity_prodChannel`: **the product DMC (Lecture 3 of [elgamal2010])**, `C = C₁ + C₂`.
+* `capacity_piChannel`: the same for `d` channels, `C = ∑ⱼ Cⱼ`.
 
 ## References
 
@@ -148,5 +150,91 @@ theorem capacity_prodChannel [Nonempty α₁] [Nonempty α₂] (h₁ : IsChannel
     obtain ⟨p₂, hp₂, e₂⟩ := exists_capacity_eq h₂
     rw [← e₁, ← e₂, ← mutualInfoOf_prodDist_prodChannel hp₁ hp₂ h₁ h₂]
     exact mutualInfoOf_le_capacity (hp₁.prodDist hp₂) (h₁.prod h₂)
+
+section Relabel
+
+variable {α α' β β' : Type*} [Fintype α] [Fintype α'] [Fintype β] [Fintype β']
+
+/-- The capacity does not depend on the names of the inputs and of the outputs. -/
+theorem capacity_comp_equiv (e : α' ≃ α) (e' : β' ≃ β) {W : α → β → ℝ} (hW : IsChannel W) :
+    capacity (fun x y => W (e x) (e' y)) = capacity W := by
+  have hW' : IsChannel fun x y => W (e x) (e' y) := fun x =>
+    ⟨fun y => (hW _).nonneg _, by rw [e'.sum_comp (W (e x)), (hW _).sum_eq_one]⟩
+  have key : ∀ {p : α → ℝ}, IsPMF p →
+      mutualInfoOf (fun x => p (e x)) (fun x y => W (e x) (e' y)) = mutualInfoOf p W :=
+      fun {p} hp => by
+    have hp' : IsPMF fun x => p (e x) :=
+      ⟨fun _ => hp.nonneg _, by rw [e.sum_comp p, hp.sum_eq_one]⟩
+    rw [mutualInfoOf_eq hp' hW', mutualInfoOf_eq hp hW]
+    congr 1
+    · have ho : outDist (fun x => p (e x)) (fun x y => W (e x) (e' y)) = outDist p W ∘ e' := by
+        funext y
+        exact e.sum_comp fun a => p a * W a (e' y)
+      rw [ho]
+      exact entropy_comp_equiv e' _
+    · refine (e.sum_comp fun a => p a * entropy (W a ∘ e')).trans ?_
+      exact sum_congr rfl fun a _ => by rw [entropy_comp_equiv]
+  unfold capacity
+  congr 1
+  ext c
+  constructor
+  · rintro ⟨p, hp, rfl⟩
+    refine ⟨fun a => p (e.symm a), ⟨fun _ => hp.nonneg _, by
+      rw [e.symm.sum_comp p, hp.sum_eq_one]⟩, ?_⟩
+    have h := key (p := fun a => p (e.symm a)) ⟨fun _ => hp.nonneg _, by
+      rw [e.symm.sum_comp p, hp.sum_eq_one]⟩
+    simp only [Equiv.symm_apply_apply] at h
+    exact h.symm
+  · rintro ⟨p, hp, rfl⟩
+    exact ⟨fun x => p (e x), ⟨fun _ => hp.nonneg _, by rw [e.sum_comp p, hp.sum_eq_one]⟩, key hp⟩
+
+end Relabel
+
+section Pi
+
+universe u v
+
+/-- **Lecture 3 of [elgamal2010] (product DMC).** The product `∏ⱼ p(yⱼ | xⱼ)` of `d` channels. -/
+def piChannel {d : ℕ} {α : Fin d → Type u} {β : Fin d → Type v} (W : ∀ i, α i → β i → ℝ) :
+    (∀ i, α i) → (∀ i, β i) → ℝ :=
+  fun x y => ∏ i, W i (x i) (y i)
+
+/-- **Lecture 3 of [elgamal2010] (product DMC).** The capacity of the product of `d` discrete
+memoryless channels is the sum of their capacities. -/
+theorem capacity_piChannel : ∀ {d : ℕ} {α : Fin d → Type u} {β : Fin d → Type v}
+    [∀ i, Fintype (α i)] [∀ i, Fintype (β i)] [∀ i, Nonempty (α i)] {W : ∀ i, α i → β i → ℝ},
+    (∀ i, IsChannel (W i)) → IsChannel (piChannel W) ∧
+      capacity (piChannel W) = ∑ i, capacity (W i)
+  | 0, α, β, _, _, _, W, _ => by
+    have hC : IsChannel (piChannel W) := fun x => by
+      refine ⟨fun y => by simp [piChannel], ?_⟩
+      simp [piChannel]
+    refine ⟨hC, le_antisymm ?_ (by simpa using capacity_nonneg hC)⟩
+    simpa using capacity_le_log_card_input hC
+  | d + 1, α, β, _, _, _, W, hW => by
+    obtain ⟨hC, hc⟩ := capacity_piChannel (α := fun i => α i.succ) (β := fun i => β i.succ)
+      (W := fun i => W i.succ) fun i => hW i.succ
+    have hP := (hW 0).prod hC
+    have heq : ∀ x y, piChannel W (Fin.consEquiv α x) (Fin.consEquiv β y) =
+        prodChannel (W 0) (piChannel fun i => W i.succ) x y := fun x y => by
+      simp [piChannel, prodChannel, Fin.prod_univ_succ, Fin.consEquiv]
+    have hA : IsChannel (piChannel W) := fun x => by
+      have hx : x = Fin.consEquiv α ((Fin.consEquiv α).symm x) := by simp
+      rw [hx]
+      refine ⟨fun y => ?_, ?_⟩
+      · have hy : y = Fin.consEquiv β ((Fin.consEquiv β).symm y) := by simp
+        rw [hy, heq]
+        exact (hP _).nonneg _
+      · rw [← (Fin.consEquiv β).sum_comp]
+        simp only [heq]
+        exact (hP _).sum_eq_one
+    refine ⟨hA, ?_⟩
+    rw [Fin.sum_univ_succ, ← hc, ← capacity_prodChannel (hW 0) hC,
+      ← capacity_comp_equiv (Fin.consEquiv α) (Fin.consEquiv β) hA]
+    congr 1
+    funext x y
+    exact heq x y
+
+end Pi
 
 end InfoTheory

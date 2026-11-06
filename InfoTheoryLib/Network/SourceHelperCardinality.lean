@@ -27,6 +27,7 @@ sources exchanged, so that we can use the reduction of `RateDistortion.SideInfo`
 
 * `helperInfo_eq_sideRate`, `helperCond_eq_sideRate`: the two quantities as rates of `siLaw`.
 * `exists_helper_reduce`: **the bound**.
+* `convex_helperRegionBits`: the region is convex.
 * `helperRegionBits_eq_card`, `isClosed_helperRegionCardBits`, `helperOptimalRegionBits_eq_card`:
   **Theorem 2 of Lecture 11**, with the bound and no closure.
 
@@ -106,6 +107,36 @@ theorem exists_helper_reduce (hq : IsPMF q) {κ : β → 𝒰 → ℝ} (hκ : �
   refine ⟨κ', hκ', ?_, ?_⟩
   · rw [helperCond_eq_sideRate hq hκ', helperCond_eq_sideRate hq hκ, e₀, e₁]
   · rw [helperInfo_eq_sideRate, helperInfo_eq_sideRate, e₀]
+
+/-- **Lecture 11 of [elgamal2010].** The region of Theorem 2 is convex: a time-sharing variable is
+part of the auxiliary random variable. -/
+theorem convex_helperRegionBits (hq : IsPMF q) : Convex ℝ (helperRegionBits q) := by
+  have hl := log_pos one_lt_two
+  have hS := helperSwap_isPMF hq
+  rintro ⟨x₁, x₂⟩ ⟨k, κ, hκ, h₁, h₂⟩ ⟨y₁, y₂⟩ ⟨k', κ', hκ', h₃, h₄⟩ a b ha hb hab
+  simp only at h₁ h₂ h₃ h₄
+  obtain ⟨hC, e₀⟩ := sideRate_sumElim hS (show IsChannel κ from hκ) (show IsChannel κ' from hκ') ha
+    hb hab 0
+  obtain ⟨-, e₁⟩ := sideRate_sumElim hS (show IsChannel κ from hκ) (show IsChannel κ' from hκ') ha
+    hb hab 1
+  have eC := helperCond_eq_sideRate hq hC
+  have eI := helperInfo_eq_sideRate q (fun x => Sum.elim (fun u => a * κ x u) fun v => b * κ' x v)
+  have c₁ := helperCond_eq_sideRate hq hκ
+  have c₂ := helperCond_eq_sideRate hq hκ'
+  have i₁ := helperInfo_eq_sideRate q κ
+  have i₂ := helperInfo_eq_sideRate q κ'
+  refine mem_helperRegionBits_of_kernel hq hC ?_ ?_
+  · have h : a * (helperCond q κ / log 2) + b * (helperCond q κ' / log 2) ≤ a * x₁ + b * y₁ :=
+      add_le_add (mul_le_mul_of_nonneg_left h₁ ha) (mul_le_mul_of_nonneg_left h₃ hb)
+    refine le_trans (le_of_eq ?_) (by simpa using h)
+    rw [eC, e₀, e₁, c₁, c₂]
+    field_simp
+    linear_combination (-H[Prod.fst ; q]) * hab
+  · have h : a * (helperInfo q κ / log 2) + b * (helperInfo q κ' / log 2) ≤ a * x₂ + b * y₂ :=
+      add_le_add (mul_le_mul_of_nonneg_left h₂ ha) (mul_le_mul_of_nonneg_left h₄ hb)
+    refine le_trans (le_of_eq ?_) (by simpa using h)
+    rw [eI, e₀, i₁, i₂]
+    ring
 
 /-- **Theorem 2 of Lecture 11 of [elgamal2010], the region with the bound.** `R₁ ≥ H(X | U)`,
 `R₂ ≥ I(Y; U)` for some `p(u | y)` with `U` on `Fin K`, in bits. -/

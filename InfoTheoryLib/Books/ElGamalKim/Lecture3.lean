@@ -56,6 +56,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Shannon's channel coding theorem `C = max_{p(x)} I(X; Y)`: `opCapacityAvg_eq`, with
   `capacity` and `exists_capacity_eq` (`ChannelCoding.Capacity`).
 * The BSC, `C = 1 - H(p)`: `example_bsc` (here); the BEC, `C = 1 - p`: `example_bec` (here).
+* The product of `d` channels: `piChannel`, `capacity_comp_equiv`, `capacity_piChannel`
+  (`ChannelCoding.Product`).
+* The continuity of `C(B)` at the smallest cost: `continuousWithinAt_capacityCost`,
+  `continuousOn_capacityCost_Ici` (`ChannelCoding.Cost`).
 * The product DMC, `C = C₁ + C₂`: `prodChannel`, `capacity_prodChannel`
   (`ChannelCoding.Product`).
 * Achievability: `isAchievableRateAvg_of_lt`, derived from Cover and Thomas's random coding
@@ -152,10 +156,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   derived from Cover and Thomas's proof, which decodes with weak typicality and bounds the
   maximal probability of error. The proof of Theorem 2 uses the same decoder, restricted to
   robustly typical codewords (`ChannelCoding.Cost`).
-* The product DMC with `d > 2` components, as a separate statement; it follows by iterating the
-  case of two channels.
 * Achievability with linear codes for the BSC; error exponents.
-* The continuity of `C(B)` at the smallest cost `B = 0`.
 * Lemma 2 and its Appendix (the quantization argument `I([X]ⱼ; [Yⱼ]ₖ) → I(X; Y)`): Theorem 3
   is derived from Cover and Thomas's direct proof for Gaussian codebooks.
 * The Gaussian product channel with gains `g_j` as an operational theorem: only its information

@@ -42,6 +42,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### Lossless source coding with a helper
 * The codes: `HelperCode`, `IsAchievableHelperBits`, `helperOptimalRegionBits`
   (`Network.SourceHelper`).
+* The convexity of the region of Theorem 2: `sideRate_sumElim` (`RateDistortion.SideInfo`),
+  `convex_helperRegionBits` (`Network.SourceHelperCardinality`).
 * The bound `|U| ≤ |Y| + 1` and no closure: `exists_helper_reduce`, `helperRegionCardBits`,
   `helperRegionBits_eq_card`, `isClosed_helperRegionCardBits`, `helperOptimalRegionBits_eq_card`
   (`Network.SourceHelperCardinality`).
@@ -69,7 +71,6 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   matrix.
 * The remark on zero-error coding on page 11-19, and the extension to stationary ergodic sources on
   page 11-20.
-* The convexity of the region of Theorem 2.
 * Theorem 4, with `k` sources and a helper.
 
 ## Issues in the notes

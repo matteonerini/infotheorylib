@@ -30,6 +30,8 @@ in `B`.
 * `exists_capacityCost_eq`: the supremum defining `C(B)` is a maximum.
 * `monotoneOn_capacityCost`, `concaveOn_capacityCost`, `continuousOn_capacityCost`: `C(B)` is
   nondecreasing and concave for `B ≥ 0`, hence continuous for `B > 0`.
+* `continuousWithinAt_capacityCost`, `continuousOn_capacityCost_Ici`: `C(B)` is also continuous at
+  the smallest cost.
 * `ChannelCode.one_sub_avgErrProb_mul_log_le_capacityCost`: Fano's inequality and concavity give
   `(1 - P_e^(n)) log M ≤ log 2 + n C(B)` for every code satisfying the cost constraint.
 * `isAchievableRateCost_of_lt`: achievability, by random coding.
@@ -164,6 +166,59 @@ function. -/
 theorem continuousOn_capacityCost (hW : IsChannel W) (x₀ : α) :
     ContinuousOn (capacityCost W b) (Set.Ioi (b x₀)) := by
   simpa using (concaveOn_capacityCost hW x₀).continuousOn_interior
+
+/-- **Lecture 3 of [elgamal2010].** `C(B)` is continuous from the right at `B = b(x₀)`, in
+particular at the smallest cost. For `ε > 0`, the laws with `I(X; Y) ≥ C(b(x₀)) + ε` form a compact
+set, on which the cost has a minimum, and this minimum is larger than `b(x₀)`. -/
+theorem continuousWithinAt_capacityCost (hW : IsChannel W) (x₀ : α) :
+    ContinuousWithinAt (capacityCost W b) (Set.Ici (b x₀)) (b x₀) := by
+  classical
+  rw [Metric.continuousWithinAt_iff]
+  intro ε hε
+  set C₀ := capacityCost W b (b x₀) with hC₀
+  set K : Set (α → ℝ) := {p | IsPMF p} ∩ (fun p => mutualInfoOf p W) ⁻¹' Set.Ici (C₀ + ε) with hK
+  have hKcl : IsClosed K := (continuousOn_mutualInfoOf hW).preimage_isClosed_of_isClosed
+    isCompact_setOf_isPMF.isClosed isClosed_Ici
+  have hKc : IsCompact K := isCompact_setOf_isPMF.of_isClosed_subset hKcl Set.inter_subset_left
+  have hcont : Continuous fun p : α → ℝ => expect p b :=
+    continuous_finsetSum _ fun x _ => continuous_const.mul (continuous_apply x)
+  -- A threshold below which the value `C₀ + ε` is not reached.
+  obtain ⟨δ, hδ, hlt⟩ : ∃ δ > 0, ∀ p ∈ K, b x₀ + δ ≤ expect p b := by
+    rcases K.eq_empty_or_nonempty with he | hne
+    · exact ⟨1, one_pos, fun p hp => by simp [he] at hp⟩
+    · obtain ⟨p, hp, hmin⟩ := hKc.exists_isMinOn hne hcont.continuousOn
+      refine ⟨expect p b - b x₀, ?_, fun q hq => by
+        have := hmin hq
+        simp only [Set.mem_ofPred_eq] at this
+        linarith⟩
+      by_contra hn
+      have hle : expect p b ≤ b x₀ := by linarith
+      have h1 := mutualInfoOf_le_capacityCost hW hp.1 hle
+      have h2 : C₀ + ε ≤ mutualInfoOf p W := hp.2
+      linarith
+  refine ⟨δ, hδ, fun B hB hd => ?_⟩
+  have hB' : b x₀ ≤ B := hB
+  rw [Real.dist_eq, abs_of_nonneg (by linarith)] at hd
+  have hmono : C₀ ≤ capacityCost W b B :=
+    monotoneOn_capacityCost hW x₀ Set.self_mem_Ici hB hB'
+  obtain ⟨p, hp, hpB, heq⟩ := exists_capacityCost_eq hW hB'
+  have hup : capacityCost W b B < C₀ + ε := by
+    by_contra hn
+    push Not at hn
+    have hmem : p ∈ K := ⟨hp, by
+      change C₀ + ε ≤ mutualInfoOf p W
+      rwa [heq]⟩
+    have := hlt p hmem
+    linarith
+  rw [Real.dist_eq, abs_of_nonneg (by linarith)]
+  linarith
+
+/-- **Lecture 3 of [elgamal2010].** `C(B)` is continuous for `B ≥ b(x₀)`. -/
+theorem continuousOn_capacityCost_Ici (hW : IsChannel W) (x₀ : α) :
+    ContinuousOn (capacityCost W b) (Set.Ici (b x₀)) := fun B hB => by
+  rcases (show b x₀ ≤ B from hB).eq_or_lt with rfl | hlt
+  · exact continuousWithinAt_capacityCost hW x₀
+  · exact ((continuousOn_capacityCost hW x₀).continuousAt (Ioi_mem_nhds hlt)).continuousWithinAt
 
 /-! ### Codes satisfying the cost constraint -/
 

@@ -66,6 +66,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The chain rule for entropy and `H(Xⁿ) ≤ ∑ᵢ H(Xᵢ)` with equality iff independence:
   `chain_rule_entropy` (`Entropy.ChainRule`), `entropy_prefixRV_le_sum`,
   `entropy_prefixRV_eq_sum_iff` (`Entropy.Bounds`).
+* The equality case of `H(g(X)) ≤ H(X)`, when `g` is one-to-one on the support of `X`:
+  `entropyRV_comp_eq_iff` (`Entropy.Fano`).
+* The concavity of `h(X)` in the density: `integrable_negMulLog_mix`, `diffEntropy_mix_ge`
+  (`DifferentialEntropy.Basic`).
 * `H(g(X)) ≤ H(X)`, with equality if `g` is one-to-one: `entropyRV_comp_le`
   (`Entropy.Conditional`), `entropyRV_comp_injective` (`Entropy.Basic`).
 * Fano's inequality, `H(X|Y) ≤ H(Pₑ) + Pₑ log |𝒳| ≤ 1 + Pₑ log |𝒳|`: `fano_of_eq`, `fano_weak`
@@ -181,8 +185,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ## Not formalized
 
 * Conditioning on a general random variable `X ∼ F(x)`: conditioning variables are discrete.
-* The equality case of `H(g(X)) ≤ H(X)` when `g` is one-to-one only on the support of `X`.
-* The concavity of `h(X)` in the density; the maximum differential entropy lemma with the
+* The maximum differential entropy lemma with the
   conditional covariance `K_{X|Y}` of the MMSE estimate; the differential entropy rate.
 * The entropy power inequality (scalar, vector and conditional), as in Cover & Thomas.
 * Mutual information between a discrete and a continuous random variable, and the limit of

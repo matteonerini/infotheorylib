@@ -226,4 +226,68 @@ theorem diffEntropy_linearEquiv (μ : Measure E) [μ.IsAddHaarMeasure] {f : E �
   field_simp
   ring
 
+section Concavity
+
+variable {α : Type*} [MeasurableSpace α] {μ : Measure α} {f g : α → ℝ}
+
+/-- `-(x + y) log (x + y) ≤ -x log x - y log y`, for `x, y ≥ 0`. -/
+private lemma negMulLog_add_le {x y : ℝ} (hx : 0 ≤ x) (hy : 0 ≤ y) :
+    negMulLog (x + y) ≤ negMulLog x + negMulLog y := by
+  have key : ∀ {a b : ℝ}, 0 ≤ a → 0 ≤ b → a * log a ≤ a * log (a + b) := fun {a b} ha hb => by
+    rcases ha.eq_or_lt with rfl | ha'
+    · simp
+    · exact mul_le_mul_of_nonneg_left (log_le_log ha' (by linarith)) ha
+  have h₁ := key hx hy
+  have h₂ := key hy hx
+  rw [add_comm] at h₂
+  simp only [negMulLog]
+  nlinarith
+
+/-- A mixture of densities with integrable `f log f` has an integrable `f log f`. -/
+theorem integrable_negMulLog_mix (hf : IsPDF μ f) (hg : IsPDF μ g)
+    (hfi : Integrable (fun x => negMulLog (f x)) μ) (hgi : Integrable (fun x => negMulLog (g x)) μ)
+    {a b : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) (hab : a + b = 1) :
+    Integrable (fun x => negMulLog (a * f x + b * g x)) μ := by
+  have hup : Integrable (fun x => a * negMulLog (f x) + f x * negMulLog a +
+      (b * negMulLog (g x) + g x * negMulLog b)) μ :=
+    ((hfi.const_mul a).add (hf.integrable.mul_const _)).add
+      ((hgi.const_mul b).add (hg.integrable.mul_const _))
+  have hlow : Integrable (fun x => a * negMulLog (f x) + b * negMulLog (g x)) μ :=
+    (hfi.const_mul a).add (hgi.const_mul b)
+  have hm : Measurable fun x => a * f x + b * g x :=
+    (hf.measurable.const_mul a).add (hg.measurable.const_mul b)
+  have hmn : AEStronglyMeasurable (fun x => negMulLog (a * f x + b * g x)) μ :=
+    (continuous_negMulLog.measurable.comp hm).aestronglyMeasurable
+  refine (hup.norm.add hlow.norm).mono' hmn (Filter.Eventually.of_forall fun x => ?_)
+  have h1 := negMulLog_add_le (mul_nonneg ha (hf.nonneg x)) (mul_nonneg hb (hg.nonneg x))
+  rw [negMulLog_mul, negMulLog_mul] at h1
+  simp only [Real.norm_eq_abs, Pi.add_apply]
+  have h2 := concaveOn_negMulLog.2 (x := f x) (y := g x) (hf.nonneg x) (hg.nonneg x) ha hb hab
+  simp only [smul_eq_mul] at h2
+  rw [abs_le]
+  constructor
+  · linarith [neg_abs_le (a * negMulLog (f x) + b * negMulLog (g x)),
+      abs_nonneg (a * negMulLog (f x) + f x * negMulLog a +
+        (b * negMulLog (g x) + g x * negMulLog b))]
+  · linarith [le_abs_self (a * negMulLog (f x) + f x * negMulLog a +
+        (b * negMulLog (g x) + g x * negMulLog b)),
+      abs_nonneg (a * negMulLog (f x) + b * negMulLog (g x))]
+
+/-- **Lecture 2 of [elgamal2010]: `h(X)` is concave in the density.** For densities `f` and `g` with
+integrable `f log f`, `g log g`, the differential entropy of the mixture is at least the mean of
+the differential entropies. -/
+theorem diffEntropy_mix_ge (hf : IsPDF μ f) (hg : IsPDF μ g)
+    (hfi : Integrable (fun x => negMulLog (f x)) μ) (hgi : Integrable (fun x => negMulLog (g x)) μ)
+    {a b : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) (hab : a + b = 1) :
+    a * diffEntropy μ f + b * diffEntropy μ g ≤ diffEntropy μ fun x => a * f x + b * g x := by
+  simp only [diffEntropy]
+  rw [← integral_const_mul, ← integral_const_mul, ← integral_add (hfi.const_mul a)
+    (hgi.const_mul b)]
+  refine integral_mono ((hfi.const_mul a).add (hgi.const_mul b))
+    (integrable_negMulLog_mix hf hg hfi hgi ha hb hab) fun x => ?_
+  have h2 := concaveOn_negMulLog.2 (x := f x) (y := g x) (hf.nonneg x) (hg.nonneg x) ha hb hab
+  simpa only [smul_eq_mul] using h2
+
+end Concavity
+
 end InfoTheory

@@ -61,6 +61,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ### Gaussian vector MAC (formulas)
 * **The region of Theorem 3**: `gvMACRates`, `gvMACRegion` (`Network.GaussianVector`).
+* The regions are closed: `isCompact_posSemidef_trace_le`, `isClosed_gvMACRegion`,
+  `isClosed_gvSumMACRegion` (`Network.GaussianVectorClosed`).
 * The corner points: `corner₁_mem_gvMACRates`, `corner₂_mem_gvMACRates`, by `det_add_one_add_le`.
 * The fixed points of iterative water-filling: `log_det_mac_le_of_kkt`.
 
@@ -98,7 +100,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The capacity region of the Gaussian vector BC (the second Theorem 4): the coding theorem of the
   dirty paper region, Lemma 3 as a statement about codes, and Lemma 4, which needs the vector
   entropy power inequality. We have the matrix facts that these proofs use.
-* The closedness of the dual MAC region, its boundary points as solutions of the optimization
+* The boundary points of the dual MAC region as solutions of the optimization
   problem, the uniqueness of the supporting hyperplane, and more than two receivers.
 * The figures on pages 10-40, 10-43 and 10-45.
 

@@ -424,6 +424,43 @@ theorem exists_side_reduce₂ (hP : IsPMF P) (hq : IsChannel q) {N : ℕ}
   simp only [Bool.false_eq_true, ite_false, ite_true] at m₀ m₁
   exact ⟨q', hq'P, by rw [e, e', m₀], by rw [e, e', m₁]⟩
 
+/-- **Time sharing.** A mixture of two kernels on the disjoint union of their alphabets has the mean
+of their rates. -/
+theorem sideRate_sumElim {υ₁ υ₂ : Type*} [Fintype υ₁] [Fintype υ₂] (hP : IsPMF P)
+    {q₁ : α → υ₁ → ℝ} {q₂ : α → υ₂ → ℝ} (h₁ : IsChannel q₁) (h₂ : IsChannel q₂) {a b : ℝ}
+    (ha : 0 ≤ a) (hb : 0 ≤ b) (hab : a + b = 1) (θ : ℝ) :
+    IsChannel (fun x => Sum.elim (fun u => a * q₁ x u) fun v => b * q₂ x v) ∧
+      sideRate θ P (fun x => Sum.elim (fun u => a * q₁ x u) fun v => b * q₂ x v) =
+        a * sideRate θ P q₁ + b * sideRate θ P q₂ := by
+  obtain ⟨W, hW, hPW⟩ := exists_side_channel hP
+  obtain ⟨w₁, r₁, hw₁, hr₁, hrep₁⟩ := exists_side_rep hP h₁
+  obtain ⟨w₂, r₂, hw₂, hr₂, hrep₂⟩ := exists_side_rep hP h₂
+  have hC : IsChannel (fun x => Sum.elim (fun u => a * q₁ x u) fun v => b * q₂ x v) := fun x => by
+    refine ⟨?_, ?_⟩
+    · rintro (u | v)
+      · exact mul_nonneg ha ((h₁ x).nonneg u)
+      · exact mul_nonneg hb ((h₂ x).nonneg v)
+    · simp only [Fintype.sum_sum_type, Sum.elim_inl, Sum.elim_inr, ← mul_sum, (h₁ x).sum_eq_one,
+        (h₂ x).sum_eq_one, mul_one, hab]
+  refine ⟨hC, ?_⟩
+  have e := sideRate_eq_of_rep (w := Sum.elim (fun u => a * w₁ u) fun v => b * w₂ v)
+    (r := Sum.elim r₁ r₂) hP hC hW hPW (by
+      rintro (u | v)
+      · exact mul_nonneg ha (hw₁ u)
+      · exact mul_nonneg hb (hw₂ v)) (by
+      rintro (u | v)
+      · exact hr₁ u
+      · exact hr₂ v) (by
+      rintro x (u | v)
+      · simp only [Sum.elim_inl]
+        linear_combination a * hrep₁ x u
+      · simp only [Sum.elim_inr]
+        linear_combination b * hrep₂ x v) θ
+  rw [e, sideRate_eq_of_rep hP h₁ hW hPW hw₁ hr₁ hrep₁ θ,
+    sideRate_eq_of_rep hP h₂ hW hPW hw₂ hr₂ hrep₂ θ, Fintype.sum_sum_type]
+  simp only [Sum.elim_inl, Sum.elim_inr, mul_assoc, ← mul_sum]
+  linear_combination (-(entropy (margFst P) - θ * entropy (margSnd P))) * hab
+
 /-- The cardinality bound for a distortion measure: `|𝒰'| = |𝒳| + 1`. -/
 theorem exists_side_reduce₁ (hP : IsPMF P) (hq : IsChannel q) (θ : ℝ) (d : α → β → ℝ)
     (f : υ → γ → β) :

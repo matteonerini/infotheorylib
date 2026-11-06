@@ -214,6 +214,7 @@ public import InfoTheoryLib.Network.GaussianNetCode
 public import InfoTheoryLib.Network.GaussianNetTDM
 public import InfoTheoryLib.Network.GaussianVector
 public import InfoTheoryLib.Network.GaussianVectorBC
+public import InfoTheoryLib.Network.GaussianVectorClosed
 public import InfoTheoryLib.Network.GrayWyner
 public import InfoTheoryLib.Network.GrayWynerConverse
 public import InfoTheoryLib.Network.GuptaKumar
