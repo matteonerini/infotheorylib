@@ -14,8 +14,8 @@ by topic, following two texts:
 
 ## Status
 
-All 17 chapters of Cover & Thomas and Lectures 1–24 of El Gamal & Kim are formalized, with some
-omissions. Each [chapter](InfoTheoryLib/Books/CoverThomas/) and
+All 17 chapters of Cover & Thomas and Lectures 1–24 and Appendix A of El Gamal & Kim are
+formalized, with some omissions. Each [chapter](InfoTheoryLib/Books/CoverThomas/) and
 [lecture](InfoTheoryLib/Books/ElGamalKim/) file indexes what is proved and has a "Not formalized"
 section listing what is not. Many lecture files also record the differences from the notes and the
 errors found in them.

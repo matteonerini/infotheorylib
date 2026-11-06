@@ -97,8 +97,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ## Not formalized
 
-* Theorem 3, the cardinality bound `|Q| ≤ 2`, and the Fenchel–Eggleston–Carathéodory theorem of
-  Appendix A. The capacity region is formalized as the closure of the region with an unbounded
+* Theorem 3, the cardinality bound `|Q| ≤ 2`. The Fenchel–Eggleston–Carathéodory theorem of Appendix
+  A is `exists_finset_of_mem_convexHull`, but it is not applied here. The capacity region is
+  formalized as the closure of the region with an unbounded
   time-sharing variable (`macCapacityRegion_eq_closure_macRegion`); Cover and Thomas's planar
   Carathéodory theorem is `exists_convex_combination_le_three` (`Network.MACCapacity`).
 * Successive cancellation decoding and coded time sharing as achievability proofs: the region is

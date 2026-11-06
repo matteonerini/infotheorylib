@@ -22,6 +22,7 @@ public import InfoTheoryLib.Books.CoverThomas.Chapter6
 public import InfoTheoryLib.Books.CoverThomas.Chapter7
 public import InfoTheoryLib.Books.CoverThomas.Chapter8
 public import InfoTheoryLib.Books.CoverThomas.Chapter9
+public import InfoTheoryLib.Books.ElGamalKim.AppendixA
 public import InfoTheoryLib.Books.ElGamalKim.Lecture1
 public import InfoTheoryLib.Books.ElGamalKim.Lecture10
 public import InfoTheoryLib.Books.ElGamalKim.Lecture11
@@ -82,6 +83,8 @@ public import InfoTheoryLib.Entropy.Conditional
 public import InfoTheoryLib.Entropy.Fano
 public import InfoTheoryLib.Entropy.MrsGerber
 public import InfoTheoryLib.ForMathlib.BinaryMatrix
+public import InfoTheoryLib.ForMathlib.ConvexHessian
+public import InfoTheoryLib.ForMathlib.FenchelEggleston
 public import InfoTheoryLib.ForMathlib.FlowDecomposition
 public import InfoTheoryLib.ForMathlib.Integral
 public import InfoTheoryLib.ForMathlib.Log
@@ -91,6 +94,7 @@ public import InfoTheoryLib.ForMathlib.MatrixSVD
 public import InfoTheoryLib.ForMathlib.MaxFlow
 public import InfoTheoryLib.ForMathlib.PolyFiniteField
 public import InfoTheoryLib.ForMathlib.SupportLemma
+public import InfoTheoryLib.ForMathlib.SupportingHyperplane
 public import InfoTheoryLib.ForMathlib.WeakLaw
 public import InfoTheoryLib.Gambling.DataCompression
 public import InfoTheoryLib.Gambling.DependentRaces
