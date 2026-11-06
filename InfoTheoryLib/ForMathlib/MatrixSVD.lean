@@ -273,10 +273,12 @@ lemma log_det_le_trace_sub_card' {M : Matrix n n ℝ} (hM : M.PosDef) :
   rw [log_prod fun i _ => (hM.eigenvalues_pos i).ne']
   exact log_sum_le hM.eigenvalues_pos
 
-/-- **The tangent bound for `log |A|`:** for positive definite `A` and `B`,
-`log |B| - log |A| ≤ tr(A⁻¹ B) - dim`. -/
-theorem log_det_le_trace_sub_card {A B : Matrix n n ℝ} (hA : A.PosDef) (hB : B.PosDef) :
-    log B.det - log A.det ≤ (A⁻¹ * B).trace - Fintype.card n := by
+/-- **Whitening.** For positive definite `A` and `B`, the matrix `M = S B Sᵀ` with `S A Sᵀ = I` is
+positive definite, with `log |M| = log |B| - log |A|` and `tr M = tr(A⁻¹ B)`, and `M = I` only if
+`B = A`. -/
+lemma exists_whitened {A B : Matrix n n ℝ} (hA : A.PosDef) (hB : B.PosDef) :
+    ∃ M : Matrix n n ℝ, M.PosDef ∧ log B.det - log A.det = log M.det ∧ (A⁻¹ * B).trace = M.trace ∧
+      (M = 1 → B = A) := by
   obtain ⟨S, hS⟩ := exists_mul_mul_transpose_eq_one hA
   have hdet := congrArg det hS
   rw [det_mul_mul_transpose, det_one] at hdet
@@ -286,28 +288,37 @@ theorem log_det_le_trace_sub_card {A B : Matrix n n ℝ} (hA : A.PosDef) (hB : B
     refine (posSemidef_mul_mul_transpose hB.posSemidef S).posDef_iff_det_ne_zero.2 ?_
     rw [det_mul_mul_transpose]
     exact mul_ne_zero (pow_ne_zero 2 hSdet) hB.det_pos.ne'
+  have hSS : S⁻¹ * S = 1 := nonsing_inv_mul S hSu
   have hAinv : A⁻¹ = Sᵀ * S := by
     have h1 : A * (Sᵀ * S) = 1 := by
       have h2 : S⁻¹ * (S * A * Sᵀ) * S = S⁻¹ * 1 * S := by rw [hS]
-      have hSS : S⁻¹ * S = 1 := nonsing_inv_mul S hSu
       calc A * (Sᵀ * S) = (S⁻¹ * S) * A * Sᵀ * S := by rw [hSS]; simp only [Matrix.mul_assoc,
             Matrix.one_mul]
         _ = S⁻¹ * (S * A * Sᵀ) * S := by simp only [Matrix.mul_assoc]
         _ = 1 := by rw [h2, Matrix.mul_one, hSS]
     exact inv_eq_right_inv h1
-  have h := log_det_le_trace_sub_card' hM
-  rw [det_mul_mul_transpose, log_mul (pow_ne_zero 2 hSdet) hB.det_pos.ne',
-    Matrix.mul_assoc, trace_mul_comm, Matrix.mul_assoc, trace_mul_comm] at h
-  have e : (S ^ 0 : Matrix n n ℝ) = 1 := pow_zero S
   have hlog : log (S.det ^ 2) = - log A.det := by
     have : S.det ^ 2 = (A.det)⁻¹ := eq_inv_of_mul_eq_one_left hdet
     rw [this, log_inv]
-  rw [hlog] at h
-  rw [hAinv]
-  have e2 : (Sᵀ * S * B).trace = (B * Sᵀ * S).trace := by
-    rw [trace_mul_comm, Matrix.mul_assoc]
-  simp only [Matrix.mul_assoc] at h e2 ⊢
-  linarith
+  refine ⟨S * B * Sᵀ, hM, ?_, ?_, fun h1 => ?_⟩
+  · rw [det_mul_mul_transpose, log_mul (pow_ne_zero 2 hSdet) hB.det_pos.ne', hlog]
+    ring
+  · rw [hAinv, Matrix.mul_assoc, trace_mul_comm]
+  · have hSt : IsUnit Sᵀ.det := by rwa [det_transpose]
+    have hc : S * B * Sᵀ = S * A * Sᵀ := by rw [h1, hS]
+    have hc₂ : S * B = S * A := by
+      have := congrArg (· * (Sᵀ)⁻¹) hc
+      simpa [Matrix.mul_assoc, mul_nonsing_inv _ hSt] using this
+    have := congrArg (S⁻¹ * ·) hc₂
+    simpa [← Matrix.mul_assoc, hSS] using this
+
+/-- **The tangent bound for `log |A|`:** for positive definite `A` and `B`,
+`log |B| - log |A| ≤ tr(A⁻¹ B) - dim`. -/
+theorem log_det_le_trace_sub_card {A B : Matrix n n ℝ} (hA : A.PosDef) (hB : B.PosDef) :
+    log B.det - log A.det ≤ (A⁻¹ * B).trace - Fintype.card n := by
+  obtain ⟨M, hM, h₁, h₂, -⟩ := exists_whitened hA hB
+  rw [h₁, h₂]
+  exact log_det_le_trace_sub_card' hM
 
 /-- **Concavity of `log |A|`** on positive definite matrices. -/
 theorem concaveOn_log_det : ConcaveOn ℝ {A : Matrix n n ℝ | A.PosDef} fun A => log A.det := by

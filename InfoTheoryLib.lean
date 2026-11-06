@@ -26,6 +26,7 @@ public import InfoTheoryLib.Books.ElGamalKim.AppendixA
 public import InfoTheoryLib.Books.ElGamalKim.AppendixB
 public import InfoTheoryLib.Books.ElGamalKim.AppendixC
 public import InfoTheoryLib.Books.ElGamalKim.AppendixD
+public import InfoTheoryLib.Books.ElGamalKim.AppendixE
 public import InfoTheoryLib.Books.ElGamalKim.Lecture1
 public import InfoTheoryLib.Books.ElGamalKim.Lecture10
 public import InfoTheoryLib.Books.ElGamalKim.Lecture11
@@ -87,6 +88,7 @@ public import InfoTheoryLib.Entropy.Fano
 public import InfoTheoryLib.Entropy.MrsGerber
 public import InfoTheoryLib.ForMathlib.BinaryMatrix
 public import InfoTheoryLib.ForMathlib.ConvexHessian
+public import InfoTheoryLib.ForMathlib.ConvexOptimization
 public import InfoTheoryLib.ForMathlib.FenchelEggleston
 public import InfoTheoryLib.ForMathlib.FlowDecomposition
 public import InfoTheoryLib.ForMathlib.FourierMotzkin
@@ -112,6 +114,7 @@ public import InfoTheoryLib.GaussianChannel.Capacity
 public import InfoTheoryLib.GaussianChannel.Code
 public import InfoTheoryLib.GaussianChannel.ColoredNoise
 public import InfoTheoryLib.GaussianChannel.Converse
+public import InfoTheoryLib.GaussianChannel.DetMaximization
 public import InfoTheoryLib.GaussianChannel.Fading
 public import InfoTheoryLib.GaussianChannel.FadingCompound
 public import InfoTheoryLib.GaussianChannel.Feedback
