@@ -14,7 +14,7 @@ by topic, following two texts:
 
 ## Status
 
-All 17 chapters of Cover & Thomas and Lectures 1–22 of El Gamal & Kim are formalized, with some
+All 17 chapters of Cover & Thomas and Lectures 1–23 of El Gamal & Kim are formalized, with some
 omissions. Each [chapter](InfoTheoryLib/Books/CoverThomas/) and
 [lecture](InfoTheoryLib/Books/ElGamalKim/) file indexes what is proved and has a "Not formalized"
 section listing what is not. Many lecture files also record the differences from the notes and the
@@ -61,6 +61,8 @@ with theorem numbers, and EGK is El Gamal & Kim, with lecture numbers.
 | Compress–forward lower bound for the relay channel (EGK Lecture 17) | `isAchievableRC_compressForward` | `Network.RelayCF` |
 | Noisy network coding (EGK Lecture 19) | `isAchievableMN_nnc`, `isAchievableDMN_nnc` | `Network.NNCTheorem` |
 | Orlitsky–Roche theorem (EGK Lecture 22) | `losslessFunBits_eq_condGraphEntropy` | `RateDistortion.GraphEntropy` |
+| Secrecy capacity of the wiretap channel (EGK Lecture 23) | `wiretapCapacity_eq` | `Secrecy.WiretapAchievability` |
+| Multi-node secret key capacity (EGK Lecture 23) | `multiKeyCapacity_eq` | `Secrecy.KeyMultiNodeCapacity` |
 
 ## Getting started
 
@@ -135,6 +137,7 @@ InfoTheoryLib/
   DifferentialEntropy/    densities, differential entropy, the Gaussian distribution
   GaussianChannel/        Gaussian channels, water-filling, feedback, vector channels, fading
   RateDistortion/         rate distortion theory, with side information
+  Secrecy/                secrecy systems, the wiretap channel, secret key agreement
   Statistics/             sufficient statistics, the method of types, large deviations, testing
   MaxEntropy/             maximum entropy distributions and Burg's theorem
   Kolmogorov/             Kolmogorov complexity and universal probability
