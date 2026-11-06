@@ -23,6 +23,7 @@ public import InfoTheoryLib.Books.CoverThomas.Chapter7
 public import InfoTheoryLib.Books.CoverThomas.Chapter8
 public import InfoTheoryLib.Books.CoverThomas.Chapter9
 public import InfoTheoryLib.Books.ElGamalKim.AppendixA
+public import InfoTheoryLib.Books.ElGamalKim.AppendixB
 public import InfoTheoryLib.Books.ElGamalKim.Lecture1
 public import InfoTheoryLib.Books.ElGamalKim.Lecture10
 public import InfoTheoryLib.Books.ElGamalKim.Lecture11
@@ -307,9 +308,14 @@ public import InfoTheoryLib.Probability.Channel
 public import InfoTheoryLib.Probability.Conditional
 public import InfoTheoryLib.Probability.Event
 public import InfoTheoryLib.Probability.FinitePMF
+public import InfoTheoryLib.Probability.FunctionalRepresentation
+public import InfoTheoryLib.Probability.GaussianDensity
+public import InfoTheoryLib.Probability.GaussianVector
 public import InfoTheoryLib.Probability.IID
 public import InfoTheoryLib.Probability.Independence
 public import InfoTheoryLib.Probability.Jensen
+public import InfoTheoryLib.Probability.MMSE
+public import InfoTheoryLib.Probability.ProbabilityBounds
 public import InfoTheoryLib.Probability.RandomVector
 public import InfoTheoryLib.Probability.Variance
 public import InfoTheoryLib.Probability.WeakLaw
