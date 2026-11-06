@@ -99,7 +99,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   binary skew-symmetric channel on pages 9-42 to 9-44.
 * The extensions to more than 2 receivers on pages 9-45 to 9-52: the multivariate covering lemma,
   the extended Marton inner bound and the proposition on 3-receiver degraded message sets.
-* The bounds on the cardinalities of the auxiliary random variables.
+* The bounds on the cardinalities of the auxiliary random variables, except for the sum rate of
+  the Marton inner bound: `exists_marton_card` (`Network.MartonCardinality`, Appendix C).
 * The description of the capacity region of the Blackwell channel as a union over `α ∈ [1/2, 2/3]`:
   we have the capacity region as the closure of the region over all `p(x)`, the rate pairs for each
   `α`, the bound on the sum rate and the corner of the figure.

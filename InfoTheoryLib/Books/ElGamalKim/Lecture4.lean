@@ -97,11 +97,11 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ## Not formalized
 
-* Theorem 3, the cardinality bound `|Q| ≤ 2`. The Fenchel–Eggleston–Carathéodory theorem of Appendix
-  A is `exists_finset_of_mem_convexHull`, but it is not applied here. The capacity region is
-  formalized as the closure of the region with an unbounded
-  time-sharing variable (`macCapacityRegion_eq_closure_macRegion`); Cover and Thomas's planar
-  Carathéodory theorem is `exists_convex_combination_le_three` (`Network.MACCapacity`).
+* Theorem 3, the cardinality bound `|Q| ≤ 2`. Appendix C gives `|Q| ≤ 3`, and then no closure is
+  needed: `macCapacityRegion_eq_card` (`Network.MACCardinality`). The capacity region is also
+  formalized as the closure of the region with an unbounded time-sharing variable
+  (`macCapacityRegion_eq_closure_macRegion`); Cover and Thomas's planar Carathéodory theorem is
+  `exists_convex_combination_le_three` (`Network.MACCapacity`).
 * Successive cancellation decoding and coded time sharing as achievability proofs: the region is
   achieved by simultaneous decoding and time sharing.
 * The remark on the maximal probability of error, the push-to-talk MAC, and the computational

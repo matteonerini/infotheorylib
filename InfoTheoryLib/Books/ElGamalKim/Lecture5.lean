@@ -115,8 +115,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 * The common message: the code with `M₀`, the triples `(R₀, R₁, R₂)`, the common-message capacity
   `C₀`, the degraded message sets, and the extension on page 5-46.
-* The cardinality bounds on `U` (Appendix C): the regions use an unbounded `Fin k`, so Theorem 2 is
-  stated with a closure.
+* The cardinality bounds on `U` for less noisy and more capable channels: these regions use an
+  unbounded `Fin k` and are stated with a closure. For the degraded DM-BC, Theorem 2 has the bound
+  and no closure: `bcCapacityRegionBits_eq_card` (`Network.BCCardinality`, Appendix C).
 * Theorem 3 as a coding theorem for the AWGN-BC. Its converse needs the conditional vector entropy
   power inequality, which the library does not have.
 * The explicit `U ⊕ V` scheme for the BS-BC and successive cancellation decoding; the region is

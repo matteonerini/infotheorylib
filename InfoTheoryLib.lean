@@ -24,6 +24,7 @@ public import InfoTheoryLib.Books.CoverThomas.Chapter8
 public import InfoTheoryLib.Books.CoverThomas.Chapter9
 public import InfoTheoryLib.Books.ElGamalKim.AppendixA
 public import InfoTheoryLib.Books.ElGamalKim.AppendixB
+public import InfoTheoryLib.Books.ElGamalKim.AppendixC
 public import InfoTheoryLib.Books.ElGamalKim.Lecture1
 public import InfoTheoryLib.Books.ElGamalKim.Lecture10
 public import InfoTheoryLib.Books.ElGamalKim.Lecture11
@@ -153,9 +154,11 @@ public import InfoTheoryLib.MutualInformation.ChainRule
 public import InfoTheoryLib.MutualInformation.Conditional
 public import InfoTheoryLib.MutualInformation.Convexity
 public import InfoTheoryLib.MutualInformation.CsiszarSum
+public import InfoTheoryLib.Network.BC3Cardinality
 public import InfoTheoryLib.Network.BCBits
 public import InfoTheoryLib.Network.BCBounds
 public import InfoTheoryLib.Network.BCCapacity
+public import InfoTheoryLib.Network.BCCardinality
 public import InfoTheoryLib.Network.BCClasses
 public import InfoTheoryLib.Network.BCCutSet
 public import InfoTheoryLib.Network.BCDegraded
@@ -178,6 +181,7 @@ public import InfoTheoryLib.Network.BergerTungOuter
 public import InfoTheoryLib.Network.BergerTungSharing
 public import InfoTheoryLib.Network.BinarySymmetricBC
 public import InfoTheoryLib.Network.Broadcast
+public import InfoTheoryLib.Network.CardinalityBound
 public import InfoTheoryLib.Network.CascadeComputing
 public import InfoTheoryLib.Network.CommonInformation
 public import InfoTheoryLib.Network.ComputeMAC
@@ -223,6 +227,7 @@ public import InfoTheoryLib.Network.MACAchievability
 public import InfoTheoryLib.Network.MACBits
 public import InfoTheoryLib.Network.MACBounds
 public import InfoTheoryLib.Network.MACCapacity
+public import InfoTheoryLib.Network.MACCardinality
 public import InfoTheoryLib.Network.MACCode
 public import InfoTheoryLib.Network.MACConverse
 public import InfoTheoryLib.Network.MACFeedback
@@ -238,6 +243,7 @@ public import InfoTheoryLib.Network.MDLine
 public import InfoTheoryLib.Network.MDNetwork
 public import InfoTheoryLib.Network.MDOuter
 public import InfoTheoryLib.Network.MDTriangle
+public import InfoTheoryLib.Network.MartonCardinality
 public import InfoTheoryLib.Network.MultiWay
 public import InfoTheoryLib.Network.MultiWayExamples
 public import InfoTheoryLib.Network.MultipleDescriptions

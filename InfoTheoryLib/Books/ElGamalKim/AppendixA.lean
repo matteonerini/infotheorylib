@@ -79,9 +79,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ## Not formalized
 
-Nothing in the appendix is left out. The theorem is not yet applied to the cardinality bounds that
-the notes derive from it: Theorem 3 of Lecture 4 and the bound `|𝒰| ≤ |𝒳| + 1` of Lecture 12 are on
-the "Not formalized" lists of those lectures, and `RateDistortion.SideInfo` and
+Nothing in the appendix is left out. Appendix C applies the theorem, through the support lemma, to
+the degraded DM-BC and the DM-MAC. It is not yet applied to the other cardinality bounds that the
+notes derive from it: Theorem 3 of Lecture 4 and the bound `|𝒰| ≤ |𝒳| + 1` of Lecture 12 are on the
+"Not formalized" lists of those lectures, and `RateDistortion.SideInfo` and
 `Network.GrayWynerConverse` prove larger constants.
 
 ## Issues in the notes
