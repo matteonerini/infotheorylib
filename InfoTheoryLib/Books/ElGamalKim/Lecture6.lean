@@ -80,8 +80,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   treat-interference-as-noise inner bound.
 * The tighter inner bound on page 6-7, where a receiver need not decode the other message correctly.
 * The cardinality bound `|Q| ≤ 4` in Theorem 1.
-* The Han–Kobayashi inner bound (Theorem 4) with its Fourier–Motzkin elimination, the deterministic
-  IC (Theorem 5), and the semideterministic IC with Lemma 3 and Proposition 5.
+* The Han–Kobayashi inner bound (Theorem 4). Its example of Fourier–Motzkin elimination in Appendix
+  D is `hk_elimination`, without the constraints `0 ≤ R_jj ≤ R_j` of page 6-27.
+* The deterministic IC (Theorem 5), and the semideterministic IC with Lemma 3 and Proposition 5.
 * All the coding theorems for the AWGN-IC: Theorem 2, the sum capacity under weak interference
   (Theorem 3) with Lemma 2, the half-bit theorem and the limit `d*(α)` of the degrees of freedom.
   They need conditional differential entropy, jointly Gaussian variables and the fact that Gaussian

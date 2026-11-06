@@ -25,6 +25,7 @@ public import InfoTheoryLib.Books.CoverThomas.Chapter9
 public import InfoTheoryLib.Books.ElGamalKim.AppendixA
 public import InfoTheoryLib.Books.ElGamalKim.AppendixB
 public import InfoTheoryLib.Books.ElGamalKim.AppendixC
+public import InfoTheoryLib.Books.ElGamalKim.AppendixD
 public import InfoTheoryLib.Books.ElGamalKim.Lecture1
 public import InfoTheoryLib.Books.ElGamalKim.Lecture10
 public import InfoTheoryLib.Books.ElGamalKim.Lecture11
@@ -88,6 +89,7 @@ public import InfoTheoryLib.ForMathlib.BinaryMatrix
 public import InfoTheoryLib.ForMathlib.ConvexHessian
 public import InfoTheoryLib.ForMathlib.FenchelEggleston
 public import InfoTheoryLib.ForMathlib.FlowDecomposition
+public import InfoTheoryLib.ForMathlib.FourierMotzkin
 public import InfoTheoryLib.ForMathlib.Integral
 public import InfoTheoryLib.ForMathlib.Log
 public import InfoTheoryLib.ForMathlib.MatrixBlock
