@@ -99,6 +99,7 @@ public import InfoTheoryLib.DifferentialEntropy.ChainRule
 public import InfoTheoryLib.DifferentialEntropy.Estimation
 public import InfoTheoryLib.DifferentialEntropy.Gaussian
 public import InfoTheoryLib.DifferentialEntropy.Joint
+public import InfoTheoryLib.DifferentialEntropy.Mixed
 public import InfoTheoryLib.DifferentialEntropy.MultivariateGaussian
 public import InfoTheoryLib.DifferentialEntropy.Partition
 public import InfoTheoryLib.DifferentialEntropy.Quantization
@@ -357,6 +358,7 @@ public import InfoTheoryLib.Networking.RandomAccess
 public import InfoTheoryLib.Networking.RandomArrival
 public import InfoTheoryLib.Probability.Channel
 public import InfoTheoryLib.Probability.Conditional
+public import InfoTheoryLib.Probability.CovarianceMatrix
 public import InfoTheoryLib.Probability.Event
 public import InfoTheoryLib.Probability.FinitePMF
 public import InfoTheoryLib.Probability.FunctionalRepresentation
