@@ -7,6 +7,7 @@ module
 
 public import InfoTheoryLib.Books.CoverThomas.Chapter9
 public import InfoTheoryLib.RateDistortion.Binary
+public import InfoTheoryLib.RateDistortion.Normal
 public import InfoTheoryLib.RateDistortion.ParallelGaussian
 public import InfoTheoryLib.RateDistortion.SourceChannel
 public import InfoTheoryLib.RateDistortion.BlahutArimoto
@@ -50,8 +51,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### 10.2 Definitions
 * (10.2)–(10.6): distortion measures `d : α → β → ℝ`, `maxDistortion`, `hammingDistortion`,
   `seqDistortion` (`RateDistortion.Basic`); the Hamming distortion is the probability of error:
-  `sum_mul_hammingDistortion` (here); the squared-error distortion (10.5) appears in
-  `RateDistortion.Gaussian`.
+  `sum_mul_hammingDistortion` (`RateDistortion.Normal`); the squared-error distortion (10.5) appears
+  in `RateDistortion.Gaussian`.
 * (10.7)–(10.10): `RDCode`, `RDCode.distortion`.
 * Achievable pairs, the rate distortion region, the rate distortion and distortion rate
   functions: `IsAchievableRD`, `rdRegion`, `rateDistortion`, `distortionRate`.
@@ -250,16 +251,6 @@ theorem distortion_nearestCode_le {α β : Type*} [Fintype α] {M n : ℕ} [NeZe
   sum_le_sum fun x _ => mul_le_mul_of_nonneg_left
     ((Finite.exists_min fun w => seqDistortion d x (c.dec w)).choose_spec (c.enc x))
     (iidPMF_nonneg hp.nonneg x)
-
-/-! ## Section 10.2: the Hamming distortion -/
-
-open Classical in
-/-- **(10.4)** With the Hamming distortion, `E d(X, X̂) = Pr{X ≠ X̂}`. -/
-theorem sum_mul_hammingDistortion {Ω α : Type*} [Fintype Ω] (μ : Ω → ℝ) (X Y : Ω → α) :
-    ∑ ω, μ ω * hammingDistortion (X ω) (Y ω) = prob μ (univ.filter fun ω => X ω ≠ Y ω) := by
-  rw [prob, sum_filter]
-  refine sum_congr rfl fun ω _ => ?_
-  by_cases h : X ω = Y ω <;> simp [hammingDistortion, h]
 
 /-! ## Section 10.3: examples -/
 

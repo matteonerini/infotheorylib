@@ -375,8 +375,10 @@ public import InfoTheoryLib.RateDistortion.Binary
 public import InfoTheoryLib.RateDistortion.BitRate
 public import InfoTheoryLib.RateDistortion.BlahutArimoto
 public import InfoTheoryLib.RateDistortion.Converse
+public import InfoTheoryLib.RateDistortion.ExcessDistortion
 public import InfoTheoryLib.RateDistortion.Gaussian
 public import InfoTheoryLib.RateDistortion.GraphEntropy
+public import InfoTheoryLib.RateDistortion.Normal
 public import InfoTheoryLib.RateDistortion.ParallelGaussian
 public import InfoTheoryLib.RateDistortion.SideInfo
 public import InfoTheoryLib.RateDistortion.SideInfoAchievability
