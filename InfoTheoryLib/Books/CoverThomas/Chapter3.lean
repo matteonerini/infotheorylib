@@ -73,7 +73,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 * Figures 3.1 and 3.2, whose content is the code `typicalSetCode`.
 * Convergence with probability `1`, which needs a single probability space carrying the whole
-  sequence. The chapter only uses convergence in probability.
+  sequence. The chapter only uses convergence in probability. Later chapters state such results on
+  a probability space: `tendsto_sampleDiffEntropy_ae` (Chapter 8) and
+  `tendsto_log_stratWealth_const_ae` (Chapter 16).
 * The end-of-chapter problems, apart from Problem 3.1 (Markov's and Chebyshev's inequalities,
   the weak law) and Problem 3.11, which the chapter uses.
 

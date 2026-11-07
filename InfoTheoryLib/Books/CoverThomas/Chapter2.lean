@@ -52,7 +52,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Examples 2.1.1 and 2.1.2: `example_2_1_1`, `example_2_1_2`, … (here).
 
 ### 2.2 Joint entropy and conditional entropy
-* (2.8)–(2.13): `jointEntropy_def`, `condEntropy` (`Entropy.Conditional`).
+* (2.8)–(2.13): `jointEntropy_def` (`Entropy.Basic`), `condEntropy` (`Entropy.Conditional`).
 * Theorem 2.2.1 and Corollary (2.21): `chain_rule`, `chain_rule_cond` (`Entropy.Conditional`).
 * Example 2.2.1 and Remark: `example_2_2_1_HX`, …, `remark_condEntropy_not_symm` (here), and
   `entropy_sub_condEntropy_symm` (`Entropy.Conditional`).

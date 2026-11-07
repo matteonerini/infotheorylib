@@ -80,10 +80,11 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Theorem 17.2.3: `diffEntropy_le_of_covariance` (`DifferentialEntropy.MultivariateGaussian`).
 
 ### 17.3 Bounds on entropy and relative entropy
-* Theorem 17.3.1 (Fano's inequality): `fano_estimator`; Lemma 17.3.1:
-  `exp_neg_entropy_le_sum_sq` (`Entropy.Fano`).
+* Theorem 17.3.1 (Fano's inequality): `fano_estimator` (`Entropy.Fano`); Lemma 17.3.1:
+  `exp_neg_entropy_le_sum_sq` (`Entropy.Collision`).
 * Theorem 17.3.2, (17.23)–(17.24): `exp_two_mul_diffEntropy_div_le`,
-  `exp_two_mul_condDiffEntropy_div_le` (`DifferentialEntropy.Estimation`).
+  `exp_two_mul_condDiffEntropy_div_le` (`DifferentialEntropy.Gaussian`,
+  `DifferentialEntropy.Estimation`).
 * Theorem 17.3.3 (L₁ bound on entropy), (17.25)–(17.33): `abs_entropy_sub_le`, with (17.27)
   `abs_negMulLog_sub_le` and (17.31)–(17.33) `sum_negMulLog_le` (`Inequalities.EntropyBounds`).
 * Lemma 17.3.2 (Pinsker): `pinsker` (`RelativeEntropy.Pinsker`).
@@ -102,7 +103,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   (`Inequalities.Binomial`).
 
 ### 17.6 Entropy rates of subsets
-* (17.50): `entropy_prefixRV_le_sum` (`Entropy.ChainRule`).
+* (17.50): `entropy_prefixRV_le_sum` (`Entropy.Bounds`).
 * The set functions: `IsSubmodular`, `isSubmodular_subsetEntropy`, `subsetEntropy_empty`
   (`Inequalities.Han`, `Inequalities.SubsetEntropy`).
 * (17.51) and Theorem 17.6.1 (Han), (17.52)–(17.54): `subsetAvg`, `subsetAvg_succ_le`, with

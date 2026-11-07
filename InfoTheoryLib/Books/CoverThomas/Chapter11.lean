@@ -74,8 +74,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ### 11.5 Examples of Sanov's theorem
 * (11.108)–(11.110), the closest distribution under linear constraints: `tiltedPMF`,
-  `relEntropyReal_tiltedPMF_le`, through the Gibbs inequality `neg_log_sum_le_relEntropyReal_add`
-  (`RelativeEntropy.Gibbs`).
+  `relEntropyReal_tiltedPMF_le` (`Statistics.LargeDeviations`), through the Gibbs inequality
+  `neg_log_sum_le_relEntropyReal_add` (`RelativeEntropy.Gibbs`).
 * Example 11.5.2: `example_11_5_2` (here).
 * Example 11.5.3: the exponent `D(Q ‖ Q₀) = I(X; Y)` is `mutualInfoOf_eq_relEntropy`
   (`MutualInformation.Convexity`).

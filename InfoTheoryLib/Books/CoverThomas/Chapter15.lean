@@ -15,6 +15,7 @@ public import InfoTheoryLib.Network.MACConverse
 public import InfoTheoryLib.Network.MACCapacity
 public import InfoTheoryLib.Network.SlepianWolf
 public import InfoTheoryLib.Network.Broadcast
+public import InfoTheoryLib.Network.RelayClasses
 
 /-!
 # Cover & Thomas, Chapter 15: Network Information Theory
@@ -38,8 +39,8 @@ The end-of-chapter problems and the historical notes are not included.
   in the positive quadrant.
 * **Regions.** The rate regions are written with the book's strict or nonstrict inequalities;
   the capacity regions are closures, so both give the same results.
-* **Time sharing.** The time-sharing variable `Q` of Theorem 15.3.4 takes finitely many values,
-  without the bound `|Q| ≤ 4`.
+* **Time sharing.** In `macRegion`, the time-sharing variable `Q` of Theorem 15.3.4 takes finitely
+  many values, with no bound on `|Q|`; the bound is in `macRegionCard`.
 
 ## Index
 
@@ -55,10 +56,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Section 15.1.5: `gaussCap_lt_iff_strong_interference`.
 
 ### 15.2 Jointly typical sequences
-* Theorem 15.2.1, for a pair of random variables: (15.29) `tendsto_prob_jointTypicalSet`, (15.31)
-  `card_jointTypicalSet_le` (`ChannelCoding.JointTypicality`), (15.33)–(15.34)
-  `jointTypicalSet_condProb_bounds` (`Network.Typicality`).
-* Theorem 15.2.2, (15.40)–(15.44): `card_fiber_jointTypicalSet_le`,
+* Theorem 15.2.1, for a pair of random variables: (15.27) `tendsto_prob_jointTypicalSet`, the upper
+  bound of (15.29), (15.31)–(15.33) `card_jointTypicalSet_le` (`ChannelCoding.JointTypicality`),
+  (15.30) `jointTypicalSet_condProb_bounds` (`Network.Typicality`).
+* Theorem 15.2.2, (15.38), (15.40)–(15.42): `card_fiber_jointTypicalSet_le`,
   `card_fiber_jointTypicalSet_le'`.
 * Theorem 15.2.3 for independent sequences: `prob_indep_jointTypicalSet_le`
   (`ChannelCoding.JointTypicality`), `sum_indep_typical_le` (`Network.MACAchievability`).
@@ -73,6 +74,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Theorem 15.3.1: `macCapacityRegion_eq` (`Network.MACCapacity`).
 * Example 15.3.2 (binary multiplier channel): `binaryMultiplierMAC`, `example_15_3_2` (here), with
   `le_log_card_of_mem_macCapacityRegion` (`Network.MACCapacity`).
+* Example 15.3.3 (binary erasure multiple-access channel), in bits: `binaryErasureMAC`,
+  `macCapacityRegionBits_binaryErasureMAC` (`Books.ElGamalKim.Lecture4`).
 * Section 15.3.1 (achievability), (15.60)–(15.72): `macTypicalSet`, `macTypicalDecode`,
   `sum_codebook_macCondErrProb_le`, `exists_macCode_avgErrProb_le`,
   `isAchievableMAC_of_mem_macRateRegion`; (15.68)–(15.69): `mutualInfo_macJointA`,
@@ -87,6 +90,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Theorem 15.3.3: `sub_mem_convexHull_of_mem_macRegion`, `macRegion_subset_closure_convexHull`.
 * Theorem 15.3.4, (15.89)–(15.95): `macRegion`, `macCapacityRegion_eq_closure_macRegion`.
 * Theorem 15.3.5 (Carathéodory) in the plane: `exists_convex_combination_le_three`.
+* The bound on the time-sharing variable: `macRegionCard`, `macCapacityRegion_eq_card`
+  (`Network.MACCardinality`), with `|Q| ≤ 3`, one less than the `|Q| ≤ 4` of the book, as its
+  remark after Theorem 15.3.5 suggests.
 * Section 15.3.4 (converse), (15.96)–(15.131): `MACCode.jointLaw`, `MACCode.letterDist₁`,
   `MACCode.letterDist₂`, `MACCode.log_le_macInfo₁`, `MACCode.log_le_macInfo₂`,
   `MACCode.log_mul_le_macInfo₁₂`, `IsAchievableMAC.mem_closure_macRegion`
@@ -116,43 +122,70 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `BCCode.max_errProb_le`, `BCCode.errProb_le_add`, `isAchievableBC_iff`.
 * Section 15.6.2, (15.209): `IsPhysicallyDegraded`, `IsStochasticallyDegraded`,
   `IsPhysicallyDegraded.isStochasticallyDegraded`, `IsStochasticallyDegraded.capacityRegion_eq`.
-* Example 15.6.5, (15.229)–(15.230): `bscBroadcast`, `example_15_6_5` (here).
+* Example 15.6.5, (15.229)–(15.230): `bscBroadcast`, `example_15_6_5` (here). The rates
+  (15.231)–(15.237), in bits, with `β ∈ [0, 1/2]`: `degradedBCRegionBits_bsbc`
+  (`Network.BinarySymmetricBC`).
 * Example 15.6.6, (15.240)–(15.241): `gaussianBCRegion` (`Network.Gaussian`).
 * Superposition coding and the capacity region of the degraded broadcast channel, in the form of
   El Gamal and Kim's lecture notes (rates in bits, unbounded alphabet for `U`):
   `superpositionRegionBits_subset` (`Network.BCSuperposition`),
-  `bcCapacityRegionBits_eq_closure_degradedBCRegionBits` (`Network.BCCapacity`).
+  `bcCapacityRegionBits_eq_closure_degradedBCRegionBits` (`Network.BCCapacity`). With
+  `|𝒰| ≤ min {|𝒳|, |𝒴₁|, |𝒴₂|} + 1` and no closure: `bcCapacityRegionBits_eq_card`
+  (`Network.BCCardinality`).
+
+### 15.7 Relay channel
+These are in the form of El Gamal and Kim's lecture notes, with rates in bits and informations in
+nats.
+* Theorem 15.7.1 (cut-set bound), (15.248): `rcCutsetBound`, `IsAchievableRC.le_rcCutsetBound`
+  (`Network.RelayCode`). Here: `theorem_15_7_1`.
+* Theorem 15.7.2 (physically degraded relay channel), (15.249)–(15.250): `IsDegradedRC`,
+  `rcCapacity_degraded` (`Network.RelayClasses`). Here: `theorem_15_7_2`.
+* The classes in the remark after Theorem 15.7.2, (15.257)–(15.258): `IsReverselyDegradedRC`,
+  `rcCapacity_reverselyDegraded`, and `IsSemiDetRC`, `rcCapacity_semiDet` for semi-deterministic
+  channels, which include the deterministic ones (`Network.RelayClasses`); with feedback,
+  `rcfbCapacity_eq` (`Network.RelayFeedback`). These capacities equal the bound (15.248), not the
+  formula (15.250), which is `0` when `Y₁` is constant.
 
 ### 15.8 Source coding with side information
 * Theorem 15.8.1, in bits and up to closure, in the form of El Gamal and Kim's lecture notes:
-  `helperRegionBits`, `helperOptimalRegionBits_eq` (`Network.SourceHelperConverse`).
+  `helperRegionBits`, `helperOptimalRegionBits_eq` (`Network.SourceHelper`,
+  `Network.SourceHelperConverse`).
+* With `|𝒰| ≤ |𝒴| + 1`, one less than the book's `|𝒴| + 2`, and no closure: `helperRegionCardBits`,
+  `helperOptimalRegionBits_eq_card` (`Network.SourceHelperCardinality`).
 
 ### 15.9 Rate distortion with side information
 * Theorem 15.9.1 (Wyner–Ziv), (15.288), in bits, in the form of El Gamal and Kim's lecture notes:
-  `wzRD`, `rateWZBits`, `rateWZBits_eq` (`RateDistortion.SideInfoConverse`).
+  `wzRD`, `rateWZBits`, `rateWZBits_eq` (`RateDistortion.SideInfo`,
+  `RateDistortion.SideInfoAchievability`, `RateDistortion.SideInfoConverse`).
+* The bound `|𝒲| ≤ |𝒳| + 1`: `exists_sideRD_eq` (`RateDistortion.SideInfo`), where the minimum is
+  attained, and `WZCode.exists_kernel_le`, `IsAchievableWZBits.exists_kernel` in the converse
+  (`RateDistortion.SideInfoConverse`).
 * Lemma 15.9.1: `sideRD_antitoneOn`, `sideRD_convexOn` (`RateDistortion.SideInfo`), for `θ = 1`.
 
 ## Not formalized
 
 * The coding theorems for the Gaussian channels of Section 15.1, which the book states without
-  proof, the bound (15.138)–(15.145) on the Gaussian multiple-access channel (which needs
-  conditional differential entropies), the interference channel and the two-way channel.
-* The typical sets of collections of random variables (15.24) and Theorem 15.2.3 for
-  conditionally independent sequences.
-* Examples 15.3.1 and 15.3.3, the `m`-user multiple-access channel (Theorem 15.3.6) and the bound
-  `|Q| ≤ 4` (we prove Carathéodory's theorem in the plane, which gives three points of the union
-  of the pentagons).
+  proof, the bound (15.138)–(15.145) on the Gaussian multiple-access channel, and the Gaussian
+  interference and two-way channels of Sections 15.1.5 and 15.1.6. The discrete memoryless
+  interference and two-way channels are in `Network.ICCode` and `Network.TwoWayCode`, in the form
+  of the lecture notes.
+* The typical sets of collections of random variables (15.24), the lower bound of (15.29) as a
+  statement of its own (it is a step in the proof of `eventually_prob_indep_jointTypicalSet_ge`),
+  the lower bound (15.39), and Theorem 15.2.3 for conditionally independent sequences with the
+  book's typical sets; the form with robust typicality is the joint typicality lemma
+  (`Typicality.JointTypicalityLemma`).
+* Example 15.3.1, and the `m`-user multiple-access channel (Theorem 15.3.6).
 * The interpretation of Section 15.4.4 and the duality of Section 15.5.
-* Examples 15.6.1–15.6.4, the rates (15.231)–(15.237) of Example 15.6.5, the broadcast channel
-  with common information, the bound on the alphabet of `U`, and Theorems 15.6.2–15.6.4 in the
-  book's form (rates in nats); superposition coding and the converse for degraded broadcast
-  channels are indexed above, in the form of the lecture notes.
-* The relay channel (Section 15.7, Theorems 15.7.1–15.7.2), and the cut-set bound for general
-  networks (Section 15.10, Theorem 15.10.1), which has a message for each pair of nodes; the bound
-  with one message at each node is `IsAchievableDMN.exists_cutset`.
-* The bounds `|𝒰| ≤ |𝒴| + 2` of Theorem 15.8.1 and `|𝒲| ≤ |𝒳| + 1` of Theorem 15.9.1, and the Markov
-  lemma with the strong typical sets of the book (Lemma 15.8.1); `sum_jointIid_not_mem_le` is the
-  form with robust typicality that we use.
+* Examples 15.6.1–15.6.4, and the broadcast channel with common information, (15.205)–(15.208) and
+  Theorems 15.6.3 and 15.6.4.
+* Theorem 15.6.2 in the book's form, with rates in nats and the bound
+  `|𝒰| ≤ min {|𝒳|, |𝒴₁|, |𝒴₂|}` (we have it with `+ 1`); superposition coding and the converse for
+  degraded broadcast channels are indexed above, in the form of the lecture notes.
+* The cut-set bound for general networks (Section 15.10, Theorem 15.10.1), which has a message for
+  each pair of nodes; the bound with one message at each node is `IsAchievableDMN.exists_cutset`.
+* The Markov lemma with the strong typical sets of the book (Lemma 15.8.1); the forms with robust
+  typicality are `sum_jointIid_not_mem_le`, which we use, and
+  `eventually_prob_condRobustTypicalSet_of_markovChain` (`Typicality.JointTypicalityLemma`).
 -/
 
 open Real Finset Filter Topology
@@ -386,5 +419,11 @@ alias theorem_15_4_1_converse := IsAchievableSW.mem_swRegion
 
 /-- **Theorem 15.6.1.** -/
 alias theorem_15_6_1 := bcCapacityRegion_eq_of_marg_eq
+
+/-- **Theorem 15.7.1 (Cut-set bound for the relay channel).** -/
+alias theorem_15_7_1 := IsAchievableRC.le_rcCutsetBound
+
+/-- **Theorem 15.7.2 (Capacity of the physically degraded relay channel).** -/
+alias theorem_15_7_2 := rcCapacity_degraded
 
 end InfoTheory.CoverThomas

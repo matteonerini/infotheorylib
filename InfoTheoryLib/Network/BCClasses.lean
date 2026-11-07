@@ -399,7 +399,7 @@ lemma entropy_outDist_bscBecMarg₁ (a p : ℝ) :
     entropy (outDist (bernoulliPMF a) (bscBecMarg₁ p)) = binEntropy (binConv a p) := by
   rw [outDist_bscBecMarg₁, entropy_bernoulliPMF]
 
-/-- `H(Y₂) = H(ε) + (1 - ε) H(a)` for `X ∼ Bern(a)` (7.13). -/
+/-- `H(Y₂) = H(ε) + (1 - ε) H(a)` for `X ∼ Bern(a)` (7.12). -/
 lemma entropy_outDist_bscBecMarg₂ (a ε : ℝ) :
     entropy (outDist (bernoulliPMF a) (bscBecMarg₂ ε)) =
       binEntropy ε + (1 - ε) * binEntropy a := by

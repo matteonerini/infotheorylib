@@ -57,8 +57,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `StochasticProcess.IsStationary.condEntropyLast_antitone`,
   `StochasticProcess.IsStationary.hasCondEntropyRate`, `cesaro_mean`, with the chain rule
   (4.22) `StochasticProcess.jointEntropy_eq_sum` (`StochasticProcess.Basic`).
-* (4.25)–(4.26), Theorem 4.2.4: `markovProcess_condEntropyLast`, `IsStationaryDist`,
-  `markovProcess_hasEntropyRate`, `sum_mul_entropy_eq` (`StochasticProcess.Markov`).
+* (4.25)–(4.26), Theorem 4.2.4: `markovProcess_condEntropyLast`, `markovProcess_hasEntropyRate`,
+  `sum_mul_entropy_eq` (`StochasticProcess.Markov`), `IsStationaryDist` (`MarkovChain.Process`).
 * Example 4.2.1, (4.28): `example_4_2_1` (here).
 * Remark after Example 4.2.1: `markovProcess_hasEntropyRate_of_tendsto`
   (`StochasticProcess.Markov`).

@@ -90,7 +90,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   (`Investment.Competitive`).
 
 ### 16.7 Universal portfolios
-* (16.91)–(16.93): `crpWealth`, `CausalStrategy`, `stratWealth` (`Investment.Universal`).
+* (16.91)–(16.93): `crpWealth`, `CausalStrategy`, `stratWealth` (`Investment.Universal`,
+  `Investment.Causal`).
 * Lemma 16.7.1, (16.96)–(16.98): `ratio_sum_ge`.
 * The example `n = 1`, `m = 2`: `minimaxRatio_two_one`.
 * (16.105)–(16.107): `seqReturn`, `crpWealth_eq_sum`.

@@ -47,8 +47,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ### 9.1 Gaussian channel: definitions
 * (9.8): `gaussianInfoCapacity` (`GaussianChannel.Capacity`).
-* (9.9)–(9.16): `mutualInfoPDF_gaussianChannel_le`, `mutualInfoPDF_gaussianChannel_le_of_power`,
-  through the general bound `mutualInfoPDF_noiseJointPDF_le` (`GaussianChannel.Basic`).
+* (9.9)–(9.16): `mutualInfoPDF_gaussianChannel_le`, `mutualInfoPDF_gaussianChannel_le_of_power`
+  (`GaussianChannel.Capacity`), through the general bound `mutualInfoPDF_noiseJointPDF_le`
+  (`GaussianChannel.Basic`).
 * (9.17): `mutualInfoPDF_gaussianChannel_gaussian`, `marginalSnd_gaussianChannel_gaussian`,
   `gaussianInfoCapacity_eq`.
 * (9.18)–(9.20), codes and achievable rates: `GaussianCode`, `GaussianCode.condErrProb`,
@@ -84,8 +85,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### 9.5 Channels with colored Gaussian noise
 * (9.79)–(9.82): `coloredInfoCapacity`, `coloredInfoCapacity_eq_parallel`
   (`GaussianChannel.ColoredNoise`).
-* (9.83)–(9.96): `det_add_le_prod_max`, `det_waterFill_add`, with Hadamard's inequality
-  `det_le_prod_diag` (`DifferentialEntropy.MultivariateGaussian`).
+* (9.83)–(9.96): `det_add_le_prod_max`, `det_waterFill_add` (`GaussianChannel.ColoredNoise`), with
+  Hadamard's inequality `det_le_prod_diag` (`DifferentialEntropy.MultivariateGaussian`).
 * (9.105)–(9.106): `coloredInfoCapacity_eq`.
 
 ### 9.6 Gaussian channels with feedback

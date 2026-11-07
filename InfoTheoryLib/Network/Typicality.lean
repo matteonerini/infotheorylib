@@ -22,9 +22,9 @@ jointly typical with it (Theorem 15.2.2). It also records the entropies of `n` i
 
 * `entropy_jointIid`, `condEntropy_jointIid_fst`, `condEntropy_jointIid_snd`:
   `H(Xⁿ, Yⁿ) = n H(X, Y)` and `H(Xⁿ | Yⁿ) = n H(X | Y)` for i.i.d. pairs.
-* `jointTypicalSet_condProb_bounds`: **Theorem 15.2.1 (4)**, (15.33)–(15.34).
+* `jointTypicalSet_condProb_bounds`: **Theorem 15.2.1 (4)**, (15.30).
 * `card_fiber_jointTypicalSet_le`, `card_fiber_jointTypicalSet_le'`: **Theorem 15.2.2**,
-  (15.40)–(15.44), `|A_ε^(n)(X | yⁿ)| ≤ e^{n(H(X|Y)+2ε)}`.
+  (15.38), (15.40)–(15.42), `|A_ε^(n)(X | yⁿ)| ≤ e^{n(H(X|Y)+2ε)}`.
 
 ## References
 
@@ -111,7 +111,7 @@ theorem condEntropy_jointIid_snd {q : α × β → ℝ} (hq : IsPMF q) (n : ℕ)
 
 /-! ### Conditional typicality -/
 
-/-- **Theorem 15.2.1 (4), (15.33)–(15.34).** For a jointly typical pair,
+/-- **Theorem 15.2.1 (4), (15.30).** For a jointly typical pair,
 `e^{-n(H(X|Y)+2ε)} ≤ p(xⁿ | yⁿ) ≤ e^{-n(H(X|Y)-2ε)}`. -/
 theorem jointTypicalSet_condProb_bounds {q : α × β → ℝ} (hq : IsPMF q) {n : ℕ} {ε : ℝ}
     {z : (Fin n → α) × (Fin n → β)} (hz : z ∈ jointTypicalSet q n ε) :
@@ -136,8 +136,8 @@ theorem jointTypicalSet_condProb_bounds {q : α × β → ℝ} (hq : IsPMF q) {n
       _ ≤ _ := mul_le_mul_of_nonneg_left hy₁ (exp_pos _).le
 
 open Classical in
-/-- **Theorem 15.2.2, (15.40)–(15.44).** For a fixed `yⁿ`, the set `A_ε^(n)(X | yⁿ)` of sequences
-`xⁿ` jointly typical with `yⁿ` has at most `e^{n(H(X|Y)+2ε)}` elements. -/
+/-- **Theorem 15.2.2, (15.38), (15.40)–(15.42).** For a fixed `yⁿ`, the set `A_ε^(n)(X | yⁿ)` of
+sequences `xⁿ` jointly typical with `yⁿ` has at most `e^{n(H(X|Y)+2ε)}` elements. -/
 theorem card_fiber_jointTypicalSet_le {q : α × β → ℝ} (hq : IsPMF q) (n : ℕ) (ε : ℝ)
     (y : Fin n → β) :
     (#(univ.filter fun x => (x, y) ∈ jointTypicalSet q n ε) : ℝ) ≤

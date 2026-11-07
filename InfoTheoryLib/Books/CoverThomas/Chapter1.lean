@@ -54,7 +54,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * (1.4): `mutualInfo`, `mutualInfo_eq_entropy_sub_condEntropy`, `mutualInfo_eq_sum`; it is
   symmetric, non-negative, and zero iff `X` and `Y` are independent: `mutualInfo_comm`,
   `mutualInfo_nonneg`, `mutualInfo_eq_zero_iff` (`MutualInformation.Basic`).
-* (1.5): `IsChannel`, `mutualInfoOf`, `capacity` (`ChannelCoding.Capacity`).
+* (1.5): `IsChannel` (`Probability.Channel`), `mutualInfoOf` (`MutualInformation.Convexity`),
+  `capacity` (`ChannelCoding.Capacity`).
 * Example 1.1.3: `noiselessChannel` (`Books.CoverThomas.Chapter7`), `noiselessCode`,
   `example_1_1_3` (here).
 * Example 1.1.4: `fourSymbolChannel`, `fourSymbolCode`, `example_1_1_4` (here).

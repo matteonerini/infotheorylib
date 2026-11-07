@@ -34,7 +34,8 @@ The end-of-chapter problems and the historical notes are not included.
 Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ### Introduction and 7.1 Examples of channel capacity
-* Discrete channels and (7.1): `IsChannel`, `capacity` (`ChannelCoding.Capacity`).
+* Discrete channels and (7.1): `IsChannel` (`Probability.Channel`), `capacity`
+  (`ChannelCoding.Capacity`).
 * 7.1.1 Noiseless binary channel: `noiselessChannel`, `capacity_noiselessChannel` (here).
 * 7.1.2 Noisy channel with nonoverlapping outputs: `nonoverlappingChannel`,
   `capacity_nonoverlappingChannel` (here).
@@ -52,13 +53,14 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### 7.3 Properties of channel capacity
 * Properties 1–3: `capacity_nonneg`, `capacity_le_log_card_input`, `capacity_le_log_card_output`.
 * Properties 4–5: `continuousOn_mutualInfoOf`, `mutualInfoOf_concave_input`
-  (`MutualInformation.Convexity`), and the maximum is attained: `exists_capacity_eq`.
+  (`ChannelCoding.Capacity`, `MutualInformation.Convexity`), and the maximum is attained:
+  `exists_capacity_eq`.
 
 ### 7.5 Definitions
 * (7.26)–(7.27): `channelExt`, `IsChannel.ext` (`ChannelCoding.Code`).
 * Codes and (7.28)–(7.34): `ChannelCode`, `ChannelCode.condErrProb`, `ChannelCode.maxErrProb`,
   `ChannelCode.avgErrProb`, `ChannelCode.avgErrProb_le_maxErrProb`, `ChannelCode.errProb_jointLaw`
-  (`ChannelCoding.Converse`).
+  (`ChannelCoding.Code`, `ChannelCoding.Converse`).
 * Achievable rates and the operational capacity: `IsAchievableRate`, `opCapacity`.
 
 ### 7.6 Jointly typical sequences
@@ -74,7 +76,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Throwing away the worst half, (7.80)–(7.81): `ChannelCode.exists_maxErrProb_le_two_mul`
   (`ChannelCoding.Code`).
 * Theorem 7.7.1: `isAchievableRate_of_lt_capacity` (achievability),
-  `IsAchievableRate.le_capacity` (converse), `opCapacity_eq_capacity` (`ChannelCoding.Converse`).
+  `IsAchievableRate.le_capacity` (converse), `opCapacity_eq_capacity`
+  (`ChannelCoding.Achievability`, `ChannelCoding.Converse`).
 
 ### 7.8 Zero-error codes
 * (7.82)–(7.87): `ChannelCode.log_le_of_avgErrProb_eq_zero` (`ChannelCoding.Converse`).

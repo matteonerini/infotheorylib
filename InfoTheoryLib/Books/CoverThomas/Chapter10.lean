@@ -81,7 +81,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### 10.4 Converse to the rate distortion theorem
 * Lemma 10.4.1: `infoRD_antitoneOn`, `infoRD_convexOn` (`RateDistortion.Basic`).
 * (10.58)–(10.71): `RDCode.mul_infoRD_le_log`, through `mul_infoRD_le_mutualInfo`,
-  `sum_mutualInfo_le_of_indepFamily` and `infoRD_le_mutualInfo` (`RateDistortion.Converse`);
+  `sum_mutualInfo_le_of_indepFamily` (`RateDistortion.Converse`) and `infoRD_le_mutualInfo`
+  (`RateDistortion.Basic`);
   the converse `IsAchievableRD.infoRD_le`, using the closedness of the epigraph,
   `infoRD_le_of_tendsto`.
 * Theorem 10.4.1: `LossySourceChannelCode`, `IsAchievableSCDistortion`,
@@ -128,9 +129,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   we compute the information rate distortion functions of Gaussian sources. Likewise, reverse
   water-filling on the eigenvalues for a general multivariate normal source, and on the spectrum
   for a Gaussian process, are only mentioned by the book.
-* Lemma 10.6.2 (proved in the book only as Problem 10.16) and the achievability proof of
-  Section 10.6 based on it, which shows that most source sequences have small distortion; the
-  achievability of Section 10.5 is formalized.
+* Lemma 10.6.2 with the book's strongly typical sets (proved in the book only as Problem 10.16) and
+  the achievability proof of Section 10.6 based on it, which shows that most source sequences have
+  small distortion; the achievability of Section 10.5 is formalized. The form of the lemma with
+  robust typicality is the joint typicality lemma (`Typicality.JointTypicalityLemma`).
 * The Kuhn–Tucker conditions (10.125)–(10.129), and the convergence of the Blahut–Arimoto
   algorithm to `R(D)` (due to Csiszár) and of the analogous algorithm for the capacity.
 -/

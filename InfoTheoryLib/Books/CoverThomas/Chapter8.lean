@@ -43,7 +43,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### 8.1 Definitions
 * Densities and the support set: `IsPDF`, `pdfMeasure` (`DifferentialEntropy.Basic`).
 * (8.1): `diffEntropy`, `diffEntropy_eq_setIntegral_support`.
-* Example 8.1.1, (8.2): `uniformPDF`, `diffEntropy_uniformPDF`, and `example_8_1_1` (here).
+* Example 8.1.1, (8.2): `uniformPDF`, `diffEntropy_uniformPDF` (`DifferentialEntropy.Basic`), and
+  `example_8_1_1` (here).
 * Example 8.1.2, (8.3)–(8.8): `diffEntropy_gaussianPDFReal` (`DifferentialEntropy.Gaussian`);
   (8.9) in bits: `example_8_1_2` (here).
 
@@ -104,8 +105,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `diffEntropy_le_of_integral_mul_sq`, `diffEntropy_eq_of_integral_mul_sq_iff`
   (`DifferentialEntropy.Gaussian`).
 * Theorem 8.6.6, (8.77)–(8.80): `exp_two_mul_diffEntropy_div_le`,
-  `exp_two_mul_diffEntropy_div_eq_iff`; Corollary (side information):
-  `exp_two_mul_condDiffEntropy_div_le` (`DifferentialEntropy.Estimation`).
+  `exp_two_mul_diffEntropy_div_eq_iff` (`DifferentialEntropy.Gaussian`); Corollary (side
+  information): `exp_two_mul_condDiffEntropy_div_le` (`DifferentialEntropy.Estimation`).
 
 ## Not formalized
 
