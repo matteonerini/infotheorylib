@@ -112,6 +112,7 @@ public import InfoTheoryLib.Entropy.Range
 public import InfoTheoryLib.ForMathlib.BinaryMatrix
 public import InfoTheoryLib.ForMathlib.ConvexHessian
 public import InfoTheoryLib.ForMathlib.ConvexOptimization
+public import InfoTheoryLib.ForMathlib.FactorialBounds
 public import InfoTheoryLib.ForMathlib.FenchelEggleston
 public import InfoTheoryLib.ForMathlib.FlowDecomposition
 public import InfoTheoryLib.ForMathlib.FourierMotzkin
@@ -447,6 +448,8 @@ public import InfoTheoryLib.Typicality.Basic
 public import InfoTheoryLib.Typicality.Conditional
 public import InfoTheoryLib.Typicality.Covering
 public import InfoTheoryLib.Typicality.JointTypicalityLemma
+public import InfoTheoryLib.Typicality.L1
+public import InfoTheoryLib.Typicality.L1Conditional
 public import InfoTheoryLib.Typicality.MarkovLemma
 public import InfoTheoryLib.Typicality.MutualCovering
 public import InfoTheoryLib.Typicality.Packing
