@@ -27,6 +27,7 @@ strong joint typicality array gives a typicality proof of the basic inequality
   `exists_card_condL1TypicalSet_bounds`: Theorem 6.10.
 * `eventually_card_l1TypicalProjection_ge`: Corollary 6.12.
 * `eventually_prob_l1TypicalProjection_gt`: Proposition 6.13.
+* `prob_indep_jointL1TypicalSet_le`: Lemma 7.17.
 * `card_condL1TypicalSet_pair_le`: (6.153)–(6.154).
 * `condEntropy_le_add_of_typicality`: (6.155)–(6.156).
 * `card_typeClass_zip_le`: a joint type class is at most the type class of `x` times the
@@ -42,7 +43,7 @@ Logarithms are natural. The conditional entropy `H(Y|X)` is `H[Prod.snd | Prod.f
 
 ## References
 
-* [R. W. Yeung, *Information Theory and Network Coding*][yeung2008], Sections 6.3 and 6.4
+* [R. W. Yeung, *Information Theory and Network Coding*][yeung2008], Sections 6.3, 6.4 and 7.4
 -/
 
 open Real Finset Filter Topology
@@ -360,6 +361,33 @@ theorem eventually_prob_l1TypicalProjection_gt {q : α × β → ℝ} (hq : IsPM
   refine sum_le_sum_of_subset_of_nonneg (fun z hz => ?_)
     fun z _ _ => jointIid_nonneg hq.nonneg n z
   exact mem_filter.2 ⟨mem_univ _, fst_mem_l1TypicalProjection hq hz⟩
+
+/-! ### Independent sequences -/
+
+/-- **Lemma 7.17, (7.136)–(7.145).** Let `(X', Y')` be `n` i.i.d. copies of a pair with `X'` and
+`Y'` independent and with the marginals of `q`. Then
+`Pr{(X', Y') ∈ T_{[XY]δ}ⁿ} ≤ e^{-n(I(X; Y) - τ)}`, with `τ = δ (M_{XY} + M_X + M_Y)`. -/
+theorem prob_indep_jointL1TypicalSet_le {q : α × β → ℝ} (hq : IsPMF q) (n : ℕ) (δ : ℝ) :
+    prob (fun z : (Fin n → α) × (Fin n → β) => iidPMF (margFst q) n z.1 * iidPMF (margSnd q) n z.2)
+        (jointL1TypicalSet q n δ) ≤
+      exp (-(n * (I[Prod.fst : Prod.snd ; q] -
+        δ * (maxNegLog q + maxNegLog (margFst q) + maxNegLog (margSnd q))))) := by
+  set A := exp (-(n * (entropy (margFst q) - δ * maxNegLog (margFst q))))
+  set B := exp (-(n * (entropy (margSnd q) - δ * maxNegLog (margSnd q))))
+  set C := exp (n * (entropy q + δ * maxNegLog q))
+  have h₁ : ∀ z ∈ jointL1TypicalSet q n δ, iidPMF (margFst q) n z.1 * iidPMF (margSnd q) n z.2 ≤
+      A * B := fun z hz =>
+    mul_le_mul (exp_le_iidPMF_of_mem_l1TypicalSet (hq.dist _) (fst_mem_l1TypicalSet hq hz)).2
+      (exp_le_iidPMF_of_mem_l1TypicalSet (hq.dist _) (snd_mem_l1TypicalSet hq hz)).2
+      (iidPMF_nonneg (hq.dist _).nonneg _) (exp_pos _).le
+  have h₂ := prob_le_card_mul h₁
+  have h₃ := card_jointL1TypicalSet_le hq n δ
+  refine h₂.trans ((mul_le_mul_of_nonneg_right h₃ (mul_pos (exp_pos _) (exp_pos _)).le).trans
+    (le_of_eq ?_))
+  rw [← exp_add, ← exp_add, mutualInfo_eq_add_sub hq, entropyRV, entropyRV, entropyRV,
+    dist_pair_fst_snd]
+  congr 1
+  ring
 
 /-! ### An interpretation of the basic inequalities -/
 

@@ -81,11 +81,13 @@ public import InfoTheoryLib.Books.Yeung.Chapter7
 public import InfoTheoryLib.Books.Yeung.Chapter8
 public import InfoTheoryLib.Books.Yeung.Chapter9
 public import InfoTheoryLib.ChannelCoding.Achievability
+public import InfoTheoryLib.ChannelCoding.AsymptoticRate
 public import InfoTheoryLib.ChannelCoding.AverageError
 public import InfoTheoryLib.ChannelCoding.Capacity
 public import InfoTheoryLib.ChannelCoding.Code
 public import InfoTheoryLib.ChannelCoding.Converse
 public import InfoTheoryLib.ChannelCoding.Cost
+public import InfoTheoryLib.ChannelCoding.DiscreteChannel
 public import InfoTheoryLib.ChannelCoding.Hamming
 public import InfoTheoryLib.ChannelCoding.JointTypicality
 public import InfoTheoryLib.ChannelCoding.Product
