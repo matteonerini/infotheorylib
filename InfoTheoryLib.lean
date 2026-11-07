@@ -2,6 +2,7 @@ module  -- shake: keep-all --deprecated_module: ignore
 
 public import InfoTheoryLib.AEP.Basic
 public import InfoTheoryLib.AEP.HighProbabilitySet
+public import InfoTheoryLib.AEP.SourceCodingTheorem
 public import InfoTheoryLib.AEP.StrongTypicality
 public import InfoTheoryLib.AEP.TypicalSet
 public import InfoTheoryLib.Analysis.LogSum
