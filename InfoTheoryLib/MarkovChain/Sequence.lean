@@ -5,8 +5,8 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.Inequalities.SubsetEntropy
 public import InfoTheoryLib.MarkovChain.CondIndep
+public import InfoTheoryLib.MutualInformation.Block
 
 /-!
 # Markov chains of `n` random variables
@@ -17,8 +17,6 @@ alphabet. Only the variables with `i < n` matter for a chain of `n` variables.
 
 ## Main definitions
 
-* `blockRV X s`: the random vector `(Xᵢ)_{i ∈ s}`.
-* `blockEntropy μ X s`: its entropy.
 * `IsMarkovChain μ X n`: `X₀ → X₁ → ⋯ → X_{n-1}` is a Markov chain.
 
 ## Main statements
@@ -36,8 +34,8 @@ alphabet. Only the variables with `i < n` matter for a chain of `n` variables.
 
 ## Implementation notes
 
-The subchain property is proved with entropies of sets of indices: `blockEntropy` is monotone and
-submodular, and a conditional mutual information of blocks is a linear combination of its values.
+The subchain property is proved with entropies of sets of indices, `blockEntropy` of
+`MutualInformation.Block`.
 
 ## References
 
@@ -53,14 +51,6 @@ open Real Finset
 namespace InfoTheory
 
 variable {Ω : Type*} [Fintype Ω] {A : ℕ → Type*}
-
-/-- The random vector `(Xᵢ)_{i ∈ s}`. -/
-def blockRV (X : ∀ i, Ω → A i) (s : Finset ℕ) : Ω → ∀ i : s, A i := fun ω i => X i ω
-
-omit [Fintype Ω] in
-lemma blockRV_eq_iff (X : ∀ i, Ω → A i) (s : Finset ℕ) (ω : Ω) (x : ∀ i, A i) :
-    blockRV X s ω = (fun i : s => x i) ↔ ∀ i ∈ s, X i ω = x i := by
-  simp [blockRV, funext_iff]
 
 /-- The probability that `Xᵢ = xᵢ` for all `i ∈ s`. -/
 def blockDist (μ : Ω → ℝ) (X : ∀ i, Ω → A i) (s : Finset ℕ) (x : ∀ i, A i) : ℝ :=
@@ -571,115 +561,7 @@ end Factorization
 
 section Entropy
 
-variable {β γ β' γ' : Type*}
-
-/-- Two random variables are functions of each other. -/
-def RVEquiv (U : Ω → β) (V : Ω → γ) : Prop :=
-  (∃ f : γ → β, ∀ ω, U ω = f (V ω)) ∧ ∃ g : β → γ, ∀ ω, V ω = g (U ω)
-
-omit [Fintype Ω] in
-lemma RVEquiv.refl (U : Ω → β) : RVEquiv U U :=
-  ⟨⟨id, fun _ => rfl⟩, ⟨id, fun _ => rfl⟩⟩
-
-omit [Fintype Ω] in
-lemma RVEquiv.trans {U : Ω → β} {V : Ω → γ} {W : Ω → β'} (h₁ : RVEquiv U V) (h₂ : RVEquiv V W) :
-    RVEquiv U W := by
-  obtain ⟨⟨f₁, hf₁⟩, g₁, hg₁⟩ := h₁
-  obtain ⟨⟨f₂, hf₂⟩, g₂, hg₂⟩ := h₂
-  exact ⟨⟨f₁ ∘ f₂, fun ω => by simp [hf₁, hf₂]⟩, g₂ ∘ g₁, fun ω => by simp [← hg₁, ← hg₂]⟩
-
-omit [Fintype Ω] in
-lemma RVEquiv.pair {U : Ω → β} {V : Ω → γ} {U' : Ω → β'} {V' : Ω → γ'} (h₁ : RVEquiv U U')
-    (h₂ : RVEquiv V V') : RVEquiv (pair U V) (pair U' V') := by
-  obtain ⟨⟨f₁, hf₁⟩, g₁, hg₁⟩ := h₁
-  obtain ⟨⟨f₂, hf₂⟩, g₂, hg₂⟩ := h₂
-  exact ⟨⟨Prod.map f₁ f₂, fun ω => by simp [InfoTheory.pair, ← hf₁, ← hf₂]⟩,
-    Prod.map g₁ g₂, fun ω => by simp [InfoTheory.pair, ← hg₁, ← hg₂]⟩
-
-lemma RVEquiv.entropy_eq [Fintype β] [Fintype γ] {μ : Ω → ℝ} (hμ : IsPMF μ) {U : Ω → β}
-    {V : Ω → γ} (h : RVEquiv U V) : H[U ; μ] = H[V ; μ] := by
-  obtain ⟨⟨f, hf⟩, g, hg⟩ := h
-  exact entropyRV_eq_of_comp hμ f g hf hg
-
-omit [Fintype Ω] in
-/-- `(X(S), X(T))` and `X(S ∪ T)` are functions of each other. -/
-lemma rvEquiv_blockRV_union (X : ∀ i, Ω → A i) (S T : Finset ℕ) :
-    RVEquiv (InfoTheory.pair (blockRV X S) (blockRV X T)) (blockRV X (S ∪ T)) := by
-  refine ⟨⟨fun t => (fun i => t ⟨i, mem_union_left _ i.2⟩, fun i => t ⟨i, mem_union_right _ i.2⟩),
-    fun ω => rfl⟩, ⟨fun p i => if h : (i : ℕ) ∈ S then p.1 ⟨i, h⟩ else
-      p.2 ⟨i, (mem_union.1 i.2).resolve_left h⟩, fun ω => ?_⟩⟩
-  funext i
-  by_cases h : (i : ℕ) ∈ S <;> simp [blockRV, InfoTheory.pair, h]
-
-omit [Fintype Ω] in
-/-- `Xᵢ` and `X({i})` are functions of each other. -/
-lemma rvEquiv_blockRV_singleton (X : ∀ i, Ω → A i) (i : ℕ) :
-    RVEquiv (X i) (blockRV X {i}) := by
-  refine ⟨⟨fun t => t ⟨i, mem_singleton_self i⟩, fun ω => rfl⟩,
-    ⟨fun a j => (mem_singleton.1 j.2).symm ▸ a, fun ω => ?_⟩⟩
-  funext j
-  obtain ⟨j, hj⟩ := j
-  obtain rfl := mem_singleton.1 hj
-  rfl
-
-variable [∀ i, Fintype (A i)]
-
-/-- The entropy `H(X(s))` of the random vector `X(s) = (Xᵢ)_{i ∈ s}`. -/
-def blockEntropy (μ : Ω → ℝ) (X : ∀ i, Ω → A i) (s : Finset ℕ) : ℝ := H[blockRV X s ; μ]
-
-variable {μ : Ω → ℝ} {X : ∀ i, Ω → A i}
-
-/-- A conditional mutual information of blocks as a combination of entropies of index sets. -/
-lemma condMutualInfo_eq_blockEntropy [Fintype β] [Fintype γ] [Fintype β'] (hμ : IsPMF μ)
-    {U : Ω → β} {V : Ω → γ} {W : Ω → β'} {P F S : Finset ℕ} (hU : RVEquiv U (blockRV X P))
-    (hV : RVEquiv V (blockRV X F)) (hW : RVEquiv W (blockRV X S)) :
-    I[U : V | W ; μ] = blockEntropy μ X (S ∪ P) + blockEntropy μ X (S ∪ F) - blockEntropy μ X S -
-      blockEntropy μ X (S ∪ (P ∪ F)) := by
-  rw [condMutualInfo_eq hμ]
-  have h₁ : RVEquiv (InfoTheory.pair U V) (blockRV X (P ∪ F)) :=
-    (hU.pair hV).trans (rvEquiv_blockRV_union X P F)
-  rw [((hW.pair hU).trans (rvEquiv_blockRV_union X S P)).entropy_eq hμ,
-    ((hW.pair hV).trans (rvEquiv_blockRV_union X S F)).entropy_eq hμ, hW.entropy_eq hμ,
-    ((hW.pair h₁).trans (rvEquiv_blockRV_union X S (P ∪ F))).entropy_eq hμ]
-  rfl
-
-/-- Entropies of index sets are monotone. -/
-lemma blockEntropy_mono (hμ : IsPMF μ) {S T : Finset ℕ} (h : S ⊆ T) :
-    blockEntropy μ X S ≤ blockEntropy μ X T :=
-  entropyRV_comp_le hμ (blockRV X T) (fun t (i : S) => t ⟨i, h i.2⟩)
-
-/-- Entropies of index sets are submodular. -/
-lemma blockEntropy_submodular (hμ : IsPMF μ) (S T : Finset ℕ) :
-    blockEntropy μ X (S ∪ T) + blockEntropy μ X (S ∩ T) ≤
-      blockEntropy μ X S + blockEntropy μ X T := by
-  have h := condMutualInfo_nonneg hμ (blockRV X (S \ T)) (blockRV X (T \ S)) (blockRV X (S ∩ T))
-  rw [condMutualInfo_eq_blockEntropy hμ (RVEquiv.refl _) (RVEquiv.refl _) (RVEquiv.refl _)] at h
-  have e₁ : S ∩ T ∪ S \ T = S := by rw [union_comm, sdiff_union_inter]
-  have e₂ : S ∩ T ∪ T \ S = T := by rw [inter_comm, union_comm, sdiff_union_inter]
-  have e₃ : S ∩ T ∪ (S \ T ∪ T \ S) = S ∪ T := by
-    ext i
-    simp only [mem_union, mem_inter, mem_sdiff]
-    tauto
-  rw [e₁, e₂, e₃] at h
-  linarith
-
-/-- The information between two sets, without the common conditioning term, grows with the sets. -/
-lemma blockEntropy_add_sub_mono (hμ : IsPMF μ) {S S' T T' : Finset ℕ} (hS : S ⊆ S') (hT : T ⊆ T') :
-    blockEntropy μ X S + blockEntropy μ X T - blockEntropy μ X (S ∪ T) ≤
-      blockEntropy μ X S' + blockEntropy μ X T' - blockEntropy μ X (S' ∪ T') := by
-  have h₁ := blockEntropy_submodular (μ := μ) (X := X) hμ S' (S ∪ T)
-  have h₂ : blockEntropy μ X S ≤ blockEntropy μ X (S' ∩ (S ∪ T)) :=
-    blockEntropy_mono hμ (subset_inter hS subset_union_left)
-  have e₁ : S' ∪ (S ∪ T) = S' ∪ T := by
-    rw [← union_assoc, union_eq_left.2 hS]
-  rw [e₁] at h₁
-  have h₃ := blockEntropy_submodular (μ := μ) (X := X) hμ T' (S' ∪ T)
-  have h₄ : blockEntropy μ X T ≤ blockEntropy μ X (T' ∩ (S' ∪ T)) :=
-    blockEntropy_mono hμ (subset_inter hT subset_union_right)
-  have e₂ : T' ∪ (S' ∪ T) = S' ∪ T' := by
-    rw [union_comm S' T, ← union_assoc, union_eq_left.2 hT, union_comm]
-  rw [e₂] at h₃
-  linarith
+variable [∀ i, Fintype (A i)] {μ : Ω → ℝ} {X : ∀ i, Ω → A i}
 
 /-- The three-variable chains of a Markov chain in terms of entropies of index sets. -/
 lemma IsMarkovChain.blockEntropy_step (hμ : IsPMF μ) {n : ℕ} (hn : 2 ≤ n)
@@ -796,16 +678,6 @@ theorem IsMarkovChain.markovChain_block [∀ i, Finite (A i)] (hμ : IsPMF μ) {
       · exact Or.inr (Or.inr h')
   rw [e₃] at hmono
   linarith
-
-omit [∀ i, Fintype (A i)] [Fintype Ω] in
-/-- A tuple of blocks and the block of their union are functions of each other. -/
-lemma rvEquiv_blockRV_biUnion (X : ∀ i, Ω → A i) (α : ℕ → Finset ℕ) (t : Finset ℕ) :
-    RVEquiv (blockRV (fun j => blockRV X (α j)) t) (blockRV X (t.biUnion α)) := by
-  classical
-  have hmem : ∀ i : t.biUnion α, ∃ j, j ∈ t ∧ (i : ℕ) ∈ α j := fun i => mem_biUnion.1 i.2
-  choose J hJ₁ hJ₂ using hmem
-  refine ⟨⟨fun v j i => v ⟨i, mem_biUnion.2 ⟨j, j.2, i.2⟩⟩, fun ω => rfl⟩,
-    ⟨fun v i => v ⟨J i, hJ₁ i⟩ ⟨i, hJ₂ i⟩, fun ω => rfl⟩⟩
 
 omit [∀ i, Fintype (A i)] in
 /-- **Proposition 2.10 (Markov subchains).** Let `X₀ → ⋯ → X_{n-1}` be a Markov chain, and let

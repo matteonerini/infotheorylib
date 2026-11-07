@@ -146,6 +146,10 @@ public import InfoTheoryLib.GaussianChannel.Vector
 public import InfoTheoryLib.GaussianChannel.VectorCode
 public import InfoTheoryLib.GaussianChannel.VectorFading
 public import InfoTheoryLib.GaussianChannel.WaterFilling
+public import InfoTheoryLib.IMeasure.Basic
+public import InfoTheoryLib.IMeasure.Markov
+public import InfoTheoryLib.IMeasure.Realization
+public import InfoTheoryLib.IMeasure.SignedMeasure
 public import InfoTheoryLib.Inequalities.Binomial
 public import InfoTheoryLib.Inequalities.Determinant
 public import InfoTheoryLib.Inequalities.EntropyBounds
@@ -179,6 +183,7 @@ public import InfoTheoryLib.MaxEntropy.Burg
 public import InfoTheoryLib.MaxEntropy.Covariance
 public import InfoTheoryLib.MaxEntropy.Distributions
 public import InfoTheoryLib.MutualInformation.Basic
+public import InfoTheoryLib.MutualInformation.Block
 public import InfoTheoryLib.MutualInformation.ChainRule
 public import InfoTheoryLib.MutualInformation.Conditional
 public import InfoTheoryLib.MutualInformation.Continuity

@@ -108,6 +108,7 @@ InfoTheoryLib/
   RelativeEntropy/        relative entropy, the information inequality, Pinsker's inequality
   MutualInformation/      mutual information, chain rules, the Csiszár sum identity
   MarkovChain/            Markov chains, data processing, the second law, random walks
+  IMeasure/               the I-Measure: signed measures on the field of a set of random variables
   AEP/                    the asymptotic equipartition property and typical sets
   Typicality/             robust typicality, the packing, covering and Markov lemmas
   StochasticProcess/      stochastic processes and entropy rates
