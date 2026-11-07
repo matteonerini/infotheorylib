@@ -86,6 +86,7 @@ public import InfoTheoryLib.ChannelCoding.AverageError
 public import InfoTheoryLib.ChannelCoding.BlahutArimoto
 public import InfoTheoryLib.ChannelCoding.Capacity
 public import InfoTheoryLib.ChannelCoding.Code
+public import InfoTheoryLib.ChannelCoding.ContinuousChannel
 public import InfoTheoryLib.ChannelCoding.Converse
 public import InfoTheoryLib.ChannelCoding.Cost
 public import InfoTheoryLib.ChannelCoding.DiscreteChannel
@@ -117,6 +118,7 @@ public import InfoTheoryLib.ForMathlib.AlternatingMaximization
 public import InfoTheoryLib.ForMathlib.BinaryMatrix
 public import InfoTheoryLib.ForMathlib.ConvexHessian
 public import InfoTheoryLib.ForMathlib.ConvexOptimization
+public import InfoTheoryLib.ForMathlib.CrossCorrelation
 public import InfoTheoryLib.ForMathlib.FactorialBounds
 public import InfoTheoryLib.ForMathlib.FenchelEggleston
 public import InfoTheoryLib.ForMathlib.FlowDecomposition

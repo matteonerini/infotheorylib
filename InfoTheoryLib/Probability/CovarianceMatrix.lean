@@ -31,10 +31,12 @@ positive semidefinite, and a linear map `Y = AX` transforms them to `A K Aᵀ`.
 * `covMatrix_add_of_indepFun`: Proposition 10.8, `K_{X+Z} = K_X + K_Z` for independent `X`, `Z`.
 * `sum_sq_mulVec_of_orthogonal`, `integral_sum_sq_mulVec_of_orthogonal`: Proposition 10.9, an
   orthogonal transformation preserves the energy.
+* `corrMatrix_add_of_indepFun`: Lemma 11.33, `K̃_{X+Z} = K̃_X + K̃_Z` for a zero-mean `X`
+  independent of `Z`.
 
 ## References
 
-* [R. W. Yeung, *Information Theory and Network Coding*][yeung2008], Section 10.1
+* [R. W. Yeung, *Information Theory and Network Coding*][yeung2008], Sections 10.1 and 11.9
 -/
 
 open MeasureTheory ProbabilityTheory Matrix Finset Filter
@@ -203,5 +205,38 @@ lemma sum_sq_mulVec_of_orthogonal [Fintype ι] [DecidableEq ι] {Q : Matrix ι �
 theorem integral_sum_sq_mulVec_of_orthogonal [DecidableEq ι] {X : ι → Ω → ℝ} {Q : Matrix ι ι ℝ}
     (hQ : Qᵀ * Q = 1) : ∫ ω, ∑ i, (Q *ᵥ fun j => X j ω) i ^ 2 ∂μ = ∫ ω, ∑ i, X i ω ^ 2 ∂μ :=
   integral_congr_ae (Eventually.of_forall fun ω => sum_sq_mulVec_of_orthogonal hQ (fun j => X j ω))
+
+omit [Fintype ι] in
+/-- **Lemma 11.33, (11.271)–(11.277).** If `X` has zero mean and is independent of `Z`, the
+correlation matrices add: `K̃_{X+Z} = K̃_X + K̃_Z`. -/
+theorem corrMatrix_add_of_indepFun [IsProbabilityMeasure μ] {X Z : ι → Ω → ℝ}
+    (hX : ∀ i, MemLp (X i) 2 μ) (hZ : ∀ i, MemLp (Z i) 2 μ)
+    (hXZ : (fun ω i => X i ω) ⟂ᵢ[μ] (fun ω i => Z i ω)) (h0 : ∀ i, ∫ ω, X i ω ∂μ = 0) :
+    corrMatrix μ (X + Z) = corrMatrix μ X + corrMatrix μ Z := by
+  ext i j
+  have hind : ∀ a b, X a ⟂ᵢ[μ] Z b := fun a b =>
+    hXZ.comp (measurable_pi_apply a) (measurable_pi_apply b)
+  have hcross : ∀ a b, ∫ ω, X a ω * Z b ω ∂μ = 0 := fun a b => by
+    have := ProbabilityTheory.IndepFun.integral_mul_eq_mul_integral (hind a b)
+      (hX a).aestronglyMeasurable (hZ b).aestronglyMeasurable
+    simp only [Pi.mul_apply] at this
+    rw [this, h0, zero_mul]
+  have hcross' : ∀ a b, ∫ ω, Z a ω * X b ω ∂μ = 0 := fun a b => by
+    rw [← hcross b a]
+    exact integral_congr_ae (Eventually.of_forall fun ω => mul_comm _ _)
+  have e : ∀ ω, (X + Z) i ω * (X + Z) j ω =
+      (X i ω * X j ω + X i ω * Z j ω) + (Z i ω * X j ω + Z i ω * Z j ω) := fun ω => by
+    simp only [Pi.add_apply]; ring
+  have i₁ : Integrable (fun ω => X i ω * X j ω) μ := (hX i).integrable_mul (hX j)
+  have i₂ : Integrable (fun ω => X i ω * Z j ω) μ := (hX i).integrable_mul (hZ j)
+  have i₃ : Integrable (fun ω => Z i ω * X j ω) μ := (hZ i).integrable_mul (hX j)
+  have i₄ : Integrable (fun ω => Z i ω * Z j ω) μ := (hZ i).integrable_mul (hZ j)
+  simp only [corrMatrix, Matrix.of_apply, Matrix.add_apply, e]
+  have h₁ := integral_add (i₁.add i₂) (i₃.add i₄)
+  have h₂ := integral_add i₁ i₂
+  have h₃ := integral_add i₃ i₄
+  simp only [Pi.add_apply] at h₁ h₂ h₃
+  rw [h₁, h₂, h₃, hcross, hcross']
+  ring
 
 end InfoTheory
