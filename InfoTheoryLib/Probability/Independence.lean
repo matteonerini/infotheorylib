@@ -22,6 +22,10 @@ public import InfoTheoryLib.Probability.Conditional
 * `indepRV_iff_dist_eq`: independence as an equality of pmfs.
 * `condIndep_iff_dist_eq`: `CondIndep μ X Y Z` iff the law of `(Z, X, Y)` is
   `condProdDist μ X Y Z`.
+
+## References
+
+* [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Section 2.8
 -/
 
 open Real Finset Filter Topology

@@ -32,6 +32,11 @@ theorem of Ford and Fulkerson, for real and for integer capacities.
 
 The proof is by augmenting paths. A simple path is the inductive predicate `SPath`, whose index is
 the set of nodes it has to avoid, so no lists are needed. No acyclicity is assumed here.
+
+## References
+
+* [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
+  Lecture 16
 -/
 
 open Finset Filter Topology

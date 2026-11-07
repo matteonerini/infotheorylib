@@ -23,6 +23,10 @@ spectral theorem.
 * `det_le_det_of_posSemidef_sub`: if `B` and `A - B` are positive semidefinite, `|B| ≤ |A|`.
 * `det_rpow_mul_det_rpow_le`: the determinant is log-concave,
   `|A|^t |B|^{1-t} ≤ |t A + (1 - t) B|`.
+
+## References
+
+* [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Section 9.6
 -/
 
 @[expose] public section

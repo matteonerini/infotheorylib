@@ -19,7 +19,8 @@ We show directly that `(Xⁿ, Yⁿ, Uⁿ(L))` falls in any given sequence of set
 that is any sets with `P{(Xⁿ, Yⁿ, Uⁿ) ∈ Tₙ} → 1` for i.i.d. triples. Instead of the conditional
 typicality lemma, we call a pair `(xⁿ, uⁿ)` good if it is jointly typical and `yⁿ` given `xⁿ` falls
 in `Tₙ` with probability at least `1 - δ`. By Markov's inequality, i.i.d. pairs are good with
-probability tending to `1`, and the covering argument of Lemma 10.5.2 finds a good codeword.
+probability tending to `1`, and the covering argument of Lemma 10.5.2 of [cover2006] finds a good
+codeword.
 
 For noncausal side information, we bin the codewords, and the decoder finds the sequence of the bin
 that is jointly typical with `Yⁿ`.
@@ -72,9 +73,9 @@ section Miss
 variable {p : α → ℝ} {q : α → υ → ℝ}
 
 open Classical in
-/-- **Lecture 12, page 12-10, and (10.89)–(10.101).** A random codebook of `M` sequences drawn
-i.i.d. from `p(u)` misses a set `A` of typical pairs `(xⁿ, uⁿ)`, for `xⁿ` i.i.d. from `p(x)`, with
-probability at most `P{(Xⁿ, Uⁿ) ∉ A} + exp(-M e^{-n(I(X; U) + 3ε)})`. -/
+/-- **Lecture 12, page 12-10, and (10.89)–(10.101) of [cover2006].** A random codebook of `M`
+sequences drawn i.i.d. from `p(u)` misses a set `A` of typical pairs `(xⁿ, uⁿ)`, for `xⁿ` i.i.d.
+from `p(x)`, with probability at most `P{(Xⁿ, Uⁿ) ∉ A} + exp(-M e^{-n(I(X; U) + 3ε)})`. -/
 theorem sum_codebook_miss_le (hp : IsPMF p) (hq : IsChannel q) {n M : ℕ} {ε : ℝ} (hε : 0 ≤ ε)
     (A : Finset ((Fin n → α) × (Fin n → υ))) (hA : ∀ z ∈ A, z ∈ jointTypicalSet (jointOf p q) n ε) :
     ∑ C : Fin M → Fin n → υ, iidPMF (iidPMF (outDist p q) n) M C *

@@ -30,7 +30,10 @@ public import InfoTheoryLib.MutualInformation.Basic
 
 ## References
 
+Numbers without a source refer to [cover2006].
+
 * [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Sections 2.5 and 2.6
+* [R. W. Yeung, *Information Theory and Network Coding*][yeung2008], Proposition 2.21
 -/
 
 open Real Finset Filter Topology

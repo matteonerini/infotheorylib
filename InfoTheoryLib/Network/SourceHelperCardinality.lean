@@ -21,7 +21,7 @@ sources exchanged, so that we can use the reduction of `RateDistortion.SideInfo`
 
 ## Main definitions
 
-* `helperRegionCardBits q K`: the region of Theorem 2 with `U` on `Fin K`.
+* `helperRegionCardBits q K`: the region of Theorem 2 of Lecture 11 with `U` on `Fin K`.
 
 ## Main statements
 

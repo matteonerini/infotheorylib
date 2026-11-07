@@ -10,10 +10,11 @@ public import InfoTheoryLib.GaussianChannel.Capacity
 /-!
 # Gaussian multiple-user channels
 
-Section 15.1 describes the capacity regions of the Gaussian multiple-access, broadcast, relay,
-interference and two-way channels in terms of the function `C(x) = ½ log (1 + x)`, the capacity
-of a Gaussian channel with signal-to-noise ratio `x`. The coding theorems are stated there without
-proof; this file proves the properties of the regions that the book derives from the formulas.
+Section 15.1 of [cover2006] describes the capacity regions of the Gaussian multiple-access,
+broadcast, relay, interference and two-way channels in terms of the function
+`C(x) = ½ log (1 + x)`, the capacity of a Gaussian channel with signal-to-noise ratio `x`. The
+coding theorems are stated there without proof; this file proves the properties of the regions that
+the book derives from the formulas.
 
 ## Main definitions
 
@@ -54,6 +55,8 @@ the same closure. Powers and noise variances are real numbers, with positivity h
 needed.
 
 ## References
+
+Numbers without a source refer to [cover2006].
 
 * [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Sections 15.1 and
   15.3.6

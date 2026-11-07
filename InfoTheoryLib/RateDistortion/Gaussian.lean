@@ -42,7 +42,11 @@ with `D' < σ²`.
 
 ## References
 
+Numbers without a source refer to [cover2006].
+
 * [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Section 10.3.2
+* [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
+  Lectures 1 and 3
 -/
 
 open Real MeasureTheory ProbabilityTheory Filter Topology

@@ -126,6 +126,10 @@ new reference to `docs/references.bib` and cite it by its key.
 * A docstring of a result from a book starts with its number and name in bold, for example
   `/-- **Theorem 2.6.3 (Information inequality).** ... -/`, and cites equation numbers such as
   `(2.82)`.
+* A number such as `Theorem 1` or `(2.82)` may omit its source only if the file's `## References`
+  section lists exactly one text, and, for the lecture notes, one lecture or appendix. Otherwise
+  name the source at the number (`(2.82) of [cover2006]`, `Theorem 2 of Lecture 11`), or start the
+  section with `Numbers without a source refer to [cover2006].` if most numbers come from one text.
 * Every definition and every main theorem has a docstring. Lines are at most 100 characters.
 * Do not use `open Classical` or `open scoped Classical` for a whole file. Use the `classical`
   tactic inside proofs, or `open Classical in` before a single declaration whose statement needs

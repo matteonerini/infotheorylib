@@ -19,6 +19,10 @@ public import InfoTheoryLib.Probability.FinitePMF
 
 * `dist_mul_condDist`: `p(x) p(y | x) = p(x, y)`.
 * `condDist_isPMF`: `p(· | x)` is a pmf whenever `p(x) > 0`.
+
+## References
+
+* [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Section 2.2
 -/
 
 open Real Finset Filter Topology

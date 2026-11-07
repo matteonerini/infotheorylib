@@ -66,6 +66,7 @@ Case 4 of the example in the notes, `H(p) < ε ≤ 1`, needs `ε < 1` and `p > 0
 * [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
   Lecture 5
 * [C. Nair, *Capacity regions of two new classes of 2-receiver broadcast channels*][nair2009]
+* [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Section 7.1.5
 -/
 
 open Real Finset
@@ -399,7 +400,7 @@ lemma entropy_outDist_bscBecMarg₁ (a p : ℝ) :
     entropy (outDist (bernoulliPMF a) (bscBecMarg₁ p)) = binEntropy (binConv a p) := by
   rw [outDist_bscBecMarg₁, entropy_bernoulliPMF]
 
-/-- `H(Y₂) = H(ε) + (1 - ε) H(a)` for `X ∼ Bern(a)` (7.12). -/
+/-- `H(Y₂) = H(ε) + (1 - ε) H(a)` for `X ∼ Bern(a)`, (7.12) of [cover2006]. -/
 lemma entropy_outDist_bscBecMarg₂ (a ε : ℝ) :
     entropy (outDist (bernoulliPMF a) (bscBecMarg₂ ε)) =
       binEntropy ε + (1 - ε) * binEntropy a := by
@@ -429,7 +430,7 @@ theorem mutualInfoOf_bscBecMarg₁ {p : ℝ} (h0 : 0 ≤ p) (h1 : p ≤ 1) {r : 
   rw [eq_bernoulliPMF_of_isPMF hr, entropy_outDist_bscBecMarg₁]
   simp [bernoulliPMF]
 
-/-- `I(X; Y₂) = (1 - ε) H(a)` for the BEC(`ε`) with input `Bern(a)` (7.14). -/
+/-- `I(X; Y₂) = (1 - ε) H(a)` for the BEC(`ε`) with input `Bern(a)`, (7.14) of [cover2006]. -/
 theorem mutualInfoOf_bscBecMarg₂ {ε : ℝ} (h0 : 0 ≤ ε) (h1 : ε ≤ 1) {r : Bool → ℝ}
     (hr : IsPMF r) : mutualInfoOf r (bscBecMarg₂ ε) = (1 - ε) * binEntropy (r true) := by
   have hrow : ∀ x, entropy (bscBecMarg₂ ε x) = binEntropy ε := fun x => by

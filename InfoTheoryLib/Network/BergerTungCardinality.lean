@@ -21,8 +21,9 @@ and one for each distortion, this gives `|𝒳₁| + 3`. Each distortion is repl
 as in `RateDistortion.SideInfo`, so that the distortions may decrease.
 
 The Markov chain `U₁ → X₁ → U₂` makes `(X₁, U₂, U₁)` a law `siLaw`, and we use the tools of
-`RateDistortion.SideInfo`. The outer bound of Theorem 2 is different: there `U₁` and `U₂` have a
-joint law, so reducing `U₁` has to preserve the law of `(X₁, X₂, U₂)`, whose size depends on `|𝒰₂|`.
+`RateDistortion.SideInfo`. The outer bound of Theorem 2 of Lecture 13 is different: there `U₁` and
+`U₂` have a joint law, so reducing `U₁` has to preserve the law of `(X₁, X₂, U₂)`, whose size
+depends on `|𝒰₂|`.
 
 ## Main definitions
 
@@ -32,7 +33,7 @@ joint law, so reducing `U₁` has to preserve the law of `(X₁, X₂, U₂)`, w
 
 * `exists_bt_reduce₁`: the reduction of `U₁` for a fixed `p(u₂ | x₂)`.
 * `exists_bt_reduce`: **the bound**, for a law without time sharing.
-* `exists_bt_sharing_card`: **the bound**, with time sharing, as in Theorem 1.
+* `exists_bt_sharing_card`: **the bound**, with time sharing, as in Theorem 1 of Lecture 13.
 
 ## References
 

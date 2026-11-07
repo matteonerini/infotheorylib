@@ -32,6 +32,10 @@ This file sets up the elementary probability used in the library. All alphabets 
 
 * `sum_dist_mul`: change of variables `∑ₐ Pr{X = a} g(a) = ∑_ω μ(ω) g(X ω)`.
 * `sum_dist_pair_right`, `sum_dist_pair_left`: marginalization.
+
+## References
+
+* [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Section 2.1
 -/
 
 open Real Finset Filter Topology

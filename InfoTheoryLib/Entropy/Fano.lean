@@ -37,7 +37,12 @@ on the same space as `X` and `Y`), and its alphabet `𝒳̂` may be larger than 
 
 ## References
 
+Numbers without a source refer to [cover2006].
+
 * [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Section 2.10
+* [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
+  Lecture 2
+* [R. W. Yeung, *Information Theory and Network Coding*][yeung2008], Corollary 2.48
 -/
 
 open Real Finset Filter Topology

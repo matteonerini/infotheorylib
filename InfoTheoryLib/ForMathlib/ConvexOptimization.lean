@@ -46,6 +46,8 @@ can be `⊥`.
 ## References
 
 * [S. Boyd and L. Vandenberghe, *Convex Optimization*][boyd2004]
+* [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
+  Appendix E
 -/
 
 open Finset Module Set Matrix

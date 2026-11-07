@@ -45,6 +45,8 @@ coefficients that depend only on `A`, so the elimination also holds for symbolic
 ## References
 
 * [G. M. Ziegler, *Lectures on Polytopes*][ziegler1995]
+* [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
+  Appendix D
 -/
 
 open Finset Matrix

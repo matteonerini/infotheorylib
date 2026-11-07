@@ -41,8 +41,12 @@ variables the density is a product of one-dimensional normal densities.
 
 ## References
 
+Numbers without a source refer to [cover2006].
+
 * [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Sections 8.4 and
   8.6
+* [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
+  Lecture 2
 -/
 
 open Real MeasureTheory ProbabilityTheory Matrix Filter

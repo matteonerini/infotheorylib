@@ -19,6 +19,11 @@ lemma of Mathlib.
 * `exists_aeval_ne_zero`: a polynomial of small degree has a nonzero value.
 * `exists_aeval_galoisField_ne_zero`: a nonzero polynomial over `𝔽₂` has a nonzero value in
   `𝔽_{2^m}` for all large `m`. This is Lemma 1 of Lecture 16 of El Gamal and Kim.
+
+## References
+
+* [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
+  Lecture 16
 -/
 
 open Finset

@@ -23,6 +23,10 @@ first `n` terms is `prefixRV X n = (X₀, …, X_{n-1}) : Ω → (Fin n → α)`
 
 * `indepFamily_iff`: `X₀, …, X_{n-1}` are independent iff each `Xᵢ` is independent of
   `(X₀, …, X_{i-1})`.
+
+## References
+
+* [R. W. Yeung, *Information Theory and Network Coding*][yeung2008], Definition 2.3
 -/
 
 open Real Finset Filter Topology

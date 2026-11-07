@@ -41,6 +41,8 @@ submodular, and a conditional mutual information of blocks is a linear combinati
 
 ## References
 
+Numbers without a source refer to [yeung2008].
+
 * [R. W. Yeung, *Information Theory and Network Coding*][yeung2008], Section 2.1
 -/
 
