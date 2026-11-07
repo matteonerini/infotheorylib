@@ -76,7 +76,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `mwSource_intrinsic`, `keyCapacity_mwSource`.
 * Double binning (`Secrecy.DoubleBinning`): `entropy_key_ge_of_decodable`,
   `mutualInfo_key_le_of_decodable`, `key_transfer`, `exists_doubleBin`, `eventually_doubleBin`.
-* **Theorem 6:** `oneWayGap` (`Secrecy.KeyOneWay`), `isAchievableKey_of_lt_oneWayGap`,
+* **Theorem 6:** `oneWayGap`, `isAchievableKey_of_lt_oneWayGap` (`Secrecy.KeyOneWay`),
   `oneWayValue`, `condMutualInfo_sub_eq_sum`, `exists_channel_coord`, `letterGap_le_value`,
   `KeyCode.entropyKey₁_le_oneWay`, `IsAchievableKey.le_oneWayValue`, `keyCapacity₁₂_eq`
   (`Secrecy.KeyOneWayConverse`), `srcSwap`, `IsAchievableKey.swap`, `keyCapacity₂₁_eq`,

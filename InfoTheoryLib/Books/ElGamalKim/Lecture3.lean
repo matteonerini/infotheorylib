@@ -21,7 +21,7 @@ public import InfoTheoryLib.Typicality.Covering
 public import InfoTheoryLib.Typicality.Packing
 
 /-!
-# El Gamal & Kim, Lecture 3: Point-to-Point Information Theory
+# El Gamal & Kim, Lecture 3: Point-to-Point Communication
 
 This file indexes the formalization of Lecture 3 of [elgamal2010] and contains the lecture's
 worked examples, with aliases named after its results. The lecture proves Shannon's
@@ -53,8 +53,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `ChannelCode.jointLaw`, `ChannelCode.errProb_jointLaw` (`ChannelCoding.Converse`).
 * Achievable rates and the capacity: `IsAchievableRateAvg`, `opCapacityAvg`
   (`ChannelCoding.AverageError`).
-* Shannon's channel coding theorem `C = max_{p(x)} I(X; Y)`: `opCapacityAvg_eq`, with
-  `capacity` and `exists_capacity_eq` (`ChannelCoding.Capacity`).
+* Shannon's channel coding theorem `C = max_{p(x)} I(X; Y)`: `opCapacityAvg_eq`
+  (`ChannelCoding.AverageError`), with `capacity` and `exists_capacity_eq`
+  (`ChannelCoding.Capacity`).
 * The BSC, `C = 1 - H(p)`: `example_bsc` (here); the BEC, `C = 1 - p`: `example_bec` (here).
 * The product of `d` channels: `piChannel`, `capacity_comp_equiv`, `capacity_piChannel`
   (`ChannelCoding.Product`).
@@ -62,13 +63,13 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `continuousOn_capacityCost_Ici` (`ChannelCoding.Cost`).
 * The product DMC, `C = C₁ + C₂`: `prodChannel`, `capacity_prodChannel`
   (`ChannelCoding.Product`).
-* Achievability: `isAchievableRateAvg_of_lt`, derived from Cover and Thomas's random coding
-  proof `isAchievableRate_of_lt_capacity` (`ChannelCoding.Achievability`).
+* Achievability: `isAchievableRateAvg_of_lt` (`ChannelCoding.AverageError`), derived from Cover and
+  Thomas's random coding proof `isAchievableRate_of_lt_capacity` (`ChannelCoding.Achievability`).
 * Remarks: the maximal and the average probability of error give the same capacity,
   `ChannelCode.exists_maxErrProb_le_two_mul` (`ChannelCoding.Code`), `opCapacity_eq_capacity`
   (`ChannelCoding.Converse`).
-* The weak converse: `IsAchievableRateAvg.le_capacity_div`, through Fano's inequality
-  `ChannelCode.condEntropy_message_le` and the steps `I(M; Yⁿ) ≤ ∑ᵢ I(Xᵢ; Yᵢ)`,
+* The weak converse: `IsAchievableRateAvg.le_capacity_div` (`ChannelCoding.AverageError`), through
+  Fano's inequality `ChannelCode.condEntropy_message_le` and the steps `I(M; Yⁿ) ≤ ∑ᵢ I(Xᵢ; Yᵢ)`,
   `mutualInfo_fbLaw_succ_le_mutualInfoOf` (`ChannelCoding.Converse`), which also hold with
   feedback.
 
@@ -91,8 +92,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `GaussianCode`, `GaussianCode.SatisfiesPower` (`GaussianChannel.Code`), `GaussianCode.scale`,
   `IsAchievableAWGNRate`, `opCapacityAWGN`, `receivedPower` (`GaussianChannel.AWGN`).
 * Theorem 3, `C = C(S)`: `opCapacityAWGN_eq`, with `gaussianCapacityFun`; achievability
-  `isAchievableAWGNRate_of_lt` and converse `IsAchievableAWGNRate.le`, derived from Cover and
-  Thomas's `gaussianOpCapacity_eq` (`GaussianChannel.Achievability`).
+  `isAchievableAWGNRate_of_lt` and converse `IsAchievableAWGNRate.le` (`GaussianChannel.AWGN`),
+  derived from Cover and Thomas's `gaussianOpCapacity_eq` (`GaussianChannel.Achievability`).
 * `I(X; Y) = C(S)` for `X ∼ N(0, P)`: `mutualInfoPDF_gaussianChannel_gaussian`
   (`GaussianChannel.Capacity`).
 * The bandlimited channel, `C = W C(S)` and its wideband limit: `bandlimitedCapacity`,
@@ -122,7 +123,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Achievable pairs and `R(D)`: `IsAchievableRDBits`, `rateDistortionBits`
   (`RateDistortion.BitRate`).
 * Shannon's lossy source coding theorem `R(D) = min I(X; X̂)` for `D ≥ D_min`:
-  `rateDistortionBits_eq`, with `infoRD`, `minDistortion` (`RateDistortion.Basic`);
+  `rateDistortionBits_eq` (`RateDistortion.BitRate`), with `infoRD`, `minDistortion`
+  (`RateDistortion.Basic`);
   achievability `isAchievableRDBits_of_lt` and converse `IsAchievableRDBits.infoRD_div_le`.
 * `R(D)` is nonincreasing and convex: `infoRD_antitoneOn`, `infoRD_convexOn`
   (`RateDistortion.Basic`).
@@ -130,7 +132,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `rateDistortionBits_bernoulli` (here), from `infoRD_bernoulli` (`RateDistortion.Binary`).
 * Lossless source coding revisited, `R* = R(0)`: `optLosslessRate_eq_rateDistortionBits_zero`
   (here), from `minDistortion_hammingDistortion` and `infoRD_hammingDistortion_zero`
-  (`RateDistortion.BitRate`).
+  (`RateDistortion.Binary`, `RateDistortion.BitRate`).
 
 ### Covering lemma
 * The covering lemma: `prob_forall_not_mem_robustTypicalSet_le`, and asymptotically

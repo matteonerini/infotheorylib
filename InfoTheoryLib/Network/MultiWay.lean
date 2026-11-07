@@ -351,7 +351,7 @@ lemma sum_mwRivals_le (hp : IsPMF p) (ε : ℝ) (k : ι) (ω : Fin n → ∀ j, 
     _ ≤ _ := mul_le_mul_of_nonneg_right (card_filter_diff_le hp ω S) hprod0
 
 open Classical in
-/-- **Pages 21-18 of [elgamal2010]: random binning.** There is a code, with one round for each node,
+/-- **Page 21-18 of [elgamal2010]: random binning.** There is a code, with one round for each node,
 such that `Pₑ ≤ P{Xⁿ ∉ T} + ∑_{k ∈ A} ∑_{S ≠ ∅, k ∉ S} e^{n(H(X(S) | X(Sᶜ)) + δ)} ∏_{j ∈ S} 1/Mⱼ`.
 -/
 theorem exists_mw_code_le (hp : IsPMF p) [∀ j, NeZero (M j)] (A : Finset ι) (ε : ℝ) :

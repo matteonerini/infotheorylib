@@ -66,8 +66,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `mutualInfoOf_side_indexedExt_le`, `mutualInfoOf_sideOut`.
 * The bound `|Q| ≤ 4` in Theorem 1: `icStrongRegionCardBits`, `icStrongRegionBits_eq_card`,
   `isClosed_icStrongRegionCardBits`, `icCapacityRegionBits_eq_card` (`Network.ICCardinality`).
-* Theorem 1: `icStrongRegionBits`, `icCapacityRegionBits_eq_closure_icStrongRegionBits`
-  (`Network.ICAchievability`), with the converse `IsAchievableICBits.mem_closure_icStrongRegionBits`
+* Theorem 1: `icStrongRegionBits` (`Network.ICStrong`),
+  `icCapacityRegionBits_eq_closure_icStrongRegionBits` (`Network.ICAchievability`),
+  with the converse `IsAchievableICBits.mem_closure_icStrongRegionBits`
   (`Network.ICStrong`).
 
 ### AWGN interference channel (formulas)

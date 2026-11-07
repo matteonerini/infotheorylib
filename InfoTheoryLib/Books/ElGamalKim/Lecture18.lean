@@ -173,7 +173,7 @@ section Aliases
 variable {X X₁ X₂ Y Y₁ Y₂ U α β : Type*} [Fintype X] [Fintype X₁] [Fintype X₂] [Fintype Y]
   [Fintype Y₁] [Fintype Y₂] [Fintype U] [Fintype α] [Fintype β]
 
-/-- **Theorem 1, page 18-3.** Feedback does not increase the capacity of a DMC. -/
+/-- **Theorem 1, page 18-4.** Feedback does not increase the capacity of a DMC. -/
 theorem theorem_18_1 [Nonempty α] {W : α → β → ℝ} (hW : IsChannel W) :
     fbCapacity W = capacity W :=
   fbCapacity_eq_capacity hW

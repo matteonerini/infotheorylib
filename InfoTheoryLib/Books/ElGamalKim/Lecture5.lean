@@ -35,7 +35,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The DM-BC and a `(2^{nR₁}, 2^{nR₂}, n)` code: `BCCode`, `BCCode.errProb`, `bcMarg₁`, `bcMarg₂`
   (`Network.Broadcast`).
 * Achievable rate pairs and the capacity region: `IsAchievableBCBits`, `bcCapacityRegionBits`
-  (`Network.BCBits`), which is Cover and Thomas's `bcCapacityRegion` scaled by `1/log 2`:
+  (`Network.BCBits`), which is Cover and Thomas's `bcCapacityRegion` (`Network.Broadcast`) scaled by
+  `1/log 2`:
   `bcCapacityRegionBits_eq_smul` (`Network.BCTimeSharing`).
 * Lemma 1, the capacity region depends only on the conditional marginals: `isAchievableBCBits_iff`,
   `isAchievableBCBits_congr`, `bcCapacityRegionBits_eq_of_marg_eq` (`Network.BCTimeSharing`).
@@ -69,7 +70,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Physical and stochastic degradedness: `IsPhysicallyDegraded`, `IsStochasticallyDegraded`
   (`Network.Broadcast`), and the transfer `IsStochasticallyDegraded.capacityRegionBits_eq`.
 * Theorem 2: `degradedBCRegionBits`, `bcCapacityRegionBits_eq_closure_degradedBCRegionBits`
-  (`Network.BCCapacity`). Achievability, `I(U; Y₁) ≥ I(U; Y₂)` makes the sum-rate bound inactive:
+  (`Network.BCBits`, `Network.BCCapacity`). Achievability, `I(U; Y₁) ≥ I(U; Y₂)` makes the sum-rate
+  bound inactive:
   `IsStochasticallyDegraded.bcInfoUY₂_le_bcInfoUY₁`, `degradedBCRegionBits_subset_closure`.
   The converse: `BCCode.log_le_sum_bcInfoXY₁U`, `BCCode.log_le_sum_bcInfoUY₂`,
   `IsAchievableBCBits.mem_closure_degradedBCRegionBits`,
@@ -105,7 +107,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The converses, with `Uᵢ = (M₂, Y₁^{i-1}, Y₂_{i+1}ⁿ)` and `Vᵢ = (M₁, Y₁^{i-1}, Y₂_{i+1}ⁿ)`: the
   Csiszár sum identity in telescoped form `condEntropy_sub_condEntropy_eq_sum_moreCapableAux`,
   `BCCode.log_add_log_le_sum_bcInfoXY₁U_add_bcInfoUY₂`, `BCCode.log_add_log_le_sum_bcInfoXY₁`
-  (`Network.BCMoreCapableLaws`), `IsMoreCapable.bcInfoXY₂U_le_bcInfoXY₁U`.
+  (`Network.BCMoreCapableLaws`, `Network.BCMoreCapable`), `IsMoreCapable.bcInfoXY₂U_le_bcInfoXY₁U`.
 * The alternative regions: `moreCapableAltRegionBits`, `lessNoisyAltRegionBits`,
   `mem_superpositionClosedRegionBits_of_mem_moreCapableAltRegionBits`,
   `IsLessNoisy.mem_degradedBCRegionBits_of_mem_lessNoisyAltRegionBits`.
@@ -117,12 +119,13 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ## Not formalized
 
 * The common message: the code with `M₀`, the triples `(R₀, R₁, R₂)`, the common-message capacity
-  `C₀`, the degraded message sets, and the extension on page 5-46.
+  `C₀`, and the extension on page 5-46. The degraded message sets of page 5-5 are in Lecture 9:
+  `dmsCapacityRegionBits_eq` (`Network.BCDegradedMessages`).
 * Theorem 3 as a coding theorem for the AWGN-BC. Its converse needs the conditional vector entropy
   power inequality, which the library does not have.
 * The explicit `U ⊕ V` scheme for the BS-BC and successive cancellation decoding; the region is
   obtained from Theorem 1 with a DSBS input.
-* The BC with more than two receivers, and the remark on feedback.
+* The BC with more than two receivers, and the remark on page 5-4 that Lemma 1 fails with feedback.
 
 ## Issues in the notes
 
@@ -131,8 +134,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   not intersected with `R₁, R₂ ≥ 0`.
 * **Page 5-21.** The intermediate crossover probability is printed as `p̃₂ = (p₂ − p₁)(1 − 2p₁)`.
   It should be `(p₂ − p₁)/(1 − 2p₁)`: `bsbc_not_forall_binConv_mul`, `binConv_bsbcNoise₂`.
-* **Page 5-39.** Case 4 of the BSC and the BEC, "`H(p) < ε ≤ 1`: none of the three classes", fails
-  at `ε = 1` and at `p = 0`, where `Y₂` is a degraded version of `Y₁`:
+* **Page 5-39.** Case 4 of the BSC and the BEC, `H(p) < ε ≤ 1`, where "the channel does not belong
+  to any of the three classes", fails at `ε = 1` and at `p = 0`, where `Y₂` is a degraded version
+  of `Y₁`:
   `isStochasticallyDegraded_bscBecBC_of_eps_eq_one`,
   `isStochasticallyDegraded_bscBecBC_of_p_eq_zero`. It holds for `H(p) < ε < 1` and `p > 0`.
 

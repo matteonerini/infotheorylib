@@ -65,7 +65,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ### Semi-deterministic and deterministic broadcast channels
 * The capacity region of the semi-deterministic DM-BC: `IsSemiDeterministicBC`,
-  `bcCapacityRegionBits_eq_of_isSemiDeterministicBC`, for the region `bcOuterRegionBits`, with
+  `bcCapacityRegionBits_eq_of_isSemiDeterministicBC` (`Network.BCSemiDeterministic`), for the region
+  `bcOuterRegionBits` (`Network.BCDegradedMessages`), with
   `I(X; Y₁) = H(Y₁)` and `I(X; Y₁ | U) = H(Y₁ | U)`: `bcInfoXY₁_eq_entropy`,
   `bcInfoXY₁U_eq_condEntropy` (`Network.BCSemiDeterministic`).
 * The capacity region of the deterministic DM-BC: `IsDeterministicBC`, `bcCutSetRegionBits`,

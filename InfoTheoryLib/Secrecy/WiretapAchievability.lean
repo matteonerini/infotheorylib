@@ -28,7 +28,7 @@ values of `l` in the bin of the message `m`. To send `m`, the encoder picks `l` 
 ## Implementation notes
 
 The notes take a bin rate `R̃ - R > I(U; Z)` and bound `H(L | Zⁿ, M)` with Chebyshev's inequality on
-the number of typical codewords in a bin (Lemma 1 of page 23-16). We take the bin rate just below
+the number of typical codewords in a bin (Lemma 1 of page 23-17). We take the bin rate just below
 `I(U; Z)`, which is Wyner's original choice. The eavesdropper can then decode `L` given `M`, by the
 packing lemma, and Fano's inequality bounds `H(L | Zⁿ, M)`. No second-moment argument is needed.
 

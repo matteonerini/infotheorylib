@@ -64,7 +64,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `genericCoeff`, `detGeneric`, `aeval_detGeneric` (`Network.LinearNetworkCode`).
 * Routing is linear with `A(α) = I`: `exists_coeff_of_bit`, `detGeneric_ne_zero_of_cuts`.
 * A linear code with invertible matrices has no errors: `LinCoeff.code_correct`.
-* `|A(x)| ≠ 0` implies the cut conditions: `cuts_of_detGeneric_ne_zero`, and both directions in
+* `|A(x)| ≠ 0` implies the cut conditions: `cuts_of_detGeneric_ne_zero`
+  (`Network.LinearNetworkCode`), and both directions in
   `detGeneric_ne_zero_iff` (`Network.NetworkCoding`).
 * **Lemma 1 (page 16-21)**: `exists_aeval_galoisField_ne_zero` (`ForMathlib.PolyFiniteField`). Here:
   `lemma_16_1`.

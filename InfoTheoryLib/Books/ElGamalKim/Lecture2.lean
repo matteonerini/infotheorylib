@@ -144,7 +144,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The joint type and `T_ε^(n)(X, Y) = T_ε^(n)((X, Y))`: `typeOf (zipSeq xⁿ yⁿ)`,
   `robustTypicalSet q`.
 * Properties of jointly typical sequences: 1. `fst_mem_robustTypicalSet`,
-  `snd_mem_robustTypicalSet`, and in general `comp_mem_robustTypicalSet` (`Typicality.Basic`);
+  `snd_mem_robustTypicalSet` (`Typicality.Conditional`), and in general
+  `comp_mem_robustTypicalSet` (`Typicality.Basic`);
   2. property 1 of typical sequences for `q`; 3. the same for the marginals, by 1;
   4. `le_channelExt_condPMF_of_mem`, `channelExt_condPMF_le_of_mem` (`Typicality.Conditional`),
   and for `p(xⁿ|yⁿ)` the same applied to the swapped pmf, `zipSeq_swap_mem_robustTypicalSet`.
@@ -159,8 +160,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Its consequence `|T_ε^(n)(Y|xⁿ)| ≥ (1 - ε) 2^{n(H(Y|X)-δ(ε))}` for `xⁿ ∈ T_{ε'}^(n)(X)`:
   `eventually_card_condRobustTypicalSet_ge`.
 * Joint typicality for random triples: properties 1–4 are those of pairs for `((X, Y), Z)`, with
-  `comp_mem_robustTypicalSet` for the subtuples and `le_prod_condDist_of_mem`,
-  `prod_condDist_le_of_mem` for `p(xⁿ, yⁿ|zⁿ)` (`Typicality.JointTypicalityLemma`).
+  `comp_mem_robustTypicalSet` (`Typicality.Basic`) for the subtuples and
+  `le_prod_condDist_of_mem`, `prod_condDist_le_of_mem` for `p(xⁿ, yⁿ|zⁿ)`
+  (`Typicality.JointTypicalityLemma`).
 * The Markov chain `X → Y → Z`: `p(z|x, y) = p(z|y)`, `condPMF_eq_condDist_of_markovChain`, and
   `P{(xⁿ, yⁿ, Zⁿ) ∈ T_ε^(n)(X, Y, Z)} → 1` for `(xⁿ, yⁿ) ∈ T_{ε'}^(n)(X, Y)`, uniformly:
   `eventually_prob_condRobustTypicalSet_of_markovChain`.

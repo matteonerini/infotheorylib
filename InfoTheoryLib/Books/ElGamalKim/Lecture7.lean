@@ -42,7 +42,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Codes, achievability and capacity: `compoundErr`, `IsAchievableCompound`, `compoundCapacity`,
   `compoundInfo`, `compoundValue`, `exists_compoundInfo_eq` (`StateChannel.Compound`).
 * Theorem 1: `compoundCapacity_eq`, with the converse `one_sub_compoundErr_mul_log_le` and
-  achievability `isAchievableCompound_of_lt`, `exists_compound_code_le`. The packing lemma,
+  achievability `isAchievableCompound_of_lt`, `exists_compound_code_le` (`StateChannel.Compound`).
+  The packing lemma,
   universal in the law of the output: `prob_iidPMF_condRobustTypicalSet_le`
   (`StateChannel.Multicoding`).
 * The capacity does not increase if the decoder knows the state: `IsAchievableCompoundDec`,
@@ -76,13 +77,14 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `stateCapacity_defect_causal_true`, `stateCapacity_defect_noncausal_true`,
   `stateCapacity_defect_none_true`, `stateCapacity_defect_noncausal_false`, `gpRate_defect` (here).
 * The Gelfand–Pinsker theorem: `gpRate`, `gpValue`, `stateCapacity_noncausal_false`
-  (`StateChannel.GPConverse`).
+  (`StateChannel.GelfandPinsker`, `StateChannel.GPConverse`).
 * Achievability, by multicoding: `sum_codebook_subcode_le`, `subcodeDecode`,
   `sum_iidPMF_ite_forall_not_mem_le`, `eventually_le_prob_iidPMF_condRobustTypicalSet`
   (`StateChannel.Multicoding`), `gpEnc`, `exists_gp_code_le`,
   `isAchievableStateRate_noncausal_false_of_lt` (`StateChannel.GelfandPinsker`).
 * The converse: `gpAux`, `mutualInfo_le_sum_gp`, `StateCode.one_sub_errProb_mul_log_le_gpValue`,
-  `IsAchievableStateRate.le_gpValue`, and the reduction to functions `x(u, s)`:
+  `IsAchievableStateRate.le_gpValue` (`StateChannel.GPConverse`), and the reduction to functions
+  `x(u, s)`:
   `gpMix_rate_le_gpValue`, `sub_le_gpValue_of_law` (`StateChannel.GPDerandomize`).
 * The comparison to the causal case: `causalValue_le_gpValue`, and to the state at both ends:
   `gpValue_le_stateKnownValue`, `gpRate_le_stateKnownValue`.

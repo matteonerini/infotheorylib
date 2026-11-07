@@ -82,7 +82,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The converse, with the time-sharing random variable `Q` uniform on the `n` positions:
   `IsAchievableMAC.mem_closure_macRegion` (`Network.MACConverse`), and `𝒞 = 𝒞'` for the region
   `𝒞'` of `p(q) p(x₁|q) p(x₂|q)`: `macRegion`, `macCapacityRegion_eq_closure_macRegion`
-  (`Network.MACCapacity`), in nats and without a bound on `|Q|`.
+  (`Network.MACRegion`, `Network.MACCapacity`), in nats and without a bound on `|Q|`.
 * The sum capacity `max_{p(x₁) p(x₂)} I(X₁, X₂; Y)`: `sSup_sum_macCapacityRegionBits`
   (`Network.MACBounds`).
 

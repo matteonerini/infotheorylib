@@ -48,7 +48,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `helperRegionBits_eq_card`, `isClosed_helperRegionCardBits`, `helperOptimalRegionBits_eq_card`
   (`Network.SourceHelperCardinality`).
 * **Theorem 2**: `helperLaw`, `helperCond`, `helperInfo`, `helperRegionBits`,
-  `helperOptimalRegionBits_eq` (`Network.SourceHelperConverse`).
+  `helperOptimalRegionBits_eq` (`Network.SourceHelper`, `Network.SourceHelperConverse`).
 * Achievability: `exists_bins_code` (random binning), `helperEnc`, `sum_not_mem_helperEnc_le`,
   `exists_helper_code_le`, `isAchievableHelperBits_of_lt`.
 * The converse: `sum_iidPMF_mul_phi`, `entropyRV_mix`, `condEntropy_mix`,

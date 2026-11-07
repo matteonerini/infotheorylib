@@ -90,14 +90,15 @@ end InfoTheory
 ```
 
 The header linter requires the copyright block exactly in this form. Every file uses Lean's
-module system: a `module` header, `public import`s, and `@[expose] public noncomputable section`,
-which makes all declarations and definition bodies visible to other files. Mathlib imports its
-own dependencies privately, so a lemma is available only after importing the Mathlib file that
-declares it (or one that imports it publicly), and the bodies of Mathlib definitions that are not
-exposed cannot be unfolded: use their characterizing lemmas instead (see
-`binEntropy_eq_mul_log_inv`). Import only the modules that are needed; a few base files, such as
-`ForMathlib/Log.lean` and `Probability/FinitePMF.lean`, import `Mathlib`. Add any new reference
-to `docs/references.bib` and cite it by its key.
+module system: a `module` header, `public import`s, and `@[expose] public noncomputable section`
+(`@[expose] public section` in a file with computable definitions, such as
+`ChannelCoding/Hamming.lean`), which makes all declarations and definition bodies visible to other
+files. Mathlib imports its own dependencies privately, so a lemma is available only after
+importing the Mathlib file that declares it (or one that imports it publicly), and the bodies of
+Mathlib definitions that are not exposed cannot be unfolded: use their characterizing lemmas
+instead (see `binEntropy_eq_mul_log_inv`). Import only the modules that are needed; a few base
+files, such as `ForMathlib/Log.lean` and `Probability/FinitePMF.lean`, import `Mathlib`. Add any
+new reference to `docs/references.bib` and cite it by its key.
 
 ## Mathematical conventions
 

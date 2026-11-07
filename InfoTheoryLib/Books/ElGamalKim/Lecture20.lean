@@ -42,13 +42,15 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### The constant gap (pages 20-5 to 20-7)
 * `K ≼ tr(K) I`: `posSemidef_trace_smul_sub`; the relaxation of the cutset bound: `cutset_relax`,
   here `gaussian_cutset_relax` (`Network.GaussianNetBounds`).
-* The rate of Theorem 1: `nncGaussRate`. The two terms of its derivation: `gk_nnc_gap`,
+* The rate of Theorem 1: `nncGaussRate` (`Network.GaussianNetBounds`).
+  The two terms of its derivation: `gk_nnc_gap`,
   `gvRate_half` (`Network.GuptaKumar`).
 * The gap: `nnc_gap_le`, `gvRate_le_nncGaussRate_add`, here `gaussian_constant_gap`.
 
 ### Capacity scaling, examples (pages 20-10 to 20-17)
-* The `N`-sender MAC: `C(N) = (1 / N) C(N P)`, `gnSymCapacity_mac`, here `mac_symmetric_capacity`;
-  its order: `isTheta_gaussCap_div`, here `mac_order` (`Network.GaussianNetTDM`).
+* The `N`-sender MAC: `C(N) = (1 / N) C(N P)`, `gnSymCapacity_mac` (`Network.GaussianNetTDM`), here
+  `mac_symmetric_capacity`; its order: `isTheta_gaussCap_div` (`Network.GuptaKumar`), here
+  `mac_order`.
 * The interference example: time division `isAchievableGN_ic`, the bounds
   `IsAchievableGN.ic_le_single` and `IsAchievableGN.ic_le_rate`; the determinant
   `det_interference`, `gvRate_interference`; the case `a = 1`: here `ic_one_rate`.

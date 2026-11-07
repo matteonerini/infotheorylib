@@ -66,7 +66,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### Two-way lossy source coding (pages 21-20 to 21-29)
 * The code and the region: `KaspiCode`, `IsAchievableKaspi`, `kaspiRegion`, `IsKaspiLaw`,
   `kaspiInner` (`Network.TwoWayLossy`).
-* **Lemma 1:** `condMutualInfo_of_indep`, `lemma1`, `lemma1_speak`, here `lemma_21_1`. For a code:
+* **Lemma 1:** `condMutualInfo_of_indep`, `lemma1`, `lemma1_speak` (`Network.TwoWayLossy`), here
+  `lemma_21_1`. For a code:
   `KaspiCode.condMutualInfo_trans`, `KaspiCode.condMutualInfo_speak` (`Network.TwoWayLossyLetters`).
 * The converse: the auxiliary letter `KaspiCode.kU`, the claim (a) `exists_estimator_le`,
   `KaspiCode.markov_dist₁`, `KaspiCode.markov_dist₂`; the claim (b) `KaspiCode.markov_mix`; the
