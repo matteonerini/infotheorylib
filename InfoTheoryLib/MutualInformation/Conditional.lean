@@ -21,6 +21,8 @@ public import InfoTheoryLib.MutualInformation.Basic
 * `condMutualInfo_nonneg`: `I(X; Y | Z) ≥ 0`, with equality iff `X` and `Y` are conditionally
   independent given `Z` (`condMutualInfo_eq_zero_iff`).
 * `chain_rule_mutualInfo₂`: `I(X; Y, Z) = I(X; Z) + I(X; Y | Z)`.
+* `condMutualInfo_self`: `I(X; X | Z) = H(X | Z)`.
+* `condMutualInfo_eq_add_sub`: `I(X; Y | Z) = H(X | Z) + H(Y | Z) - H(X, Y | Z)`.
 
 ## Notation
 
@@ -176,5 +178,22 @@ lemma condMutualInfo_comp_le {μ : Ω → ℝ} (hμ : IsPMF μ) (X : Ω → α) 
       (fun _ => rfl)).symm
   rw [h1, chain_rule_condMutualInfo hμ]
   linarith [condMutualInfo_nonneg hμ X Y (pair (g ∘ Y) Z)]
+
+/-- **Proposition 2.21 of [yeung2008].** `I(X; X | Z) = H(X | Z)`. -/
+theorem condMutualInfo_self {μ : Ω → ℝ} (hμ : IsPMF μ) (X : Ω → α) (Z : Ω → γ) :
+    I[X : X | Z ; μ] = H[X | Z ; μ] := by
+  have h : H[X | pair Z X ; μ] = 0 := condEntropy_comp_self hμ (pair Z X) Prod.snd
+  rw [condMutualInfo_eq' hμ, h, sub_zero]
+
+/-- `I(X; Y | Z) = H(Y | Z) - H(Y | X, Z)`. -/
+theorem condMutualInfo_eq_sub_right {μ : Ω → ℝ} (hμ : IsPMF μ) (X : Ω → α) (Y : Ω → β)
+    (Z : Ω → γ) : I[X : Y | Z ; μ] = H[Y | Z ; μ] - H[Y | pair X Z ; μ] := by
+  rw [condMutualInfo_comm hμ, condMutualInfo]
+
+/-- `I(X; Y | Z) = H(X | Z) + H(Y | Z) - H(X, Y | Z)`. -/
+theorem condMutualInfo_eq_add_sub {μ : Ω → ℝ} (hμ : IsPMF μ) (X : Ω → α) (Y : Ω → β)
+    (Z : Ω → γ) : I[X : Y | Z ; μ] = H[X | Z ; μ] + H[Y | Z ; μ] - H[pair X Y | Z ; μ] := by
+  rw [condMutualInfo_eq hμ, condEntropy_eq_sub hμ, condEntropy_eq_sub hμ, condEntropy_eq_sub hμ]
+  ring
 
 end InfoTheory

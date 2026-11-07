@@ -20,6 +20,8 @@ public import InfoTheoryLib.MutualInformation.Conditional
 * `condMutualInfo_le_of_markovChain_left`: if `Z → X → Y` then `I(X; Y | Z) ≤ I(X; Y)`.
 * `mutualInfo_le_condMutualInfo_of_indep`: if `X` and `Z` are independent then
   `I(X; Y | Z) ≥ I(X; Y)`.
+* `mutualInfo_le_mutualInfo_pair`: `I(X; Y) ≤ I(X; Y, Z)`, with equality iff `X → Y → Z`
+  (`mutualInfo_pair_eq_iff`).
 
 ## References
 
@@ -115,5 +117,22 @@ theorem condMutualInfo_le_of_markovChain_left {μ : Ω → ℝ} (hμ : IsPMF μ)
     {Y : Ω → β} {Z : Ω → γ} (h : MarkovChain μ Z X Y) : I[X : Y | Z ; μ] ≤ I[X : Y ; μ] := by
   rw [condMutualInfo_comm hμ, mutualInfo_comm hμ]
   exact condMutualInfo_le_of_markov hμ (h.symm hμ)
+
+/-- Adding a variable cannot decrease information: `I(X; Y) ≤ I(X; Y, Z)`. -/
+theorem mutualInfo_le_mutualInfo_pair {μ : Ω → ℝ} (hμ : IsPMF μ) (X : Ω → α) (Y : Ω → β)
+    (Z : Ω → γ) : I[X : Y ; μ] ≤ I[X : pair Y Z ; μ] := by
+  have h1 := chain_rule_mutualInfo₂ hμ X Z Y
+  have h2 : I[X : pair Z Y ; μ] = I[X : pair Y Z ; μ] :=
+    mutualInfo_congr_right hμ X Prod.swap Prod.swap_injective fun _ => rfl
+  linarith [condMutualInfo_nonneg hμ X Z Y]
+
+/-- `I(X; Y, Z) = I(X; Y)` iff `X → Y → Z` is a Markov chain. -/
+theorem mutualInfo_pair_eq_iff {μ : Ω → ℝ} (hμ : IsPMF μ) (X : Ω → α) (Y : Ω → β)
+    (Z : Ω → γ) : I[X : pair Y Z ; μ] = I[X : Y ; μ] ↔ MarkovChain μ X Y Z := by
+  have h1 := chain_rule_mutualInfo₂ hμ X Z Y
+  have h2 : I[X : pair Z Y ; μ] = I[X : pair Y Z ; μ] :=
+    mutualInfo_congr_right hμ X Prod.swap Prod.swap_injective fun _ => rfl
+  rw [markovChain_iff_condIndep hμ, ← condMutualInfo_eq_zero_iff hμ]
+  constructor <;> intro h <;> linarith
 
 end InfoTheory

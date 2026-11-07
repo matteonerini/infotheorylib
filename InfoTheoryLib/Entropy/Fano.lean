@@ -26,6 +26,7 @@ on the same space as `X` and `Y`), and its alphabet `𝒳̂` may be larger than 
 ## Main statements
 
 * `fano_estimator`: Theorem 2.10.1, `H(Pₑ) + Pₑ log |𝒳| ≥ H(X | X̂) ≥ H(X | Y)`.
+* `fano_lt`: the strict form `H(X | Y) < 1 + Pₑ log |𝒳|` (in bits).
 * `fano_estimator_weak`, `fano_estimator_lower_bound`: the weakened forms (2.131)–(2.132),
   `1 + Pₑ log |𝒳| ≥ H(X | Y)` and `Pₑ ≥ (H(X | Y) - 1) / log |𝒳|` (in bits).
 * `fano_of_eq`: Corollary (2.139), `H(p) + p log |𝒳| ≥ H(X | Y)` for `p = Pr{X ≠ Y}`.
@@ -489,5 +490,31 @@ theorem entropyRV_comp_eq_iff {Ω α β : Type*} [Fintype Ω] [Fintype α] [Fint
     have hα : Nonempty α := ⟨X ω₀⟩
     refine ⟨Function.invFunOn f {a | dist μ X a ≠ 0}, fun ω hω => ?_⟩
     exact (hinj.leftInvOn_invFunOn (hsupp ω hω)).symm
+
+/-- **Corollary 2.48 of [yeung2008]**, the strict form of the weakened Fano inequality, for a
+deterministic estimator `g(Y)`. In nats: `H(X|Y) < log 2 + Pₑ log |𝒳|`. -/
+theorem fano_lt {μ : Ω → ℝ} (hμ : IsPMF μ) (X : Ω → α) (Y : Ω → β) (g : β → α) :
+    H[X | Y ; μ] < log 2 + errProb μ X Y g * log (Fintype.card α) := by
+  have hcard : 0 < Fintype.card α := card_pos_of_isPMF (hμ.dist X)
+  have h := fano hμ X Y g
+  have hlog2 : 0 < log 2 := log_pos one_lt_two
+  have hP := errProb_nonneg hμ X Y g
+  have hlogc : 0 ≤ log (Fintype.card α) := log_natCast_nonneg _
+  rcases hP.eq_or_lt with h0 | h0
+  · rw [← h0] at h ⊢
+    simp only [binEntropy_zero, zero_mul, add_zero] at h ⊢
+    linarith
+  · rcases Nat.lt_or_ge (Fintype.card α) 2 with hc | hc
+    · have hc1 : Fintype.card α = 1 := by omega
+      have h1 := condEntropy_le_entropy hμ X Y
+      have h2 := entropy_le_log_card (hμ.dist X)
+      rw [hc1, Nat.cast_one, log_one] at h2
+      rw [hc1, Nat.cast_one, log_one, mul_zero, add_zero]
+      exact (h1.trans h2).trans_lt hlog2
+    · have hc' : (2 : ℝ) ≤ Fintype.card α := by exact_mod_cast hc
+      have hlt : log ((Fintype.card α : ℝ) - 1) < log (Fintype.card α) :=
+        log_lt_log (by linarith) (by linarith)
+      have := mul_lt_mul_of_pos_left hlt h0
+      linarith [binEntropy_le_log_two (p := errProb μ X Y g)]
 
 end InfoTheory

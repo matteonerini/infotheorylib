@@ -8,9 +8,8 @@ module
 /-!
 # Yeung, Chapter 1: The Science of Information
 
-This file maps Chapter 1 of [yeung2008] to the library. It cites the draft of 15 November 2007,
-which numbers definitions, theorems and examples with one counter per chapter. No aliases are
-defined yet, and the end-of-chapter problems and the historical notes are not included.
+This file maps Chapter 1 of [yeung2008] to the library. It cites the draft of 15 November 2007.
+The chapter has no numbered results, so this file defines no aliases.
 
 Module names are relative to `InfoTheoryLib`.
 

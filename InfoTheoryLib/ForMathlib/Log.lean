@@ -167,4 +167,17 @@ lemma two_pow_ceil_le (n : ℕ) {R : ℝ} (hR : 0 ≤ R) :
         congr 1
         ring
 
+/-- Equality in `log a ≤ a - 1` holds only at `a = 1`. -/
+theorem log_eq_sub_one_iff {a : ℝ} (ha : 0 < a) : log a = a - 1 ↔ a = 1 := by
+  refine ⟨fun h => ?_, fun h => by simp [h]⟩
+  by_contra hne
+  exact (log_lt_sub_one_of_pos ha hne).ne h
+
+/-- Equality in `log a ≥ 1 - 1 / a` holds only at `a = 1`. -/
+theorem log_eq_one_sub_inv_iff {a : ℝ} (ha : 0 < a) : log a = 1 - a⁻¹ ↔ a = 1 := by
+  have h := log_eq_sub_one_iff (inv_pos.2 ha)
+  rw [log_inv, inv_eq_one] at h
+  rw [← h]
+  constructor <;> intro h' <;> linarith
+
 end InfoTheory

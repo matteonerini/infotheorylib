@@ -107,6 +107,7 @@ public import InfoTheoryLib.Entropy.Concavity
 public import InfoTheoryLib.Entropy.Conditional
 public import InfoTheoryLib.Entropy.Fano
 public import InfoTheoryLib.Entropy.MrsGerber
+public import InfoTheoryLib.Entropy.Range
 public import InfoTheoryLib.ForMathlib.BinaryMatrix
 public import InfoTheoryLib.ForMathlib.ConvexHessian
 public import InfoTheoryLib.ForMathlib.ConvexOptimization
@@ -167,10 +168,12 @@ public import InfoTheoryLib.Kolmogorov.Programs
 public import InfoTheoryLib.Kolmogorov.Universal
 public import InfoTheoryLib.Kolmogorov.UniversalProbability
 public import InfoTheoryLib.MarkovChain.Basic
+public import InfoTheoryLib.MarkovChain.CondIndep
 public import InfoTheoryLib.MarkovChain.DataProcessing
 public import InfoTheoryLib.MarkovChain.Process
 public import InfoTheoryLib.MarkovChain.RandomWalk
 public import InfoTheoryLib.MarkovChain.SecondLaw
+public import InfoTheoryLib.MarkovChain.Sequence
 public import InfoTheoryLib.MaxEntropy.Basic
 public import InfoTheoryLib.MaxEntropy.Burg
 public import InfoTheoryLib.MaxEntropy.Covariance
@@ -178,6 +181,7 @@ public import InfoTheoryLib.MaxEntropy.Distributions
 public import InfoTheoryLib.MutualInformation.Basic
 public import InfoTheoryLib.MutualInformation.ChainRule
 public import InfoTheoryLib.MutualInformation.Conditional
+public import InfoTheoryLib.MutualInformation.Continuity
 public import InfoTheoryLib.MutualInformation.Convexity
 public import InfoTheoryLib.MutualInformation.CsiszarSum
 public import InfoTheoryLib.Network.BC3Cardinality
