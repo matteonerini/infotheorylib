@@ -6,19 +6,28 @@
 A [Lean 4](https://lean-lang.org) library of information theory, built on [Mathlib](https://github.com/leanprover-community/mathlib4).
 
 The goal is to formalize the core concepts and theorems of information theory and to organize them
-by topic, following two texts:
+by topic, following three texts:
 
-* T. M. Cover and J. A. Thomas, *Elements of Information Theory*, 2nd ed., Wiley, 2006.
-* A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*,
-  [arXiv:1001.3404v4](https://arxiv.org/abs/1001.3404v4), 2010.
-
-## Status
+* T. M. Cover and J. A. Thomas,
+  [*Elements of Information Theory*](https://doi.org/10.1002/047174882X),
+  2nd ed., Wiley, 2006.
+* A. El Gamal and Y.-H. Kim,
+  [*Lecture Notes on Network Information Theory*](https://arxiv.org/abs/1001.3404v4),
+  arXiv:1001.3404v4, 2010.
+* R. W. Yeung,
+  [*Information Theory and Network Coding*](https://iest2.ie.cuhk.edu.hk/~whyeung/post/draft2.pdf),
+  Springer, 2008.
 
 All 17 chapters of Cover & Thomas and Lectures 1–24 and Appendices A–E of El Gamal & Kim are
 formalized, with some omissions. Each [chapter](InfoTheoryLib/Books/CoverThomas/) and
 [lecture](InfoTheoryLib/Books/ElGamalKim/) file indexes what is proved and has a "Not formalized"
 section listing what is not. Many lecture files also record the differences from the notes and the
-errors found in them.
+errors found in them. The formalization of Yeung's book is in progress: each
+[chapter](InfoTheoryLib/Books/Yeung/) file maps the book's results to the library and lists what
+remains.
+
+All the definitions and theorems can be browsed in the
+[API documentation](https://matteonerini.github.io/infotheorylib/docs/).
 
 ## How this library was made
 
@@ -34,36 +43,6 @@ What is not guaranteed mechanically: that each Lean statement says what the corr
 statement of the text says. The statements follow the texts closely, and each chapter and lecture
 file lists the conventions used and the deviations from the text, but before relying on a result,
 read its Lean statement.
-
-## Main results
-
-A selection of the headline theorems; every formalized result of the two texts is listed, with its
-Lean name, in the chapter and lecture files. Browse them in the
-[API documentation](https://matteonerini.github.io/infotheorylib/docs/). Below, C&T is Cover & Thomas,
-with theorem numbers, and EGK is El Gamal & Kim, with lecture numbers.
-
-| Result | Lean declaration | Module |
-|---|---|---|
-| Asymptotic equipartition property (C&T 3.1.1) | `aep` | `AEP.Basic` |
-| Source coding bounds `H ≤ L* < H + 1` (C&T 5.4.1) | `minExpectedLength_bounds` | `SourceCoding.OptimalLength` |
-| Channel coding theorem (C&T 7.7.1) | `isAchievableRate_of_lt_capacity`, `IsAchievableRate.le_capacity` | `ChannelCoding.Achievability`, `ChannelCoding.Converse` |
-| Capacity of the Gaussian channel (C&T 9.1.1) | `gaussianOpCapacity_eq` | `GaussianChannel.Achievability` |
-| Rate distortion theorem (C&T 10.2.1) | `rateDistortion_eq_infoRD` | `RateDistortion.Theorem` |
-| Sanov's theorem (C&T 11.4.1) | `prob_typeEvent_le_sanov`, `tendsto_log_prob_typeEvent` | `Statistics.LargeDeviations` |
-| Kolmogorov complexity and entropy (C&T 14.3.1) | `tendsto_expected_complexity_div` | `Kolmogorov.Entropy` |
-| Universal portfolios (C&T 16.7.1) | `minimax_universal` | `Investment.Universal` |
-| Capacity region of the multiple access channel (EGK Lecture 4) | `macCapacityRegionBits_eq` | `Network.MACBits` |
-| Capacity region of the degraded broadcast channel (EGK Lecture 5) | `bcCapacityRegionBits_eq_closure_degradedBCRegionBits` | `Network.BCCapacity` |
-| Gelfand–Pinsker theorem (EGK Lecture 7) | `stateCapacity_noncausal_false` | `StateChannel.GPConverse` |
-| Slepian–Wolf theorem (EGK Lecture 11) | `swOptimalRegionBits_eq` | `Network.SlepianWolfBits` |
-| Wyner–Ziv theorem (EGK Lecture 12) | `rateWZBits_eq` | `RateDistortion.SideInfoConverse` |
-| Network coding theorem (EGK Lecture 16) | `network_coding_theorem` | `Network.NetworkCoding` |
-| Compress–forward lower bound for the relay channel (EGK Lecture 17) | `isAchievableRC_compressForward` | `Network.RelayCF` |
-| Noisy network coding (EGK Lecture 19) | `isAchievableMN_nnc`, `isAchievableDMN_nnc` | `Network.NNCTheorem` |
-| Orlitsky–Roche theorem (EGK Lecture 22) | `losslessFunBits_eq_condGraphEntropy` | `RateDistortion.GraphEntropy` |
-| Secrecy capacity of the wiretap channel (EGK Lecture 23) | `wiretapCapacity_eq` | `Secrecy.WiretapAchievability` |
-| Multi-node secret key capacity (EGK Lecture 23) | `multiKeyCapacity_eq` | `Secrecy.KeyMultiNodeCapacity` |
-| Capacity region of the totally asynchronous MAC (EGK Lecture 24) | `asyncCapacityRegionBits_eq` | `Networking.AsyncMACAchievability` |
 
 ## Getting started
 
@@ -150,14 +129,15 @@ InfoTheoryLib/
   Books/
     CoverThomas/          ChapterN.lean: index, worked examples and aliases for each chapter
     ElGamalKim/           LectureN.lean, AppendixX.lean: the same for each lecture and appendix
+    Yeung/                ChapterN.lean: the same for each chapter
 docs/
   references.bib          bibliography of the API documentation
 ```
 
-General theory goes in the topic folders, shared by both texts. Material that is specific to a
+General theory goes in the topic folders, shared by the texts. Material that is specific to a
 text (its worked examples, its numbering, text-only definitions) goes in
-`Books/CoverThomas/ChapterN.lean` or `Books/ElGamalKim/LectureN.lean`, which also map each result of
-the chapter or lecture to the declaration that proves it.
+the `Books/` files, which also map each result of the chapter or lecture to the declaration that
+proves it.
 
 ## Conventions
 

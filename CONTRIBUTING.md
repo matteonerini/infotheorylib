@@ -38,7 +38,8 @@ are adapted from [Mathlib's](https://leanprover-community.github.io/contribute/i
   lecture. Cover & Thomas is in `Books/CoverThomas/` (namespace `InfoTheory.CoverThomas`), with one
   file per chapter, and El Gamal & Kim's lecture notes are in `Books/ElGamalKim/` (namespace
   `InfoTheory.ElGamalKim`), with one file per lecture or appendix; a long lecture can have extra
-  files (`Lecture14Binary.lean`). Each numbered lemma or theorem gets an alias
+  files (`Lecture14Binary.lean`). Yeung's book is in `Books/Yeung/` (namespace `InfoTheory.Yeung`),
+  with one file per chapter. Each numbered lemma or theorem gets an alias
   named after its number (`theorem_2_6_5`; `theorem_3_2` for Theorem 2 of Lecture 3) pointing to the
   library declaration; a named but unnumbered result gets an alias named after it
   (`mrs_gerber_lemma`). Results that are useful beyond the text belong in a topic folder, with a
