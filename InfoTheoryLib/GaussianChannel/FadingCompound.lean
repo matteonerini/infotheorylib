@@ -234,24 +234,18 @@ theorem isAchievableFadingCompound_of_lt {g : 𝒢 → ℝ} (hg : ∀ s, g s ≠
         (mem_univ s₀))
   · exact sup'_le _ _ fun s _ => hdb n s
 
-/-- If all the rates below `C` are in `A` and all the rates in `A` are at most `C`, `sSup A = C`. -/
-lemma sSup_eq_of_forall_mem' {A : Set ℝ} {C : ℝ} (h₁ : ∀ R ∈ A, R ≤ C) (h₂ : ∀ R < C, R ∈ A) :
-    sSup A = C :=
-  csSup_eq_of_forall_le_of_forall_lt_exists_gt ⟨C - 1, h₂ _ (by linarith)⟩ h₁ fun R hR =>
-    ⟨(R + C) / 2, h₂ _ (by linarith), by linarith⟩
-
 /-- **Lecture 8 of [elgamal2010], page 8-8.** With the gain at the decoder only, the compound
 channel approach gives the capacity `C_CC = min_g C(g²P)`, in bits. -/
 theorem fadingCompoundCapacity_eq {g : 𝒢 → ℝ} (hg : ∀ s, g s ≠ 0) (P : ℝ≥0) :
     fadingCompoundCapacity g P = fadingCompoundValue g P / log 2 :=
-  sSup_eq_of_forall_mem' (fun _ h => (IsAchievableFadingCompound.isAchievableE h).le)
+  sSup_eq_of_forall_mem (fun _ h => (IsAchievableFadingCompound.isAchievableE h).le)
     fun _ hR => isAchievableFadingCompound_of_lt hg hR
 
 /-- **Lecture 8 of [elgamal2010], page 8-10.** With the gain at both the encoder and the decoder,
 the compound channel approach gives the same capacity `C_CC-E = min_g C(g²P) = C_CC`, in bits. -/
 theorem fadingCompoundCapacityE_eq {g : 𝒢 → ℝ} (hg : ∀ s, g s ≠ 0) (P : ℝ≥0) :
     fadingCompoundCapacityE g P = fadingCompoundValue g P / log 2 :=
-  sSup_eq_of_forall_mem' (fun _ h => IsAchievableFadingCompoundE.le h)
+  sSup_eq_of_forall_mem (fun _ h => IsAchievableFadingCompoundE.le h)
     fun _ hR => (isAchievableFadingCompound_of_lt hg hR).isAchievableE
 
 end InfoTheory

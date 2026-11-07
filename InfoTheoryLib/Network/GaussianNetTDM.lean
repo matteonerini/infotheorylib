@@ -196,7 +196,7 @@ lemma gnTdm_out (e : t ≃ Fin (Fintype.card t)) (hm : Fintype.card t * m ≤ n)
   · simp
 
 /-- **The error of the time division code** is at most the sum of the errors of the codes. -/
-theorem gnTdm_errProb_le [Nonempty t] (e : t ≃ Fin (Fintype.card t)) (hm : Fintype.card t * m ≤ n)
+theorem gnTdm_errProb_le (e : t ≃ Fin (Fintype.card t)) (hm : Fintype.card t * m ≤ n)
     (dest : t → r) (hM : ∀ j, 0 < M j) (cs : ∀ j, GaussianCode (M j) m) {ε : ℝ}
     (hε : ∀ j w, (noiseLaw 1 m).real
       {z | (cs j).dec (G (dest j) j • (cs j).enc w + z) ≠ w} ≤ ε) :

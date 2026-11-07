@@ -167,10 +167,10 @@ theorem IsAchievableKey.swap {allowed allowed' : ∀ q, (Fin q → Bool) → Pro
     rw [KeyCode.errProbB, ← hd, errProb_image, hK₁, hK₂]
     exact errProb_symm _ _ _
   · refine le_trans (le_of_eq ?_) hl₂
-    rw [KeyCode.leak₁, ← hd, ← mutualInfo_comp_of_dist, hK₁, hV]
+    rw [KeyCode.leak₁, ← hd, ← mutualInfo_comp, hK₁, hV]
     rfl
   · refine le_trans (le_of_eq ?_) hl₁
-    rw [KeyCode.leak₂, ← hd, ← mutualInfo_comp_of_dist, hK₂, hV]
+    rw [KeyCode.leak₂, ← hd, ← mutualInfo_comp, hK₂, hV]
     rfl
   · refine hk₂.trans (le_of_eq ?_)
     rw [KeyCode.entropyKey₁, ← hd, ← entropyRV_comp_of_dist, hK₁]

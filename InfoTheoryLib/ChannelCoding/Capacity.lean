@@ -207,4 +207,10 @@ theorem capacity_of_isWeaklySymmetric [Nonempty α] {W : α → β → ℝ} (hW 
     IsGreatest.csSup_eq ⟨⟨_, uniformPMF_isPMF, hmax⟩, fun _ ⟨p, hp, hc⟩ => hc ▸ hle p hp⟩
   exact ⟨hC, hmax.trans hC.symm⟩
 
+/-- If all the rates below `C` are in `A` and all the rates in `A` are at most `C`, `sSup A = C`. -/
+lemma sSup_eq_of_forall_mem {A : Set ℝ} {C : ℝ} (h₁ : ∀ R ∈ A, R ≤ C) (h₂ : ∀ R < C, R ∈ A) :
+    sSup A = C :=
+  csSup_eq_of_forall_le_of_forall_lt_exists_gt ⟨C - 1, h₂ _ (by linarith)⟩ h₁ fun R hR =>
+    ⟨(R + C) / 2, h₂ _ (by linarith), by linarith⟩
+
 end InfoTheory

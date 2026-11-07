@@ -20,8 +20,8 @@ one channel `T : α → β` at a time. The bound does not use degradedness.
 
 ## Main definitions
 
-* `triLaw r c T`: the law of `((U, V), X), Y` with `p(u, v) p(x | v) T(y | x)`.
-* `triInfoXV`, `triInfoVU`, `triInfoU`: `I(X; Y | V)`, `I(V; Y | U)` and `I(U; Y)`.
+* `bc3Law r c T`: the law of `((U, V), X), Y` with `p(u, v) p(x | v) T(y | x)`.
+* `bc3InfoXV`, `bc3InfoVU`, `bc3InfoU`: `I(X; Y | V)`, `I(V; Y | U)` and `I(U; Y)`.
 
 ## Main statements
 

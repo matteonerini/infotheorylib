@@ -216,7 +216,7 @@ theorem lemma_24_1_nec {p R : ℝ} {k n : ℕ} (h0 : 0 ≤ p) (h1 : p ≤ 1) (hn
 
 /-- **Theorem 1 of Lecture 24 of [elgamal2010], achievability.** If `λ < C`, the arrivals can be
 reliably communicated. -/
-theorem theorem_24_1_achievability [Nonempty α] [Nonempty β] (hW : IsChannel W) {p : ℝ} {k : ℕ}
+theorem theorem_24_1_achievability [Nonempty α] (hW : IsChannel W) {p : ℝ} {k : ℕ}
     (h0 : 0 ≤ p) (h1 : p ≤ 1) (h : p * k * log 2 < capacity W) : ∃ R, IsReliableArrival W p k R :=
   exists_isReliableArrival hW h0 h1 h
 

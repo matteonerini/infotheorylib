@@ -30,7 +30,7 @@ independent positions is again a product (`sum_macInfo₁₂_le` and its compani
 
 * `cycInput enc d w i`: the input of a sender in the cyclic system.
 * `AsyncCode.cycCode c d`: the cyclic system as a code for the DM-MAC.
-* `letterAvg enc`: the law of a letter of a uniform codeword at a uniform position.
+* `letterLaw enc q`: the law of the letter at position `q` of a uniform codeword.
 
 ## Main statements
 
@@ -202,7 +202,7 @@ lemma cycInput_cycWindow {M : ℕ} {α : Type*} (enc : Fin M → Fin n → α) (
 end Cyclic
 
 /-- The law of letter `q` of a uniformly chosen codeword. -/
-def letterLaw {M n : ℕ} {α : Type*} [Fintype α] (enc : Fin M → Fin n → α) (q : Fin n) : α → ℝ :=
+def letterLaw {M n : ℕ} {α : Type*} (enc : Fin M → Fin n → α) (q : Fin n) : α → ℝ :=
   dist (uniformPMF (Fin M)) fun m => enc m q
 
 lemma letterLaw_isPMF {M n : ℕ} {α : Type*} [Fintype α] (hM : 0 < M) (enc : Fin M → Fin n → α)
@@ -394,8 +394,8 @@ theorem avgErrProb_cycCode_le [Finite α₁] [Finite α₂] (c : AsyncCode M₁ 
         simp only [hwin]
         simp [mul_assoc]
 
-omit [Fintype α₂] [Fintype β] in
-lemma letterDist₁_cycCode (c : AsyncCode M₁ M₂ n α₁ α₂ β) (d : Fin n) (h₁ : 0 < M₁)
+omit [Fintype α₁] [Fintype α₂] [Fintype β] in
+lemma letterDist₁_cycCode [Finite α₁] (c : AsyncCode M₁ M₂ n α₁ α₂ β) (d : Fin n) (h₁ : 0 < M₁)
     (i : Fin (3 * n)) :
     (c.cycCode d).letterDist₁ i = letterLaw c.enc₁ ⟨(i : ℕ) % n, Nat.mod_lt _ d.pos⟩ := by
   have h := dist_uniform_finFunction_coord h₁
@@ -409,8 +409,8 @@ lemma letterDist₁_cycCode (c : AsyncCode M₁ M₂ n α₁ α₂ β) (d : Fin 
   congr 2
   rw [Nat.sub_zero, Nat.add_mul_mod_self_right]
 
-omit [Fintype α₁] [Fintype β] in
-lemma letterDist₂_cycCode (c : AsyncCode M₁ M₂ n α₁ α₂ β) (d : Fin n) (h₂ : 0 < M₂)
+omit [Fintype α₁] [Fintype α₂] [Fintype β] in
+lemma letterDist₂_cycCode [Finite α₂] (c : AsyncCode M₁ M₂ n α₁ α₂ β) (d : Fin n) (h₂ : 0 < M₂)
     (i : Fin (3 * n)) :
     (c.cycCode d).letterDist₂ i =
       letterLaw c.enc₂ ⟨((i : ℕ) + 3 * n - d) % n, Nat.mod_lt _ d.pos⟩ := by

@@ -54,13 +54,6 @@ lemma condEntropy_comp_of_dist (hμ : IsPMF μ) (Γ : Ω → J) (f : J → a) (g
   rw [← dist_comp_eq]
   rfl
 
-/-- A mutual information for the image of a law. -/
-lemma mutualInfo_comp_of_dist (Γ : Ω → J) (f : J → a) (g : J → b) :
-    I[f ∘ Γ : g ∘ Γ ; μ] = I[f : g ; dist μ Γ] := by
-  refine mutualInfo_eq_of_dist_pair_eq ?_
-  rw [← dist_comp_eq]
-  rfl
-
 /-- An entropy for the image of a law. -/
 lemma entropyRV_comp_of_dist (Γ : Ω → J) (f : J → a) : H[f ∘ Γ ; μ] = H[f ; dist μ Γ] := by
   rw [entropyRV, entropyRV, dist_comp_eq]
@@ -411,7 +404,7 @@ theorem isAchievableKey_of_lt_oneWayGap (hP : IsPMF P) (hq : IsChannel q) (hr : 
     exact htr w l
   have hleak₁ : c.leak₁ P π₁ (fun _ : Unit => 1) ≤ n * ε₀ := by
     refine le_trans (le_of_eq ?_) hleak
-    rw [KeyCode.leak₁, hK₁, hpair, mutualInfo_comp_of_dist, hdist]
+    rw [KeyCode.leak₁, hK₁, hpair, mutualInfo_comp, hdist]
     refine mutualInfo_congr_right (iidPMF_isPMF hP₀P n) _
       (fun w => (fun i => (w.1 i).1, fun _ : Fin 1 => Fintype.equivFin _
         ((fun i => (w.1 i).2), w.2))) (fun a b h => ?_) fun ω => rfl

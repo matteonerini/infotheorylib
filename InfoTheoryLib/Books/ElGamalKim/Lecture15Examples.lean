@@ -187,7 +187,7 @@ theorem erasure_sum_le {p q : ℝ} (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (hq0 : 0 ≤ 
   have hrP : IsPMF r := ⟨fun y => (hrpos y).le, by
     rw [Fin.sum_univ_three, hr₀, hr₁, hr₂]
     ring⟩
-  have hgibbs := relEntropyReal_nonneg' hpdP hrP fun y h => absurd h (hrpos y).ne'
+  have hgibbs := relEntropyReal_nonneg hpdP hrP fun y h => absurd h (hrpos y).ne'
   have hterm : ∀ y, pd y * log (pd y / r y) = -negMulLog (pd y) - pd y * log (r y) := fun y => by
     rcases (hpdP.nonneg y).eq_or_lt with h | h
     · simp [← h]

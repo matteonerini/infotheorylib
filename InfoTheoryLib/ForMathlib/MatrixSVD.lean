@@ -60,7 +60,7 @@ lemma posSemidef_self_mul_transpose [Finite r] (G : Matrix r t ℝ) : (G * Gᵀ)
   simpa [conjTranspose_eq_transpose_of_trivial] using posSemidef_self_mul_conjTranspose G
 
 omit [Fintype r] in
-lemma posDef_add_one [Finite r] {K : Matrix r r ℝ} (hK : K.PosSemidef) : (K + 1).PosDef :=
+lemma posDef_add_one {K : Matrix r r ℝ} (hK : K.PosSemidef) : (K + 1).PosDef :=
   Matrix.PosDef.posSemidef_add hK PosDef.one
 
 omit [Fintype r] [Fintype t] [DecidableEq r] [DecidableEq t] in

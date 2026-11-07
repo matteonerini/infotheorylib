@@ -23,7 +23,8 @@ and the eavesdropper observes the output of the channel. With the information le
 
 * `KeyedSecrecyCode.one_sub_errProb_mul_log_le_key`, `.one_sub_errProb_mul_log_le_capacity`: the
   two bounds of the converse for one code.
-* `exists_keyedCode`: the one-time pad on the message of a channel code. Its leakage is `0`.
+* `padCode`, `padCode_leakage`, `padCode_errProb`: the one-time pad on the message of a channel
+  code. Its leakage is `0`.
 * `keyedSecrecyCapacity_eq`: **Theorem 2 of Lecture 23**.
 
 ## References

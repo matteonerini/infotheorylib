@@ -158,7 +158,7 @@ theorem det_smul_rpow_add {M : Matrix t t ℝ} (hM : M.PosDef) (ht : 0 < Fintype
 omit [DecidableEq t] in
 /-- **Lecture 10, page 10-53.** The KKT conditions give `I - Gⱼ Σⱼ Gⱼᵀ ≽ 0`, which makes the
 original channel a degraded version of the enhanced channel. -/
-theorem one_sub_mul_sigma_posSemidef {r : Type*} [Finite r] [DecidableEq r] {G : Matrix r t ℝ}
+theorem one_sub_mul_sigma_posSemidef {r : Type*} [DecidableEq r] {G : Matrix r t ℝ}
     {Sg : Matrix t t ℝ} {U : Matrix r r ℝ} (hU : U.PosSemidef) (hl : 0 < lam)
     (h : G * Sg * Gᵀ + lam⁻¹ • U = 1) : (1 - G * Sg * Gᵀ).PosSemidef := by
   have e : 1 - G * Sg * Gᵀ = lam⁻¹ • U := by rw [← h, add_sub_cancel_left]

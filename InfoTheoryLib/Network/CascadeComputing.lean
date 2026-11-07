@@ -25,7 +25,7 @@ index to the decoder. By Lecture 22 of [elgamal2010], the region is `R₁ ≥ H_
 ## Main statements
 
 * `isLosslessCascade_of_lt`: achievability, by local computing.
-* `IsLosslessCascade.funLosslessRate_le`, `IsLosslessCascade.entropy_le`: the converse.
+* `IsLosslessCascade.isLosslessFunBits`, `IsLosslessCascade.entropy_le`: the converse.
 * `cascadeRegion_eq`: **the optimal rate region**.
 
 ## References

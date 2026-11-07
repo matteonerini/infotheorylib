@@ -192,7 +192,7 @@ lemma condEntropy_iid_snd (hP : IsPMF P) (n : ℕ) :
 variable {r : ℕ} {M₁ M₂ M₃ : Fin r → ℕ} [∀ l, NeZero (M₁ l)] [∀ l, NeZero (M₂ l)]
   [∀ l, NeZero (M₃ l)]
 
-lemma log_card_pi (M : Fin r → ℕ) [∀ l, NeZero (M l)] :
+lemma log_card_pi (M : Fin r → ℕ) :
     log (Fintype.card (∀ l, Fin (M l))) = log ((∏ l, M l : ℕ) : ℝ) := by
   rw [Fintype.card_pi]
   simp

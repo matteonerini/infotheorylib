@@ -516,7 +516,7 @@ theorem IsAchievableRate.isAchievableRateFB [Nonempty α] (hW : IsChannel W) {R 
     exact (c n).avgErrProb_le_maxErrProb
 
 /-- **(7.122)–(7.134)** Rates achievable with feedback are at most the capacity. -/
-theorem IsAchievableRateFB.le_capacity [Nonempty α] (hW : IsChannel W) {R : ℝ}
+theorem IsAchievableRateFB.le_capacity (hW : IsChannel W) {R : ℝ}
     (h : IsAchievableRateFB W R) : R ≤ capacity W := by
   obtain ⟨c, hc⟩ := h
   refine le_of_converse_bound hc (fun n => ?_) fun n _ =>

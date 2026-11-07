@@ -49,7 +49,7 @@ variable {X X₁ Y Y₁ : Type*} [Fintype X] [Fintype X₁] [Fintype Y] [Fintype
 
 omit [Fintype X] [Fintype X₁] in
 /-- The capacity from the two directions of a coding theorem. -/
-lemma rcCapacity_eq [Nonempty X] [Nonempty X₁] [Nonempty Y] [Nonempty Y₁] {V : ℝ}
+lemma rcCapacity_eq [Nonempty X] [Nonempty X₁] {V : ℝ}
     (h₁ : ∀ R, R * log 2 < V → IsAchievableRC W R) (h₂ : ∀ R, IsAchievableRC W R → R * log 2 ≤ V) :
     rcCapacity W = V / log 2 := by
   have hlog2 : 0 < log 2 := log_pos (by norm_num)

@@ -134,7 +134,7 @@ lemma log_le_of_fano (hW : IsChannel W) (h₁ : 0 < M₁) (h₂ : 0 < M₂) :
   linarith
 
 /-- The law of the inputs at time `i`. -/
-def letter [Fintype α₁] [Fintype α₂] (W : α₁ × α₂ → β → ℝ) (i : Fin n) : α₁ × α₂ → ℝ :=
+def letter (W : α₁ × α₂ → β → ℝ) (i : Fin n) : α₁ × α₂ → ℝ :=
   dist (c.law W) fun z => c.fbEnc i z.1 (fbPre i z.2)
 
 end MACFBCode

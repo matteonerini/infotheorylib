@@ -221,7 +221,7 @@ end Pythagorean
 /-! ### The conditional limit theorem -/
 
 /-- The conditional probability `Pr(S | T) = Pr(S ∩ T)/Pr(T)`. -/
-def condProb {Ω : Type*} [Fintype Ω] [DecidableEq Ω] (μ : Ω → ℝ) (S T : Finset Ω) : ℝ :=
+def condProb {Ω : Type*} [DecidableEq Ω] (μ : Ω → ℝ) (S T : Finset Ω) : ℝ :=
   prob μ (S ∩ T) / prob μ T
 
 section CondLimit

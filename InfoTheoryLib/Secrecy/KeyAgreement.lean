@@ -314,7 +314,7 @@ section Sources
 variable {α₁ α₂ γ κ₁ κ₂ : Type*} [Fintype α₁] [Fintype α₂] [Fintype γ] [Fintype κ₁] [Fintype κ₂]
 
 /-- The law of `n` letters of a source and of the private random variables of the nodes. -/
-def keyLaw {ξ : Type*} [Fintype ξ] (P : ξ → ℝ) (π₁ : κ₁ → ℝ) (π₂ : κ₂ → ℝ) (n : ℕ) :
+def keyLaw {ξ : Type*} (P : ξ → ℝ) (π₁ : κ₁ → ℝ) (π₂ : κ₂ → ℝ) (n : ℕ) :
     (Fin n → ξ) × κ₁ × κ₂ → ℝ := secBlockLaw P (prodDist π₁ π₂) n
 
 variable {q n : ℕ} {spk : Fin q → Bool} {M : Fin q → ℕ} [∀ l, NeZero (M l)] {K : ℕ}

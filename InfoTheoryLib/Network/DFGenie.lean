@@ -347,6 +347,7 @@ theorem sum_dfGenie_not_good_le (hp : IsPMF p) (hW : IsChannel W) (hκc : ∀ k,
         simp [sum_const, card_univ, nsmul_eq_mul]
         ring
 
+omit [∀ k, DecidableEq (X k)] in
 /-- On the good event, the true message passes the tests of the decoders. -/
 lemma dfWin_true_of_good {L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ} {ε : ℝ} {msg : ℕ → Fin Mm} {B' b : ℕ}
     (hb : B' + N ≤ b) {dξ : DFΞ N Mm n X Y} {ξ : Fin b → DFΞ N Mm n X Y}
@@ -362,6 +363,7 @@ lemma dfWin_true_of_good {L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ} {ε : ℝ
   exact comp_mem_robustTypicalSet h₁ fun ω : (∀ l, X l) × (∀ l, Y l) =>
     ((fillGe d₀ (k + 1) ω.1, ω.2 d), ω.1 k)
 
+omit [∀ k, DecidableEq (X k)] in
 /-- On the good event, no wrong message passes the tests of the decoders. -/
 lemma dfWin_wrong_of_good {L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ} {ε : ℝ} {msg : ℕ → Fin Mm} {B' b : ℕ}
     {dξ : DFΞ N Mm n X Y} {ξ : Fin b → DFΞ N Mm n X Y}

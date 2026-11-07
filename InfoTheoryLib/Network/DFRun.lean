@@ -77,6 +77,7 @@ def dfRx (d₀ : ∀ l, X l) (L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ) (ε :
   if k = s₀ then dfX d₀ (Cs B) (dfTagOf msg B) i k
   else dfX d₀ (Cs B) (dfTagD d₀ L₀ ε Cs B' k (getBlock (dY k) fun s => z s k) B) i k
 
+omit [∀ k, DecidableEq (X k)] in
 /-- **The law of the code of all the blocks** is a product over the blocks. -/
 theorem dfCode_law (d₀ : ∀ l, X l) (L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ) (ε : ℝ)
     (Cs : ℕ → DFBlock N Mm n X) (s₀ : Fin N) (e : Fin (M s₀) → Fin B' → Fin Mm) (dY : ∀ k, Y k)
@@ -127,7 +128,7 @@ section Good
 variable {N Mm n B' t : ℕ} {X Y : Fin N → Type*} [NeZero Mm] [NeZero n] [∀ k, Fintype (X k)]
   [∀ k, Fintype (Y k)] [∀ k, DecidableEq (X k)] {M : Fin N → ℕ}
 
-omit [NeZero n] in
+omit [NeZero n] [∀ k, DecidableEq (X k)] in
 /-- The tests depend only on the received sequences of the window. -/
 lemma dfWin_congr_Z (d₀ : ∀ l, X l) (L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ) (ε : ℝ)
     (Cs : ℕ → DFBlock N Mm n X) (d : Fin N) {Zd Zd' : ℕ → Fin n → Y d} {j : ℕ} (a : ℕ → Fin Mm)
@@ -147,7 +148,7 @@ lemma getBlock_col (dY : ∀ k, Y k) (z : Fin (t * n) → ∀ k, Y k) (k : Fin N
     getBlock (dY k) (fun s => z s k) B = fun i => nncBlocks z B i k :=
   getBlock_nncBlocks (dY k) (fun s => z s k) B
 
-omit [NeZero n] in
+omit [NeZero n] [∀ k, DecidableEq (X k)] in
 /-- The hypotheses of the estimates of a node, on the good event. -/
 lemma dfGood_win {d₀ : ∀ l, X l} {L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ} {ε : ℝ} {msg : ℕ → Fin Mm}
     (hb : B' + N ≤ t) {dξ : DFΞ N Mm n X Y} {Cst : Fin t → DFBlock N Mm n X}
@@ -182,7 +183,7 @@ lemma dfGood_win {d₀ : ∀ l, X l} {L₀ : (∀ l, X l) × (∀ l, Y l) → �
       (hZ j hj)]
     exact dfWin_wrong_of_good d₀ hG hd hj hm
 
-omit [NeZero n] in
+omit [NeZero n] [∀ k, DecidableEq (X k)] in
 /-- **On the good event, the actual run is the genie run.** -/
 theorem dfRx_eq_of_good {d₀ : ∀ l, X l} {L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ} {ε : ℝ}
     {μ : Fin B' → Fin Mm} (hb : B' + N ≤ t) {dξ : DFΞ N Mm n X Y} {Cst : Fin t → DFBlock N Mm n X}
@@ -199,6 +200,7 @@ theorem dfRx_eq_of_good {d₀ : ∀ l, X l} {L₀ : (∀ l, X l) × (∀ l, Y l)
     rw [ite_eq_right hk]
     exact dfX_tagD_eq_of_good d₀ L₀ ε _ (fun j hj => dfMsg_zero μ j hj) h₁ h₂ B i
 
+omit [∀ k, DecidableEq (X k)] in
 /-- **On the good event, the destinations decode.** -/
 theorem dfCode_not_wrong_of_good {d₀ : ∀ l, X l} {L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ} {ε : ℝ}
     (hb : B' + N ≤ t) {dξ : DFΞ N Mm n X Y} {Cst : Fin t → DFBlock N Mm n X}
@@ -240,7 +242,7 @@ def dfGen (d₀ : ∀ l, X l) (W : (∀ k, X k) → (∀ k, Y k) → ℝ) (Cs : 
     (msg : ℕ → Fin Mm) (z : Fin (t * n) → ∀ k, Y k) : ℝ :=
   ∏ B : Fin t, seqChan W n (dfX d₀ (Cs B) (dfTagOf msg B)) (nncBlocks z B)
 
-omit [NeZero n] [∀ k, Fintype (X k)] in
+omit [NeZero n] [∀ k, Fintype (X k)] [∀ k, DecidableEq (X k)] in
 lemma sum_dfGen [∀ k, Finite (X k)] (d₀ : ∀ l, X l)
     (hW : IsChannel W) (Cs : ℕ → DFBlock N Mm n X) (msg : ℕ → Fin Mm) :
     ∑ z : Fin (t * n) → ∀ k, Y k, dfGen d₀ W Cs msg z = 1 := by
@@ -252,6 +254,7 @@ lemma sum_dfGen [∀ k, Finite (X k)] (d₀ : ∀ l, X l)
   rw [← h]
   exact Fintype.sum_equiv (nncBlockEquiv _) _ _ fun _ => rfl
 
+omit [∀ k, DecidableEq (X k)] in
 /-- The total mass of the actual run is one. -/
 lemma sum_dfRx (d₀ : ∀ l, X l) (L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ) (ε : ℝ) (hW : IsChannel W)
     (Cs : ℕ → DFBlock N Mm n X) (s₀ : Fin N) (e : Fin (M s₀) → Fin B' → Fin Mm) (dY : ∀ k, Y k)

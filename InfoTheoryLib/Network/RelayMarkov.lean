@@ -369,7 +369,7 @@ lemma RelayBlock.err_nonneg (hV : IsChannel V) (l a : Fin Ma) (c : Fin Mc) :
   sum_nonneg fun z _ => mul_nonneg ((hV _).nonneg z) (add_nonneg (ind_nonneg _) (ind_nonneg _))
 
 /-- The uniform law of a table of messages. -/
-lemma uniform_table (K : ℕ) [NeZero K] (f : Fin B → Fin K) :
+lemma uniform_table (K : ℕ) (f : Fin B → Fin K) :
     piLaw (fun _ : Fin B => uniformPMF (Fin K)) f = 1 / (K : ℝ) ^ B := by
   simp [piLaw, uniformPMF]
 

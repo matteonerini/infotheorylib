@@ -133,7 +133,7 @@ def condGraphEntropy (G : SimpleGraph α) (P : α × γ → ℝ) : ℝ :=
 
 /-- **Lecture 22 of [elgamal2010], page 22-7.** The graph entropy of Körner,
 `H_G(X) = min I(X; W)` over `p(w | x)` with `W ∈ Γ(G)` and `X ∈ W`, in nats. It is the conditional
-graph entropy with no side information: see `graphEntropy_eq_sInf`. -/
+graph entropy with no side information. -/
 def graphEntropy (G : SimpleGraph α) (p : α → ℝ) : ℝ :=
   condGraphEntropy G fun z : α × Unit => p z.1
 

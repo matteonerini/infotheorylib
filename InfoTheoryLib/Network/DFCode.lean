@@ -57,6 +57,7 @@ def dfWin (d : Fin N) (Zd : ℕ → Fin n → Y d) (j : ℕ) (a : ℕ → Fin Mm
   ∀ k : Fin N, (k : ℕ) < d →
     dfTest d₀ L₀ k d ε (dfX d₀ (Cs (j + k)) (dfTagOf a (j + k))) (Zd (j + k))
 
+omit [∀ k, DecidableEq (X k)] in
 /-- The tests depend only on the messages up to `m_j`. -/
 lemma dfWin_congr (d : Fin N) (Zd : ℕ → Fin n → Y d) (j : ℕ) {a a' : ℕ → Fin Mm}
     (h : ∀ i, i ≤ j → a i = a' i) : dfWin d₀ L₀ ε Cs d Zd j a ↔ dfWin d₀ L₀ ε Cs d Zd j a' := by
@@ -107,6 +108,7 @@ def dfEst (B' : ℕ) (d : Fin N) (Zd : ℕ → Fin n → Y d) (i : ℕ) : Fin Mm
 def dfTagD (B' : ℕ) (d : Fin N) (Zd : ℕ → Fin n → Y d) (B : ℕ) : DFTag N Mm :=
   fun l => if (d : ℕ) ≤ l ∧ (l : ℕ) ≤ B then dfEst d₀ L₀ ε Cs B' d Zd (B - l) else 0
 
+omit [∀ k, DecidableEq (X k)] in
 /-- The estimates are causal. -/
 lemma dfEstA_congr (B' : ℕ) (d : Fin N) {Zd Zd' : ℕ → Fin n → Y d} : ∀ j : ℕ,
     (∀ B, B + 1 < j + d → Zd B = Zd' B) →
@@ -129,12 +131,14 @@ lemma dfEstA_congr (B' : ℕ) (d : Fin N) {Zd Zd' : ℕ → Fin n → Y d} : ∀
       exact propext (hw _)
     · simp [hj]
 
+omit [∀ k, DecidableEq (X k)] in
 lemma dfEst_congr (B' : ℕ) (d : Fin N) {Zd Zd' : ℕ → Fin n → Y d} (i : ℕ)
     (h : ∀ B, B < i + d → Zd B = Zd' B) :
     dfEst d₀ L₀ ε Cs B' d Zd i = dfEst d₀ L₀ ε Cs B' d Zd' i := by
   simp only [dfEst]
   rw [dfEstA_congr d₀ L₀ ε Cs B' d (i + 1) fun B hB => h B (by omega)]
 
+omit [∀ k, DecidableEq (X k)] in
 /-- The tag that a node knows in block `B` depends only on the earlier blocks. -/
 lemma dfTagD_congr (B' : ℕ) (d : Fin N) {Zd Zd' : ℕ → Fin n → Y d} (B : ℕ)
     (h : ∀ B', B' < B → Zd B' = Zd' B') :
@@ -145,6 +149,7 @@ lemma dfTagD_congr (B' : ℕ) (d : Fin N) {Zd Zd' : ℕ → Fin n → Y d} (B : 
   · exact dfEst_congr d₀ L₀ ε Cs B' d _ fun B₁ hB₁ => h B₁ (by omega)
   · rfl
 
+omit [∀ k, DecidableEq (X k)] in
 /-- **On the good event, the estimates are the messages.** -/
 theorem dfEstA_eq_of_good {B' : ℕ} {d : Fin N} {Zd : ℕ → Fin n → Y d} {msg : ℕ → Fin Mm}
     (h0 : ∀ i, B' ≤ i → msg i = 0)
@@ -188,6 +193,7 @@ theorem dfEstA_eq_of_good {B' : ℕ} {d : Fin N} {Zd : ℕ → Fin n → Y d} {m
     · rw [Function.update_of_ne hij]
       exact ih i (by omega)
 
+omit [∀ k, DecidableEq (X k)] in
 /-- **On the good event, the estimates are the messages.** -/
 theorem dfEst_eq_of_good {B' : ℕ} {d : Fin N} {Zd : ℕ → Fin n → Y d} {msg : ℕ → Fin Mm}
     (h0 : ∀ i, B' ≤ i → msg i = 0)
@@ -197,6 +203,7 @@ theorem dfEst_eq_of_good {B' : ℕ} {d : Fin N} {Zd : ℕ → Fin n → Y d} {ms
     dfEst d₀ L₀ ε Cs B' d Zd i = msg i :=
   dfEstA_eq_of_good d₀ L₀ ε Cs h0 htrue hwrong (i + 1) i (Nat.lt_succ_self i)
 
+omit [∀ k, DecidableEq (X k)] in
 /-- **On the good event, the node knows the tag from itself on.** -/
 theorem dfX_tagD_eq_of_good {B' : ℕ} {d : Fin N} {Zd : ℕ → Fin n → Y d} {msg : ℕ → Fin Mm}
     (h0 : ∀ i, B' ≤ i → msg i = 0)

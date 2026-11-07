@@ -181,7 +181,7 @@ section Aliases
 variable {X X₁ Y Y₁ : Type*} [Fintype X] [Fintype X₁] [Fintype Y] [Fintype Y₁]
 
 /-- **Theorem 1, the cutset bound, page 17-5.** -/
-theorem theorem_17_1 [Nonempty X] [Nonempty X₁] {W : X × X₁ → Y × Y₁ → ℝ} (hW : IsChannel W) {R : ℝ}
+theorem theorem_17_1 {W : X × X₁ → Y × Y₁ → ℝ} (hW : IsChannel W) {R : ℝ}
     (h : IsAchievableRC W R) : R * log 2 ≤ rcCutsetBound W :=
   h.le_rcCutsetBound hW
 
@@ -219,7 +219,7 @@ theorem theorem_17_6 [Nonempty X] [Nonempty X₁] [Nonempty Y₁] {W₁ : X → 
   IsAchievableLook.le_capacity h₁ h₂ h
 
 /-- **Theorem 7, the relay-without-delay cutset bound, page 17-73.** -/
-theorem theorem_17_7 [Nonempty X] [Nonempty X₁] [DecidableEq Y₁] {W₁ : X → Y₁ → ℝ}
+theorem theorem_17_7 [DecidableEq Y₁] {W₁ : X → Y₁ → ℝ}
     {W₂ : X × X₁ × Y₁ → Y → ℝ} (h₁ : IsChannel W₁) (h₂ : IsChannel W₂) {R : ℝ} (h : IsAchievableRWD
       W₁ W₂ R) :
     R * log 2 ≤ rcCutsetBound (rwdChannel W₁ W₂) :=

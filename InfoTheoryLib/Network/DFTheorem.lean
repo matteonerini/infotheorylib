@@ -187,6 +187,7 @@ variable {N Mm n B' t : ℕ} {X Y : Fin N → Type*} [NeZero Mm] [NeZero n] [∀
   [∀ k, Fintype (Y k)] [∀ k, DecidableEq (X k)] {M : Fin N → ℕ}
   {W : (∀ k, X k) → (∀ k, Y k) → ℝ}
 
+omit [∀ k, DecidableEq (X k)] in
 /-- **A longer code.** The rest of the symbols are not used, so the error is the same. -/
 theorem dfCode_errProb_pad (hW : IsChannel W) (d₀ : ∀ l, X l) (L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ)
     (ε : ℝ) (Cs : ℕ → DFBlock N Mm n X) (s₀ : Fin N) (e : Fin (M s₀) → Fin B' → Fin Mm)

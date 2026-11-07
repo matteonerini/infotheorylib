@@ -224,7 +224,7 @@ theorem eq_of_forall_isSupportingAt [Nontrivial E] {R R₁ R₂ : Set E} (hR₁ 
 of `R`, with `R₁` nonempty and closed relative to `R`. Let `A` be a set of boundary points of `R₁`
 whose convex hull contains the boundary of `R₁`. If each point of `A` has a unique supporting half
 space of `R₁` and lies on the boundary of `R₂`, then `R₁ = R₂`. Boundedness is not needed. -/
-theorem eq_of_hasUniqueSupport [Nontrivial E] {R R₁ R₂ A : Set E} (hR₁ : Convex ℝ R₁)
+theorem eq_of_hasUniqueSupport {R R₁ R₂ A : Set E} (hR₁ : Convex ℝ R₁)
     (hR₂c : Convex ℝ R₂) (hne : R₁.Nonempty) (hsub : R₁ ⊆ R₂) (hR₂ : R₂ ⊆ R)
     (hrel : closure R₁ ∩ R ⊆ R₁) (hA : A ⊆ frontier R₁) (hcov : frontier R₁ ⊆ convexHull ℝ A)
     (huniq : ∀ x₀ ∈ A, HasUniqueSupport R₁ x₀) (hbd : ∀ x₀ ∈ A, x₀ ∈ frontier R₂) : R₁ = R₂ := by
@@ -321,7 +321,7 @@ lemma HasUniqueSupportingHyperplane.hasUniqueSupport {S : Set E} {x₀ : E}
 
 /-- **Lemma A.2 of El Gamal and Kim, with hyperplanes**, for a smaller set with nonempty interior.
 The assumption on the interior cannot be dropped: see `printed_lemma_A_2_false`. -/
-theorem eq_of_hasUniqueSupportingHyperplane [Nontrivial E] {R R₁ R₂ A : Set E} (hR₁ : Convex ℝ R₁)
+theorem eq_of_hasUniqueSupportingHyperplane {R R₁ R₂ A : Set E} (hR₁ : Convex ℝ R₁)
     (hR₂c : Convex ℝ R₂) (hint : (interior R₁).Nonempty) (hsub : R₁ ⊆ R₂) (hR₂ : R₂ ⊆ R)
     (hrel : closure R₁ ∩ R ⊆ R₁) (hA : A ⊆ frontier R₁) (hcov : frontier R₁ ⊆ convexHull ℝ A)
     (huniq : ∀ x₀ ∈ A, HasUniqueSupportingHyperplane R₁ x₀) (hbd : ∀ x₀ ∈ A, x₀ ∈ frontier R₂) :

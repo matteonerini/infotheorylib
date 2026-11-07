@@ -54,13 +54,13 @@ def fillGe (d₀ : ∀ l, X l) (j : ℕ) (x : ∀ l, X l) : ∀ l, X l :=
 abbrev NetStrat (X : Fin N → Type*) (k : Fin N) := (∀ l, X l) → X k
 
 /-- The tuple built by the strategies from node `j` on, with default values before `j`. -/
-def buildAt [∀ k, DecidableEq (X k)] (d₀ : ∀ l, X l) (s : ∀ k, NetStrat X k) (j : ℕ) : ∀ l, X l :=
+def buildAt (d₀ : ∀ l, X l) (s : ∀ k, NetStrat X k) (j : ℕ) : ∀ l, X l :=
   if h : j < N then
     Function.update (buildAt d₀ s (j + 1)) ⟨j, h⟩ (s ⟨j, h⟩ (buildAt d₀ s (j + 1)))
   else d₀
 termination_by N - j
 
-variable [∀ k, DecidableEq (X k)] (d₀ : ∀ l, X l)
+variable (d₀ : ∀ l, X l)
 
 lemma buildAt_of_lt (s : ∀ k, NetStrat X k) {j : ℕ} (h : j < N) :
     buildAt d₀ s j = Function.update (buildAt d₀ s (j + 1)) ⟨j, h⟩

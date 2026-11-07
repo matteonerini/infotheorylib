@@ -140,7 +140,7 @@ theorem isAchievableMD_of_eventually [Finite β₀] [Finite β₁] [Finite β₂
   exact ⟨by linarith, by linarith, by linarith⟩
 
 /-- A larger rate pair or a larger distortion triple keeps a pair achievable. -/
-theorem IsAchievableMD.mono [Finite β₀] [Finite β₁] [Finite β₂] {P : α → ℝ} {d₀ : α → β₀ → ℝ}
+theorem IsAchievableMD.mono {P : α → ℝ} {d₀ : α → β₀ → ℝ}
     {d₁ : α → β₁ → ℝ} {d₂ : α → β₂ → ℝ} {R₁ R₂ D₀ D₁ D₂ D₀' D₁' D₂' : ℝ}
     (h : IsAchievableMD P d₀ d₁ d₂ R₁ R₂ D₀ D₁ D₂) (h₀ : D₀ ≤ D₀') (h₁ : D₁ ≤ D₁')
     (h₂ : D₂ ≤ D₂') : IsAchievableMD P d₀ d₁ d₂ R₁ R₂ D₀' D₁' D₂' := by

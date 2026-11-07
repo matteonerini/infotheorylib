@@ -139,7 +139,7 @@ omit [SigmaFinite μ] in
 `X₁, X₂, …` are i.i.d. with density `f` and `h(f)` exists, then
 `-(1/n) log f(X₁, …, Xₙ) → h(f)` almost surely. -/
 theorem tendsto_sampleDiffEntropy_ae {Ω : Type*} [MeasurableSpace Ω] {P : Measure Ω}
-    [IsProbabilityMeasure P] (hf : IsPDF μ f) (hint : Integrable (fun x => negMulLog (f x)) μ)
+    (hf : IsPDF μ f) (hint : Integrable (fun x => negMulLog (f x)) μ)
     {X : ℕ → Ω → α} (hX : ∀ i, Measurable (X i)) (hindep : iIndepFun X P)
     (hlaw : ∀ i, P.map (X i) = pdfMeasure μ f) :
     ∀ᵐ ω ∂P, Tendsto (fun n => sampleDiffEntropy f n fun i => X i ω) atTop

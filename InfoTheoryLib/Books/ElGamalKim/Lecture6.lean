@@ -14,8 +14,8 @@ public import InfoTheoryLib.Network.ICAchievability
 This file indexes the formalization of Lecture 6 of [elgamal2010] and contains the lecture's worked
 examples, with aliases named after its results. The capacity region of the DM-IC is known in only a
 few cases. We formalize the discrete memoryless part up to strong interference (Theorem 1), and for
-the AWGN-IC only the formulas: its coding theorems need differential entropy tools that the library
-does not have.
+the AWGN-IC only the formulas: its coding theorems need multi-user coding for continuous alphabets
+and the fact that Gaussian noise is the worst additive noise, which the library does not have.
 
 ## Conventions
 
@@ -88,8 +88,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The deterministic IC (Theorem 5), and the semideterministic IC with Lemma 3 and Proposition 5.
 * All the coding theorems for the AWGN-IC: Theorem 2, the sum capacity under weak interference
   (Theorem 3) with Lemma 2, the half-bit theorem and the limit `d*(α)` of the degrees of freedom.
-  They need conditional differential entropy, jointly Gaussian variables and the fact that Gaussian
-  noise is the worst additive noise.
+  They need multi-user coding for continuous alphabets and the fact that Gaussian noise is the worst
+  additive noise; conditional differential entropy (`condDiffEntropy`) and jointly Gaussian vectors
+  (`Probability.GaussianVector`) are available.
 * The `q`-ary expansion deterministic IC, its linear codes, and more than two user pairs.
 
 ## Issues in the notes

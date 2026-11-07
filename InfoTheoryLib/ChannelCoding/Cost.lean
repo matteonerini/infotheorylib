@@ -450,17 +450,6 @@ lemma prob_jointIid_filter_ge {p : α → ℝ} (hp : IsPMF p) (hW : IsChannel W)
   simp only [prob] at hsplit hnot ⊢
   linarith
 
-lemma two_pow_ceil_le (n : ℕ) {R : ℝ} (hR : 0 ≤ R) :
-    ((2 ^ ⌈n * R⌉₊ : ℕ) : ℝ) ≤ 2 * exp (n * (R * log 2)) := by
-  push_cast
-  calc (2 : ℝ) ^ ⌈n * R⌉₊ = 2 ^ (⌈n * R⌉₊ : ℝ) := (rpow_natCast 2 _).symm
-    _ ≤ 2 ^ (n * R + 1) := rpow_le_rpow_of_exponent_le one_le_two
-        (Nat.ceil_lt_add_one (mul_nonneg (Nat.cast_nonneg n) hR)).le
-    _ = 2 * exp (n * (R * log 2)) := by
-        rw [rpow_def_of_pos two_pos, ← exp_log two_pos, ← exp_add, exp_log two_pos]
-        congr 1
-        ring
-
 lemma exp_le_two_pow_ceil (n : ℕ) (R : ℝ) :
     exp (n * (R * log 2)) ≤ ((2 ^ ⌈n * R⌉₊ : ℕ) : ℝ) := by
   push_cast

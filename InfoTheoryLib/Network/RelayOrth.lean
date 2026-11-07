@@ -514,7 +514,7 @@ def rcROBound (P : X → Y' × S → ℝ) (κ : U → Y'' → ℝ) : ℝ :=
     (mutualInfoOf p P)}
 
 omit [Fintype V] in
-lemma bddAbove_rcRO [Nonempty X] (hP : IsChannel P) :
+lemma bddAbove_rcRO (hP : IsChannel P) :
     BddAbove {v | ∃ p : X → ℝ, IsPMF p ∧ v = min (mutualInfoOf p (bcMarg₁ P) + capacity κ)
       (mutualInfoOf p P)} := by
   refine ⟨capacity P, ?_⟩

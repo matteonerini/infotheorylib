@@ -442,7 +442,7 @@ uses. So the alphabet of a pair that is not an edge can be a single point if its
 -/
 theorem NetCode.exists_relabel (c : NetCode V A M) {D : V → Finset V}
     (h : ∀ m, c.Correct D m) [∀ j, Nonempty (M j)] [∀ j, Nonempty (M' j)]
-    [∀ j k, Nonempty (A' j k)] (μ : ∀ j, M' j → M j) (hμ : ∀ j, Function.Injective (μ j))
+    (μ : ∀ j, M' j → M j) (hμ : ∀ j, Function.Injective (μ j))
     (ι : ∀ j k, A j k → A' j k)
     (hι : ∀ j k, Set.InjOn (ι j k) (Set.range fun m : ∀ j, M j => c.edge m j k)) :
     ∃ c' : NetCode V A' M', ∀ m, c'.Correct D m := by

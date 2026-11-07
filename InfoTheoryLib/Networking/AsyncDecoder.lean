@@ -32,7 +32,7 @@ hypotheses, and each one is excluded by splitting its slots into two classes wit
 
 * `asyncPasses_fresh_le`: the bound for a hypothesis with fresh sub-messages.
 * `asyncPasses_conflict_le`: the bound for a hypothesis using only sub-messages actually sent.
-* `asyncFail_le`: the bound for the true hypothesis.
+* `asyncPasses_true`: if the true entries pass the tests, so does the true hypothesis.
 
 ## References
 

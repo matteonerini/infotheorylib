@@ -520,7 +520,7 @@ theorem isAchievableMultiKey_of_lt (hp : IsPMF p) (hN : 0 < N) {R : ℝ} (hR : 0
       · exact h₃
       · exact mul_nonneg h₀ (sum_nonneg fun k' _ => hInd0 ω k')
   have hI₀ : I[K₀B : pair eveM c.transB ; secBlockLaw p (seedsLaw (unitLaw N)) n] ≤ n * ε₀ := by
-    rw [hVB, mutualInfo_comp_of_dist, hd]
+    rw [hVB, mutualInfo_comp, hd]
     exact hleak
   have hH₀ : n * (R * log 2 - ε₀) ≤ H[K₀B ; secBlockLaw p (seedsLaw (unitLaw N)) n] := by
     have h₂ := entropyRV_comp_of_dist (μ := secBlockLaw p (seedsLaw (unitLaw N)) n)

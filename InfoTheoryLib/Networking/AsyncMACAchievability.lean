@@ -626,19 +626,6 @@ lemma pos_of_two_le {b k : ℕ} {R : ℝ} (h : 2 ≤ 2 ^ ⌈(k : ℝ) * asyncRho
   have h0 : asyncRho b R = 0 := le_antisymm (not_lt.1 hR) (asyncRho_nonneg b R)
   simp [h0] at h
 
-/-- `2^⌈k ρ⌉ ≤ 2 e^{k ρ log 2}`. -/
-lemma two_pow_ceil_le_two_mul_exp {k : ℕ} {ρ : ℝ} (hρ : 0 ≤ ρ) :
-    ((2 ^ ⌈(k : ℝ) * ρ⌉₊ : ℕ) : ℝ) ≤ 2 * exp (k * (ρ * log 2)) := by
-  have hl := log_pos one_lt_two
-  have h1 : (⌈(k : ℝ) * ρ⌉₊ : ℝ) < k * ρ + 1 := Nat.ceil_lt_add_one (by positivity)
-  push_cast
-  calc (2 : ℝ) ^ ⌈(k : ℝ) * ρ⌉₊ = exp (⌈(k : ℝ) * ρ⌉₊ * log 2) := by
-        rw [← rpow_natCast, rpow_def_of_pos two_pos, mul_comm]
-    _ ≤ exp ((k * ρ + 1) * log 2) := exp_le_exp.2 (mul_le_mul_of_nonneg_right h1.le hl.le)
-    _ = 2 * exp (k * (ρ * log 2)) := by
-        rw [add_mul, one_mul, exp_add, exp_log two_pos, mul_comm]
-        ring_nf
-
 /-- **There are enough sub-messages for the messages.** -/
 lemma two_pow_ceil_le_pow {b k n : ℕ} {R : ℝ} (hb : 1 ≤ b) (hu : n < (b + 3) * k)
     (hkR : 0 < R → 1 ≤ (k : ℝ) * R) :
@@ -806,8 +793,8 @@ theorem isAchievableAsync_of_lt [Nonempty α₁] [Nonempty α₂] (hp₁ : IsPMF
       (two_pow_ceil_le_pow hb hu' (hR R₁ (Or.inl rfl)))
       (two_pow_ceil_le_pow hb hu' (hR R₂ (Or.inr rfl)))
       (mul_nonneg (asyncRho_nonneg _ _) hl.le) (mul_nonneg (asyncRho_nonneg _ _) hl.le) hγ
-      (two_pow_ceil_le_two_mul_exp (asyncRho_nonneg _ _))
-      (two_pow_ceil_le_two_mul_exp (asyncRho_nonneg _ _))
+      (two_pow_ceil_le _ (asyncRho_nonneg _ _))
+      (two_pow_ceil_le _ (asyncRho_nonneg _ _))
       (fun h => hA (pos_of_two_le h)) (fun h => hB (pos_of_two_le h))
       (fun h h' => hAB (pos_of_two_le h) (pos_of_two_le h')) hC hC' hc0.le hcD
     refine ⟨c', fun d₁ d₂ => (hc' d₁ d₂).trans ?_⟩

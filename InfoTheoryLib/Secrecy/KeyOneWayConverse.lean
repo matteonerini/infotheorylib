@@ -191,12 +191,12 @@ lemma oneWayGap_le_log (hP : IsPMF P) {q : α₁ → 𝒱 → ℝ} {r : 𝒱 →
   linarith
 
 omit [Fintype α₁] in
-lemma IsChannel_relabel_q {q : α₁ → 𝒱 → ℝ} (hq : IsChannel q) (e𝒱 : 𝒱 ≃ 𝒱') :
+lemma isChannel_relabel_q {q : α₁ → 𝒱 → ℝ} (hq : IsChannel q) (e𝒱 : 𝒱 ≃ 𝒱') :
     IsChannel fun a v => q a (e𝒱.symm v) := fun a =>
   ⟨fun v => (hq a).nonneg _, by rw [Equiv.sum_comp e𝒱.symm (q a)]; exact (hq a).sum_eq_one⟩
 
 omit [Fintype 𝒱] [Fintype 𝒱'] in
-lemma IsChannel_relabel_r {r : 𝒱 → 𝒰 → ℝ} (hr : IsChannel r) (e𝒱 : 𝒱 ≃ 𝒱') (e𝒰 : 𝒰 ≃ 𝒰') :
+lemma isChannel_relabel_r {r : 𝒱 → 𝒰 → ℝ} (hr : IsChannel r) (e𝒱 : 𝒱 ≃ 𝒱') (e𝒰 : 𝒰 ≃ 𝒰') :
     IsChannel fun v u => r (e𝒱.symm v) (e𝒰.symm u) := fun v =>
   ⟨fun u => (hr _).nonneg _, by
     rw [Equiv.sum_comp e𝒰.symm (r (e𝒱.symm v))]; exact (hr _).sum_eq_one⟩
@@ -235,7 +235,7 @@ lemma oneWayGap_relabel (hP : IsPMF P) {q : α₁ → 𝒱 → ℝ} {r : 𝒱 �
     (hr : IsChannel r) (e𝒱 : 𝒱 ≃ 𝒱') (e𝒰 : 𝒰 ≃ 𝒰') :
     oneWayGap P (fun a v => q a (e𝒱.symm v)) (fun v u => r (e𝒱.symm v) (e𝒰.symm u)) =
       oneWayGap P q r := by
-  rw [oneWayGap_eq hP (IsChannel_relabel_q hq e𝒱) (IsChannel_relabel_r hr e𝒱 e𝒰),
+  rw [oneWayGap_eq hP (isChannel_relabel_q hq e𝒱) (isChannel_relabel_r hr e𝒱 e𝒰),
     oneWayGap_eq hP hq hr, condEntropy_oneWayJoint_relabel hP hq hr e𝒱 e𝒰 fun l => l.2.2,
     condEntropy_oneWayJoint_relabel hP hq hr e𝒱 e𝒰 fun l => l.2.1]
 
@@ -248,8 +248,8 @@ theorem oneWayGap_le_value (hP : IsPMF P) {q : α₁ → 𝒱 → ℝ} {r : 𝒱
     refine ⟨log (Fintype.card α₂), ?_⟩
     rintro _ ⟨k, l, q', r', hq', hr', rfl⟩
     exact oneWayGap_le_log hP hq' hr'
-  exact le_csSup hbdd ⟨_, _, _, _, IsChannel_relabel_q hq (Fintype.equivFin 𝒱),
-    IsChannel_relabel_r hr (Fintype.equivFin 𝒱) (Fintype.equivFin 𝒰),
+  exact le_csSup hbdd ⟨_, _, _, _, isChannel_relabel_q hq (Fintype.equivFin 𝒱),
+    isChannel_relabel_r hr (Fintype.equivFin 𝒱) (Fintype.equivFin 𝒰),
     oneWayGap_relabel hP hq hr (Fintype.equivFin 𝒱) (Fintype.equivFin 𝒰)⟩
 
 /-- `H(K, U | C, U) = H(K | C, U)`. -/

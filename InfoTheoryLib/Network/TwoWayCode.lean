@@ -192,7 +192,7 @@ def err₂ (W : α₁ × α₂ → β → ℝ) (v₁ : β → γ₁) (v₂ : β 
     fun t => c.dec₂ t.1 t.2
 
 /-- The law of the inputs at time `i`. -/
-def letter [Fintype α₁] [Fintype α₂] (W : α₁ × α₂ → β → ℝ) (v₁ : β → γ₁) (v₂ : β → γ₂) (i : Fin n) :
+def letter (W : α₁ × α₂ → β → ℝ) (v₁ : β → γ₁) (v₂ : β → γ₂) (i : Fin n) :
     α₁ × α₂ → ℝ :=
   dist (c.law W v₁ v₂) fun z => c.fbEnc v₁ v₂ i z.1 (fbPre i z.2)
 
@@ -484,7 +484,7 @@ lemma dist_fst_eq_bcMarg₁ (a : α₁ × α₂) : dist (W a) Prod.fst = bcMarg�
 
 /-- **Shannon's outer bound, page 18-48 of [elgamal2010].** Every achievable rate pair is in the
 closure of the region. -/
-theorem IsAchievableTWC.mem_closure_twcOuterRegion [Nonempty α₁] [Nonempty α₂] (hW : IsChannel W)
+theorem IsAchievableTWC.mem_closure_twcOuterRegion (hW : IsChannel W)
     {R₁ R₂ : ℝ} (h : IsAchievableTWC W R₁ R₂) : (R₁, R₂) ∈ closure (twcOuterRegion W) := by
   obtain ⟨c, hc⟩ := h
   set a₁ : ℕ → ℕ := fun n => ⌈(n : ℝ) * R₁⌉₊ with ha₁

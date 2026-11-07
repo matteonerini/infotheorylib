@@ -149,7 +149,7 @@ theorem lemma_A_1 [Nontrivial E] {R R₁ R₂ : Set E} (hR₁ : Convex ℝ R₁)
 
 /-- **Lemma A.2 of Appendix A of [elgamal2010]**, with unique supporting half spaces, for a nonempty
 smaller set. -/
-theorem lemma_A_2 [Nontrivial E] {R R₁ R₂ A : Set E} (hR₁ : Convex ℝ R₁) (hR₂c : Convex ℝ R₂)
+theorem lemma_A_2 {R R₁ R₂ A : Set E} (hR₁ : Convex ℝ R₁) (hR₂c : Convex ℝ R₂)
     (hne : R₁.Nonempty) (hsub : R₁ ⊆ R₂) (hR₂ : R₂ ⊆ R) (hrel : closure R₁ ∩ R ⊆ R₁)
     (hA : A ⊆ frontier R₁) (hcov : frontier R₁ ⊆ convexHull ℝ A)
     (huniq : ∀ x₀ ∈ A, HasUniqueSupport R₁ x₀) (hbd : ∀ x₀ ∈ A, x₀ ∈ frontier R₂) : R₁ = R₂ :=

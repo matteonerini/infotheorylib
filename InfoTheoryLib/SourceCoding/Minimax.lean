@@ -198,7 +198,7 @@ lemma exists_relEntropy_mix_gt {w r : β → ℝ} (hw : IsPMF w) (hr : IsPMF r) 
 
 /-- At the output distribution `q*` of a capacity-achieving input `π*`, every row `p_θ` is
 absolutely continuous with respect to `q*` and has `D(p_θ ‖ q*) ≤ C`. -/
-theorem relEntropy_le_capacity [Nonempty α] (hp : IsPMF p) (hW : IsChannel W)
+theorem relEntropy_le_capacity (hp : IsPMF p) (hW : IsChannel W)
     (hpC : mutualInfoOf p W = capacity W) (x₀ : α) :
     AbsCont (W x₀) (outDist p W) ∧ relEntropyReal (W x₀) (outDist p W) ≤ capacity W := by
   classical
@@ -235,7 +235,7 @@ theorem relEntropy_le_capacity [Nonempty α] (hp : IsPMF p) (hW : IsChannel W)
   exact hmix t ht.1 ht.2
 
 /-- The rows charged by a capacity-achieving input are at distance exactly `C` from `q*`. -/
-theorem relEntropy_eq_capacity [Nonempty α] (hp : IsPMF p) (hW : IsChannel W)
+theorem relEntropy_eq_capacity (hp : IsPMF p) (hW : IsChannel W)
     (hpC : mutualInfoOf p W = capacity W) {x₀ : α} (hx₀ : 0 < p x₀) :
     relEntropyReal (W x₀) (outDist p W) = capacity W := by
   have hle := fun x => (relEntropy_le_capacity hp hW hpC x).2
@@ -285,7 +285,7 @@ theorem isLeast_maxRedundancy [Nonempty α] (hW : IsChannel W) :
 
 /-- **Theorem 13.1.1 (uniqueness).** A coding distribution `q` with worst-case redundancy `C` is
 the output distribution `q*` of every capacity-achieving input. -/
-theorem eq_outDist_of_relEntropy_le_capacity [Nonempty α] (hp : IsPMF p) (hW : IsChannel W)
+theorem eq_outDist_of_relEntropy_le_capacity (hp : IsPMF p) (hW : IsChannel W)
     (hpC : mutualInfoOf p W = capacity W) {q : β → ℝ} (hq : IsPMF q)
     (hqW : ∀ x, AbsCont (W x) q) (hR : ∀ x, relEntropyReal (W x) q ≤ capacity W) :
     q = outDist p W := by

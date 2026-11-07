@@ -149,7 +149,7 @@ lemma margCh_isChannel {κ : α → B → ℝ} (h : IsChannel κ) (g : B → B')
   fun a => (h a).dist g
 
 omit [Fintype B'] in
-lemma jointOf_margCh [Finite B'] (κ : α → B → ℝ) (g : B → B') :
+lemma jointOf_margCh (κ : α → B → ℝ) (g : B → B') :
     jointOf P (margCh κ g) = dist (jointOf P κ) (fun z => (z.1, g z.2)) := by
   classical
   funext ⟨a, b'⟩

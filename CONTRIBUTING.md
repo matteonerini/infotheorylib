@@ -37,7 +37,8 @@ are adapted from [Mathlib's](https://leanprover-community.github.io/contribute/i
   specific to one text: its worked examples, text-only definitions and the index of the chapter or
   lecture. Cover & Thomas is in `Books/CoverThomas/` (namespace `InfoTheory.CoverThomas`), with one
   file per chapter, and El Gamal & Kim's lecture notes are in `Books/ElGamalKim/` (namespace
-  `InfoTheory.ElGamalKim`), with one file per lecture. Each numbered lemma or theorem gets an alias
+  `InfoTheory.ElGamalKim`), with one file per lecture or appendix; a long lecture can have extra
+  files (`Lecture14Binary.lean`). Each numbered lemma or theorem gets an alias
   named after its number (`theorem_2_6_5`; `theorem_3_2` for Theorem 2 of Lecture 3) pointing to the
   library declaration; a named but unnumbered result gets an alias named after it
   (`mrs_gerber_lemma`). Results that are useful beyond the text belong in a topic folder, with a
@@ -94,8 +95,9 @@ which makes all declarations and definition bodies visible to other files. Mathl
 own dependencies privately, so a lemma is available only after importing the Mathlib file that
 declares it (or one that imports it publicly), and the bodies of Mathlib definitions that are not
 exposed cannot be unfolded: use their characterizing lemmas instead (see
-`binEntropy_eq_mul_log_inv`). Import only the modules that are needed; the base files `ForMathlib/Log.lean` and `Probability/FinitePMF.lean` import
-`Mathlib`. Add any new reference to `docs/references.bib` and cite it by its key.
+`binEntropy_eq_mul_log_inv`). Import only the modules that are needed; a few base files, such as
+`ForMathlib/Log.lean` and `Probability/FinitePMF.lean`, import `Mathlib`. Add any new reference
+to `docs/references.bib` and cite it by its key.
 
 ## Mathematical conventions
 

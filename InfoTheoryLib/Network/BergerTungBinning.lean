@@ -18,7 +18,7 @@ independently of the codebooks, which avoids the analogue of Lemma 1 of Lecture 
 
 ## Main definitions
 
-* `btYU P κ₁ κ₂`: the law of `(U₁, U₂)`.
+* `btUU P κ₁ κ₂`: the law of `(U₁, U₂)`.
 * `btPackExp`: the exponent `I(U₁; U₂) - δ(ε)` of the mutual packing lemma.
 * `btIndex`: the decoder.
 

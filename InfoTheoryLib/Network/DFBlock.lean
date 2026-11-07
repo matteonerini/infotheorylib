@@ -68,6 +68,7 @@ variable [∀ k, DecidableEq (X k)] (d₀ : ∀ l, X l)
 def dfX (C : DFBlock N Mm n X) (τ : DFTag N Mm) (i : Fin n) : ∀ l, X l :=
   buildAt d₀ (dfStrats C τ i) 0
 
+omit [∀ k, DecidableEq (X k)] in
 /-- The tuple from `j` on depends only on the tag from `j` on. -/
 lemma fillGe_dfX_congr (C : DFBlock N Mm n X) {τ τ' : DFTag N Mm} {j : ℕ}
     (h : ∀ l : Fin N, j ≤ l → τ l = τ' l) (i : Fin n) :
@@ -83,11 +84,13 @@ lemma fillGe_dfX_congr (C : DFBlock N Mm n X) {τ τ' : DFTag N Mm} {j : ℕ}
   · exact h l (hk.trans hl)
   · rfl
 
+omit [∀ k, DecidableEq (X k)] in
 /-- The input of a node is its strategy, applied to the inputs of the nodes after it. -/
 lemma dfX_apply (C : DFBlock N Mm n X) (τ : DFTag N Mm) (i : Fin n) (k : Fin N) :
     dfX d₀ C τ i k = C k (dfCanon k τ) i (fillGe d₀ (k + 1) (dfX d₀ C τ i)) :=
   buildAt_zero_apply d₀ _ k
 
+omit [∀ k, DecidableEq (X k)] in
 /-- The input of a node depends only on the tag from that node on. -/
 lemma dfX_congr (C : DFBlock N Mm n X) {τ τ' : DFTag N Mm} {k : Fin N}
     (h : ∀ l : Fin N, (k : ℕ) ≤ l → τ l = τ' l) (i : Fin n) :

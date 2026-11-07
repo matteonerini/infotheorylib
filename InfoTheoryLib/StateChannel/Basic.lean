@@ -551,12 +551,6 @@ theorem isAchievableStateRate_causal_true_of_lt [Nonempty α] (hW : IsChannel W)
     rw [h i le_rfl]
   · rw [ChannelCode.errProb_toStateCodeOut]
 
-/-- If all the rates below `C` are in `A` and all the rates in `A` are at most `C`, `sSup A = C`. -/
-lemma sSup_eq_of_forall_mem {A : Set ℝ} {C : ℝ} (h₁ : ∀ R ∈ A, R ≤ C) (h₂ : ∀ R < C, R ∈ A) :
-    sSup A = C :=
-  csSup_eq_of_forall_le_of_forall_lt_exists_gt ⟨C - 1, h₂ _ (by linarith)⟩ h₁ fun R hR =>
-    ⟨(R + C) / 2, h₂ _ (by linarith), by linarith⟩
-
 /-- **Lecture 7 of [elgamal2010], page 7-17.** With the state available causally at both the encoder
 and the decoder, the capacity is `C_SI-ED = max_{p(x|s)} I(X; Y | S)`, in bits. -/
 theorem stateCapacity_causal_true [Nonempty α] (hW : IsChannel W) (hp : IsPMF p) :

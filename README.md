@@ -149,7 +149,7 @@ InfoTheoryLib/
   Networking/             random data arrival, the asynchronous MAC, the random access channel
   Books/
     CoverThomas/          ChapterN.lean: index, worked examples and aliases for each chapter
-    ElGamalKim/           LectureN.lean: index, worked examples and aliases for each lecture
+    ElGamalKim/           LectureN.lean, AppendixX.lean: the same for each lecture and appendix
 docs/
   references.bib          bibliography of the API documentation
 ```

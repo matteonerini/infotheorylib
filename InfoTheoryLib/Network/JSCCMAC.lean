@@ -87,7 +87,7 @@ lemma MACJSCCCode.errProb_nonneg {P : α₁ × α₂ → ℝ} {W : ξ₁ × ξ�
 /-- To show that the sources can be sent losslessly it is enough to find, for every `ε > 0` and all
 large `n`, a code with error probability at most `ε`. -/
 theorem isLosslessMAC_of_eventually [Finite ξ₁] [Finite ξ₂] [Nonempty α₁] [Nonempty α₂]
-    [Nonempty ξ₁] [Nonempty ξ₂] [Nonempty β] {P : α₁ × α₂ → ℝ} {W : ξ₁ × ξ₂ → β → ℝ} (hP : IsPMF P)
+    [Nonempty ξ₁] [Nonempty ξ₂] {P : α₁ × α₂ → ℝ} {W : ξ₁ × ξ₂ → β → ℝ} (hP : IsPMF P)
     (hW : IsChannel W)
     (h : ∀ ε > 0, ∀ᶠ n : ℕ in atTop, ∃ C : MACJSCCCode n α₁ α₂ ξ₁ ξ₂ β, C.errProb P W ≤ ε) :
     IsLosslessMAC P W := by

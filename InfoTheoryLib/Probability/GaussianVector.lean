@@ -55,7 +55,7 @@ variable {Ω : Type*} {mΩ : MeasurableSpace Ω} {μ : Measure Ω} {ι κ : Type
 
 /-- **The definition of Appendix B.** A random vector is Gaussian if and only if every linear
 combination of its coordinates is a Gaussian random variable. -/
-theorem hasGaussianLaw_iff_forall_linear [Fintype ι] [IsProbabilityMeasure μ] {X : ι → Ω → ℝ}
+theorem hasGaussianLaw_iff_forall_linear [Fintype ι] {X : ι → Ω → ℝ}
     (hXm : ∀ i, AEMeasurable (X i) μ) :
     HasGaussianLaw (fun ω i => X i ω) μ ↔
       ∀ a : ι → ℝ, HasGaussianLaw (fun ω => ∑ i, a i * X i ω) μ := by
@@ -92,10 +92,10 @@ theorem hasGaussianLaw_iff_forall_linear [Fintype ι] [IsProbabilityMeasure μ] 
 section Linear
 
 /-- A matrix as a continuous linear map. -/
-def mulVecCLM [Fintype ι] [Fintype κ] (A : Matrix κ ι ℝ) : (ι → ℝ) →L[ℝ] (κ → ℝ) :=
+def mulVecCLM [Fintype ι] (A : Matrix κ ι ℝ) : (ι → ℝ) →L[ℝ] (κ → ℝ) :=
   LinearMap.toContinuousLinearMap (Matrix.mulVecLin A)
 
-lemma mulVecCLM_apply [Fintype ι] [Fintype κ] (A : Matrix κ ι ℝ) (x : ι → ℝ) : mulVecCLM A x =
+lemma mulVecCLM_apply [Fintype ι] (A : Matrix κ ι ℝ) (x : ι → ℝ) : mulVecCLM A x =
   A *ᵥ x := rfl
 
 variable {X : ι → Ω → ℝ}

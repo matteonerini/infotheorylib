@@ -155,4 +155,16 @@ lemma log_card_sub_one_le_log_card [Nonempty α] :
     exact log_nonneg (by exact_mod_cast Fintype.card_pos)
   · exact log_le_log h (by linarith)
 
+/-- `2^⌈n R⌉ ≤ 2 e^{n R log 2}`, for the number of messages of a code of rate `R` in bits. -/
+lemma two_pow_ceil_le (n : ℕ) {R : ℝ} (hR : 0 ≤ R) :
+    ((2 ^ ⌈n * R⌉₊ : ℕ) : ℝ) ≤ 2 * exp (n * (R * log 2)) := by
+  push_cast
+  calc (2 : ℝ) ^ ⌈n * R⌉₊ = 2 ^ (⌈n * R⌉₊ : ℝ) := (rpow_natCast 2 _).symm
+    _ ≤ 2 ^ (n * R + 1) := rpow_le_rpow_of_exponent_le one_le_two
+        (Nat.ceil_lt_add_one (mul_nonneg (Nat.cast_nonneg n) hR)).le
+    _ = 2 * exp (n * (R * log 2)) := by
+        rw [rpow_def_of_pos two_pos, ← exp_log two_pos, ← exp_add, exp_log two_pos]
+        congr 1
+        ring
+
 end InfoTheory

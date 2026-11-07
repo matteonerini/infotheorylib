@@ -229,10 +229,6 @@ lemma binEntropy_binConv_mono {a : ℝ} (ha : a ∈ Set.Icc 0 1) (hp₁ : 0 ≤ 
   rw [e]
   exact binEntropy_le_binEntropy_binConv hx ⟨hn.1, hn.2.trans (by norm_num)⟩
 
-lemma binConv_two_inv (p : ℝ) : binConv 2⁻¹ p = 2⁻¹ := by
-  unfold binConv
-  ring
-
 /-- The mutual information of the BSC for an input with `p(true) = a`. -/
 lemma mutualInfoOf_bsbcBSC {p : ℝ} (h0 : 0 ≤ p) (h1 : p ≤ 1) {r : Bool → ℝ} (hr : IsPMF r) :
     mutualInfoOf r (bsbcBSC p) = binEntropy (binConv (r true) p) - binEntropy p :=
@@ -260,7 +256,7 @@ theorem wiretapXValue_bsbcIndep (hp₁ : 0 ≤ p₁) (hp₁₂ : p₁ ≤ p₂) 
   have hu : IsPMF (bernoulliPMF (2⁻¹ : ℝ)) := bernoulliPMF_isPMF (by norm_num) (by norm_num)
   have h := sub_mutualInfoOf_le_wiretapXValue hW hu
   rw [e₁, e₂, mutualInfoOf_bsbcBSC hp₁ hp₁' hu, mutualInfoOf_bsbcBSC hp₂0 hp₂' hu] at h
-  simp only [bernoulliPMF, ite_true, binConv_two_inv] at h
+  simp only [bernoulliPMF, ite_true, binConv_half_left] at h
   linarith
 
 /-- **The BS-WTC, page 23-11 of [elgamal2010].** For `p₁ ≤ p₂ ≤ 1/2`, the secrecy capacity of the

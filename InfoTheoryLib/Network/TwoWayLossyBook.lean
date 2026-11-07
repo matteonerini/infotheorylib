@@ -260,7 +260,7 @@ theorem exists_round_choice {l : Fin q} [NeZero (M l)] (ξs : α₁ × α₂ →
       ring
 
 omit [Fintype α₁] [Fintype α₂] [Fintype υ] [∀ l, NeZero (L l)] [Fintype a] [Fintype b] in
-lemma kFail_eq_zero_iff {X : Type*} [Finite X] {Lk Mk : ℕ} [NeZero Lk] {A T S : Finset X}
+lemma kFail_eq_zero_iff {X : Type*} [Finite X] {Lk Mk : ℕ} {A T S : Finset X}
     {C : Fin Lk → X} {Bn : Fin Lk → Fin Mk} {l₀ : Fin Lk} (h : kFail A T S l₀ C Bn = 0) :
     C (firstIn A C l₀) ∈ T ∧ ∀ l' ∈ univ.erase (firstIn A C l₀),
       ¬ (Bn l' = Bn (firstIn A C l₀) ∧ C l' ∈ S) := by

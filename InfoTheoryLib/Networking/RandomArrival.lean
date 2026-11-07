@@ -132,7 +132,7 @@ lemma eventually_two_pow_succ_le {R R' : ℝ} (hR : 0 < R) (hR' : R * log 2 < R'
 
 /-- **Theorem 1 of Lecture 24, achievability.** If `λ < R` and `R < C`, the arrivals can be
 reliably communicated at rate `R`. The capacity `C` is in nats. -/
-theorem isReliableArrival_of_lt [Nonempty α] [Nonempty β] (hW : IsChannel W) (h0 : 0 ≤ p)
+theorem isReliableArrival_of_lt [Nonempty α] (hW : IsChannel W) (h0 : 0 ≤ p)
     (h1 : p ≤ 1) (hlr : p * k < R) (hRC : R * log 2 < capacity W) :
     IsReliableArrival W p k R := by
   have hl0 : 0 ≤ p * (k : ℝ) := by positivity
@@ -163,7 +163,7 @@ theorem isReliableArrival_of_lt [Nonempty α] [Nonempty β] (hW : IsChannel W) (
 
 /-- **Theorem 1 of Lecture 24, achievability.** If `λ < C`, the arrivals can be reliably
 communicated at some rate. The capacity `C` is in nats. -/
-theorem exists_isReliableArrival [Nonempty α] [Nonempty β] (hW : IsChannel W) (h0 : 0 ≤ p)
+theorem exists_isReliableArrival [Nonempty α] (hW : IsChannel W) (h0 : 0 ≤ p)
     (h1 : p ≤ 1) (hlC : p * k * log 2 < capacity W) : ∃ R, IsReliableArrival W p k R := by
   have hl := log_pos one_lt_two
   obtain ⟨R, hR1, hR2⟩ := exists_between ((lt_div_iff₀ hl).2 hlC)

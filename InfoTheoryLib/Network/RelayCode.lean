@@ -621,7 +621,7 @@ lemma RCFBCode.one_sub_errProb_mul_log_le_info (c : RCFBCode M n X X₁ Y Y₁) 
   linarith
 
 /-- The values in the cutset bound are bounded. -/
-lemma bddAbove_rcCutset [Nonempty X] [Nonempty X₁] (hW : IsChannel W) :
+lemma bddAbove_rcCutset (hW : IsChannel W) :
     BddAbove {v | ∃ p : X × X₁ → ℝ, IsPMF p ∧ v = min (rcMacInfo p W) (rcBcInfo p W)} := by
   refine ⟨capacity (bcMarg₁ W), ?_⟩
   rintro _ ⟨p, hp, rfl⟩
@@ -654,7 +654,7 @@ lemma IsAchievableRC.toFB {R : ℝ} (h : IsAchievableRC W R) : IsAchievableRCFB 
 
 /-- **The cutset bound holds with feedback, pages 17-5 and 18-44 of [elgamal2010].** Every
 achievable rate, converted to nats, is at most the cutset bound. -/
-theorem IsAchievableRCFB.le_rcCutsetBound [Nonempty X] [Nonempty X₁] (hW : IsChannel W) {R : ℝ}
+theorem IsAchievableRCFB.le_rcCutsetBound (hW : IsChannel W) {R : ℝ}
     (h : IsAchievableRCFB W R) : R * log 2 ≤ rcCutsetBound W := by
   obtain ⟨c, hc⟩ := h
   have hpos : ∀ n : ℕ, 0 < 2 ^ ⌈(n : ℝ) * R⌉₊ := fun n => by positivity
@@ -688,7 +688,7 @@ theorem IsAchievableRCFB.le_rcCutsetBound [Nonempty X] [Nonempty X₁] (hW : IsC
 
 /-- **Theorem 1 of Lecture 17 of [elgamal2010], page 17-5: the cutset bound.** Every achievable
 rate, converted to nats, is at most the cutset bound. -/
-theorem IsAchievableRC.le_rcCutsetBound [Nonempty X] [Nonempty X₁] (hW : IsChannel W) {R : ℝ}
+theorem IsAchievableRC.le_rcCutsetBound (hW : IsChannel W) {R : ℝ}
     (h : IsAchievableRC W R) : R * log 2 ≤ rcCutsetBound W :=
   h.toFB.le_rcCutsetBound hW
 

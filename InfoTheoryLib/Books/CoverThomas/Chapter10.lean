@@ -236,13 +236,13 @@ theorem oneBit_distortion_optimal {v : ℝ≥0} (hv : v ≠ 0) :
 
 /-- **Section 10.1, the nearest-neighbor condition.** Mapping each source sequence to the index of
 a closest reproduction sequence. -/
-def nearestEncode {α β : Type*} [Fintype α] [Fintype β] {M n : ℕ} [NeZero M]
+def nearestEncode {α β : Type*} {M n : ℕ} [NeZero M]
     (d : α → β → ℝ) (dec : Fin M → Fin n → β) (x : Fin n → α) : Fin M :=
   (Finite.exists_min fun w => seqDistortion d x (dec w)).choose
 
 /-- **Section 10.1.** Given the reproduction points, the distortion is minimized by mapping each
 source sequence to the closest reproduction point. -/
-theorem distortion_nearestCode_le {α β : Type*} [Fintype α] [Fintype β] {M n : ℕ} [NeZero M]
+theorem distortion_nearestCode_le {α β : Type*} [Fintype α] {M n : ℕ} [NeZero M]
     {p : α → ℝ} (hp : IsPMF p) (d : α → β → ℝ) (c : RDCode M n α β) :
     (⟨nearestEncode d c.dec, c.dec⟩ : RDCode M n α β).distortion p d ≤ c.distortion p d :=
   sum_le_sum fun x _ => mul_le_mul_of_nonneg_left

@@ -81,6 +81,7 @@ def rwdCapacity (W₁ : X → Y₁ → ℝ) (W₂ : X × X₁ × Y₁ → Y → 
 
 variable [Fintype X] [Fintype X₁] [DecidableEq Y₁] [Nonempty X] [Nonempty X₁]
 
+omit [Nonempty X] [Nonempty X₁] in
 /-- **Theorem 7 of Lecture 17 of [elgamal2010], page 17-73: the relay-without-delay cutset bound**,
 in the form `max_{p(x, x₁')} min {I(X; Y, Y₁ | X₁'), I(X, X₁'; Y)}` of the remark there, with `X₁'`
 the maps `Y₁ → X₁`. -/
