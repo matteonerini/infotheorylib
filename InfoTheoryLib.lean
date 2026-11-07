@@ -405,6 +405,7 @@ public import InfoTheoryLib.Secrecy.WiretapExamples
 public import InfoTheoryLib.SourceCoding.Arithmetic
 public import InfoTheoryLib.SourceCoding.BinarySequences
 public import InfoTheoryLib.SourceCoding.Code
+public import InfoTheoryLib.SourceCoding.CodeTree
 public import InfoTheoryLib.SourceCoding.CoinFlips
 public import InfoTheoryLib.SourceCoding.Competitive
 public import InfoTheoryLib.SourceCoding.FixedLength
