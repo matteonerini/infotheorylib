@@ -30,13 +30,15 @@ distortion of the best constant reproduction: `R^(I)(D) = 0` for `D ≥ D_max`, 
 * `infoRD_eq_zero_of_dMax_le`, `infoRD_le_entropy`: properties 3 and 4 of `R^(I)(D)`.
 * `infoRD_pos`, `strictAntiOn_infoRD`, `expDistortion_eq_of_infoRD_eq`: Corollary 8.19.
 * `sum_mul_hammingDistortion`: (8.7), the expected Hamming distortion is a probability of error.
+* `sInf_mutualInfoOf_sub_mul_eq`: (9.57), the tangents to `R^(I)`.
 
 ## References
 
 Numbers without a source refer to [yeung2008].
 
 * [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], (10.4)
-* [R. W. Yeung, *Information Theory and Network Coding*][yeung2008], Sections 8.1 to 8.3
+* [R. W. Yeung, *Information Theory and Network Coding*][yeung2008], Sections 8.1 to 8.3 and
+  9.2.2
 -/
 
 open Real Finset
@@ -231,5 +233,38 @@ theorem expDistortion_eq_of_infoRD_eq [Nonempty β] (hp : IsPMF p) {D : ℝ}
   have h₁ := strictAntiOn_infoRD hp ⟨hmin, hqD.trans hD.2⟩ hD hlt
   have h₂ := infoRD_le hp hq (le_refl (expDistortion p q d))
   linarith
+
+/-! ### Tangents to `R^(I)` -/
+
+/-- **(9.57)** For a slope `s ≤ 0`, the minimum over test channels of `I(X; X̂) - s E d(X, X̂)` is
+the minimum over `D ≥ D_min` of `R^(I)(D) - s D`: the intercept of the tangent to `R^(I)` with slope
+`s`. -/
+theorem sInf_mutualInfoOf_sub_mul_eq [Nonempty β] (hp : IsPMF p) (hd : ∀ x y, 0 ≤ d x y) {s : ℝ}
+    (hs : s ≤ 0) :
+    sInf {v | ∃ q : α → β → ℝ, IsChannel q ∧ mutualInfoOf p q - s * expDistortion p q d = v} =
+      sInf {v | ∃ D, minDistortion p d ≤ D ∧ infoRD p d D - s * D = v} := by
+  have hmin : 0 ≤ minDistortion p d :=
+    sum_nonneg fun x _ => mul_nonneg (hp.nonneg x) (le_ciInf fun y => hd x y)
+  obtain ⟨y₀⟩ := ‹Nonempty β›
+  have hq₀ := detChannel_isChannel (fun _ : α => y₀)
+  have hbdd₁ : BddBelow {v | ∃ q : α → β → ℝ, IsChannel q ∧
+      mutualInfoOf p q - s * expDistortion p q d = v} := ⟨0, by
+    rintro _ ⟨q, hq, rfl⟩
+    have h₁ := mutualInfoOf_nonneg hp hq
+    have h₂ := (minDistortion_le_expDistortion hp hq (d := d))
+    nlinarith⟩
+  have hbdd₂ : BddBelow {v | ∃ D, minDistortion p d ≤ D ∧ infoRD p d D - s * D = v} := ⟨0, by
+    rintro _ ⟨D, hD, rfl⟩
+    have := infoRD_nonneg (d := d) hp D
+    nlinarith⟩
+  refine le_antisymm (le_csInf ⟨_, _, le_rfl, rfl⟩ ?_) (le_csInf ⟨_, _, hq₀, rfl⟩ ?_)
+  · rintro _ ⟨D, hD, rfl⟩
+    obtain ⟨q, hq, hqD, hqI⟩ := exists_infoRD_eq hp hD
+    refine (csInf_le hbdd₁ ⟨q, hq, rfl⟩).trans ?_
+    rw [hqI]
+    nlinarith
+  · rintro _ ⟨q, hq, rfl⟩
+    refine (csInf_le hbdd₂ ⟨_, minDistortion_le_expDistortion hp hq d, rfl⟩).trans ?_
+    linarith [infoRD_le hp hq (le_refl (expDistortion p q d))]
 
 end InfoTheory

@@ -83,6 +83,7 @@ public import InfoTheoryLib.Books.Yeung.Chapter9
 public import InfoTheoryLib.ChannelCoding.Achievability
 public import InfoTheoryLib.ChannelCoding.AsymptoticRate
 public import InfoTheoryLib.ChannelCoding.AverageError
+public import InfoTheoryLib.ChannelCoding.BlahutArimoto
 public import InfoTheoryLib.ChannelCoding.Capacity
 public import InfoTheoryLib.ChannelCoding.Code
 public import InfoTheoryLib.ChannelCoding.Converse
@@ -111,6 +112,7 @@ public import InfoTheoryLib.Entropy.Conditional
 public import InfoTheoryLib.Entropy.Fano
 public import InfoTheoryLib.Entropy.MrsGerber
 public import InfoTheoryLib.Entropy.Range
+public import InfoTheoryLib.ForMathlib.AlternatingMaximization
 public import InfoTheoryLib.ForMathlib.BinaryMatrix
 public import InfoTheoryLib.ForMathlib.ConvexHessian
 public import InfoTheoryLib.ForMathlib.ConvexOptimization
