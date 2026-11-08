@@ -307,6 +307,7 @@ public import InfoTheoryLib.Network.MDOuter
 public import InfoTheoryLib.Network.MDTriangle
 public import InfoTheoryLib.Network.MartonCardinality
 public import InfoTheoryLib.Network.MaxFlowBound
+public import InfoTheoryLib.Network.MultiSource
 public import InfoTheoryLib.Network.MultiWay
 public import InfoTheoryLib.Network.MultiWayExamples
 public import InfoTheoryLib.Network.MultipleDescriptions
