@@ -76,6 +76,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `iMeasure_inter_markov_three`, `iMeasure_nonneg_markov_three` (`IMeasure.Markov`).
 * (3.91)–(3.96), the five atoms for four variables: `iMeasure_atoms_markov_four`
   (`IMeasure.Markov`).
+* (3.97)–(3.98), the values of `μ*` on the other ten atoms for a Markov chain, and its
+  nonnegativity: `IsMarkovChain.iMeasure_Icc`, `iMeasure_atom_singleton` and
+  `IsMarkovChain.iMeasure_nonneg` (`IMeasure.MarkovField`, `IMeasure.Basic`), for chains of any
+  length. The book defers the proof to Theorem 12.30.
 
 ### 3.6 Examples of Applications
 * Example 3.12: `entropy_concaveOn` (`Entropy.Concavity`), by another proof.
@@ -93,8 +97,6 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 * Information diagrams as pictures, and Figures 3.1 to 3.21. The proofs here use the identities that
   the diagrams display.
-* (3.97)–(3.98), the values of `μ*` on the other ten atoms for a Markov chain of four variables,
-  and its nonnegativity. The book defers the formal proof to Theorem 12.30, in Chapter 12.
 * The substitution of symbols (3.19), which is a remark about notation.
 
 ## References

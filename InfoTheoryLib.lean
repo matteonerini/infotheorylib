@@ -156,7 +156,9 @@ public import InfoTheoryLib.GaussianChannel.VectorCode
 public import InfoTheoryLib.GaussianChannel.VectorFading
 public import InfoTheoryLib.GaussianChannel.WaterFilling
 public import InfoTheoryLib.IMeasure.Basic
+public import InfoTheoryLib.IMeasure.CondMutIndep
 public import InfoTheoryLib.IMeasure.Markov
+public import InfoTheoryLib.IMeasure.MarkovField
 public import InfoTheoryLib.IMeasure.Realization
 public import InfoTheoryLib.IMeasure.SignedMeasure
 public import InfoTheoryLib.Inequalities.Binomial
@@ -166,6 +168,7 @@ public import InfoTheoryLib.Inequalities.Han
 public import InfoTheoryLib.Inequalities.Schur
 public import InfoTheoryLib.Inequalities.SubsetEntropy
 public import InfoTheoryLib.Inequalities.Toeplitz
+public import InfoTheoryLib.InfoInequalities.Polymatroid
 public import InfoTheoryLib.Investment.AlmostSure
 public import InfoTheoryLib.Investment.Basic
 public import InfoTheoryLib.Investment.Causal
@@ -194,6 +197,7 @@ public import InfoTheoryLib.MaxEntropy.Distributions
 public import InfoTheoryLib.MutualInformation.Basic
 public import InfoTheoryLib.MutualInformation.Block
 public import InfoTheoryLib.MutualInformation.ChainRule
+public import InfoTheoryLib.MutualInformation.CondMutIndep
 public import InfoTheoryLib.MutualInformation.Conditional
 public import InfoTheoryLib.MutualInformation.Continuity
 public import InfoTheoryLib.MutualInformation.Convexity
