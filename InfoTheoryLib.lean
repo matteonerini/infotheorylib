@@ -171,6 +171,7 @@ public import InfoTheoryLib.Inequalities.SubsetEntropy
 public import InfoTheoryLib.Inequalities.Toeplitz
 public import InfoTheoryLib.InfoInequalities.EntropicRegion
 public import InfoTheoryLib.InfoInequalities.EntropySpace
+public import InfoTheoryLib.InfoInequalities.Groups
 public import InfoTheoryLib.InfoInequalities.NonShannon
 public import InfoTheoryLib.InfoInequalities.Polymatroid
 public import InfoTheoryLib.InfoInequalities.ShannonType
