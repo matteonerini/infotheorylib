@@ -21,6 +21,7 @@ in Sanov's theorem (11.110).
 * `neg_log_sum_le_relEntropyReal_add`: the Gibbs inequality.
 * `relEntropyReal_gibbs_add`: equality for the Gibbs distribution.
 * `sum_mul_sub_log_le_log_sum_exp`: `∑ s (c - log s) ≤ log ∑ e^{c}`.
+* `sum_mul_log_le_of_sum_le_one`: `∑ Q log R ≤ ∑ Q log Q` for a sub-probability `R`.
 
 ## References
 
@@ -107,6 +108,25 @@ theorem sum_mul_sub_log_le_log_sum_exp {s : γ → ℝ} (hs : IsPMF s) (c : γ �
   have : ∑ a, s a * (c a - log (s a)) = -(∑ a, s a * log (s a) + ∑ a, s a * -c a) := by
     rw [← sum_add_distrib, ← sum_neg_distrib]
     exact sum_congr rfl fun a _ => by ring
+  linarith
+
+/-- The divergence inequality for a sub-probability `R`: `∑ Q log R ≤ ∑ Q log Q`. -/
+lemma sum_mul_log_le_of_sum_le_one {Q R : γ → ℝ} (hQ : IsPMF Q)
+    (hR : ∀ y, 0 ≤ R y) (hRs : ∑ y, R y ≤ 1) (hpos : ∀ y, Q y ≠ 0 → 0 < R y) :
+    ∑ y, Q y * log (R y) ≤ ∑ y, Q y * log (Q y) := by
+  have key : ∀ y, Q y * log (R y) - Q y * log (Q y) ≤ R y - Q y := fun y => by
+    by_cases hy : Q y = 0
+    · simp [hy, hR y]
+    · have hq : 0 < Q y := lt_of_le_of_ne (hQ.nonneg y) (Ne.symm hy)
+      have hr := hpos y hy
+      have := log_le_sub_one_of_pos (div_pos hr hq)
+      rw [log_div hr.ne' hq.ne'] at this
+      have h2 : Q y * (log (R y) - log (Q y)) ≤ Q y * (R y / Q y - 1) :=
+        mul_le_mul_of_nonneg_left this hq.le
+      rw [mul_sub, mul_sub, mul_div_cancel₀ _ hq.ne', mul_one] at h2
+      exact h2
+  have := sum_le_sum fun y (_ : y ∈ univ) => key y
+  rw [sum_sub_distrib, sum_sub_distrib, hQ.sum_eq_one] at this
   linarith
 
 end InfoTheory

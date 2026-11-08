@@ -60,43 +60,6 @@ section Product
 
 variable {A B a b : Type*} [Fintype A] [Fintype B] [Fintype a] [Fintype b]
 
-omit [Fintype a] [Fintype b] in
-/-- The law of a pair of functions of independent parts. -/
-lemma dist_prodDist_pair (μ : A → ℝ) (ρ : B → ℝ) (F : A → a) (G : B → b) (x : a) (y : b) :
-    dist (prodDist μ ρ) (fun z => (F z.1, G z.2)) (x, y) = dist μ F x * dist ρ G y := by
-  classical
-  simp only [dist, Prod.mk.injEq]
-  rw [Fintype.sum_prod_type, sum_mul]
-  refine sum_congr rfl fun u _ => ?_
-  by_cases h₁ : F u = x
-  · simp only [h₁, true_and, ite_true, prodDist, mul_sum]
-    refine sum_congr rfl fun v _ => ?_
-    by_cases h₂ : G v = y <;> simp [h₂]
-  · simp [h₁]
-
-omit [Fintype a] [Fintype b] in
-/-- The law of a function of the first part. -/
-lemma dist_prodDist_comp_fst (μ : A → ℝ) {ρ : B → ℝ} (hρ : IsPMF ρ) (F : A → a) (x : a) :
-    dist (prodDist μ ρ) (fun z => F z.1) x = dist μ F x := by
-  classical
-  simp only [dist, Fintype.sum_prod_type, prodDist]
-  refine sum_congr rfl fun u _ => ?_
-  by_cases h₁ : F u = x
-  · simp only [h₁, ite_true, ← mul_sum, hρ.sum_eq_one, mul_one]
-  · simp [h₁]
-
-omit [Fintype a] [Fintype b] in
-/-- The law of a function of the second part. -/
-lemma dist_prodDist_comp_snd {μ : A → ℝ} (hμ : IsPMF μ) (ρ : B → ℝ) (G : B → b) (y : b) :
-    dist (prodDist μ ρ) (fun z => G z.2) y = dist ρ G y := by
-  classical
-  simp only [dist, Fintype.sum_prod_type, prodDist]
-  rw [sum_comm]
-  refine sum_congr rfl fun v _ => ?_
-  by_cases h₁ : G v = y
-  · simp only [h₁, ite_true, ← sum_mul, hμ.sum_eq_one, one_mul]
-  · simp [h₁]
-
 /-- `H(F(A), G(B)) = H(F(A)) + H(G(B))` for independent `A` and `B`. -/
 lemma entropyRV_prodDist {μ : A → ℝ} (hμ : IsPMF μ) {ρ : B → ℝ} (hρ : IsPMF ρ) (F : A → a)
     (G : B → b) :

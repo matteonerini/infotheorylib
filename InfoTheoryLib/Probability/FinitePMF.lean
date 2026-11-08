@@ -245,6 +245,43 @@ lemma IsPMF.prodDist {p : α → ℝ} {q : β → ℝ} (hp : IsPMF p) (hq : IsPM
     rw [Fintype.sum_prod_type]
     simp [← mul_sum, hp.sum_eq_one, hq.sum_eq_one]⟩
 
+omit [Fintype γ] [Fintype δ] in
+/-- The law of a pair of functions of independent parts. -/
+lemma dist_prodDist_pair (μ : α → ℝ) (ρ : β → ℝ) (F : α → γ) (G : β → δ) (x : γ) (y : δ) :
+    dist (prodDist μ ρ) (fun z => (F z.1, G z.2)) (x, y) = dist μ F x * dist ρ G y := by
+  classical
+  simp only [dist, Prod.mk.injEq]
+  rw [Fintype.sum_prod_type, sum_mul]
+  refine sum_congr rfl fun u _ => ?_
+  by_cases h₁ : F u = x
+  · simp only [h₁, true_and, ite_true, prodDist, mul_sum]
+    refine sum_congr rfl fun v _ => ?_
+    by_cases h₂ : G v = y <;> simp [h₂]
+  · simp [h₁]
+
+omit [Fintype γ] [Fintype δ] in
+/-- The law of a function of the first part. -/
+lemma dist_prodDist_comp_fst (μ : α → ℝ) {ρ : β → ℝ} (hρ : IsPMF ρ) (F : α → γ) (x : γ) :
+    dist (prodDist μ ρ) (fun z => F z.1) x = dist μ F x := by
+  classical
+  simp only [dist, Fintype.sum_prod_type, prodDist]
+  refine sum_congr rfl fun u _ => ?_
+  by_cases h₁ : F u = x
+  · simp only [h₁, ite_true, ← mul_sum, hρ.sum_eq_one, mul_one]
+  · simp [h₁]
+
+omit [Fintype γ] [Fintype δ] in
+/-- The law of a function of the second part. -/
+lemma dist_prodDist_comp_snd {μ : α → ℝ} (hμ : IsPMF μ) (ρ : β → ℝ) (G : β → δ) (y : δ) :
+    dist (prodDist μ ρ) (fun z => G z.2) y = dist ρ G y := by
+  classical
+  simp only [dist, Fintype.sum_prod_type, prodDist]
+  rw [sum_comm]
+  refine sum_congr rfl fun v _ => ?_
+  by_cases h₁ : G v = y
+  · simp only [h₁, ite_true, ← sum_mul, hμ.sum_eq_one, one_mul]
+  · simp [h₁]
+
 omit [Fintype α] [Fintype β] in
 lemma absCont_dist_pair_prodDist {μ : Ω → ℝ} (hμ : IsPMF μ) (X : Ω → α) (Y : Ω → β) :
     AbsCont (dist μ (pair X Y)) (prodDist (dist μ X) (dist μ Y)) := by

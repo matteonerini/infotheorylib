@@ -5,9 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
-public import InfoTheoryLib.ChannelCoding.Capacity
-public import InfoTheoryLib.IMeasure.CondMutIndep
-public import InfoTheoryLib.InfoInequalities.ShannonType
+public import InfoTheoryLib.InfoInequalities.EntropicRegion
 public import InfoTheoryLib.MarkovChain.Sequence
 
 /-!
@@ -275,47 +273,6 @@ theorem example_14_8 (hμ : IsPMF μ) {S : Ω → σ} {X : Ω → α} {Y : Ω �
   linarith [entropyRV_ge_of_secret hμ hXY hY, entropyRV_ge_of_secret hμ hYZ hZ,
     entropyRV_ge_of_secret hμ hZX hX]
 
-/-- A random variable that is a function of `W` has zero conditional entropy given `W`. -/
-lemma condEntropy_eq_zero_of_eq_comp (hμ : IsPMF μ) {S : Ω → σ} {W : Ω → α} (g : α → σ)
-    (h : ∀ ω, S ω = g (W ω)) : H[S | W ; μ] = 0 := by
-  rw [condEntropy_eq_sub hμ, sub_eq_zero]
-  exact entropyRV_eq_of_injective μ (fun w => (w, g w)) (fun _ _ e => (Prod.mk.inj e).1)
-    fun ω => by simp [pair, h ω]
-
-/-- If `ω ↦ (U ω, V ω)` is a bijection and `ω` is uniform, then `U` and `V` are independent and
-uniform. -/
-lemma uniform_of_equiv [Nonempty Ω] [Nonempty α] [Nonempty β] (e : Ω ≃ α × β) :
-    I[fun ω => (e ω).1 : fun ω => (e ω).2 ; uniformPMF Ω] = 0 ∧
-      H[fun ω => (e ω).1 ; uniformPMF Ω] = log (Fintype.card α) ∧
-        H[fun ω => (e ω).2 ; uniformPMF Ω] = log (Fintype.card β) := by
-  have hμ : IsPMF (uniformPMF Ω) := uniformPMF_isPMF
-  have hcard : (Fintype.card Ω : ℝ) = Fintype.card α * Fintype.card β := by
-    rw [Fintype.card_congr e, Fintype.card_prod, Nat.cast_mul]
-  have hpair : pair (fun ω => (e ω).1) (fun ω => (e ω).2) = e := rfl
-  have hd : ∀ z, dist (uniformPMF Ω) (pair (fun ω => (e ω).1) (fun ω => (e ω).2)) z =
-      1 / Fintype.card Ω := fun z => by
-    rw [hpair, ← e.apply_symm_apply z]
-    have := dist_comp_of_injective (uniformPMF Ω) id e.injective (e.symm z)
-    rw [Function.comp_id] at this
-    rw [show (e : Ω → α × β) = ⇑e from rfl, this, dist_id]
-    rfl
-  have hα : (Fintype.card α : ℝ) ≠ 0 := Nat.cast_ne_zero.2 Fintype.card_ne_zero
-  have hβ : (Fintype.card β : ℝ) ≠ 0 := Nat.cast_ne_zero.2 Fintype.card_ne_zero
-  have h₁ : dist (uniformPMF Ω) (fun ω => (e ω).1) = uniformPMF α := funext fun a => by
-    rw [← sum_dist_pair_right _ _ (fun ω => (e ω).2) a]
-    simp only [hd, sum_const, card_univ, nsmul_eq_mul, uniformPMF, hcard]
-    field_simp
-  have h₂ : dist (uniformPMF Ω) (fun ω => (e ω).2) = uniformPMF β := funext fun b => by
-    rw [← sum_dist_pair_left _ (fun ω => (e ω).1) _ b]
-    simp only [hd, sum_const, card_univ, nsmul_eq_mul, uniformPMF, hcard]
-    field_simp
-  refine ⟨(mutualInfo_eq_zero_iff hμ _ _).2 fun a b => ?_, ?_, ?_⟩
-  · rw [hd, h₁, h₂, hcard]
-    simp only [uniformPMF]
-    field_simp
-  · rw [entropyRV, h₁, entropy_uniformPMF]
-  · rw [entropyRV, h₂, entropy_uniformPMF]
-
 end Secret
 
 /-- The bijection `(s, n) ↦ (s, s + n)` of `(ZMod 3)²`. -/
@@ -350,9 +307,10 @@ theorem example_14_8_tight :
         H[X ; μ] + H[Y ; μ] + H[Z ; μ] = 3 * H[S ; μ] ∧ 0 < H[S ; μ] := by
   intro μ S X Y Z
   have hμ : IsPMF μ := uniformPMF_isPMF
-  obtain ⟨h₁, hS, hX⟩ := uniform_of_equiv (Equiv.refl (ZMod 3 × ZMod 3))
-  obtain ⟨h₂, -, hY⟩ := uniform_of_equiv example148e₂
-  obtain ⟨h₃, -, hZ⟩ := uniform_of_equiv example148e₃
+  obtain ⟨h₁, hS, hX⟩ :=
+    mutualInfo_eq_zero_and_entropyRV_of_equiv (Equiv.refl (ZMod 3 × ZMod 3))
+  obtain ⟨h₂, -, hY⟩ := mutualInfo_eq_zero_and_entropyRV_of_equiv example148e₂
+  obtain ⟨h₃, -, hZ⟩ := mutualInfo_eq_zero_and_entropyRV_of_equiv example148e₃
   have hcard : Fintype.card (ZMod 3) = 3 := ZMod.card 3
   refine ⟨condEntropy_eq_zero_of_eq_comp hμ (fun w => w.2 - w.1) fun p => by simp [S, X, Y],
     condEntropy_eq_zero_of_eq_comp hμ (fun w => 2 * w.1 - w.2) fun p => by simp [S, Y, Z]; ring,

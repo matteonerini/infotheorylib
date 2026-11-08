@@ -169,9 +169,12 @@ public import InfoTheoryLib.Inequalities.Han
 public import InfoTheoryLib.Inequalities.Schur
 public import InfoTheoryLib.Inequalities.SubsetEntropy
 public import InfoTheoryLib.Inequalities.Toeplitz
+public import InfoTheoryLib.InfoInequalities.EntropicRegion
 public import InfoTheoryLib.InfoInequalities.EntropySpace
+public import InfoTheoryLib.InfoInequalities.NonShannon
 public import InfoTheoryLib.InfoInequalities.Polymatroid
 public import InfoTheoryLib.InfoInequalities.ShannonType
+public import InfoTheoryLib.InfoInequalities.ZhangYeung
 public import InfoTheoryLib.Investment.AlmostSure
 public import InfoTheoryLib.Investment.Basic
 public import InfoTheoryLib.Investment.Causal
