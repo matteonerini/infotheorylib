@@ -258,6 +258,7 @@ public import InfoTheoryLib.Network.DirectedInfo
 public import InfoTheoryLib.Network.DistFun
 public import InfoTheoryLib.Network.Fading
 public import InfoTheoryLib.Network.FeedbackLaw
+public import InfoTheoryLib.Network.Forwarding
 public import InfoTheoryLib.Network.Gaussian
 public import InfoTheoryLib.Network.GaussianNetBounds
 public import InfoTheoryLib.Network.GaussianNetCode
