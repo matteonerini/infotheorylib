@@ -43,7 +43,8 @@ are adapted from [Mathlib's](https://leanprover-community.github.io/contribute/i
   named after its number (`theorem_2_6_5`; `theorem_3_2` for Theorem 2 of Lecture 3) pointing to the
   library declaration; a named but unnumbered result gets an alias named after it
   (`mrs_gerber_lemma`). Results that are useful beyond the text belong in a topic folder, with a
-  descriptive name, and a result that both texts state is proved once and indexed in both files.
+  descriptive name, and a result that several texts state is proved once and indexed in each of
+  their files.
 * Check Mathlib before defining something: reuse `Real.negMulLog`, `Real.binEntropy`,
   `ConvexOn`, and so on.
 
@@ -92,7 +93,7 @@ end InfoTheory
 
 The header linter requires the copyright block exactly in this form. Every file uses Lean's
 module system: a `module` header, `public import`s, and `@[expose] public noncomputable section`
-(`@[expose] public section` in a file with computable definitions, such as
+(`@[expose] public section` in a file that needs no `noncomputable`, such as
 `ChannelCoding/Hamming.lean`), which makes all declarations and definition bodies visible to other
 files. Mathlib imports its own dependencies privately, so a lemma is available only after
 importing the Mathlib file that declares it (or one that imports it publicly), and the bodies of
