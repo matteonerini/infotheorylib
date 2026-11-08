@@ -171,6 +171,7 @@ public import InfoTheoryLib.Inequalities.SubsetEntropy
 public import InfoTheoryLib.Inequalities.Toeplitz
 public import InfoTheoryLib.InfoInequalities.EntropySpace
 public import InfoTheoryLib.InfoInequalities.Polymatroid
+public import InfoTheoryLib.InfoInequalities.ShannonType
 public import InfoTheoryLib.Investment.AlmostSure
 public import InfoTheoryLib.Investment.Basic
 public import InfoTheoryLib.Investment.Causal
