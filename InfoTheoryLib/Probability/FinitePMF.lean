@@ -293,6 +293,12 @@ lemma absCont_dist_pair_prodDist {μ : Ω → ℝ} (hμ : IsPMF μ) (X : Ω → 
 /-- The uniform pmf `u(x) = 1/|𝒳|`. -/
 def uniformPMF (α : Type*) [Fintype α] : α → ℝ := fun _ => 1 / Fintype.card α
 
+/-- A type that carries a pmf is nonempty. -/
+lemma IsPMF.nonempty_type {p : α → ℝ} (hp : IsPMF p) : Nonempty α := by
+  by_contra h
+  rw [not_nonempty_iff] at h
+  simpa using hp.sum_eq_one
+
 lemma card_pos_of_isPMF {p : α → ℝ} (hp : IsPMF p) : 0 < Fintype.card α := by
   rw [Fintype.card_pos_iff]
   by_contra h

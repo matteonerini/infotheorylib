@@ -100,7 +100,7 @@ theorem posSemidef_covMatrix [Finite ι] [IsFiniteMeasure μ] {X : ι → Ω →
 
 omit [Fintype ι] in
 /-- **Proposition 10.3.** A correlation matrix is symmetric and positive semidefinite. -/
-theorem posSemidef_corrMatrix [Finite ι] [IsFiniteMeasure μ] {X : ι → Ω → ℝ}
+theorem posSemidef_corrMatrix [Finite ι] {X : ι → Ω → ℝ}
     (hX : ∀ i, MemLp (X i) 2 μ) : (corrMatrix μ X).PosSemidef := by
   have := Fintype.ofFinite ι
   refine posSemidef_iff_dotProduct_mulVec.2 ⟨?_, fun v => ?_⟩
@@ -142,7 +142,7 @@ theorem covMatrix_mulVec [IsFiniteMeasure μ] {X : ι → Ω → ℝ}
 
 omit [Fintype κ] in
 /-- **Proposition 10.5, (10.29).** `K̃_{AX} = A K̃_X Aᵀ`. -/
-theorem corrMatrix_mulVec [IsFiniteMeasure μ] {X : ι → Ω → ℝ}
+theorem corrMatrix_mulVec {X : ι → Ω → ℝ}
     (hX : ∀ i, MemLp (X i) 2 μ) (A : Matrix κ ι ℝ) :
     corrMatrix μ (fun k ω => (A *ᵥ fun i => X i ω) k) = A * corrMatrix μ X * Aᵀ := by
   ext i j
@@ -209,7 +209,7 @@ theorem integral_sum_sq_mulVec_of_orthogonal [DecidableEq ι] {X : ι → Ω →
 omit [Fintype ι] in
 /-- **Lemma 11.33, (11.271)–(11.277).** If `X` has zero mean and is independent of `Z`, the
 correlation matrices add: `K̃_{X+Z} = K̃_X + K̃_Z`. -/
-theorem corrMatrix_add_of_indepFun [IsProbabilityMeasure μ] {X Z : ι → Ω → ℝ}
+theorem corrMatrix_add_of_indepFun {X Z : ι → Ω → ℝ}
     (hX : ∀ i, MemLp (X i) 2 μ) (hZ : ∀ i, MemLp (Z i) 2 μ)
     (hXZ : (fun ω i => X i ω) ⟂ᵢ[μ] (fun ω i => Z i ω)) (h0 : ∀ i, ∫ ω, X i ω ∂μ = 0) :
     corrMatrix μ (X + Z) = corrMatrix μ X + corrMatrix μ Z := by

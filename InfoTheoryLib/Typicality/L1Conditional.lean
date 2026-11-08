@@ -65,19 +65,6 @@ lemma mem_condL1TypicalSet {q : α × β → ℝ} {n : ℕ} {δ : ℝ} {x : Fin 
   classical
   simp [condL1TypicalSet]
 
-/-- `H(Y|X) = H(X, Y) - H(X)` for a joint pmf. -/
-lemma condEntropy_snd_fst {q : α × β → ℝ} (hq : IsPMF q) :
-    H[Prod.snd | Prod.fst ; q] = entropy q - entropy (margFst q) := by
-  rw [condEntropy_eq_sub hq, entropyRV, dist_pair_fst_snd, entropyRV]
-
-/-- (6.121): `p(x) = ∑_y p(x, y)`. -/
-lemma sum_jointIid_right (q : α × β → ℝ) {n : ℕ} (x : Fin n → α) :
-    ∑ y, jointIid q n (x, y) = iidPMF (margFst q) n x := by
-  classical
-  simp only [jointIid, iidPMF, zipSeq]
-  rw [← Fintype.prod_sum fun i b => q (x i, b)]
-  exact prod_congr rfl fun i _ => (dist_fst q (x i)).symm
-
 /-- **Theorem 6.10, the upper bound, (6.120)–(6.125).** For `x ∈ T_{[X]δ}ⁿ`,
 `|T_{[Y|X]δ}ⁿ(x)| ≤ e^{n(H(Y|X) + ν)}` with `ν = δ (M_X + M_{XY})`, for every `n`. -/
 theorem card_condL1TypicalSet_le {q : α × β → ℝ} (hq : IsPMF q) {n : ℕ} {δ : ℝ} {x : Fin n → α}
@@ -90,14 +77,14 @@ theorem card_condL1TypicalSet_le {q : α × β → ℝ} (hq : IsPMF q) {n : ℕ}
     exact sum_le_sum fun y hy => (exp_le_jointIid_of_mem_jointL1TypicalSet hq
       (mem_condL1TypicalSet.1 hy).2).1
   have h₂ : ∑ y ∈ condL1TypicalSet q n δ x, jointIid q n (x, y) ≤ iidPMF (margFst q) n x := by
-    rw [← sum_jointIid_right]
+    rw [← sum_jointIid_fiber_snd]
     exact sum_le_sum_of_subset_of_nonneg (subset_univ _)
       fun y _ _ => jointIid_nonneg hq.nonneg n _
   have h₃ := (exp_le_iidPMF_of_mem_l1TypicalSet (hq.dist Prod.fst) hx).2
   have h₄ := h₁.trans (h₂.trans h₃)
   rw [exp_neg, ← div_eq_mul_inv, div_le_iff₀ (exp_pos _), ← exp_add] at h₄
   refine h₄.trans_eq ?_
-  rw [condEntropy_snd_fst hq]
+  rw [condEntropy_snd_fst_eq hq]
   congr 1
   ring
 
@@ -266,7 +253,7 @@ theorem eventually_exp_le_card_condL1TypicalSet {q : α × β → ℝ} (hq : IsP
         rw [← exp_add]; congr 1; ring
     _ ≤ _ := by
         refine exp_le_exp.2 (mul_le_mul_of_nonneg_left ?_ hn'.le)
-        rw [condEntropy_snd_fst hq]
+        rw [condEntropy_snd_fst_eq hq]
         linarith [e₁.1, e₂.2]
 
 /-- **Theorem 6.10.** For `ν > 0`, there is `δ₀ > 0` such that, for `0 < δ ≤ δ₀` and `n`
@@ -343,7 +330,7 @@ theorem eventually_card_l1TypicalProjection_ge {q : α × β → ℝ} (hq : IsPM
   have hE₀ : 0 < E := exp_pos _
   rw [← div_le_iff₀ hE₀] at h₂
   refine le_trans (le_of_eq ?_) h₂
-  rw [mul_div_assoc, hE, ← exp_sub, condEntropy_snd_fst hq]
+  rw [mul_div_assoc, hE, ← exp_sub, condEntropy_snd_fst_eq hq]
   congr 2
   ring
 

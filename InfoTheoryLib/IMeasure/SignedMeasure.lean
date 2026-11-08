@@ -426,6 +426,7 @@ theorem IsSignedMeasure.singleton_eq_atomValue {m : Finset (NAtom ι) → ℝ}
 def signedMeasureOf (h : Finset ι → ℝ) (A : Finset (NAtom ι)) : ℝ :=
   ∑ a ∈ A, atomValue h a.1
 
+/-- `signedMeasureOf h` is a signed measure. -/
 theorem isSignedMeasure_signedMeasureOf (h : Finset ι → ℝ) : IsSignedMeasure (signedMeasureOf h) :=
   isSignedMeasure_sum _
 

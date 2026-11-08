@@ -42,7 +42,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The entropy space `ℋₙ`: `EntropySpace` (`InfoInequalities.EntropySpace`).
 * (13.24): `entropicRegion` (`InfoInequalities.EntropySpace`).
 * Properties 1 and 3 of `Γ*ₙ`: `zero_mem_entropicRegion`, `nonneg_of_mem_entropicRegion`
-  (`InfoInequalities.EntropySpace`). Property 2 is proved in Chapter 15.
+  (`InfoInequalities.EntropySpace`). Property 2, which the book proves in Chapter 15:
+  `convex_closure_entropicRegion` (`InfoInequalities.EntropicRegion`).
 
 ### 13.2 Information Expressions in Canonical Form
 * (13.26)–(13.28): `condEntropy_eq_sub` (`Entropy.Conditional`), `mutualInfo_eq_add_sub`

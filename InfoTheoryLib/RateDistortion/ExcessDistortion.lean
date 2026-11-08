@@ -33,8 +33,9 @@ probability at most `ε`. This is the criterion of [yeung2008]; the library's `I
 * `IsAchievableRDProb.mem_epigraph`: the converse, (8.125)–(8.151).
 * `isAchievableRDProb_iff`, `rdRegionProb_eq`: the rate-distortion region.
 * `isClosed_rdRegionProb`, `convex_rdRegionProb`: Theorem 8.12.
+* `rateDistortionProb_properties`: Theorem 8.15.
 * `rateDistortionProb_eq_infoRD`: Theorem 8.17, `R(D) = R^(I)(D)`.
-* `eventually_prob_seqDistortion_const_gt_le`: (8.18)–(8.19), a constant reproduction.
+* `exists_eventually_prob_const_gt_le`: (8.18)–(8.19), a constant reproduction.
 
 ## Implementation notes
 
@@ -187,7 +188,7 @@ lemma prob_ge_typicalRDCode_le (hp : IsPMF p) {n M : ℕ} {A : Finset ((Fin n �
 
 /-- **(8.152)–(8.201)** For a test channel `p(x̂|x)` with `E d(X, X̂) ≤ D`, the pair `(I(X; X̂), D)`
 is achievable. -/
-theorem isAchievableRDProb_of_expDistortion_le [Nonempty β] (hp : IsPMF p)
+theorem isAchievableRDProb_of_expDistortion_le (hp : IsPMF p)
     {q : α → β → ℝ} (hq : IsChannel q) {D : ℝ} (hqD : expDistortion p q d ≤ D) :
     IsAchievableRDProb p d (mutualInfoOf p q) D := by
   classical

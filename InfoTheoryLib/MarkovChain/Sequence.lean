@@ -137,16 +137,13 @@ lemma chainPoint_self (ω₀ : Ω) (k : ℕ) (u : ∀ i : range k, A i) (y : A k
     chainPoint X ω₀ k u y k = y := by
   simp [chainPoint]
 
-lemma exists_of_isPMF (hμ : IsPMF μ) : Nonempty Ω :=
-  Fintype.card_pos_iff.1 (card_pos_of_isPMF hμ)
-
 /-- The three-variable chain `(X₀, …, X_{k-1}) → X_k → X_{k+1}` as an equation for all points. -/
 lemma markovChain_block_iff (hμ : IsPMF μ) (X : ∀ i, Ω → A i) (k : ℕ) :
     MarkovChain μ (blockRV X (range k)) (X k) (X (k + 1)) ↔ ∀ x : ∀ i, A i,
       blockDist μ X (range (k + 2)) x * dist μ (X k) (x k) =
         blockDist μ X (range (k + 1)) x * dist μ (pair (X k) (X (k + 1))) (x k, x (k + 1)) := by
   rw [markovChain_iff_mul hμ]
-  obtain ⟨ω₀⟩ := exists_of_isPMF hμ
+  obtain ⟨ω₀⟩ := hμ.nonempty_type
   constructor
   · intro h x
     rw [blockDist_succ_succ_eq, blockDist_succ_eq]
@@ -257,7 +254,7 @@ theorem isMarkovChain_iff_forall_markovChain [∀ i, Finite (A i)] (hμ : IsPMF 
 theorem isMarkovChain_three_iff (hμ : IsPMF μ) (X : ∀ i, Ω → A i) :
     IsMarkovChain μ X 3 ↔ MarkovChain μ (X 0) (X 1) (X 2) := by
   rw [markovChain_iff_mul hμ]
-  obtain ⟨ω₀⟩ := exists_of_isPMF hμ
+  obtain ⟨ω₀⟩ := hμ.nonempty_type
   have e₁ : ∀ x : ∀ i, A i, blockDist μ X (range 3) x =
       dist μ (pair (X 0) (pair (X 1) (X 2))) (x 0, x 1, x 2) := fun x =>
     dist_congr_of_iff μ fun ω => by
@@ -385,7 +382,7 @@ lemma isMarkovChain_reverse_aux {n : ℕ} {x : ∀ i, A i} {x' : ∀ i, A (n - 1
 `X_{n-1} → ⋯ → X₁ → X₀` is one. -/
 theorem isMarkovChain_reverse_iff (hμ : IsPMF μ) (X : ∀ i, Ω → A i) (n : ℕ) :
     IsMarkovChain μ (fun i => X (n - 1 - i)) n ↔ IsMarkovChain μ X n := by
-  obtain ⟨ω₀⟩ := exists_of_isPMF hμ
+  obtain ⟨ω₀⟩ := hμ.nonempty_type
   constructor
   · intro h x
     exact (isMarkovChain_reverse_aux (x' := fun j => x (n - 1 - j)) fun _ _ => rfl).1 (h _)
@@ -484,7 +481,7 @@ lemma markovChain_last_of_factorization [∀ i, Finite (A i)] (hμ : IsPMF μ) {
     MarkovChain μ (blockRV X (range (k + 1))) (X (k + 1)) (X (k + 2)) := by
   classical
   have : ∀ i, Fintype (A i) := fun i => Fintype.ofFinite (A i)
-  obtain ⟨ω₀⟩ := exists_of_isPMF hμ
+  obtain ⟨ω₀⟩ := hμ.nonempty_type
   rw [markovChain_iff_condIndep hμ, condIndep_iff_factorization hμ]
   -- the factor of the first `k + 2` variables, which vanishes off the positive points
   let G : (∀ i, A i) → ℝ := fun x => if ∀ i ∈ Ico 1 (k + 1), 0 < dist μ (X i) (x i) then

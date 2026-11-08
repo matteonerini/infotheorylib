@@ -72,6 +72,19 @@ omit [Fintype α] [Fintype β] in
 lemma jointIid_nonneg {q : α × β → ℝ} (hq : ∀ z, 0 ≤ q z) (n : ℕ) (z) : 0 ≤ jointIid q n z :=
   iidPMF_nonneg hq _
 
+/-- `∑_{yⁿ} p(xⁿ, yⁿ) = p(xⁿ)`. -/
+lemma sum_jointIid_fiber_snd (q : α × β → ℝ) (n : ℕ) (x : Fin n → α) :
+    ∑ y, jointIid q n (x, y) = iidPMF (margFst q) n x := by
+  classical
+  simp only [jointIid, iidPMF, zipSeq]
+  rw [← Fintype.prod_sum fun i b => q (x i, b)]
+  exact prod_congr rfl fun i _ => (dist_fst q (x i)).symm
+
+/-- `H(Y | X) = H(X, Y) - H(X)` for a joint pmf `q`. -/
+lemma condEntropy_snd_fst_eq {q : α × β → ℝ} (hq : IsPMF q) :
+    H[Prod.snd | Prod.fst ; q] = entropy q - entropy (margFst q) := by
+  rw [condEntropy_eq_sub hq, entropyRV, dist_pair_fst_snd, entropyRV]
+
 /-- Sums against `jointIid` are sums against `iidPMF` on sequences of pairs. -/
 lemma sum_jointIid (q : α × β → ℝ) (n : ℕ) (f : (Fin n → α × β) → ℝ) :
     ∑ z, jointIid q n z * f (zipSeq z.1 z.2) = ∑ w, iidPMF q n w * f w := by

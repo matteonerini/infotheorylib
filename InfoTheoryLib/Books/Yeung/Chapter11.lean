@@ -66,7 +66,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   Definition 11.16 is for `n` uses of the channel.
 
 ### 11.4 Memoryless Gaussian Channels
-* Definition 11.19: `theorem_11_19` (here), which is `isEquivalentContChannel_gaussian`
+* Definition 11.19: `isEquivalentContChannel_gaussian`, the equivalence of the two specifications
   (`ChannelCoding.ContinuousChannel`), and `noiseJointPDF` (`GaussianChannel.Basic`).
 * Definition 11.20: `GaussianCode` (`GaussianChannel.Code`).
 * Theorem 11.21: `gaussianInfoCapacity_eq` (`GaussianChannel.Capacity`),
@@ -129,8 +129,6 @@ namespace InfoTheory.Yeung
 
 /-! ### Aliases -/
 
-/-- **Definition 11.19 (Gaussian Channel).** The two specifications are equivalent. -/
-alias theorem_11_19 := isEquivalentContChannel_gaussian
 
 /-- **Lemma 11.22.** (11.119)–(11.124) -/
 alias lemma_11_22 := condDiffEntropyOfCondPDF_sub

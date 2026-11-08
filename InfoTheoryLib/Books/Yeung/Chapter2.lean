@@ -44,7 +44,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Definitions 2.1 and 2.2: `IndepRV` (`Probability.Independence`), `IndepFamily`
   (`Probability.RandomVector`).
 * Definition 2.3: `PairwiseIndep`, and `IndepFamily.pairwiseIndep` for the implication after it
-  (`Probability.RandomVector`).
+  (`Probability.RandomVector`). The converse fails, which the book leaves as an exercise:
+  `pairwiseIndep_xorTriple`, `not_indepFamily_xorTriple` (here).
 * Definition 2.4: `CondIndep` (`Probability.Independence`), with (2.3) `condIndep_iff_mul` and
   (2.4) `condIndep_iff_condDist` (`MarkovChain.CondIndep`).
 * Proposition 2.5: `condIndep_iff_factorization` (`MarkovChain.CondIndep`).
@@ -133,7 +134,6 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Example 2.56: a source with a growing alphabet, whose entropy rate does not exist.
 * The continuity argument of (2.31)–(2.34) that fails after Proposition 2.12. It is a discussion;
   what it shows is `condIndep_intersection_counterexample`.
-* The remark, left as an exercise, that pairwise independence does not imply mutual independence.
 
 ## References
 
@@ -342,5 +342,26 @@ alias lemma_2_59 := cesaro_mean
 
 /-- **Theorem 2.60.** -/
 alias theorem_2_60 := StochasticProcess.IsStationary.hasEntropyRate
+
+/-! ### Pairwise independence does not imply mutual independence -/
+
+/-- The bits `X₀`, `X₁` of a uniform pair and their sum `X₂ = X₀ ⊕ X₁`. -/
+def xorTriple : ℕ → Bool × Bool → Bool := fun i ω =>
+  if i = 0 then ω.1 else if i = 1 then ω.2 else xor ω.1 ω.2
+
+/-- **The remark after Definition 2.3.** `X₀`, `X₁` and `X₀ ⊕ X₁` are pairwise independent. -/
+theorem pairwiseIndep_xorTriple : PairwiseIndep (uniformPMF (Bool × Bool)) xorTriple 3 := by
+  intro i j hij hj x y
+  interval_cases j <;> interval_cases i <;>
+    cases x <;> cases y <;> simp [dist, pair, xorTriple, uniformPMF, Fintype.sum_prod_type] <;>
+      norm_num
+
+/-- **The remark after Definition 2.3.** `X₀`, `X₁` and `X₀ ⊕ X₁` are not mutually independent:
+the three bits cannot all be `1`. -/
+theorem not_indepFamily_xorTriple : ¬IndepFamily (uniformPMF (Bool × Bool)) xorTriple 3 := by
+  intro h
+  have := h ![true, true, true]
+  simp [dist, prefixRV, xorTriple, uniformPMF, Fintype.sum_prod_type, funext_iff,
+    Fin.forall_fin_succ, Fin.prod_univ_three] at this
 
 end InfoTheory.Yeung

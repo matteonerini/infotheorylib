@@ -351,11 +351,6 @@ end ProductPMF
 
 section Reductions
 
-lemma IsPMF.nonempty_type {p : σ → ℝ} (hp : IsPMF p) : Nonempty σ := by
-  by_contra h
-  rw [not_nonempty_iff] at h
-  simpa using hp.sum_eq_one
-
 variable {W : α × σ → β → ℝ} {p : σ → ℝ}
 
 /-- Without state information, a code is a code for the channel `p(y | x) = ∑ₛ p(s) p(y | x, s)`. -/

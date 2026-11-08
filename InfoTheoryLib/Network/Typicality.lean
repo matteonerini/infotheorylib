@@ -75,24 +75,12 @@ lemma sum_jointIid_fiber_fst (q : α × β → ℝ) (n : ℕ) (y : Fin n → β)
     ∑ x, jointIid q n (x, y) = iidPMF (margSnd q) n y := by
   rw [← dist_jointIid_snd, dist_snd]
 
-/-- `∑_{yⁿ} p(xⁿ, yⁿ) = p(xⁿ)`. -/
-lemma sum_jointIid_fiber_snd (q : α × β → ℝ) (n : ℕ) (x : Fin n → α) :
-    ∑ y, jointIid q n (x, y) = iidPMF (margFst q) n x := by
-  rw [← dist_jointIid_fst, dist_fst]
-
 /-- `H(X | Y) = H(X, Y) - H(Y)` for a joint pmf `q`. -/
 lemma condEntropy_fst_snd_eq {q : α × β → ℝ} (hq : IsPMF q) :
     H[Prod.fst | Prod.snd ; q] = entropy q - entropy (margSnd q) := by
   rw [condEntropy_eq_sub hq]
   have e : H[pair (Prod.snd : α × β → β) Prod.fst ; q] = H[id ; q] :=
     entropyRV_eq_of_injective q Prod.swap Prod.swap_injective fun _ => rfl
-  rw [e, entropyRV, entropyRV, dist_id]
-
-/-- `H(Y | X) = H(X, Y) - H(X)` for a joint pmf `q`. -/
-lemma condEntropy_snd_fst_eq {q : α × β → ℝ} (hq : IsPMF q) :
-    H[Prod.snd | Prod.fst ; q] = entropy q - entropy (margFst q) := by
-  rw [condEntropy_eq_sub hq]
-  have e : H[pair (Prod.fst : α × β → α) Prod.snd ; q] = H[id ; q] := rfl
   rw [e, entropyRV, entropyRV, dist_id]
 
 /-- `H(Xⁿ | Yⁿ) = n H(X | Y)` for i.i.d. pairs. -/
