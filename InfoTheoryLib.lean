@@ -131,6 +131,7 @@ public import InfoTheoryLib.ForMathlib.MatrixDet
 public import InfoTheoryLib.ForMathlib.MatrixSVD
 public import InfoTheoryLib.ForMathlib.MaxFlow
 public import InfoTheoryLib.ForMathlib.PolyFiniteField
+public import InfoTheoryLib.ForMathlib.RatPowerSeries
 public import InfoTheoryLib.ForMathlib.SupportLemma
 public import InfoTheoryLib.ForMathlib.SupportingHyperplane
 public import InfoTheoryLib.ForMathlib.WeakLaw
@@ -242,6 +243,7 @@ public import InfoTheoryLib.Network.CascadeComputing
 public import InfoTheoryLib.Network.CommonInformation
 public import InfoTheoryLib.Network.ComputeMAC
 public import InfoTheoryLib.Network.ComputingGaussian
+public import InfoTheoryLib.Network.Convolutional
 public import InfoTheoryLib.Network.DFBlock
 public import InfoTheoryLib.Network.DFCode
 public import InfoTheoryLib.Network.DFDegraded

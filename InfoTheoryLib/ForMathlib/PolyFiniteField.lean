@@ -17,6 +17,8 @@ lemma of Mathlib.
 
 * `card_aeval_eq_zero_le`: the fraction of zeros of a polynomial in an extension field.
 * `exists_aeval_ne_zero`: a polynomial of small degree has a nonzero value.
+* `exists_eval_ne_zero_of_degreeOf_lt_card`: a nonzero polynomial over a domain has a nonzero
+  value on `S^m` when `S` has more elements than its degree in each variable.
 * `exists_aeval_galoisField_ne_zero`: a nonzero polynomial over `𝔽₂` has a nonzero value in
   `𝔽_{2^m}` for all large `m`. This is Lemma 1 of Lecture 16 of El Gamal and Kim.
 
@@ -100,6 +102,16 @@ theorem exists_aeval_ne_zero [Finite X] {P : MvPolynomial X k} (hP : P ≠ 0)
   push_cast at h
   rw [div_self (by positivity), le_div_iff₀ hposF, one_mul] at h
   exact absurd (by exact_mod_cast h) (not_le.mpr hF)
+
+/-- A nonzero polynomial over a domain whose degree in each variable is less than the size of a
+finite set `S` has a nonzero value at a point with coordinates in `S`, by the combinatorial
+Nullstellensatz of Mathlib. -/
+theorem exists_eval_ne_zero_of_degreeOf_lt_card {σ R : Type*} [Finite σ] [CommRing R] [IsDomain R]
+    {P : MvPolynomial σ R} (hP : P ≠ 0) (S : Finset R) (hS : ∀ i, P.degreeOf i < #S) :
+    ∃ a : σ → R, (∀ i, a i ∈ S) ∧ MvPolynomial.eval a P ≠ 0 := by
+  by_contra h
+  push Not at h
+  exact hP (MvPolynomial.eq_zero_of_eval_zero_at_prod_finset P (fun _ => S) hS h)
 
 omit [Fintype X] in
 /-- A nonzero polynomial whose degree in each variable is less than the size of the field has a
