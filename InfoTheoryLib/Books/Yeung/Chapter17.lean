@@ -179,7 +179,7 @@ theorem proposition_17_3 {V : Type*} [LinearOrder V] [Finite V] {A : V → V →
 /-- **Example 17.4 (A Wireless/Satellite System).** Modelled by the network of Figure 17.2(c), with
 the relay as node `3` and its dummy node as node `4`: the network code exchanges `b₁` and `b₂` with
 one use of the downlink `(3, 4)`, while any routing scheme that exchanges the two bits needs two
-uses of it. -/
+uses of it. Numbered from `0`, the downlink is the edge `(2, 3)`. -/
 theorem example_17_4 :
     (∀ m, (unicastCode 1).Correct unicastD m) ∧
       ∀ (cap : Fin 6 → Fin 6 → ℕ), (∀ j k, unicastW j k = 0 → cap j k = 0) →

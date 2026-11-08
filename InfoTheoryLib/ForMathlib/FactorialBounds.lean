@@ -29,7 +29,7 @@ from `log x ≤ x - 1`.
 
 open Real
 
-public section
+@[expose] public section
 
 namespace InfoTheory
 

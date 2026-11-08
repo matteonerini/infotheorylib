@@ -17,8 +17,11 @@ lemma of Mathlib.
 
 * `card_aeval_eq_zero_le`: the fraction of zeros of a polynomial in an extension field.
 * `exists_aeval_ne_zero`: a polynomial of small degree has a nonzero value.
+* `exists_aeval_ne_zero_of_degreeOf`: a nonzero polynomial whose degree in each variable is less
+  than the size of the field has a nonzero value. This is Lemma 19.17 of Yeung.
 * `exists_eval_ne_zero_of_degreeOf_lt_card`: a nonzero polynomial over a domain has a nonzero
-  value on `S^m` when `S` has more elements than its degree in each variable.
+  value on `S^m` when `S` has more elements than its degree in each variable. This is Lemma 20.12
+  of Yeung.
 * `exists_aeval_galoisField_ne_zero`: a nonzero polynomial over `𝔽₂` has a nonzero value in
   `𝔽_{2^m}` for all large `m`. This is Lemma 1 of Lecture 16 of El Gamal and Kim.
 
@@ -26,6 +29,7 @@ lemma of Mathlib.
 
 * [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
   Lecture 16
+* [R. W. Yeung, *Information Theory and Network Coding*][yeung2008], Lemmas 19.17 and 20.12
 -/
 
 open Finset

@@ -43,7 +43,7 @@ maximum.
 
 open Set Filter Topology
 
-public section
+@[expose] public section
 
 namespace InfoTheory
 

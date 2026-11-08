@@ -10,7 +10,7 @@ public import InfoTheoryLib.InfoInequalities.EntropicRegion
 /-!
 # Multi-source network coding: the regions `R'` and `R_LP`
 
-A multi-source network coding problem on an acyclic network has sources `s` generated at nodes
+A multi-source network coding problem on a network has sources `s` generated at nodes
 `src s`, sinks `t ∈ T` that demand the sources `β t`, and a rate constraint `R e` on each channel.
 Its achievable information rate region is characterized by the region `R'` of Definition 21.4 of
 Yeung, defined from the region `Γ**` of the entropy functions of random variables `Y_s` and `U_e`
@@ -33,6 +33,14 @@ inequalities.
 * `MultiSourceProblem.rPrime_subset_rLP`: `R' ⊆ R_LP`.
 * `MultiSourceProblem.rLP_eq`: `R_LP = Λ(proj_{Y_S}(Γ ∩ C₁ ∩ ⋯ ∩ C₅))`, since `Γ` and the regions
   `C₁`, …, `C₅` are closed and convex.
+
+## Implementation notes
+
+The book assumes that the network is acyclic, that every source node has one source and no input
+channel, that a sink has no output channel, and that every source is demanded by some sink. These
+assumptions are not fields of `MultiSourceProblem`, since the regions do not need them; they would
+be hypotheses of Theorem 21.5. Several sources may be generated at one node, and then `C₂` asks
+that the output of the node be a function of all of them.
 
 ## References
 
@@ -62,9 +70,10 @@ lemma continuous_extend {ι : Type*} [Finite ι] (A : Finset ι) :
     Continuous fun h : EntropySpace ι => h.extend A :=
   (extendLM A).continuous_of_finiteDimensional
 
-/-- **Section 21.3.** A multi-source network coding problem on an acyclic network with nodes `V`
-and channels `E`: the source `s ∈ σ` is generated at the node `src s`, the sink `t ∈ T` demands the
-sources `β t`, and the channel `e` has the rate constraint `R e`. -/
+/-- **Section 21.3.** A multi-source network coding problem on a network with nodes `V` and
+channels `E`: the source `s ∈ σ` is generated at the node `src s`, the sink `t ∈ T` demands the
+sources `β t`, and the channel `e` has the rate constraint `R e`. The book's assumptions on the
+network, such as acyclicity, are not part of the structure. -/
 structure MultiSourceProblem (V : Type u) (E : Type v) (σ : Type w) where
   /-- The node a channel leaves. -/
   tail : E → V
@@ -138,9 +147,15 @@ variable (σ E) in
 def C₁ : Set (EntropySpace (σ ⊕ E)) :=
   {h | h.extend (vars univ ∅) = ∑ s, h.extend (vars {s} ∅)}
 
-/-- **(21.28).** `h_{U_{Out(s)} | Y_s} = 0`: a source node encodes its source. -/
+/-- The sources generated at a node. -/
+def srcAt (i : V) : Finset σ := univ.filter (P.src · = i)
+
+/-- **(21.28).** `h_{U_{Out(i)} | Y_{S_i}} = 0`: a source node `i` encodes the sources `S_i`
+generated at it. In the book every source node has one source, and this is
+`h_{U_{Out(s)} | Y_s} = 0`. -/
 def C₂ : Set (EntropySpace (σ ⊕ E)) :=
-  {h | ∀ s, h.extend (vars {s} (P.outCh (P.src s))) = h.extend (vars {s} ∅)}
+  {h | ∀ s, h.extend (vars (P.srcAt (P.src s)) (P.outCh (P.src s))) =
+    h.extend (vars (P.srcAt (P.src s)) ∅)}
 
 /-- **(21.29).** `h_{U_{Out(i)} | U_{In(i)}} = 0` at a node `i` that is neither a source node nor a
 sink: it encodes what it receives. -/
@@ -200,11 +215,13 @@ lemma convex_isClosed_C₁ [Finite E] : Convex ℝ (C₁ σ E) ∧ IsClosed (C�
 theorem rLP_eq : P.rLP =
     downClosure (projY '' (shannonRegion (σ ⊕ E) ∩ C₁ σ E ∩ P.C₂ ∩ P.C₃ ∩ P.C₄ ∩ P.C₅)) := by
   have h₂ := convex_isClosed_setOf_forall_eq (fun _ : σ => True)
-    (fun s : σ => vars {s} (P.outCh (P.src s))) (fun s : σ => vars {s} ∅)
+    (fun s : σ => vars (P.srcAt (P.src s)) (P.outCh (P.src s)))
+    (fun s : σ => vars (P.srcAt (P.src s)) ∅)
   have h₃ := convex_isClosed_setOf_forall_eq (fun i => i ∉ Set.range P.src ∧ i ∉ P.T)
     (fun i => vars (∅ : Finset σ) (P.outCh i ∪ P.inCh i)) (fun i => vars (∅ : Finset σ) (P.inCh i))
   have e₂ : P.C₂ = {h : EntropySpace (σ ⊕ E) | ∀ s, True →
-      h.extend (vars {s} (P.outCh (P.src s))) = h.extend (vars {s} ∅)} := by
+      h.extend (vars (P.srcAt (P.src s)) (P.outCh (P.src s))) =
+        h.extend (vars (P.srcAt (P.src s)) ∅)} := by
     ext h
     simp [C₂]
   have e₃ : P.C₃ = {h : EntropySpace (σ ⊕ E) | ∀ i, i ∉ Set.range P.src ∧ i ∉ P.T →
