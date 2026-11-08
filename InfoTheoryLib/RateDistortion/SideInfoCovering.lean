@@ -34,14 +34,14 @@ that is jointly typical with `Yⁿ`.
 
 ## Implementation notes
 
-The notes bin the codewords deterministically, and bound the probability of the error event `E₃` by
-Lemma 1 of the Appendix. Step (b) of its proof uses that, given `L = l`, every collection of the
-other codewords has the same distribution. For an encoder that selects the *smallest* index `l` with
-`(xⁿ, uⁿ(l))` typical, this is not so: codewords with index smaller than `l` are known not to be
-typical with `xⁿ`, and those with a larger index are not. We bin at random, as Section 15.9 of Cover
-and Thomas does, independently of the codebook: given the codebook and `(Xⁿ, Yⁿ)`, another codeword
-falls in the bin of `Uⁿ(L)` with probability `1 / M`, whatever `L` is, so the event `E₃` needs no
-conditioning at all.
+Lecture 12 of [elgamal2010] bins the codewords deterministically, and bounds the probability of
+the error event `E₃` by its Lemma 1, proved in its Appendix. Step (b) of that proof uses that,
+given `L = l`, every collection of the other codewords has the same distribution. For an encoder
+that selects the *smallest* index `l` with `(xⁿ, uⁿ(l))` typical, this is not so: codewords with
+index smaller than `l` are known not to be typical with `xⁿ`, and those with a larger index are
+not. We bin at random, as Section 15.9 of [cover2006] does, independently of the codebook: given
+the codebook and `(Xⁿ, Yⁿ)`, another codeword falls in the bin of `Uⁿ(L)` with probability
+`1 / M`, whatever `L` is, so the event `E₃` needs no conditioning at all.
 
 ## References
 

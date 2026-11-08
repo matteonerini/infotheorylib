@@ -875,9 +875,7 @@ theorem isStochasticallyDegraded_bscBecBC_of_eps_eq_one (p : ℝ) :
 
 /-- **Example (a BSC and a BEC), case 1, Lecture 5 of [elgamal2010].** For `0 ≤ ε ≤ 2p`, `Y₁` is a
 degraded version of `Y₂`. -/
-theorem bscBecBC_case₁ {p ε : ℝ} (hp1 : p ≤ 2⁻¹) (hε : ε ≤ 2 * p) :
-    IsStochasticallyDegraded (bcReceiverSwap (bscBecBC p ε)) :=
-  isStochasticallyDegraded_bcReceiverSwap_bscBecBC hp1 hε
+alias bscBecBC_case₁ := isStochasticallyDegraded_bcReceiverSwap_bscBecBC
 
 /-- **Example (a BSC and a BEC), case 2, Lecture 5 of [elgamal2010].** For `2p < ε ≤ 4p(1 - p)`,
 `Y₂` is less noisy than `Y₁`, but `Y₁` is not a degraded version of `Y₂`. -/
