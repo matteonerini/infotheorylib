@@ -123,6 +123,7 @@ public import InfoTheoryLib.ForMathlib.FactorialBounds
 public import InfoTheoryLib.ForMathlib.FenchelEggleston
 public import InfoTheoryLib.ForMathlib.FlowDecomposition
 public import InfoTheoryLib.ForMathlib.FourierMotzkin
+public import InfoTheoryLib.ForMathlib.HalfSpaceEquivalence
 public import InfoTheoryLib.ForMathlib.Integral
 public import InfoTheoryLib.ForMathlib.Log
 public import InfoTheoryLib.ForMathlib.MatrixBlock
@@ -168,6 +169,7 @@ public import InfoTheoryLib.Inequalities.Han
 public import InfoTheoryLib.Inequalities.Schur
 public import InfoTheoryLib.Inequalities.SubsetEntropy
 public import InfoTheoryLib.Inequalities.Toeplitz
+public import InfoTheoryLib.InfoInequalities.EntropySpace
 public import InfoTheoryLib.InfoInequalities.Polymatroid
 public import InfoTheoryLib.Investment.AlmostSure
 public import InfoTheoryLib.Investment.Basic
