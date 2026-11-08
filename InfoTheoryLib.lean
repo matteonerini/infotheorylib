@@ -281,6 +281,7 @@ public import InfoTheoryLib.Network.JSCCBC
 public import InfoTheoryLib.Network.JSCCMAC
 public import InfoTheoryLib.Network.JSCCMACLaw
 public import InfoTheoryLib.Network.JSCCRandomCode
+public import InfoTheoryLib.Network.LinearMulticast
 public import InfoTheoryLib.Network.LinearNetworkCode
 public import InfoTheoryLib.Network.MACAchievability
 public import InfoTheoryLib.Network.MACBits

@@ -75,7 +75,7 @@ lemma capGraph_count (cap : V → V → ℕ) (h : ∀ j k, 0 < cap j k → j < k
 only if all the message symbols fit through the cuts separating them from `t`. -/
 theorem detGeneric_ne_zero_iff {E : Type*} [Fintype E] (G : Multigraph V E) {b : V → ℕ}
     {t : V} (hb : b t = 0) :
-    detGeneric (b := b) G t ≠ 0 ↔ ∀ S : Finset V, t ∉ S →
+    detGeneric (b := b) (ZMod 2) G t ≠ 0 ↔ ∀ S : Finset V, t ∉ S →
       ∑ j ∈ S, (b j : ℤ) ≤ cutCap (fun j k => (G.count j k : ℤ)) S :=
   ⟨fun h _ hS => cuts_of_detGeneric_ne_zero G h hS, detGeneric_ne_zero_of_cuts G t hb⟩
 
@@ -90,7 +90,7 @@ theorem exists_linear_code {E F : Type*} [Fintype E] [Field F] [Algebra (ZMod 2)
       ∑ j ∈ S, (b j : ℤ) ≤ cutCap (fun j k => (G.count j k : ℤ)) S)
     (hF : #T * Fintype.card (Σ j, Fin (b j)) < Fintype.card F) :
     ∃ a : LinCoeff F E b, ∀ m, (a.code G).Correct D m := by
-  obtain ⟨α, hα⟩ := exists_coeff_of_card_gt (F := F) G
+  obtain ⟨α, hα⟩ := exists_coeff_of_card_gt (𝕜' := ZMod 2) (F := F) G
     (fun t ht => detGeneric_ne_zero_of_cuts G t (hb t ht) (h t ht)) hF
   exact ⟨ofAssign α, LinCoeff.code_correct G _ fun j l hl => hα l (hD j l hl)⟩
 
@@ -192,7 +192,7 @@ theorem isAchievableZE_of_cuts (N : NoiselessNetwork V) {T : Finset V} {D : V �
   have hcap : ∀ j k, 0 < cap j k → j < k := floor_acyclic N.acyclic (Nat.cast_nonneg K)
   let b : V → ℕ := fun j => if R j = 0 then 0 else ⌊(K : ℝ) * R j⌋₊ + 1
   let G := capGraph cap hcap
-  have hdet : ∀ t ∈ T, detGeneric (b := b) G t ≠ 0 := by
+  have hdet : ∀ t ∈ T, detGeneric (b := b) (ZMod 2) G t ≠ 0 := by
     intro t ht
     refine detGeneric_ne_zero_of_cuts G t (by simp [b, hT t ht]) fun S htS => ?_
     have hcount : (fun j k => (G.count j k : ℤ)) = fun j k => ((cap j k : ℕ) : ℤ) := by
@@ -200,7 +200,7 @@ theorem isAchievableZE_of_cuts (N : NoiselessNetwork V) {T : Finset V} {D : V �
       rw [capGraph_count]
     rw [hcount]
     exact hscale t ht S htS
-  have hP : ∏ t ∈ T, detGeneric (b := b) G t ≠ 0 := Finset.prod_ne_zero_iff.mpr hdet
+  have hP : ∏ t ∈ T, detGeneric (b := b) (ZMod 2) G t ≠ 0 := Finset.prod_ne_zero_iff.mpr hdet
   obtain ⟨m₀, hm₀⟩ := exists_aeval_galoisField_ne_zero hP
   -- for large `n`, the field of size `2 ^ (n / K)` works
   have hdiv : Tendsto (fun n : ℕ => n / K) atTop atTop :=
@@ -242,7 +242,7 @@ theorem isAchievableZE_of_cuts (N : NoiselessNetwork V) {T : Finset V} {D : V �
   have hinv : ∀ t ∈ T, (transfer G (ofAssign α) t).det ≠ 0 := by
     intro t ht
     rw [map_prod] at hα
-    rw [← aeval_detGeneric]
+    rw [← aeval_detGeneric (𝕜 := ZMod 2)]
     exact Finset.prod_ne_zero_iff.mp hα t ht
   have hcor := LinCoeff.code_correct G (ofAssign α) (D := D)
     fun j l hl => hinv l (hD j l hl)

@@ -46,6 +46,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `PtpNetwork.isGreatest_maxflow` (`Network.MaxFlowBound`), from `maxFlow_minCut`
   (`ForMathlib.MaxFlow`). Problem 1, the value of a flow: `IsFlow.sum_netOut_eq`
   (`ForMathlib.MaxFlow`).
+* The max-flow from the source to a collection of nodes or of channels, Figure 18.1:
+  `Multigraph.maxflowNodes`, `Multigraph.maxflowEdges` (`Network.LinearMulticast`), for the acyclic
+  networks of Chapter 19, as the capacities of the min-cuts of the graphs of the figure.
 
 ### 18.2 Examples Achieving the Max-Flow Bound
 * (18.9)–(18.10): Theorem 18.3.
@@ -82,8 +85,6 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ## Not formalized
 
-* The max-flow and the min-cut from the source to a collection of nodes and to a collection of
-  edges, Figure 18.1, which Chapter 19 uses.
 * The remark that each bit of Figure 18.3 is replicated exactly once, and the remark that coding
   is necessary in Figure 18.5.
 * The disk array interpretation of Figure 18.5.
