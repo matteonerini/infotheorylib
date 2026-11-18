@@ -25,8 +25,8 @@ chapters of Yeung are formalized, with some omissions. Each chapter or lecture f
 what is proved and has a "Not formalized" section listing what is not. Many of these files also
 record the differences from the text and the errors found in it.
 
-The library has three kinds of folders, and all its declarations are in the namespace
-`InfoTheory`:
+The library has three kinds of folders. Declarations are in the namespace `InfoTheory`, except in
+some files of `ForMathlib/`, which use Mathlib-style namespaces:
 
 * Topic folders such as `Entropy/`, `ChannelCoding/` and `Network/` hold the general theory,
   shared by the three texts.
@@ -53,7 +53,7 @@ lake build           # build the library
 
 The first build compiles the whole library, which takes a while.
 
-To use the library in your own project, add it to the `lakefile.toml` of the project:
+To use the library in your own project, add it to the project's `lakefile.toml`:
 
 ```toml
 [[require]]
@@ -62,12 +62,19 @@ git = "https://github.com/matteonerini/infotheorylib"
 rev = "v4.36.0"
 ```
 
-then run `lake update infotheorylib` and `lake exe cache get`. A Lake project can contain only one
-version of Mathlib, so your project must use the same Lean toolchain (`v4.36.0`) and Mathlib
-version as the release you depend on. Releases are tagged with the Lean version they support;
-the available versions are listed on the
-[releases page](https://github.com/matteonerini/infotheorylib/releases).
-The library uses the module system, so it can be imported from both module and non-module files.
+A Lake project can contain only one version of Mathlib, so your project must use the same Lean
+and Mathlib versions as the release: copy the `lean-toolchain` file of this repository into your
+project, and do not require a different version of Mathlib. Then run
+
+```sh
+lake update infotheorylib
+lake exe cache get   # download prebuilt Mathlib files
+```
+
+The cache covers only Mathlib, so the first build of your project also compiles this library.
+Releases are tagged with the Lean version they support; the available versions are listed on the
+[releases page](https://github.com/matteonerini/infotheorylib/releases). The library can be
+imported from both module and non-module files.
 
 To use the library, import it and open the `InfoTheory` namespace, which also activates the
 notation `H[X ; μ]`, `H[X | Y ; μ]`, `I[X : Y ; μ]` and `I[X : Y | Z ; μ]`:

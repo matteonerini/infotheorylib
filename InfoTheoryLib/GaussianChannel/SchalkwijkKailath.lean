@@ -197,7 +197,7 @@ def SatisfiesPower (ν : Measure ℝ) (P : ℝ) : Prop :=
 
 end AddFBCode
 
-/-- A rate, in nats, is achievable with feedback under the expected power constraint. -/
+/-- A rate, in bits, is achievable with feedback under the expected power constraint. -/
 def IsAchievableAddFB (ν : Measure ℝ) (P R : ℝ) : Prop :=
   ∃ c : ∀ n : ℕ, AddFBCode (2 ^ ⌈(n : ℝ) * R⌉₊) n,
     (∀ n, (c n).SatisfiesPower ν P) ∧ Tendsto (fun n => (c n).avgErr ν) atTop (𝓝 0)

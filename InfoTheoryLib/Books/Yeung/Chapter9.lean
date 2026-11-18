@@ -107,7 +107,8 @@ theorem lemma_9_1 {W : α → β → ℝ} {r : α → ℝ} (hr : IsPMF r) (hW : 
         baCapObjective W r q ≤ mutualInfoOf r W :=
   ⟨baCapObjective_posterior hr hW, fun _ hq hqW => baCapObjective_le_mutualInfoOf hr hW hq hqW⟩
 
-/-- **Theorem 9.2.** (9.25) -/
+/-- **Theorem 9.2**, (9.25) with the inner maximum over `q` evaluated by Lemma 9.1:
+`C = sup_{r > 0} I(r, p)`. -/
 alias theorem_9_2 := capacity_eq_sSup_pos
 
 /-- **Lemma 9.3.** (9.60) -/

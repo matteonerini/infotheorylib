@@ -129,7 +129,9 @@ lemma jointIid_isPMF {q : α × β → ℝ} (hq : IsPMF q) (n : ℕ) : IsPMF (jo
 
 open Classical in
 /-- **Definition (7.35)–(7.37).** The jointly typical set `A_ε^(n)`: the pairs `(xⁿ, yⁿ)` such that
-`xⁿ`, `yⁿ` and `(xⁿ, yⁿ)` are typical for the marginals `p₁`, `p₂` and the joint pmf `q`. -/
+`xⁿ`, `yⁿ` and `(xⁿ, yⁿ)` are typical for the marginals `p₁`, `p₂` and the joint pmf `q`. The
+bounds are non-strict, `≤ ε` where the book has `< ε`; the theorems of Section 7.6 are proved for
+this set. -/
 def jointTypicalSet (q : α × β → ℝ) (n : ℕ) (ε : ℝ) : Finset ((Fin n → α) × (Fin n → β)) :=
   univ.filter fun z => z.1 ∈ typicalSet (margFst q) n ε ∧
     z.2 ∈ typicalSet (margSnd q) n ε ∧ zipSeq z.1 z.2 ∈ typicalSet q n ε

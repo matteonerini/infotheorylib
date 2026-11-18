@@ -93,6 +93,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ## Issues in the notes
 
+* **Page 8-6.** The claim that the gain from power control vanishes at high SNR needs
+  `P{G = 0} = 0`, which holds if `G ⊆ ℝ₊` of page 8-3 excludes `0` (the notes do not define `ℝ₊`).
+  With `P{G = 0} = q₀ > 0` the gap tends to `((1 - q₀)/2) log(1/(1 - q₀)) > 0`.
+  `tendsto_fadingPowerValue_sub_fadingErgodic` assumes nonzero gains.
 * **Page 8-8.** The outage capacity is written with `{g : P{G ≤ g} ≤ p_out}`. Sending at the rate
   `C(g²P)` is in outage exactly when `G < g`, and with finitely many gains the set for `p_out = 0`
   contains no gain of the support and has no maximum. `fadingOutage` uses `P{G < g} ≤ p_out`.

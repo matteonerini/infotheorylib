@@ -59,8 +59,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `strictConcaveOn_log_Ioi`, `Real.convexOn_mul_log` (Mathlib).
 * Theorem 17.1.2 (log sum inequality): `log_sum_inequality` (`Analysis.LogSum`).
 * Theorem 17.1.3: `entropy_nonneg`, `entropy_le_log_card` (`Entropy.Basic`, `Entropy.Bounds`).
-* Theorem 17.1.4: `condEntropy_le_entropy`; Theorem 17.1.5: `chain_rule_entropy`,
-  `entropy_prefixRV_le_sum`; Theorem 17.1.6: `entropy_concaveOn`.
+* Theorem 17.1.4: `condEntropy_le_entropy`, with equality `condEntropy_eq_entropy_iff`;
+  Theorem 17.1.5: `chain_rule_entropy`, `entropy_prefixRV_le_sum`, with equality
+  `entropy_prefixRV_eq_sum_iff`; Theorem 17.1.6: `entropy_concaveOn`.
 * Theorem 17.1.7: `relEntropyReal_nonneg`; Theorem 17.1.8: `relEntropyReal_convex_pair`.
 * Theorem 17.1.9: `theorem_2_4_1` (`Books.CoverThomas.Chapter2`).
 * Theorem 17.1.10 (second law for Markov chains): `relEntropy_step_le`,
@@ -75,8 +76,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `DifferentialEntropy.Joint`).
 * Table 17.1: only the uniform, exponential and normal entries, `diffEntropy_uniformPDF`,
   `diffEntropy_expDensity`, `diffEntropy_gaussianPDFReal`, `diffEntropy_mvGaussianPDF`.
-* Theorem 17.2.1: `condDiffEntropy_le` (`DifferentialEntropy.Joint`); Theorem 17.2.2:
-  `diffEntropy_eq_sum_condDiffEntropyLast` (`DifferentialEntropy.ChainRule`).
+* Theorem 17.2.1: `condDiffEntropy_le`, with equality `condDiffEntropy_eq_iff`
+  (`DifferentialEntropy.Joint`); Theorem 17.2.2: `diffEntropy_eq_sum_condDiffEntropyLast`, with
+  equality in the bound `diffEntropy_eq_sum_coordMarginal_iff` (`DifferentialEntropy.ChainRule`).
 * Theorem 17.2.3: `diffEntropy_le_of_covariance` (`DifferentialEntropy.MultivariateGaussian`).
 
 ### 17.3 Bounds on entropy and relative entropy
@@ -152,6 +154,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 * Lemma 17.2.1 (`h(X + Y) ≥ h(X)` for independent `X`, `Y`), and the entries of Table 17.1 other
   than the uniform, exponential and normal densities.
+* The equality case of Hadamard's inequality (Theorem 17.9.2).
 * The explicit form (17.42) of Stirling's approximation: the proof of Lemma 17.5.1 uses the
   monotonicity of Mathlib's Stirling sequence instead.
 * Han's inequalities for differential entropies: they are proved for discrete random variables,

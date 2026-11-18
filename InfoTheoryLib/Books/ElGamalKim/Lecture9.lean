@@ -26,7 +26,9 @@ channels.
 * **Auxiliary random variables.** They take values in `Fin k` for some `k`, which replaces the
   bounds on their cardinalities. So the capacity regions are stated up to closure.
 * **The mutual covering lemma.** It is stated for i.i.d. sequences, which is what Marton coding
-  needs, while the notes assume pairwise independence within each family.
+  needs, while the notes assume pairwise independence within each family. It is a quantitative
+  bound that tends to `0` when `r₁ + r₂ > I(U₁; U₂) + δ` and both families grow, `r₁, r₂ > 2δ`,
+  which is the case Marton coding uses; the case `r₁ = 0` of the notes is not covered.
 * **Numbering.** The notes number the results in the order Theorem 1, Theorem 5, Theorem 1,
   Theorem 2, Theorem 3, Theorem 4. `theorem_9_1` is the first one, on degraded message sets, and
   the second Theorem 1 is `cover_van_der_meulen_inner_bound`.
@@ -60,8 +62,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The remark that the region does not increase with general conditional pmfs `p(x | u₁, u₂)`:
   `martonMix₁`, `martonMix₂`, `martonMixInfo₁`, `martonMixInfo₂`, `isAchievableBCBits_of_marton_mix`
   (`Network.BCSemiDeterministic`).
-* The **mutual covering lemma**: `eventually_sum_mutualCovering_typical_le`, from the second moment
-  bound `sum_mutualCovering_le` (`Typicality.MutualCovering`).
+* The **mutual covering lemma**: `mutual_covering_lemma` (here), which is
+  `eventually_sum_mutualCovering_typical_le`, from the second moment bound `sum_mutualCovering_le`
+  (`Typicality.MutualCovering`).
 
 ### Semi-deterministic and deterministic broadcast channels
 * The capacity region of the semi-deterministic DM-BC: `IsSemiDeterministicBC`,
@@ -156,6 +159,10 @@ omit [Fintype α] in
 theorem theorem_9_2 [Finite α] (hW : IsChannel W) :
     martonRegionBits W ⊆ {R | IsAchievableBCBits W R.1 R.2} :=
   martonRegionBits_subset hW
+
+/-- **The mutual covering lemma of Lecture 9, page 9-27**, for i.i.d. families, in the
+quantitative form described in the conventions. -/
+alias mutual_covering_lemma := eventually_sum_mutualCovering_typical_le
 
 /-- **Lecture 9, page 9-21.** The capacity region of the semi-deterministic DM-BC. -/
 theorem semi_deterministic_bc_capacity [Nonempty α] (hW : IsChannel W)

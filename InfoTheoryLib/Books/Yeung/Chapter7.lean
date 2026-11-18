@@ -104,7 +104,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * (7.219)–(7.229), `C_FB = C`: `FeedbackCode.one_sub_errProb_mul_log_le`,
   `mutualInfo_fbLaw_le` (`ChannelCoding.Converse`), `isAsymptoticallyAchievableFB_iff`,
   `fbCapacityMax_eq_capacity` (`ChannelCoding.AsymptoticRate`).
-* Example 7.23: `example_7_23` (here).
+* Example 7.23: `example_7_23` (here), the computation only.
 
 ### 7.7 Separation of Source and Channel Coding
 * (7.235)–(7.243): `exists_sourceChannelCode` (`ChannelCoding.SourceChannel`). The book uses the
@@ -207,7 +207,8 @@ theorem tendsto_codeRate_two : Tendsto (fun n => codeRate 2 n) atTop (𝓝 0) :=
 
 /-- **Example 7.23.** With feedback, a bit is sent over the BEC until it is not erased. The number
 of uses is geometric, with mean `1/(1 - γ)`, so the rate `1 - γ` bits per use, the capacity, is
-achieved with zero probability of error. -/
+achieved with zero probability of error. We formalize the computation: the geometric law, its mean
+and the capacity of the BEC; the feedback scheme itself is not modelled. -/
 theorem example_7_23 {γ : ℝ} (h0 : 0 ≤ γ) (h1 : γ < 1) :
     HasSum (fun k : ℕ => γ ^ k * (1 - γ)) 1 ∧
       HasSum (fun k : ℕ => ((k : ℝ) + 1) * (γ ^ k * (1 - γ))) (1 - γ)⁻¹ ∧

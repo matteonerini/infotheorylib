@@ -20,7 +20,6 @@ earlier messages.
 * `dfWin`: the tests of a decoder in its window of blocks.
 * `dfEstA`, `dfEst`: the estimates of a node.
 * `dfTagD`: the tag that node `d` knows in block `B`.
-* `DFGood`: the good event of the genie run.
 
 ## Main statements
 

@@ -12,6 +12,10 @@ public import InfoTheoryLib.Network.TwoWayLossyLetters
 
 The converse of Theorem 4 of Lecture 21 of El Gamal and Kim, on pages 21-24 to 21-29.
 
+## Main definitions
+
+* `KaspiCode.kU`: the auxiliary letter.
+
 ## Main statements
 
 * `exists_estimator_le`: an estimator can drop a variable that is conditionally independent of the

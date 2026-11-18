@@ -70,7 +70,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   (`ChannelCoding.ContinuousChannel`), and `noiseJointPDF` (`GaussianChannel.Basic`).
 * Definition 11.20: `GaussianCode` (`GaussianChannel.Code`).
 * Theorem 11.21: `gaussianInfoCapacity_eq` (`GaussianChannel.Capacity`),
-  `gaussianOpCapacity_eq` (`GaussianChannel.Achievability`).
+  `gaussianOpCapacity_eq` (`GaussianChannel.Achievability`). The information capacity there is that
+  of Cover and Thomas, a supremum over inputs with a density; it is not shown equal to
+  `contCapacity` of Definition 11.7 for the Gaussian channel.
 * Lemma 11.22: `lemma_11_22` (here), which is `condDiffEntropyOfCondPDF_sub`
   (`ChannelCoding.ContinuousChannel`). The library's bound for the Gaussian channel is
   `mutualInfoPDF_gaussianChannel_le` (`GaussianChannel.Capacity`).
@@ -78,7 +80,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### 11.5 Parallel Gaussian Channels
 * (11.142)–(11.179): `parallelInfoCapacity_eq` (`GaussianChannel.Parallel`).
 * Proposition 11.23: `waterFill`, `sum_log_le_waterFill`, `exists_waterLevel`
-  (`GaussianChannel.WaterFilling`).
+  (`GaussianChannel.WaterFilling`), for noise powers `Nᵢ > 0`, where the book allows `Nᵢ ≥ 0`.
 
 ### 11.6 Correlated Gaussian Channels
 * (11.180)–(11.192): `coloredInfoCapacity_eq`, `coloredInfoCapacity_eq_parallel`
@@ -91,7 +93,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   (`ForMathlib.CrossCorrelation`), for integrable signals rather than signals of finite energy.
 * Theorem 11.29: `signalOfSpectrum_eq_of_samples` (`GaussianChannel.Bandlimited`), the uniqueness
   part only, not the interpolation formula.
-* (11.258), the capacity `W log (1 + P/(N₀ W))`: `bandlimitedCapacity_eq`,
+* (11.248)–(11.249), the capacity `W log (1 + P/(N₀ W))`: `bandlimitedCapacity_eq`,
   `tendsto_bandlimitedCapacity` (`GaussianChannel.Bandlimited`), as a formula.
 
 ### 11.9 Zero-Mean Gaussian Noise is the Worst Additive Noise

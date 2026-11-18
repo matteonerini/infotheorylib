@@ -124,7 +124,8 @@ end
 variable {ι : Type u} [Fintype ι] [DecidableEq ι]
 
 /-- **The region `Γ*ₙ`** of entropic vectors, (13.24): the entropy functions of random variables
-`Xᵢ`, `i ∈ ι`. -/
+`Xᵢ`, `i ∈ ι`, with finite alphabets, which is Yeung's region `Γ**ₙ` of finitely entropic vectors,
+(21.25), while his `Γ*ₙ` also allows countable alphabets. -/
 def entropicRegion (ι : Type u) [Fintype ι] [DecidableEq ι] : Set (EntropySpace ι) :=
   {h | ∃ (Ω : Type u) (_ : Fintype Ω) (A : ι → Type u) (_ : ∀ i, Fintype (A i)) (μ : Ω → ℝ)
     (X : ∀ i, Ω → A i), IsPMF μ ∧ entropyVector μ X = h}

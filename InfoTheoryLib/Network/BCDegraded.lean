@@ -29,7 +29,8 @@ inner bound.
   degraded channel.
 * `IsAchievableBCBits.mem_closure_degradedBCRegionBits_of_stochasticallyDegraded`: the same for a
   stochastically degraded channel.
-* `bcInfoXY₁_eq_bcInfoUY₁_add_bcInfoXY₁U`: `I(X; Y₁) = I(U; Y₁) + I(X; Y₁ | U)`.
+* `bcInfoXY₁_eq_bcInfoUY₁_add_bcInfoXY₁U` (`Network.BCDegradedLaws`):
+  `I(X; Y₁) = I(U; Y₁) + I(X; Y₁ | U)`.
 * `IsStochasticallyDegraded.bcInfoUY₂_le_bcInfoUY₁`,
   `IsStochasticallyDegraded.bcInfoUY₂_add_bcInfoXY₁U_le_bcInfoXY₁`: the facts that make the sum-rate
   bound of superposition coding inactive for a degraded channel.

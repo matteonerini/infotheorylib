@@ -181,7 +181,9 @@ theorem tendstoInProb_relEntropy_typeOf {Q : α → ℝ} (hQ : IsPMF Q) :
 
 /-! ### Sanov's theorem -/
 
-/-- **(11.95)** The exponent `D* = inf_{P ∈ E} D(P‖Q)` of Sanov's theorem. -/
+/-- **(11.95)** The exponent `D* = inf_{P ∈ E} D(P‖Q)` of Sanov's theorem, over the `P ∈ E` with
+`P ≪ Q`. If there is none it is `0` (the infimum of the empty set), where the book has `+∞`; then
+Sanov's bound gives only `Qⁿ(E) ≤ (n + 1)^|𝒳|`. -/
 def sanovExponent (Q : α → ℝ) (E : Set (α → ℝ)) : ℝ :=
   sInf {d | ∃ P ∈ E, IsPMF P ∧ AbsCont P Q ∧ relEntropyReal P Q = d}
 

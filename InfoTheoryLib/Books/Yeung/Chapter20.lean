@@ -49,8 +49,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ### 20.2 Convolutional Network Codes
 * Example 20.4: the scalars (20.20) on the channel `(x, y)` are those of `example_20_8` (here).
-* The ring `F⟨z⟩` of rational power series (20.23): `ratPowerSeries`, a subring of `F⟦X⟧`, with
-  its property 2, `inv_mem_ratPowerSeries` (`ForMathlib.RatPowerSeries`).
+* The ring `F⟨z⟩` of rational power series (20.23): `ratPowerSeries`, a subring of `F⟦X⟧`, which
+  is closed under inverses of power series, `inv_mem_ratPowerSeries` (`ForMathlib.RatPowerSeries`);
+  the inverse is that of `F⟦X⟧`, which is `0` when the constant term is `0`.
 * Example 20.5: `example_20_5`, `example_20_5_inv` and `example_20_5_not` (here).
 * Definition 20.6 (Convolutional Network Code): `PtpNetwork.IsConvCode` (`Network.Convolutional`).
   The global encoding kernels are unique for any power series local encoding kernels,

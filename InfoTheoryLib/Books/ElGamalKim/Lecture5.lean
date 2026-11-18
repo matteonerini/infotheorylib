@@ -22,7 +22,10 @@ files `Network.BCSuperposition`, `Network.BCDegraded` and `Network.BCCapacity`.
   Lecture 3. Information quantities such as `bcInfoXY₁U` are in nats, and a bound in bits is the
   quantity divided by `log 2`.
 * **Regions.** Rate regions are sets of pairs `R : ℝ × ℝ`, and are not intersected with
-  `R₁, R₂ ≥ 0`. The capacity region is `bcCapacityRegionBits W`, for private messages (`R₀ = 0`).
+  `R₁, R₂ ≥ 0`, whereas the notes take rates `R ≥ 0` (page 3-2). So the remark of page 5-18 that
+  `R₂ < I(X; Y₁) - δ(ε)` "is already satisfied", which follows from `R₁ + R₂ < I(X; Y₁) - δ(ε)` for
+  `R₁ ≥ 0`, does not apply to our regions. The capacity region is `bcCapacityRegionBits W`, for
+  private messages (`R₀ = 0`).
 * **Auxiliary random variable.** `U` takes values in `Fin k`, for some `k`, and `q : Fin k × 𝒳 → ℝ`
   is the pmf `p(u, x)`. As `k` is not bounded, Theorem 2 is stated up to closure, and
   `bcCapacityRegionBits_eq_card` (`Network.BCCardinality`) states it with the bound and no closure.
@@ -68,7 +71,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ### Degraded broadcast channels
 * Physical and stochastic degradedness: `IsPhysicallyDegraded`, `IsStochasticallyDegraded`
-  (`Network.Broadcast`), and the transfer `IsStochasticallyDegraded.capacityRegionBits_eq`.
+  (`Network.Broadcast`), and the transfer `IsStochasticallyDegraded.capacityRegionBits_eq`
+  (`Network.BCTimeSharing`).
 * Theorem 2: `degradedBCRegionBits`, `bcCapacityRegionBits_eq_closure_degradedBCRegionBits`
   (`Network.BCBits`, `Network.BCCapacity`). Achievability, `I(U; Y₁) ≥ I(U; Y₂)` makes the sum-rate
   bound inactive:
@@ -84,7 +88,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `binConv_bsbcNoise₂`, `isStochasticallyDegraded_of_bsbc` (`Network.BinarySymmetricBC`).
 * The Proposition: `bcCapacityRegionBits_bsbc` (`Network.BCCapacity`), from
   `bsbcSuperpositionRegion`, `degradedBCRegionBits_bsbc`, `isClosed_bsbcSuperpositionRegion`, with
-  Mrs. Gerber's lemma in `bsbc_mrsGerber_le`.
+  Mrs. Gerber's lemma in `bsbc_mrsGerber_le` (`Network.BinarySymmetricBC`).
 * Time division versus superposition: `bsbcTimeDivisionRegion`, `bsbcTimeDivisionRegion_subset`,
   and strictly for `p₁ = 0`, `p₂ = 1/4`: `bsbcTimeDivisionRegion_ssubset`.
 
@@ -129,11 +133,6 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ## Issues in the notes
 
-* **Page 5-18.** The remark that `R₂ < I(X; Y₁) - δ(ε)` "is already satisfied" follows from
-  `R₁ + R₂ < I(X; Y₁) - δ(ε)` only for `R₁ ≥ 0`, which the notes assume implicitly. Our regions are
-  not intersected with `R₁, R₂ ≥ 0`.
-* **Page 5-21.** The intermediate crossover probability is printed as `p̃₂ = (p₂ − p₁)(1 − 2p₁)`.
-  It should be `(p₂ − p₁)/(1 − 2p₁)`: `bsbc_not_forall_binConv_mul`, `binConv_bsbcNoise₂`.
 * **Page 5-39.** Case 4 of the BSC and the BEC, `H(p) < ε ≤ 1`, where "the channel does not belong
   to any of the three classes", fails at `ε = 1` and at `p = 0`, where `Y₂` is a degraded version
   of `Y₁`:

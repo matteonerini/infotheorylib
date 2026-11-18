@@ -20,12 +20,12 @@ node to the first gives a tuple with law `p(xᴺ)`.
 
 * `fillGe d₀ j x`: the tuple `x` with the entries before `j` replaced by a default value.
 * `buildAt s j`: the tuple built by the strategies `s` of the nodes from `j` on.
-* `prod_kernel_eq`: the law of a tuple is the product of the conditional laws of `X_k` given
-  `X_{k+1}, …, X_N`.
 * `netStratLaw`: the law of a random strategy.
 
 ## Main statements
 
+* `prod_kernel_eq`: the law of a tuple is the product of the conditional laws of `X_k` given
+  `X_{k+1}, …, X_N`.
 * `buildAt_eq_fillGe`: the tuple from `j` on is the part from `j` on of the whole tuple.
 * `build_eq_iff`: when strategies build a given tuple.
 * `sum_strat_build`: **the law of the tuple built by independent strategies is `p`**.

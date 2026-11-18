@@ -282,8 +282,8 @@ theorem IsStationary.hasCondEntropyRate (hP : P.IsStationary) :
   tendsto_atTop_ciInf hP.condEntropyLast_antitone
     ⟨0, by rintro _ ⟨n, rfl⟩; exact P.condEntropyLast_nonneg n⟩
 
-/-- **Theorem 4.2.1.** For a stationary process the limits (4.10) and (4.14) exist and are equal:
-`H(𝒳) = H'(𝒳)`. -/
+/-- **Theorem 4.2.1.** For a stationary process the limit (4.10) exists and is `P.entropyRate`,
+which is the limit (4.14) by `IsStationary.hasCondEntropyRate` (Theorem 4.2.2): `H(𝒳) = H'(𝒳)`. -/
 theorem IsStationary.hasEntropyRate (hP : P.IsStationary) : P.HasEntropyRate P.entropyRate := by
   have h := cesaro_mean hP.hasCondEntropyRate
   refine h.congr fun n => ?_

@@ -50,7 +50,8 @@ variable {α β : Type*} [Fintype α] [Fintype β]
 
 open Classical in
 /-- **Definition (10.72)–(10.75).** The distortion typical set `A_{d,ε}^(n)`: the jointly typical
-pairs `(xⁿ, x̂ⁿ)` whose distortion is within `ε` of `E d(X, X̂)`. -/
+pairs `(xⁿ, x̂ⁿ)` whose distortion is within `ε` of `E d(X, X̂)`. As in `jointTypicalSet`, the
+typicality bounds are non-strict. -/
 def distortionTypicalSet (q : α × β → ℝ) (d : α → β → ℝ) (n : ℕ) (ε : ℝ) :
     Finset ((Fin n → α) × (Fin n → β)) :=
   (jointTypicalSet q n ε).filter fun z =>

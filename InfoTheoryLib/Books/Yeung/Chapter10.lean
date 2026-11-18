@@ -110,10 +110,11 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   (`DifferentialEntropy.Joint`).
 * Proposition 10.32: `proposition_10_32` (here), which is `diffEntropy_eq_sum_condDiffEntropyLast`
   (`DifferentialEntropy.ChainRule`), for a joint density.
-* Theorem 10.33: `theorem_10_33` (here), from `mutualInfoOfCondPDF_nonneg` and
-  `mutualInfoOfCondPDF_eq_zero_iff` (`DifferentialEntropy.Mixed`).
-* Corollary 10.34: `corollary_10_34` (here), from `condMutualInfoOfCondPDF_nonneg` and
-  `condMutualInfoOfCondPDF_eq_zero_iff` (`DifferentialEntropy.Mixed`).
+* Theorem 10.33: the inequality `theorem_10_33` (here), which is `mutualInfoOfCondPDF_nonneg`,
+  and the equality case `mutualInfoOfCondPDF_eq_zero_iff` (`DifferentialEntropy.Mixed`).
+* Corollary 10.34: the inequality `corollary_10_34` (here), which is
+  `condMutualInfoOfCondPDF_nonneg`, and the equality case `condMutualInfoOfCondPDF_eq_zero_iff`
+  (`DifferentialEntropy.Mixed`).
 * Corollary 10.35: `condDiffEntropy_le`, `condDiffEntropy_eq_iff` (`DifferentialEntropy.Joint`), for
   a joint density.
 * Corollary 10.36: `diffEntropy_le_sum_coordMarginal`, `diffEntropy_eq_sum_coordMarginal_iff`
@@ -122,7 +123,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### 10.4 The AEP for Continuous Random Variables
 * Theorem 10.37: `theorem_10_37` (here), which is `tendstoInMeasure_sampleDiffEntropy`
   (`DifferentialEntropy.AEP`).
-* Definition 10.38: `diffTypicalSet` (`DifferentialEntropy.AEP`).
+* Definition 10.38: `diffTypicalSet` (`DifferentialEntropy.AEP`), with `≤ ε` as in Definition 5.2,
+  where Definition 10.38 has `< ε`, and with `f(xᵢ) > 0`; so the bounds of Theorem 10.40 are
+  non-strict.
 * Definition 10.39: Mathlib's `MeasureTheory.volume`.
 * Theorem 10.40: `prodPDF_bounds`, `eventually_prob_diffTypicalSet_gt`, `volume_diffTypicalSet_le`,
   `eventually_volume_diffTypicalSet_ge` (`DifferentialEntropy.AEP`).
@@ -130,8 +133,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 ### 10.5 Informational Divergence
 * Definition 10.41: `relEntropyPDF` (`DifferentialEntropy.RelativeEntropy`), with `f ≪ g` and the
   integrability of `f log (f/g)` in place of the convention `c log (c/0) = ∞`.
-* Theorem 10.42: `theorem_10_42` (here), from `relEntropyPDF_nonneg` and
-  `relEntropyPDF_eq_zero_iff` (`DifferentialEntropy.RelativeEntropy`).
+* Theorem 10.42: the inequality `theorem_10_42` (here), which is `relEntropyPDF_nonneg`, and the
+  equality case `relEntropyPDF_eq_zero_iff` (`DifferentialEntropy.RelativeEntropy`).
 
 ### 10.6 Maximum Differential Entropy Distributions
 * Theorem 10.43 and Corollary 10.44: `diffEntropy_le_of_eq_exp`, `diffEntropy_eq_of_eq_exp_iff`
@@ -258,16 +261,19 @@ alias proposition_10_31 := diffEntropy_outPDF_eq_add
 /-- **Proposition 10.32 (Chain Rule for Differential Entropy).** (10.139) -/
 alias proposition_10_32 := diffEntropy_eq_sum_condDiffEntropyLast
 
-/-- **Theorem 10.33.** (10.140) -/
+/-- **Theorem 10.33**, the inequality (10.140); the equality case is
+`mutualInfoOfCondPDF_eq_zero_iff`. -/
 alias theorem_10_33 := mutualInfoOfCondPDF_nonneg
 
-/-- **Corollary 10.34.** (10.149) -/
+/-- **Corollary 10.34**, the inequality (10.149); the equality case is
+`condMutualInfoOfCondPDF_eq_zero_iff`. -/
 alias corollary_10_34 := condMutualInfoOfCondPDF_nonneg
 
 /-- **Theorem 10.37 (AEP I for Continuous Random Variables).** (10.152) -/
 alias theorem_10_37 := tendstoInMeasure_sampleDiffEntropy
 
-/-- **Theorem 10.42 (Divergence Inequality).** (10.174) -/
+/-- **Theorem 10.42 (Divergence Inequality)**, the inequality (10.174); the equality case is
+`relEntropyPDF_eq_zero_iff`. -/
 alias theorem_10_42 := relEntropyPDF_nonneg
 
 /-- **Theorem 10.45.** If `EX² = κ`, then `h(X) ≤ ½ log (2πeκ)`, with equality iff `X ∼ N(0, κ)`. -/
@@ -306,7 +312,8 @@ theorem theorem_10_47 {ι : Type*} [Fintype ι] [DecidableEq ι] {K : Matrix ι 
     diffEntropy_eq_of_partialCovariance_iff hK (fun _ _ => True) (fun _ _ h => absurd trivial h)
       hg hent hint fun a b _ => hcorr a b⟩
 
-/-- **Theorem 10.48.** (10.201) -/
+/-- **Theorem 10.48**, the inequality (10.201); the equality case is
+`diffEntropy_eq_of_covariance_iff`. -/
 alias theorem_10_48 := diffEntropy_le_of_covariance
 
 end InfoTheory.Yeung

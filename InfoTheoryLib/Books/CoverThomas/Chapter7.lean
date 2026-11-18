@@ -38,7 +38,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   (`ChannelCoding.Capacity`).
 * 7.1.1 Noiseless binary channel: `noiselessChannel`, `capacity_noiselessChannel` (here).
 * 7.1.2 Noisy channel with nonoverlapping outputs: `nonoverlappingChannel`,
-  `capacity_nonoverlappingChannel` (here).
+  `mutualInfoOf_nonoverlappingChannel`, `capacity_nonoverlappingChannel` (here).
 * 7.1.3 Noisy typewriter: `typewriterChannel`, `capacity_typewriterChannel` (here).
 * 7.1.4 Binary symmetric channel, (7.2)–(7.7): `bsc`, `capacity_bsc` (here).
 * 7.1.5 Binary erasure channel, (7.8)–(7.16): `bec`, `mutualInfoOf_bec`, `capacity_bec` (here).
@@ -277,7 +277,7 @@ lemma bec_isChannel {a : ℝ} (h0 : 0 ≤ a) (h1 : a ≤ 1) : IsChannel (bec a) 
    by cases x <;> simp [bec, Fintype.sum_option]⟩
 
 /-- **Section 7.1.5, (7.11)–(7.14).** With `π = Pr{X = 1}`, the binary erasure channel has
-`H(Y) = H(a) + (1 - a) H(π)` and `I(X; Y) = (1 - a) H(π)`. -/
+`I(X; Y) = (1 - a) H(π)`. -/
 theorem mutualInfoOf_bec {a : ℝ} (h0 : 0 ≤ a) (h1 : a ≤ 1) {p : Bool → ℝ} (hp : IsPMF p) :
     mutualInfoOf p (bec a) = (1 - a) * binEntropy (p true) := by
   have hpf : p false = 1 - p true := by
@@ -475,6 +475,9 @@ alias theorem_7_6_1_card := card_jointTypicalSet_le
 
 /-- **Theorem 7.6.1 (Joint AEP), part 3.** -/
 alias theorem_7_6_1_indep := prob_indep_jointTypicalSet_le
+
+/-- **Theorem 7.6.1 (Joint AEP), part 3, the lower bound (7.40).** -/
+alias theorem_7_6_1_indep_lower := eventually_prob_indep_jointTypicalSet_ge
 
 /-- **Theorem 7.7.1 (The channel coding theorem), achievability.** -/
 alias theorem_7_7_1 := isAchievableRate_of_lt_capacity

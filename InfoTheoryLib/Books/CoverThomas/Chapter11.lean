@@ -36,7 +36,9 @@ The end-of-chapter problems and the historical notes are not included.
   theorem, Chernoff information).
 * **Estimation.** Section 11.10 is formalized for parametric families on a finite space
   (`ParamFamily`), where differentiating under the sum is automatic; the Gaussian family of
-  Example 11.10.2 is treated here.
+  Example 11.10.2 is treated here. The parameter set `Θ` is open, so that unbiasedness on `Θ` gives
+  `∂/∂θ E_θ T = 1`; with `Θ = ℝ` no estimator on a finite space could be unbiased, as `E_θ T` is
+  bounded. `ParamFamily.isEfficient_bernoulli` shows that the hypotheses can hold.
 
 ## Index
 
@@ -119,7 +121,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `ParamFamily.fisherInfo` (11.270), `ParamFamily.IsEfficient` (`Statistics.FisherInformation`).
 * (11.265)–(11.269): `ParamFamily.sum_mul_score`; (11.271)–(11.279): `ParamFamily.iid`,
   `ParamFamily.score_iid`, `ParamFamily.fisherInfo_iid`.
-* Theorem 11.10.1: `ParamFamily.cramerRao`; (11.290): `ParamFamily.cramerRao_bias`.
+* Theorem 11.10.1: `ParamFamily.cramerRao`; (11.290): `ParamFamily.cramerRao_bias`; an efficient
+  estimator for the Bernoulli family: `ParamFamily.isEfficient_bernoulli`.
 * Example 11.10.2: `hasDerivAt_log_gaussianPDFReal`, `example_11_10_2` (here).
 
 ## Not formalized
@@ -133,6 +136,10 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   are replaced by the proofs of Theorems 11.8.3 and 11.9.1; Example 11.9.2 (football).
 * Example 11.10.1 (exponential estimators), the multiparameter Cramér–Rao inequality
   (11.291)–(11.292), and the Cramér–Rao inequality for densities (proved for finite families).
+* Example 11.10.2 for `n` observations (`J(θ) = n/σ²`, `E(X̄ₙ - θ)² = σ²/n`): only `n = 1` is
+  formalized; `fisherInfo_iid` gives `Jₙ = n J` for finite families.
+* The second half of Example 11.1.2, the die with pmf `(1/3, 1/3, 1/6, 1/12, 1/12, 0)`, which is an
+  instance of `iidPMF_eq_exp_entropy`.
 -/
 
 open Real MeasureTheory ProbabilityTheory Finset Filter Topology

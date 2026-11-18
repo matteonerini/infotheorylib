@@ -28,7 +28,6 @@ Theorem 3 of Lecture 17 of El Gamal and Kim and its special cases.
 * `isAchievableRC_of_fun`: the case where `U` is a function of `(X, X₁)`.
 * `isAchievableRC_decodeForward`: **Theorem 2, decode–forward**.
 * `isAchievableRC_multihop`: the coherent multi-hop lower bound.
-* `isAchievableRC_direct`: the direct transmission lower bound.
 
 ## Implementation notes
 

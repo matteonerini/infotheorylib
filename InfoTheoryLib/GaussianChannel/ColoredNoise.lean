@@ -26,7 +26,7 @@ maximization is solved by Hadamard's inequality and water-filling.
 
 * `coloredInfoCapacity_eq_parallel`: rotating by the eigenvectors of `K_Z`, the channel is
   equivalent to parallel channels with noise variances `λᵢ`.
-* `coloredInfoCapacity_eq`: water-filling on the eigenvalues of `K_Z`, (9.105).
+* `coloredInfoCapacity_eq`: water-filling on the eigenvalues of `K_Z`, (9.82)–(9.96).
 * `det_add_le_prod_max`: (9.83)–(9.96), `|K_X + K_Z| ≤ ∏ᵢ max(ν, λᵢ)` if `tr K_X ≤ ∑ᵢ (ν - λᵢ)⁺`.
 * `det_waterFill_add`: equality for `K_X = Q diag((ν - λᵢ)⁺) Qᵀ`.
 * `isGreatest_capacityNoFB`, `capacityNoFB_eq`: (9.104)–(9.106), the maximum defining `C_n` is
@@ -149,9 +149,10 @@ theorem coloredInfoCapacity_eq_parallel (hK : K.PosDef) (P : ℝ) :
     refine ⟨f, hf'.comp_measurePreserving T.symm hTs, h2, hsum.trans_le hP', ?_⟩
     rw [hI f, hfT]
 
-/-- **(9.105)** The information capacity of the Gaussian channel with colored noise `N(0, K_Z)` is
-given by water-filling on the eigenvalues `λᵢ` of `K_Z`: `C = ∑ᵢ ½ log (1 + (ν - λᵢ)⁺/λᵢ)`, where
-`∑ᵢ (ν - λᵢ)⁺ = P`. -/
+/-- **(9.82)–(9.96)** The information capacity of the Gaussian channel with colored noise
+`N(0, K_Z)` and total power `P` is given by water-filling on the eigenvalues `λᵢ` of `K_Z`:
+`C = ∑ᵢ ½ log (1 + (ν - λᵢ)⁺/λᵢ)`, where `∑ᵢ (ν - λᵢ)⁺ = P`. This is `n` times the normalized
+`Cₙ` of (9.105) at power `P/n`. -/
 theorem coloredInfoCapacity_eq (hK : K.PosDef) {P ν : ℝ} (hν : 0 < ν)
     (hνP : ∑ i, waterFill (PosDef.eigval hK) ν i = P) :
     coloredInfoCapacity K P =

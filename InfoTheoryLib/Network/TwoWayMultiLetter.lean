@@ -16,7 +16,7 @@ with a common output is the closure of the union of the regions of strategies of
 
 ## Main definitions
 
-* `blockEnc`: the encoder that runs a strategy in each block of `k` symbols.
+* `stratAt`: the encoder that runs a strategy in each block of `k` symbols.
 * `blockCode`: the code on the channel of a code on the super-channel.
 
 ## Main statements

@@ -17,7 +17,6 @@ the notes put in the first one. The letters of a sequence that are hidden are re
 ## Main definitions
 
 * `maskLt t x`, `maskGe t x`: the letters of `x` before `t` and from `t` on.
-* `KaspiCode.kU`: the auxiliary letter.
 
 ## Main statements
 

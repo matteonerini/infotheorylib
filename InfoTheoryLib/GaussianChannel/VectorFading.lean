@@ -30,7 +30,8 @@ is attained by `K* = (P/t) I`. The operational meaning of the rate is not formal
 
 ## Implementation notes
 
-A finitely supported law cannot be invariant under all orthogonal matrices unless `G = 0`. We ask
+A finitely supported law cannot be invariant under all orthogonal matrices unless `G = 0` or
+`t = 1`. We ask
 for the invariance under the flips of a sign and the transpositions of two columns only, which every
 orthogonally invariant law has. The proof does not average over a group: the invariance makes the
 matrix `E[Gᵀ (I + (P/t) G Gᵀ)⁻¹ G]` a multiple of the identity, which is the KKT condition for

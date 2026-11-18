@@ -24,6 +24,11 @@ default value. This avoids dependent types for the histories.
 
 * `run_apply`: the index of round `l` is `g l` of the indices of the previous rounds.
 * `runTo_congr`: two protocols that agree along the run have the same transcript.
+
+## References
+
+* [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
+  Lecture 21
 -/
 
 @[expose] public noncomputable section

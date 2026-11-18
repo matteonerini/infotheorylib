@@ -278,7 +278,9 @@ lemma minExpectedLength_le_expectedLength {α : Type*} [Fintype α] (hα : 2 ≤
   exact minExpectedLength_le hα hp (l := fun x => (C x).length)
     (kraft_of_isUniquelyDecodableCode hC)
 
-/-- **Theorem 5.4.1, (5.33).** The optimal expected length satisfies `H_D(X) ≤ L* < H_D(X) + 1`. -/
+/-- **Theorem 5.4.1, (5.33).** The optimal expected length satisfies `H_D(X) ≤ L* < H_D(X) + 1`.
+We assume `p > 0`: with a symbol of probability `0` the strict upper bound can fail, e.g. for
+`p = (1, 0)` and `D = 2`, where `H = 0` and `L* = 1`. -/
 theorem minExpectedLength_bounds {D : ℕ} (hD : 2 ≤ D) {p : X → ℝ} (hp : IsPMF p)
     (hpos : ∀ x, 0 < p x) :
     entropyBase D p ≤ minExpectedLength D p ∧ minExpectedLength D p < entropyBase D p + 1 :=
@@ -393,7 +395,9 @@ theorem minExpectedLength_iid_bounds {α : Type*} [Fintype α] {D : ℕ} (hD : 2
   · rw [div_lt_iff₀ hn', add_mul, one_div_mul_cancel hn'.ne']; linarith
 
 /-- **(5.38)–(5.39)** For a stochastic process, the optimal expected length per symbol of codes for
-blocks of `n` symbols satisfies `H_D(X₁, …, Xₙ)/n ≤ L*ₙ/n ≤ H_D(X₁, …, Xₙ)/n + 1/n`. -/
+blocks of `n` symbols satisfies `H_D(X₁, …, Xₙ)/n ≤ L*ₙ/n ≤ H_D(X₁, …, Xₙ)/n + 1/n`. The book's
+upper bound is strict, which can fail when a block has probability `0`, as in
+`minExpectedLength_bounds`. -/
 theorem minExpectedLength_process_bounds {α : Type*} [Fintype α] {D : ℕ} (hD : 2 ≤ D)
     (P : StochasticProcess α) {n : ℕ} (hn : 0 < n) :
     P.jointEntropy n / log D / n ≤ minExpectedLength D (P.law n) / n ∧

@@ -37,6 +37,7 @@ exchanged.
 * `sum_superposition_atyp_le`, `sum_superposition_satellite_le`,
   `sum_superposition_wrongCloud_le`: the events `E₁₁`, `E₁₂`, `E₁₃` of the notes.
 * `sum_superposition_cloudAtyp_eq`, `sum_superposition_cloudWrong_le`: the events `E₂₁`, `E₂₂`.
+  These five are in `Network.BCSuperpositionLaws`.
 * `sum_codebook_superpositionDecode_le`, `sum_codebook_superpositionCloudDecode_le`: the
   probabilities of error of the two decoders, averaged over the random codebooks.
 * `exists_bcCode_superposition`, `exists_bcCode_superposition₂`: some code does at least this well.

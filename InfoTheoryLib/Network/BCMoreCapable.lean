@@ -22,6 +22,7 @@ closure of the set of rate pairs with `R₁ ≤ I(X; Y₁ | U)`, `R₂ ≤ I(U; 
 
 ## Main statements
 
+* `BCCode.log_add_log_le_sum_bcInfoXY₁`: a bound for a single code.
 * `IsMoreCapable.bcInfoXY₂U_le_bcInfoXY₁U`: `I(X; Y₂ | V) ≤ I(X; Y₁ | V)` if `Y₁` is more capable.
 * `mem_superpositionClosedRegionBits_of_mem_moreCapableAltRegionBits`: the "check!" of page 5-41,
   the alternative region with `R₂ ≥ 0` lies in the superposition coding region.

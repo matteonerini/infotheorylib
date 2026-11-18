@@ -64,7 +64,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The rate: `gkRate`, `gkRate_ge`.
 * The cells: `GKCell`, `gkRoute`, `gkS`, `gkL`, the Chernoff bound `gkProb_count_ge`, and
   `gkProb_empty_le`, `gkProb_gkS_ge`, `gkProb_gkL_ge` (`Network.GuptaKumarCells`).
-* **Lemma 1:** `gk_lemma1`, here `gupta_kumar_lemma_1`.
+* **Lemma 1:** `gk_lemma1`, here `lemma_20_1`.
 * **The lower bound** on the rate, with probability tending to one: `gkRate_whp`, here
   `gupta_kumar_lower`.
 
@@ -73,7 +73,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   network: `gvRate_submatrix_le`, `IsAchievableGN.sum_le_gain`, `IsAchievableGN.sum_le_sum_log`.
 * The integrals: `integral_gkLog_le`, `integral_gkLog_ge`, `integral_gkLog_sq_le`
   (`Network.GuptaKumarLemma2`). Chebyshev's inequality: `pi_sum_ge_le`, `pi_gkLog_ge_le`.
-* **Lemma 2:** `gkD_whp`, here `gupta_kumar_lemma_2`.
+* **Lemma 2:** `gkD_whp`, here `lemma_20_2`.
 * **The upper bound**, with probability tending to one: `gk_upper_whp`, `gk_capacity_upper_whp`,
   here `gupta_kumar_upper`.
 
@@ -217,7 +217,7 @@ theorem ic_one_rate {N : ℕ} (hN : 0 < N) {P : ℝ} (hP : 0 ≤ P) :
   ring
 
 /-- **Lemma 1, page 20-28**, for routes along the rows and the columns. -/
-theorem gupta_kumar_lemma_1 :
+theorem lemma_20_1 :
     Tendsto (fun N : ℕ => gkProb (fun ω : Fin N → GKCell (gkSide N) × GKCell (gkSide N) =>
       (∃ c : GKCell (gkSide N), ∀ j, ¬(ω j).1 = c) ∨
         13 * ((N : ℝ) * log N) ^ (1 / 2 : ℝ) ≤ (gkS ω : ℝ) + gkL ω)) atTop (𝓝 0) :=
@@ -232,7 +232,7 @@ theorem gupta_kumar_lower {ν P : ℝ} (hν : 2 < ν) (hP : 0 < P) :
   gkRate_whp hν hP
 
 /-- **Lemma 2, page 20-34.** -/
-theorem gupta_kumar_lemma_2 {ν P : ℝ} (hν : 2 < ν) (hP : 0 < P) :
+theorem lemma_20_2 {ν P : ℝ} (hν : 2 < ν) (hP : 0 < P) :
     ∃ b > 0, Tendsto (fun N : ℕ =>
       gkLaw N {w | b * ((N : ℝ) ^ (1 / 2 + 1 / ν) * log N) ≤ gkD ν P N w}) atTop (𝓝 0) :=
   gkD_whp hν hP

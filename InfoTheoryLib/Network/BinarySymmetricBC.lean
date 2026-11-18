@@ -32,7 +32,6 @@ time division.
 ## Main statements
 
 * `isStochasticallyDegraded_of_bsbc`: the BS-BC is degraded.
-* `bsbc_not_forall_binConv_mul`: the formula `p̃₂ = (p₂ - p₁)(1 - 2 p₁)` of the notes is a typo.
 * `bsbc_mrsGerber_le`: Mrs. Gerber's lemma for the BS-BC, `H(Y₂ | U) ≥ H(H⁻¹(H(Y₁ | U)) ∗ p̃₂)`.
 * `degradedBCRegionBits_bsbc`: **the Proposition of Lecture 5**, the region of the degraded DM-BC
   is `R₁ ≤ H(a ∗ p₁) - H(p₁)`, `R₂ ≤ 1 - H(a ∗ p₂)` for some `a ∈ [0, 1/2]`.
@@ -171,8 +170,7 @@ theorem isPhysicallyDegraded_bsbcDegraded (hp₁ : 0 ≤ p₁) (hp₁₂ : p₁ 
 /-- **Example (Lecture 5 of [elgamal2010], page 5-21).** The BS-BC is degraded: a broadcast channel
 whose conditional marginals are `BSC(p₁)` and `BSC(p₂)` with `p₁ ≤ p₂ ≤ 1/2` is stochastically
 degraded, `Y₂` being the output of `BSC(p̃₂)` with input `Y₁`, where `p̃₂ = (p₂ - p₁)/(1 - 2p₁)`
-satisfies `p₁ ∗ p̃₂ = p₂`. (The notes write `p̃₂ = (p₂ - p₁)(1 - 2p₁)`, see
-`bsbc_not_forall_binConv_mul`.) -/
+satisfies `p₁ ∗ p̃₂ = p₂`. -/
 theorem isStochasticallyDegraded_of_bsbc {W : Bool → Bool × Bool → ℝ}
     (h₁ : bcMarg₁ W = bsbcBSC p₁) (h₂ : bcMarg₂ W = bsbcBSC p₂) (hp₁₂ : p₁ ≤ p₂)
     (hp₂ : p₂ ≤ 1 / 2) : IsStochasticallyDegraded W := by
@@ -180,14 +178,6 @@ theorem isStochasticallyDegraded_of_bsbc {W : Bool → Bool × Bool → ℝ}
   refine ⟨bsbcBSC (bsbcNoise₂ p₁ p₂), bsbcBSC_isChannel hn.1 (hn.2.trans (by norm_num)),
     fun x y₂ => ?_⟩
   rw [h₁, h₂, sum_bsbcBSC_mul, binConv_bsbcNoise₂ hp₁₂ hp₂]
-
-/-- The formula `p̃₂ = (p₂ - p₁)(1 - 2p₁)` of the notes (page 5-21) is a typo: for `p₁ = 1/4` and
-`p₂ = 3/8` it gives `p₁ ∗ p̃₂ = 9/32 ≠ p₂`. The right value is `bsbcNoise₂ p₁ p₂`. -/
-lemma bsbc_not_forall_binConv_mul :
-    ¬ ∀ p₁ p₂ : ℝ, 0 ≤ p₁ → p₁ < p₂ → p₂ < 1 / 2 → binConv p₁ ((p₂ - p₁) * (1 - 2 * p₁)) = p₂ :=
-  fun h => by
-    have := h (1 / 4) (3 / 8) (by norm_num) (by norm_num) (by norm_num)
-    norm_num [binConv] at this
 
 /-! ### Information quantities of the BS-BC -/
 

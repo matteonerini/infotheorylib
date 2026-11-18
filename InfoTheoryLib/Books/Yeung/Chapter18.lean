@@ -14,8 +14,8 @@ public import InfoTheoryLib.Network.NoiselessRouting
 This file indexes the formalization of Chapter 18 of [yeung2008], and contains its worked examples
 and aliases named after the numbers of the results, so the index is checked by Lean. It cites the
 draft of 15 November 2007, which numbers definitions, theorems and examples with one counter per
-chapter. The end-of-chapter problems and the historical notes are not included, except Problems 2a
-and 3, which complete the proofs of the text.
+chapter. The end-of-chapter problems and the historical notes are not included, except Problems 1,
+2a and 3, which complete the proofs of the text.
 
 ## Conventions
 

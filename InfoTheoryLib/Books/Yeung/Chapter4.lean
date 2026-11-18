@@ -187,7 +187,8 @@ theorem example_4_12 :
     exact huffmanCost_le_expectedLength pmf_4_12_isPMF.nonneg (by simp) hC
 
 /-- **Example 4.13.** For a quaternary code for the source of Example 4.12, two dummy symbols make
-the number of symbols `7 = 4 + 1 · 3`, and at most `D - 2` are needed in general. -/
+the number of symbols `7 = 4 + 1 · 3`, and `2 ≤ D - 2`. That at most `D - 2` are needed in general
+is `exists_dummy_symbols`. -/
 theorem example_4_13 : 5 + 2 = 4 + 1 * (4 - 1) ∧ 2 ≤ 4 - 2 := by
   norm_num
 

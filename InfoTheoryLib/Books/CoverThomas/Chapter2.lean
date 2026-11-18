@@ -80,7 +80,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Theorem 2.6.3: `relEntropyReal_nonneg`, `relEntropy_eq_zero_iff`, …
   (`RelativeEntropy.InformationInequality`).
 * Corollaries (2.90)–(2.92): `mutualInfo_nonneg`, `mutualInfo_eq_zero_iff`
-  (`MutualInformation.Basic`), `condRelEntropy_nonneg` (`RelativeEntropy.Conditional`),
+  (`MutualInformation.Basic`), `condRelEntropy_nonneg`, `condRelEntropy_eq_zero_iff`
+  (`RelativeEntropy.Conditional`),
   `condMutualInfo_nonneg`, `condMutualInfo_eq_zero_iff` (`MutualInformation.Conditional`).
 * Theorems 2.6.4–2.6.6 and their equality cases: `entropy_le_log_card`, `entropy_eq_log_card_iff`,
   `condEntropy_le_entropy`, `condEntropy_eq_entropy_iff`, `entropy_prefixRV_le_sum`,
@@ -89,7 +90,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * Example 2.6.1: `example_2_6_1_HX`, …, `example_2_6_1_remark` (here).
 
 ### 2.7 Log sum inequality and its applications
-* Theorem 2.7.1: `log_sum_inequality` (`Analysis.LogSum`).
+* Theorem 2.7.1: `log_sum_inequality`, with equality `log_sum_inequality_eq_iff`
+  (`Analysis.LogSum`).
 * (2.102)–(2.104): `relEntropyReal_nonneg'` (`RelativeEntropy.Convexity`).
 * Theorem 2.7.2: `relEntropyReal_convex_pair`, `relEntropy_convex_pair`
   (`RelativeEntropy.Convexity`).

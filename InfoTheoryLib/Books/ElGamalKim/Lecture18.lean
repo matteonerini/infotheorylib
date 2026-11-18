@@ -27,7 +27,8 @@ dependence balance bound, directed information and the multi-letter capacity reg
 ## Conventions
 
 * **Rates.** Rates are in bits with `2 ^ ⌈n R⌉` messages, and informations are in nats, so that a
-  condition is written as `R * log 2 < I`.
+  condition is written as `R * log 2 < I`. The exception is Theorem 1, `theorem_18_1`, which is the
+  feedback capacity of Cover and Thomas, in nats with `⌈e^{n R}⌉` messages.
 * **Laws with feedback.** All the codes are feedback laws, `fbLaw ν W enc n`, of a message and the
   outputs.
 * **Errors of a two-way code.** `TWCCode.errProb` is the sum of the errors of the two nodes, which

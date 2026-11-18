@@ -78,7 +78,9 @@ lemma SourceChannelCode.errProb_eq [Nonempty α] {n : ℕ} (P : StochasticProces
 /-! ### The converse -/
 
 /-- **Theorem 7.13.1 (converse), (7.143)–(7.150).** If a source can be sent over the channel with
-probability of error `Pₑ^(n) → 0`, its entropy rate is at most the capacity: `H(𝒱) ≤ C`. -/
+probability of error `Pₑ^(n) → 0`, its entropy rate is at most the capacity: `H(𝒱) ≤ C`. The
+process need not be stationary; `P.entropyRate` is `inf H(Vₙ₊₁ | Vⁿ)`, which is the entropy rate
+`H(𝒱)` for a stationary process. -/
 theorem entropyRate_le_capacity [Nonempty α] (P : StochasticProcess 𝒱) {W : α → β → ℝ}
     (hW : IsChannel W) (c : ∀ n, SourceChannelCode n 𝒱 α β)
     (hc : Tendsto (fun n => (c n).errProb P W) atTop (𝓝 0)) : P.entropyRate ≤ capacity W := by

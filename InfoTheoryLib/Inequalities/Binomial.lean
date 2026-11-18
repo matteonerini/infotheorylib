@@ -48,7 +48,7 @@ open Real Nat Stirling
 namespace InfoTheory
 
 /-- `sₙ ≤ s₁ = e/√2` for `n ≥ 1`. -/
-lemma stirlingSeq_le_one {n : ℕ} (hn : 1 ≤ n) : stirlingSeq n ≤ exp 1 / √2 := by
+lemma stirlingSeq_le_exp_one_div_sqrt_two {n : ℕ} (hn : 1 ≤ n) : stirlingSeq n ≤ exp 1 / √2 := by
   obtain ⟨n, rfl⟩ := exists_add_of_le hn
   rw [← stirlingSeq_one, add_comm]
   exact stirlingSeq'_antitone (Nat.zero_le n)
@@ -191,7 +191,7 @@ theorem choose_mul_pow_le' {k m : ℕ} (hk : 0 < k) (hm : 0 < m) :
   have hσ : π ≤ stirlingSeq k * stirlingSeq m := by
     rw [← hpi]; exact mul_le_mul hsk hsm (sqrt_nonneg _) ((sqrt_nonneg _).trans hsk)
   have hN : stirlingSeq (k + m) * √2 ≤ exp 1 := by
-    have := stirlingSeq_le_one (n := k + m) (by omega)
+    have := stirlingSeq_le_exp_one_div_sqrt_two (n := k + m) (by omega)
     rwa [le_div_iff₀ (sqrt_pos.2 two_pos)] at this
   have he : exp 1 * √π ≤ 2 * π := by
     have := sqrt_pi_gt

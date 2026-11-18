@@ -12,11 +12,11 @@ public import InfoTheoryLib.Network.GaussianVectorBC
 /-!
 # El Gamal & Kim, Lecture 10: Gaussian Vector Channels
 
-This file indexes the formalization of Lecture 10 of [elgamal2010] and contains two examples. We
-prove the capacity of the Gaussian vector channel as a coding theorem. The other results are about
-the formulas: the coding theorems for the MAC and the BC are for continuous alphabets, and the
-converse for the Gaussian vector BC needs the vector entropy power inequality, which the library
-does not have.
+This file indexes the formalization of Lecture 10 of [elgamal2010] and contains two special
+cases. We prove the capacity of the Gaussian vector channel as a coding theorem. The other results
+are about the formulas: the coding theorems for the MAC and the BC are for continuous alphabets,
+and the converse for the Gaussian vector BC needs the vector entropy power inequality, which the
+library does not have.
 
 ## Conventions
 
@@ -30,7 +30,7 @@ does not have.
 * **Fading.** There are finitely many states, as in Lecture 8. Isotropy is the invariance of the law
   under sign flips and transpositions of the transmit antennas, which every orthogonally invariant
   law has, as a finitely supported law cannot be invariant under all orthogonal matrices unless
-  `G = 0`.
+  `G = 0` or `t = 1`.
 
 ## Index
 
@@ -220,7 +220,8 @@ private lemma mul_rowGain_le (g : t → ℝ) {K : Matrix t t ℝ} (hK : K.PosSem
     _ = _ := by ring
 
 omit [DecidableEq t] in
-/-- **Example (Lecture 10), page 10-5.** With one receive antenna the capacity formula is
+/-- **Lecture 10, pages 10-4 and 10-5**, a special case (not an example of the notes). With one
+receive antenna the capacity formula is
 `½ log (1 + ‖g‖² P)`, attained by beamforming along `g`: the only singular value is `‖g‖`. -/
 theorem gvCapacity_rowGain (g : t → ℝ) {P : ℝ} (hP : 0 ≤ P) (hg : 0 < ∑ j, g j ^ 2) :
     gvCapacity (rowGain g) P = 1 / 2 * log (1 + (∑ j, g j ^ 2) * P) := by

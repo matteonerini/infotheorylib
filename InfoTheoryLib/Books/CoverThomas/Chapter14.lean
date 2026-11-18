@@ -121,7 +121,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * The refinement (14.9) of Theorem 14.2.3 and the bounds (14.20), (14.40) with `log* n`: we prove
   them with `2 log₂ (l + 1)` and `2 log₂ (log₂ (n + 1) + 1)`; the convention `K(x | y, y*)`.
 * Examples 14.2.2, 14.2.3, 14.2.5 and 14.2.6 (`π`, weather, fractals, the Mona Lisa), and the
-  bound (14.24) with `½ log n` for all strings, which fails for `k` or `n - k` bounded (see
+  bound (14.24) with `½ log n` for all strings: Theorem 14.2.5 is proved with `log₂ (n + 1)` in
+  place of `½ log₂ n`, and with `½ log₂ n` and an extra term for `0 < k < n` (see
   `Kolmogorov.BinaryStrings`).
 * The upper bound of Theorem 14.3.1 for alphabets with more than two letters, (14.34)–(14.35).
 * The discussion of the halting problem in Section 14.7 (Mathlib proves it,
@@ -178,7 +179,7 @@ alias theorem_14_2_3 := complexity_le_complexity_length_add
 /-- **Theorem 14.2.4 (Lower bound on Kolmogorov complexity).** -/
 alias theorem_14_2_4 := Computer.card_lt_two_pow_of_complexity_lt
 
-/-- **Theorem 14.2.5.** -/
+/-- **Theorem 14.2.5**, with `log₂ (n + 1)` in place of the book's `½ log₂ n`. -/
 alias theorem_14_2_5 := complexity_le_binEntropy
 
 /-- **Lemma 14.3.1.** -/
@@ -212,7 +213,7 @@ alias theorem_14_6_1 := Computer.IsUniversal.universalProb_ge
 alias theorem_14_9_1 := Computer.length_le_logb_gamblingWealth_add
 
 /-- **Section 14.7** Kolmogorov complexity is not computable. -/
-alias section_14_7 := not_computable_complexity
+alias noncomputability_of_complexity := not_computable_complexity
 
 /-- **Theorem 14.11.1 (lower half).** -/
 alias theorem_14_11_1_lower := Computer.two_pow_neg_complexity_le_universalProb

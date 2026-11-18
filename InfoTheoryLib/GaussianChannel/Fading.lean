@@ -284,7 +284,8 @@ lemma fadingPowerValue_eq_of_large {q g : 𝒢 → ℝ} (hq : IsPMF q) (hg : ∀
   ring
 
 /-- **Lecture 8 of [elgamal2010], page 8-6.** At high SNR, the capacity gain from power control
-vanishes: `C_SI-ED - C_SI-D → 0` as `P → ∞`. -/
+vanishes: `C_SI-ED - C_SI-D → 0` as `P → ∞`, for nonzero gains. With a zero gain of probability
+`q₀ > 0` the gap tends to `((1 - q₀)/2) log(1/(1 - q₀)) > 0`. -/
 theorem tendsto_fadingPowerValue_sub_fadingErgodic {q g : 𝒢 → ℝ} (hq : IsPMF q)
     (hg : ∀ s, g s ≠ 0) :
     Tendsto (fun P => fadingPowerValue q g P - fadingErgodic q g P) atTop (𝓝 0) := by
@@ -326,8 +327,8 @@ theorem tendsto_fadingPowerValue_sub_fadingErgodic {q g : 𝒢 → ℝ} (hq : Is
 
 /-! ### Slow fading -/
 
-/-- **Lecture 8 of [elgamal2010], page 8-8.** `C_CC ≤ E C(G²P)`: the adaptive capacity is at least
-the compound capacity. -/
+/-- **Lecture 8 of [elgamal2010], pages 8-8 and 8-10.** `C_CC ≤ E C(G²P)`: the adaptive capacity
+is at least the compound capacity. -/
 theorem fadingCompoundValue_le_fadingErgodic [Nonempty 𝒢] {q : 𝒢 → ℝ} (hq : IsPMF q) (g : 𝒢 → ℝ)
     (P : ℝ) : fadingCompoundValue g P ≤ fadingErgodic q g P := by
   calc fadingCompoundValue g P = ∑ s, q s * fadingCompoundValue g P := by

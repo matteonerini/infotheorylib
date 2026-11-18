@@ -23,8 +23,8 @@ The multi-letter part of the converses of Lecture 5 of El Gamal and Kim, for the
 * `condEntropy_sub_condEntropy_eq_sum_moreCapableAux`: the Csiszár sum identity in telescoped form,
   `H(Yⁿ | A) - H(Zⁿ | A) = ∑ᵢ (H(Yᵢ | Vᵢ) - H(Zᵢ | Vᵢ))`.
 * `BCCode.log_le_sum_bcInfoUY₂_moreCapable`, `BCCode.log_add_log_le_sum_bcInfoXY₁U_add_bcInfoUY₂`,
-  `BCCode.log_add_log_le_sum_bcInfoUY₁_add_bcInfoXY₂U`, `BCCode.log_add_log_le_sum_bcInfoXY₁`: the
-  bounds for a single code.
+  `BCCode.log_add_log_le_sum_bcInfoUY₁_add_bcInfoXY₂U`: the bounds for a single code (the fourth,
+  `BCCode.log_add_log_le_sum_bcInfoXY₁`, is in `Network.BCMoreCapable`).
 
 ## Implementation notes
 

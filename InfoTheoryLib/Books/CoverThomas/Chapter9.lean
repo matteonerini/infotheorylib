@@ -87,7 +87,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   (`GaussianChannel.ColoredNoise`).
 * (9.83)–(9.96): `det_add_le_prod_max`, `det_waterFill_add` (`GaussianChannel.ColoredNoise`), with
   Hadamard's inequality `det_le_prod_diag` (`DifferentialEntropy.MultivariateGaussian`).
-* (9.105)–(9.106): `coloredInfoCapacity_eq`.
+* (9.82)–(9.96), unnormalized with total power `P`: `coloredInfoCapacity_eq`.
 
 ### 9.6 Gaussian channels with feedback
 * (9.101)–(9.102): `secondMoment`, `secondMoment_mulVec_add`, `StrictlyLowerTriangular`,

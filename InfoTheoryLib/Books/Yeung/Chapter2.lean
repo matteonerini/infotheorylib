@@ -66,7 +66,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `condEntropy_eq_sum_joint` (`Entropy.Conditional`).
 * Proposition 2.16: `proposition_2_16` (here).
 * Definition 2.17: `mutualInfo`, `mutualInfo_eq_sum` (`MutualInformation.Basic`).
-* Propositions 2.18 and 2.19: `mutualInfo_self`, `proposition_2_19` (here).
+* Propositions 2.18 and 2.19: `proposition_2_18` (here), which is `mutualInfo_self`
+  (`MutualInformation.Basic`), and `proposition_2_19` (here).
 * Definition 2.20: `condMutualInfo`, `condMutualInfo_eq_expect` (`MutualInformation.Conditional`).
 * Propositions 2.21 and 2.22: `condMutualInfo_self` (`MutualInformation.Conditional`),
   `proposition_2_22` (here).

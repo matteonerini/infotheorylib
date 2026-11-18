@@ -120,7 +120,7 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   the noiseless networks of Lecture 16 as special cases. The results for those models are proved
   directly: `isAchievableRC_compressForward` is the compress–forward bound of page 19-22,
   `rcCapacity_semiDet` covers the deterministic relay channel of page 19-21, and
-  `NetworkCoding` the noiseless multicast networks.
+  `Network.NetworkCoding` the noiseless multicast networks.
 * The cited statement that compress–forward is not tight for the deterministic relay channel.
 
 ## Issues in the notes
@@ -140,7 +140,9 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   destination node `k`" with `Y_j`.
 * Page 19-38: the message sets are `[1 : 2^{nR₁}], …, [1 : 2^{nR_{N-1}}]`, and should go to `R_N`.
 * Page 19-40: the formula of Theorem 5 has an unmatched parenthesis, and as stated it requires also
-  the cuts in which all the rates are `0`, so it does not contain Theorem 3 as a special case.
+  the cuts in which all the rates are `0`, so it does not contain Theorem 3 as a special case. In
+  fact it can never hold: `S = ∅` meets its side condition and gives `0 < 0`. `theorem_19_5`
+  requires a positive rate in `S`.
 
 ## References
 

@@ -249,7 +249,8 @@ theorem pentagon_subset_macCapacityRegionBits_binaryErasureMAC :
   · rwa [h₂, div_self hl.ne']
   · rwa [macInfo₁₂_binaryErasureMAC, mul_div_assoc, div_self hl.ne', mul_one]
 
-/-- **Example (Lecture 4): binary erasure MAC.** `C₁ = C₂ = 1` bit. -/
+/-- **Example (Lecture 4): binary erasure MAC.** `C₁, C₂ ≤ 1` bit. Equality holds, as uniform inputs
+attain `1` bit: `mutualInfoOf_binaryErasureMAC₁`, `mutualInfoOf_binaryErasureMAC₂`. -/
 lemma macC_binaryErasureMAC :
     macC₁ binaryErasureMAC ≤ log 2 ∧ macC₂ binaryErasureMAC ≤ log 2 := by
   have hW := binaryErasureMAC_isChannel

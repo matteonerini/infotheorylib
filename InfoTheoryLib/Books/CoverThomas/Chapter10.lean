@@ -88,7 +88,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `infoRD_le_of_tendsto`.
 * Theorem 10.4.1: `LossySourceChannelCode`, `IsAchievableSCDistortion`,
   `IsAchievableSCDistortion.infoRD_le_capacity`, `isAchievableSCDistortion_of_infoRD_lt`, with
-  the concatenated code `concatCode` (`RateDistortion.SourceChannel`).
+  the concatenated code `concatCode` (`RateDistortion.SourceChannel`). The book's "iff `C > R(D)`"
+  becomes achievability for `R(D) < C` and `D ≥ D_min`, and the converse `R(D) ≤ C`.
 
 ### 10.5 Achievability of the rate distortion function
 * (10.72)–(10.75): `distortionTypicalSet` (`RateDistortion.Achievability`).

@@ -143,6 +143,11 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * **Page 23-39.** The conditional pmf of Theorem 7 is wrong: `printed_theorem7_false`.
 * **Page 23-43.** `U₂ = X₂₁` should be `U₂ = X₂₂`.
 * **Page 23-63.** `1 - h(p₁)` uses `h` for the binary entropy `H`.
+
+## References
+
+* [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
+  Lecture 23
 -/
 
 open Real Finset Filter Topology

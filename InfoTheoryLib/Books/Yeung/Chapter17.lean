@@ -15,7 +15,7 @@ This file indexes the formalization of Chapter 17 of [yeung2008], the introducti
 contains its worked examples and aliases named after the numbers of the results, so the index is
 checked by Lean. It cites the draft of 15 November 2007, which numbers definitions, theorems and
 examples with one counter per chapter. The end-of-chapter problems and the historical notes are not
-included.
+included, except Problem 3.
 
 ## Conventions
 

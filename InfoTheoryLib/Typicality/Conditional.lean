@@ -32,12 +32,12 @@ variables.
 
 ## Main statements
 
-* `fst_mem_robustTypicalSet`, `snd_mem_robustTypicalSet`: property 1(a) of jointly typical
+* `fst_mem_robustTypicalSet`, `snd_mem_robustTypicalSet`: property 1 of jointly typical
   sequences, the components of a jointly typical pair are typical.
-* `le_channelExt_condPMF_of_mem`, `channelExt_condPMF_le_of_mem`: property 1(c),
+* `le_channelExt_condPMF_of_mem`, `channelExt_condPMF_le_of_mem`: property 4,
   `p(yⁿ|xⁿ) ≐ e^{-nH(Y|X)}`.
-* `card_condRobustTypicalSet_le`: property 3, `|T_ε^(n)(Y|xⁿ)| ≤ e^{n(H(Y|X) + δ(ε))}`.
-* `mem_condRobustTypicalSet_comp_iff`: property 4, for `Y = g(X)`.
+* `card_condRobustTypicalSet_le`: `|T_ε^(n)(Y|xⁿ)| ≤ e^{n(H(Y|X) + δ(ε))}` (page 2-18).
+* `mem_condRobustTypicalSet_comp_iff`: the case `Y = g(X)` (page 2-18).
 * `one_sub_div_le_prob_condRobustTypicalSet`, `eventually_prob_condRobustTypicalSet_ge`,
   `tendsto_prob_condRobustTypicalSet`: the conditional typicality lemma.
 * `eventually_card_condRobustTypicalSet_ge`: property 5,
@@ -168,13 +168,13 @@ lemma expect_neg_log_condPMF {q : α × β → ℝ} (hq : IsPMF q) :
 
 variable {q : α × β → ℝ} {n : ℕ} {ε : ℝ} {x : Fin n → α} {y : Fin n → β}
 
-/-- **Property 1(a) of jointly typical sequences (Lecture 2).** If `(xⁿ, yⁿ)` is jointly typical,
+/-- **Property 1 of jointly typical sequences (Lecture 2).** If `(xⁿ, yⁿ)` is jointly typical,
 then `xⁿ` is typical. -/
 lemma fst_mem_robustTypicalSet (h : zipSeq x y ∈ robustTypicalSet q n ε) :
     x ∈ robustTypicalSet (margFst q) n ε :=
   comp_mem_robustTypicalSet h Prod.fst
 
-/-- **Property 1(a) of jointly typical sequences (Lecture 2).** If `(xⁿ, yⁿ)` is jointly typical,
+/-- **Property 1 of jointly typical sequences (Lecture 2).** If `(xⁿ, yⁿ)` is jointly typical,
 then `yⁿ` is typical. -/
 lemma snd_mem_robustTypicalSet (h : zipSeq x y ∈ robustTypicalSet q n ε) :
     y ∈ robustTypicalSet (margSnd q) n ε :=
@@ -194,7 +194,7 @@ lemma channelExt_condPMF_eq_exp (hq : IsPMF q) (h : zipSeq x y ∈ robustTypical
   have hpos : 0 < q (x i, y i) := pos_of_mem_robustTypicalSet hq.nonneg h i
   exact div_pos hpos (hpos.trans_le (le_marg hq.nonneg _ _))
 
-/-- **Property 1(c) of jointly typical sequences (Lecture 2)**, lower bound. For a jointly
+/-- **Property 4 of jointly typical sequences (Lecture 2)**, lower bound. For a jointly
 typical pair, `p(yⁿ|xⁿ) ≥ e^{-n(H(Y|X) + δ(ε))}` with `δ(ε) = εH(Y|X)`. -/
 theorem le_channelExt_condPMF_of_mem (hq : IsPMF q) (h : zipSeq x y ∈ robustTypicalSet q n ε) :
     exp (-(n * (H[Prod.snd | Prod.fst ; q] + ε * H[Prod.snd | Prod.fst ; q]))) ≤
@@ -206,7 +206,7 @@ theorem le_channelExt_condPMF_of_mem (hq : IsPMF q) (h : zipSeq x y ∈ robustTy
   rw [expect_neg_log_condPMF hq] at hb
   exact exp_le_exp.2 (by simp only [zipSeq] at hb; linarith)
 
-/-- **Property 1(c) of jointly typical sequences (Lecture 2)**, upper bound. For a jointly
+/-- **Property 4 of jointly typical sequences (Lecture 2)**, upper bound. For a jointly
 typical pair, `p(yⁿ|xⁿ) ≤ e^{-n(H(Y|X) - δ(ε))}` with `δ(ε) = εH(Y|X)`. -/
 theorem channelExt_condPMF_le_of_mem (hq : IsPMF q) (h : zipSeq x y ∈ robustTypicalSet q n ε) :
     channelExt (condPMF q) n x y ≤
@@ -242,7 +242,7 @@ lemma sum_channelExt_condPMF_le_one (hq : ∀ z, 0 ≤ q z) (x : Fin n → α) :
   exact prod_le_one₀ (fun i _ => sum_nonneg fun b _ => condPMF_nonneg hq _ _)
     fun i _ => sum_condPMF_le_one hq _
 
-/-- **Property 3 of jointly typical sequences (Lecture 2).** For every `xⁿ`,
+/-- **Jointly typical sequences (Lecture 2, page 2-18).** For every `xⁿ`,
 `|T_ε^(n)(Y|xⁿ)| ≤ e^{n(H(Y|X) + δ(ε))}` with `δ(ε) = εH(Y|X)`. -/
 theorem card_condRobustTypicalSet_le (hq : IsPMF q) (ε : ℝ) (x : Fin n → α) :
     ((condRobustTypicalSet q ε x).card : ℝ) ≤
@@ -258,7 +258,7 @@ theorem card_condRobustTypicalSet_le (hq : IsPMF q) (ε : ℝ) (x : Fin n → α
   rw [← le_div_iff₀ (exp_pos _), one_div, ← exp_neg, neg_neg] at h
   exact h
 
-/-- **Property 4 of jointly typical sequences (Lecture 2).** If `Y = g(X)` and `xⁿ` is typical,
+/-- **Jointly typical sequences (Lecture 2, page 2-18).** If `Y = g(X)` and `xⁿ` is typical,
 then `yⁿ ∈ T_ε^(n)(Y|xⁿ)` iff `yᵢ = g(xᵢ)` for every `i`. -/
 theorem mem_condRobustTypicalSet_comp_iff {p : α → ℝ} (hp : IsPMF p) (g : α → β)
     (hx : x ∈ robustTypicalSet p n ε) :
@@ -411,24 +411,25 @@ theorem eventually_prob_condRobustTypicalSet_ge (hq : IsPMF q) {ε' : ℝ} (hε�
   linarith [one_sub_div_le_prob_condRobustTypicalSet hq hεε hn hx]
 
 /-- **Conditional typicality lemma (Lecture 2).** Let `ε' < ε`, let `xⁿ ∈ T_{ε'}^(n)(X)` for
-every `n`, and `Yⁿ ∼ ∏ᵢ p(yᵢ|xᵢ)`. Then `P{(xⁿ, Yⁿ) ∈ T_ε^(n)(X, Y)} → 1`. -/
+all large `n`, and `Yⁿ ∼ ∏ᵢ p(yᵢ|xᵢ)`. Then `P{(xⁿ, Yⁿ) ∈ T_ε^(n)(X, Y)} → 1`. The hypothesis is
+only for large `n`: for `ε' < 1` no sequence of length `0` is typical. -/
 theorem tendsto_prob_condRobustTypicalSet (hq : IsPMF q) {ε' : ℝ} (hεε : ε' < ε)
-    {xs : ∀ n, Fin n → α} (hxs : ∀ n, xs n ∈ robustTypicalSet (margFst q) n ε') :
+    {xs : ∀ n, Fin n → α} (hxs : ∀ᶠ n in atTop, xs n ∈ robustTypicalSet (margFst q) n ε') :
     Tendsto (fun n => prob (channelExt (condPMF q) n (xs n)) (condRobustTypicalSet q ε (xs n)))
       atTop (𝓝 1) := by
   have hlim : Tendsto (fun n : ℕ => 1 - condTypicalityConst q ε' ε / n) atTop (𝓝 1) := by
     simpa using (tendsto_const_div_atTop_nhds_zero_nat (condTypicalityConst q ε' ε)).const_sub 1
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le' hlim tendsto_const_nhds ?_
     (Eventually.of_forall fun n => ?_)
-  · filter_upwards [eventually_gt_atTop 0] with n hn
-    exact one_sub_div_le_prob_condRobustTypicalSet hq hεε hn (hxs n)
+  · filter_upwards [eventually_gt_atTop 0, hxs] with n hn hx
+    exact one_sub_div_le_prob_condRobustTypicalSet hq hεε hn hx
   · exact (sum_le_sum_of_subset_of_nonneg (subset_univ _) fun y _ _ =>
       prod_nonneg fun i _ => condPMF_nonneg hq.nonneg _ _).trans
       (sum_channelExt_condPMF_le_one hq.nonneg _)
 
-/-- **Property 5 of jointly typical sequences (Lecture 2).** Let `ε' < ε`. For `n` sufficiently
-large and every `xⁿ ∈ T_{ε'}^(n)(X)`, `|T_ε^(n)(Y|xⁿ)| ≥ (1 - ε) e^{n(H(Y|X) - δ(ε))}` with
-`δ(ε) = εH(Y|X)`. -/
+/-- **Conditional typicality lemma, consequence (Lecture 2, page 2-19).** Let `ε' < ε`. For `n`
+sufficiently large and every `xⁿ ∈ T_{ε'}^(n)(X)`,
+`|T_ε^(n)(Y|xⁿ)| ≥ (1 - ε) e^{n(H(Y|X) - δ(ε))}` with `δ(ε) = εH(Y|X)`. -/
 theorem eventually_card_condRobustTypicalSet_ge (hq : IsPMF q) {ε' : ℝ} (hεε : ε' < ε)
     (hε : 0 < ε) :
     ∀ᶠ n : ℕ in atTop, ∀ x ∈ robustTypicalSet (margFst q) n ε',

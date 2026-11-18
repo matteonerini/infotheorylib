@@ -723,8 +723,8 @@ theorem wynerJ_mem_gwRegion (hP : IsPMF P) :
     rw [← e]
     linarith
 
-/-- **Lecture 15, page 15-24.** `I(U₁; U₂)` is the largest common rate with
-`2 R₀ + R₁ + R₂ = H(U₁) + H(U₂)` allowed by the bounds of `gwRegion_le`. -/
+/-- **Lecture 15, page 15-24.** The bounds of `gwRegion_le` with `2 R₀ + R₁ + R₂ = H(U₁) + H(U₂)`
+allow a common rate of at most `I(U₁; U₂)`. -/
 theorem mutualInfo_of_outer (hP : IsPMF P) {R₀ R₁ R₂ : ℝ}
     (h₂ : entropy P ≤ (R₀ + R₁ + R₂) * log 2)
     (hs : (2 * R₀ + R₁ + R₂) * log 2 = H[Prod.fst ; P] + H[Prod.snd ; P]) :

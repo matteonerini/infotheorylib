@@ -40,7 +40,9 @@ nondecreasing, concave and left-continuous in `P`.
 
 The concavity of `I(X; Y)` in the input distribution, (11.12), which the book leaves as an exercise,
 is a hypothesis of the concavity and continuity parts of Theorem 11.8. The capacity is a supremum of
-real numbers, so these results also assume that the mutual informations are bounded.
+real numbers, so these results also assume that the mutual informations are bounded. An input for
+which the integral defining `I(X; Y)` diverges has `mutualInfoOfCondPDF = 0`, by the convention for
+non-integrable functions.
 
 ## References
 
@@ -144,12 +146,15 @@ theorem isEquivalentContChannel_gaussian {N : NNReal} (hN : N ≠ 0) :
 def meanCost (κ : 𝒳 → ℝ) {n : ℕ} (x : Fin n → 𝒳) : ℝ := (∑ i, κ (x i)) / n
 
 /-- **Definition 11.9.** An `(n, M)` code for a continuous memoryless channel with input constraint
-`(κ, P)`: every codeword satisfies `(1/n) ∑ᵢ κ(xᵢ(w)) ≤ P`, (11.23). -/
-structure ContChannelCode (M n : ℕ) (𝒳 𝒴 : Type*) (κ : 𝒳 → ℝ) (P : ℝ) where
+`(κ, P)`: every codeword satisfies `(1/n) ∑ᵢ κ(xᵢ(w)) ≤ P`, (11.23). The decoder is measurable,
+which the book leaves implicit: otherwise the error probabilities below, which are integrals, could
+be `0` by convention, for a decoder with non-measurable decoding regions. -/
+structure ContChannelCode (M n : ℕ) (𝒳 𝒴 : Type*) [MeasurableSpace 𝒴] (κ : 𝒳 → ℝ) (P : ℝ) where
   /-- The encoding function `e : {1, …, M} → 𝒳ⁿ`. -/
   enc : Fin M → Fin n → 𝒳
   /-- The decoding function `g : 𝒴ⁿ → {1, …, M}`. -/
   dec : (Fin n → 𝒴) → Fin M
+  measurable_dec : Measurable dec
   /-- The input constraint. -/
   cost_le : ∀ w, meanCost κ (enc w) ≤ P
 
@@ -241,10 +246,12 @@ lemma admissible_mix {P₁ P₂ a b : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) (hab : 
     nlinarith [h₁.2.2, h₂.2.2]
 
 /-- **Theorem 11.8 (concave), (11.8)–(11.16).** If `I(X; Y)` is concave in the input distribution,
-(11.12), the capacity is concave. -/
+(11.12), the capacity is concave. Concavity is assumed only between admissible inputs: an input with
+infinite `I(X; Y)`, such as a heavy-tailed input to the Gaussian channel, has `I(X; Y) = 0` by the
+convention for non-integrable integrals, so concavity over all inputs could fail. -/
 theorem concaveOn_contCapacity
     (hbdd : ∀ P, BddAbove {I | ∃ μ, AdmissibleInput κ P μ ∧ mutualInfoOfCondPDF μ ν k = I})
-    (hconc : ∀ μ₁ μ₂ : Measure 𝒳, IsProbabilityMeasure μ₁ → IsProbabilityMeasure μ₂ →
+    (hconc : ∀ P₁ P₂ (μ₁ μ₂ : Measure 𝒳), AdmissibleInput κ P₁ μ₁ → AdmissibleInput κ P₂ μ₂ →
       ∀ a b : ℝ, 0 ≤ a → 0 ≤ b → a + b = 1 →
         a * mutualInfoOfCondPDF μ₁ ν k + b * mutualInfoOfCondPDF μ₂ ν k ≤
           mutualInfoOfCondPDF (ENNReal.ofReal a • μ₁ + ENNReal.ofReal b • μ₂) ν k) :
@@ -266,7 +273,7 @@ theorem concaveOn_contCapacity
   have hmix := admissible_mix ha hb hab hμ₁ hμ₂
   have hle : mutualInfoOfCondPDF (ENNReal.ofReal a • μ₁ + ENNReal.ofReal b • μ₂) ν k ≤
       sSup (S (a * P₁ + b * P₂)) := le_csSup (hbdd (a * P₁ + b * P₂)) ⟨_, hmix, rfl⟩
-  have hc := hconc μ₁ μ₂ hμ₁.1 hμ₂.1 a b ha hb hab
+  have hc := hconc _ _ μ₁ μ₂ hμ₁ hμ₂ a b ha hb hab
   have h₁ := mul_le_mul_of_nonneg_left hI₁.le ha
   have h₂ := mul_le_mul_of_nonneg_left hI₂.le hb
   rw [mul_sub] at h₁ h₂
@@ -278,7 +285,7 @@ theorem concaveOn_contCapacity
 is left-continuous at every `P₂` above a feasible `P₁`. -/
 theorem tendsto_contCapacity_left
     (hbdd : ∀ P, BddAbove {I | ∃ μ, AdmissibleInput κ P μ ∧ mutualInfoOfCondPDF μ ν k = I})
-    (hconc : ∀ μ₁ μ₂ : Measure 𝒳, IsProbabilityMeasure μ₁ → IsProbabilityMeasure μ₂ →
+    (hconc : ∀ P₁ P₂ (μ₁ μ₂ : Measure 𝒳), AdmissibleInput κ P₁ μ₁ → AdmissibleInput κ P₂ μ₂ →
       ∀ a b : ℝ, 0 ≤ a → 0 ≤ b → a + b = 1 →
         a * mutualInfoOfCondPDF μ₁ ν k + b * mutualInfoOfCondPDF μ₂ ν k ≤
           mutualInfoOfCondPDF (ENNReal.ofReal a • μ₁ + ENNReal.ofReal b • μ₂) ν k)

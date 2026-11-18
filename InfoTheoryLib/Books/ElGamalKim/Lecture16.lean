@@ -24,7 +24,8 @@ multicast network; the cutset outer bound; and all the examples of the lecture.
   networks are the case with one nonzero rate (`singleRate`) and one set of destinations
   (`multicastD`), as the notes say on page 16-23. A message that nobody decodes can have any rate.
 * **Rates.** They are in bits. Messages have `2 ^ ⌈n R⌉` values and an edge carries `2 ^ ⌊n C⌋`
-  indices. The decoder has no error symbol, since it would never help.
+  indices, where the notes' `[1 : 2^{nC}]` would give `2 ^ ⌈n C⌉`: at most one bit more per edge
+  and block. The decoder has no error symbol, since it would never help.
 
 ## Index
 

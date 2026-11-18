@@ -686,8 +686,8 @@ theorem keyCapacity_le (allowed : ∀ q, (Fin q → Bool) → Prop) (hP : IsPMF 
   rintro _ ⟨k, Q, hQ, rfl⟩
   exact hR.le hP hQ
 
-/-- **Theorem 8 of Lecture 23 of [elgamal2010], page 23-47, for `Z̄ = Z`.** The secret key capacity
-is at most `I(X₁; X₂ | Z)`, for any channel to `Z̄`. -/
+/-- **Theorem 8 of Lecture 23 of [elgamal2010], page 23-47.** For any channel `Q` from `Z` to `Z̄`,
+the secret key capacity is at most `I(X₁; X₂ | Z̄)`; with `Z̄ = Z` this is `I(X₁; X₂ | Z)`. -/
 theorem keyCapacity_le_of_channel (allowed : ∀ q, (Fin q → Bool) → Prop) (hP : IsPMF P)
     (hQ : IsChannel Q) : keyCapacityOf allowed P ≤ intrinsicInfoOf P Q / log 2 := by
   have hl := log_pos one_lt_two

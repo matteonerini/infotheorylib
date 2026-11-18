@@ -33,8 +33,9 @@ of this file gives aliases named after them, so that the index is checked by Lea
 ## Conventions
 
 * **Logarithms.** The notes use base `2`; the library's logarithms are natural, so entropies are
-  in nats and the bounds `2^{-n(H ± δ(ε))}` read `e^{-n(H ± δ(ε))}`. Every statement of the
-  lecture is homogeneous in the base of the logarithm.
+  in nats and the bounds `2^{-n(H ± δ(ε))}` read `e^{-n(H ± δ(ε))}`. Most statements of the
+  lecture are homogeneous in the base of the logarithm. Fano's `1 + Pₑ log |𝒳|` is not, and is
+  stated in bits in `fano_weak_bits`; `H⁻¹` is defined on `[0, log 2]` (`binEntropyInv`).
 * **Random variables.** Discrete random variables are functions on a finite probability space
   `(Ω, μ)`, with `IsPMF μ`; the conditioning variable of `H(Y|X)` is also discrete. Continuous
   random variables are given by their densities.
@@ -62,7 +63,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
   `condEntropy_eq_entropy_iff` (`Entropy.Bounds`).
 * Joint entropy, `H(X, Y) = H(X) + H(Y|X)`: `chain_rule` (`Entropy.Conditional`);
   `H(X, Y) ≤ H(X) + H(Y)`: `entropyRV_pair_le_add` (`Entropy.Bounds`), with equality iff
-  `I(X; Y) = 0`, that is iff `X` and `Y` are independent (`mutualInfo_eq_zero_iff`).
+  `I(X; Y) = 0`, that is iff `X` and `Y` are independent (`mutualInfo_eq_zero_iff`,
+  `MutualInformation.Basic`).
 * The chain rule for entropy and `H(Xⁿ) ≤ ∑ᵢ H(Xᵢ)` with equality iff independence:
   `chain_rule_entropy` (`Entropy.ChainRule`), `entropy_prefixRV_le_sum`,
   `entropy_prefixRV_eq_sum_iff` (`Entropy.Bounds`).

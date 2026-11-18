@@ -211,8 +211,9 @@ theorem theorem_17_4 {V : Type*} [Fintype V] [Nonempty X] [Nonempty X₁] [Nonem
     IsAchievableRC W R :=
   isAchievableRC_compressForward hp hp₁ hW hτ hR₁ hR₂
 
-/-- **The part of Theorem 6 that we prove, page 17-70.** With unlimited lookahead, every achievable
-rate is at most the capacity of the channel from `(X, X₁, Y₁)` to `Y`. -/
+/-- **An upper bound in place of Theorem 6, page 17-70**, which is false as printed (see the module
+doc). With unlimited lookahead, every achievable rate is at most the capacity of the channel from
+`(X, X₁, Y₁)` to `Y`. -/
 theorem theorem_17_6 [Nonempty X] [Nonempty X₁] [Nonempty Y₁] {W₁ : X → Y₁ → ℝ}
     {W₂ : X × X₁ × Y₁ → Y → ℝ} (h₁ : IsChannel W₁) (h₂ : IsChannel W₂) {R : ℝ} (h : IsAchievableLook
       W₁ W₂ R) : R * log 2 ≤ capacity W₂ :=

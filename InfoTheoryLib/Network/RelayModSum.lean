@@ -13,8 +13,8 @@ public import InfoTheoryLib.Network.RelayOrth
 
 The example of pages 17-51 and 17-52 of the notes, due to Aleksic, Razaghi and Yu: `Y' = X ⊕ Z` and
 `Y₁ = Z ⊕ Z₁`, for `Z ∼ Bern(1/2)`, `Z₁ ∼ Bern(p)` and `X` independent, and a channel `p(y'' | x₁)`
-from the relay to the receiver with capacity `C₀`. Its capacity is `1 - H(p ∗ H⁻¹(1 - C₀))`, which
-is smaller than the cutset bound.
+from the relay to the receiver with capacity `C₀`. Its capacity is `1 - H(p ∗ H⁻¹(1 - C₀))` for
+`C₀ ≤ 1` bit, which is smaller than the cutset bound for `0 < p < 1/2` and `0 < C₀ < 1` bit.
 
 ## Main definitions
 
@@ -23,6 +23,8 @@ is smaller than the cutset bound.
 ## Main statements
 
 * `isAchievableRC_modSum`: the capacity is achieved by compress–forward.
+* `rcCapacity_modSum`: the capacity.
+* `modSum_lt_cutset`: the capacity is smaller than the cutset bound.
 
 ## References
 

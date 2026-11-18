@@ -5,6 +5,7 @@ Authors: Matteo Nerini
 -/
 module
 
+public import InfoTheoryLib.Network.BergerTungCardinality
 public import InfoTheoryLib.Network.BergerTungCases
 public import InfoTheoryLib.Network.BergerTungOuter
 public import InfoTheoryLib.Network.QuadraticGaussian
@@ -111,8 +112,8 @@ All in `Network.QuadraticGaussian`, as formulas.
   `sum_not_mem_condRobust_le` compares the law `φ` of `Zⁿ` with the product law on `T(Z | yⁿ)`,
   within a factor `e^{n (E - E')}`, and uses the Chernoff bound for the product law. Its hypothesis
   on `φ` is only the upper bound on `T(Z | yⁿ)`.
-* **Lemma 2.** `sum_codebook_firstIn_le` gives the law of the selected codeword exactly: it is the
-  law of a codeword conditioned on the typical set.
+* **Lemma 2.** `sum_codebook_firstIn_le` bounds the law of the selected codeword by the law of a
+  codeword conditioned on the typical set.
 
 ## Issues in the notes
 
@@ -128,6 +129,8 @@ These come from the text of the notes as extracted from the PDF.
   `(1 - δ) p(x, y, z) ≤ E(K)`, and the Chernoff bound `2 e^{-(ε - δ)² p(x, y, z) / 4}`, which must
   have `n` in the exponent to tend to `0`.
 * **Page 13-52.** `μᵀ μ` should be `μ μᵀ`.
+* **Page 13-22.** `K⁻¹ - K_X⁻¹ = diag(N₁, N₂)` should be `diag(1/N₁, 1/N₂)`: it is `K_V⁻¹`, and
+  `(N₁, N₂)` is the test channel, as in `qg_lemma4`.
 * **Page 13-12.** The bound on `E₄` refers to Lemma 1 of Lecture 12, whose proof has the gap listed
   in `Books.ElGamalKim.Lecture12`. Random bins avoid it.
 

@@ -58,7 +58,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 * (6.31), (6.33)–(6.35): `propBet`, `seqBetProb_propBet`, `expectedLogWealth`,
   `expectedLogWealth_le`, `expectedLogWealth_propBet`, `expectedLogWealth_propBet_succ_sub`.
 * (6.36): `tendsto_expectedLogWealth_propBet`.
-* Example 6.3.1 (Red and Black), (6.39): `deckPMF`, `example_6_3_1` (here).
+* Example 6.3.1 (Red and Black), (6.39): `deckPMF`, `example_6_3_1`, `example_6_3_1_optimal`
+  (here).
 
 ### 6.4 The entropy of English
 * The zeroth-order model and the size of the third-order table: `example_6_4_zeroOrder`,
@@ -112,9 +113,10 @@ theorem example_6_1_1_growth {p : Fin 2 → ℝ} (hp : IsPMF p) (hpos : ∀ x, 0
   rwa [doublingRate_self hp fun _ => two_pos, ← sum_mul, hp.sum_eq_one, one_mul] at h
 
 /-- **Section 6.1, subcase 2.** With superfair odds of `3`-for-`1` on two equally likely horses, a
-Dutch book (bet `1/3` on each horse, keep `1/3` as cash) returns `4/3` whichever horse wins. It is
-risk-free but does not optimize the doubling rate: proportional betting has the larger doubling
-rate `log (3/2) > log (4/3)`. -/
+Dutch book that keeps cash (bet `1/3` on each horse, keep `1/3`) returns `4/3` whichever horse
+wins. It is risk-free but does not optimize the doubling rate: proportional betting has the larger
+doubling rate `log (3/2) > log (4/3)`. (The book's Dutch book `b(x) = c/o(x)` of
+`dutchBook_wealthRelative` is here `b = (1/2, 1/2)`, which is proportional betting.) -/
 theorem example_6_1_dutchBook :
     (∀ _ : Fin 2, (1 : ℝ) / 3 + 1 / 3 * 3 = 4 / 3) ∧
       cashDoublingRate (1 / 3) (fun _ => 1 / 3) (fun _ => 3) (fun _ : Fin 2 => 1 / 2) =

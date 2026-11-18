@@ -71,7 +71,8 @@ Module names are relative to `InfoTheoryLib`; "here" means this file.
 
 ### 19.4 Existence and Construction
 * Lemma 19.17: `lemma_19_17` (here), which is `exists_aeval_ne_zero_of_degreeOf`
-  (`ForMathlib.PolyFiniteField`), for a polynomial over any subfield of `F`.
+  (`ForMathlib.PolyFiniteField`), for a polynomial over a finite field `F`, where the book allows
+  any field.
 * Corollary 19.18: `card_aeval_eq_zero_le` (`ForMathlib.PolyFiniteField`), the fraction of the
   roots bounded by the total degree, `deg g / |F|`, instead of the book's `1 - (1 - m/|F|)^n`.
 * Theorem 19.20: `theorem_19_20` (here), which is `exists_isLinearMulticast`

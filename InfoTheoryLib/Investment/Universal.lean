@@ -428,7 +428,8 @@ theorem stratWealth_mixture {A : Type*} [Fintype A] {μ : A → ℝ} (hμ : IsPM
 /-! ### An example -/
 
 /-- **Section 16.7.1** For one day and two stocks, `1/V₁ = 2`: the best strategy puts half of the
-wealth on each stock, and it earns at least half of the best stock. -/
+wealth on each stock, and it earns at least half of the best stock. (The book prints `Vₙ = 2`
+here.) -/
 theorem minimaxRatio_two_one : minimaxRatio 1 2 = 1 / 2 := by
   have h : ∀ j : Fin 1 → Fin 2, bestWeight j = 1 := fun j => by
     simp only [bestWeight, occ, Fin.prod_univ_one]

@@ -233,6 +233,7 @@ lemma codeUD_three : codeUD 3 = [1, 1, 0] := rfl
 /-- **Table 5.1.** An instantaneous code. -/
 def codeInstantaneous : Fin 4 → List (Fin 2) := ![[0], [1, 0], [1, 1, 0], [1, 1, 1]]
 
+/-- **Table 5.1.** The singular code is indeed singular. -/
 theorem table_5_1_singular : ¬ IsNonsingular codeSingular := fun h =>
   absurd (h (a₁ := 0) (a₂ := 1) rfl) (by decide)
 
@@ -387,6 +388,7 @@ def weights_5_7_1 : Fin 4 → ℝ := ![5, 5, 4, 4]
 /-- **Example 5.7.1.** The code `00, 01, 10, 11` built by Huffman's algorithm for the weights. -/
 def code_5_7_1 : Fin 4 → List (Fin 2) := ![[0, 0], [0, 1], [1, 0], [1, 1]]
 
+/-- **Example 5.7.1.** Huffman's algorithm on the weights `(5, 5, 4, 4)` has cost `36`. -/
 theorem huffmanCost_5_7_1 : huffmanCost 4 weights_5_7_1 = 36 := by
   have s4 : huffmanCost 4 weights_5_7_1 = 8 + huffmanCost 3 ![8, 5, 5] :=
     huffmanCost_step _ (Equiv.swap 0 2 * Equiv.swap 1 3)
@@ -439,6 +441,7 @@ theorem example_5_7_2 :
 /-- **Example 5.7.3.** The distribution `(1/3, 1/3, 1/4, 1/12)`. -/
 def pmf_5_7_3 : Fin 4 → ℝ := ![1 / 3, 1 / 3, 1 / 4, 1 / 12]
 
+/-- **Example 5.7.3.** The optimal expected length for `(1/3, 1/3, 1/4, 1/12)` is `2`. -/
 theorem huffmanCost_5_7_3 : huffmanCost 4 pmf_5_7_3 = 2 := by
   have s4 : huffmanCost 4 pmf_5_7_3 = 1 / 3 + huffmanCost 3 ![1 / 3, 1 / 3, 1 / 3] :=
     huffmanCost_step _ (Equiv.swap 0 3 * Equiv.swap 3 1 * Equiv.swap 1 2)
@@ -665,6 +668,8 @@ def tree_5_11_1' : CoinTree (Fin 3) :=
       convert hasSum_fintype fun i => (1 / 2 : ℝ) ^ (leaves_5_11_1' i).length using 1
       exact h.symm)
 
+/-- **Example 5.11.1.** The alternative algorithm generates `(1/2, 1/4, 1/4)` with two fair bits
+per sample. -/
 theorem example_5_11_1' : tree_5_11_1'.Generates pmf_5_11_1 ∧ tree_5_11_1'.expectedFlips = 2 := by
   constructor
   · intro x
@@ -762,7 +767,8 @@ alias theorem_5_5_1_converse := exists_uniquelyDecodableCode_of_kraft
 /-- **Corollary of Theorem 5.5.1** (infinite alphabets). -/
 alias corollary_5_5_1 := summable_kraft_of_isUniquelyDecodableCode
 
-/-- **Lemma 5.8.1.** -/
+/-- **Lemma 5.8.1**, for codeword lengths: the two least likely symbols can get equal, maximal
+lengths at no larger cost (properties 2 and 3; property 1 is `cost_comp_swap`). -/
 alias lemma_5_8_1 := exists_canonical_lengths
 
 /-- **Theorem 5.8.1.** -/

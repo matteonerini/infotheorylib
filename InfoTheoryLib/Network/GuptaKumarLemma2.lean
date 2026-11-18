@@ -644,10 +644,10 @@ theorem gk_upper_whp {ν P : ℝ} (hν : 2 < ν) (hP : 0 < P)
   refine sum_congr rfl fun j _ => ?_
   rw [hdiag N w hw, gkLog]
 
-/-- **The upper bound of Theorem 1 of page 20-21 of [elgamal2010].** Let `G N w` be a positive
-semidefinite gain matrix for the `2N` nodes of the augmented network. Then, with probability
-tending to one, any rate tuple achievable by a part of the network has a sum rate, in nats,
-below `b N^{1/2 + 1/ν} log N`. -/
+/-- **The upper bound of Theorem 1 of page 20-21 of [elgamal2010]**, for codes without relaying
+(`GNCode`). Let `G N w` be a positive semidefinite gain matrix for the `2N` nodes of the augmented
+network. Then, with probability tending to one, any rate tuple achievable by a part of the network
+has a sum rate, in nats, below `b N^{1/2 + 1/ν} log N`. -/
 theorem gk_capacity_upper_whp {ν : ℝ} {P : ℝ≥0} (hν : 2 < ν) (hP : 0 < (P : ℝ))
     (G : ∀ N : ℕ, (Fin (2 * N) → ℝ) → Matrix (Fin (2 * N)) (Fin (2 * N)) ℝ)
     (hG : ∀ N w, (∀ j, 0 < w j) → (G N w).PosSemidef)

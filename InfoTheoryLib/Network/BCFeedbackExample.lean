@@ -22,7 +22,8 @@ learns the noise and broadcasts it on `X₀`, and `(1, 1)` is achievable.
 ## Main statements
 
 * `isAchievableBCFB_dueck`, `one_one_mem_bcfbCapacityRegion`: `(1, 1)` is achievable with feedback.
-* `dueck_mul_le`: for one code without feedback, `(1 - 2 Pₑ) M₁ M₂ ≤ 2ⁿ`.
+* `dueck_mul_le`: for one code without feedback, `(1 - P₁ - P₂) M₁ M₂ ≤ 2ⁿ`, for the error
+  probabilities `P₁`, `P₂` of the two receivers.
 * `bcCapacityRegionBits_dueck_subset`, `subset_bcCapacityRegionBits_dueck`: the region without
   feedback, for nonnegative rates.
 

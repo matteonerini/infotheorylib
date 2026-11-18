@@ -19,6 +19,8 @@ notes are not included.
 
 ## Conventions
 
+* **Units.** `capacityRegion` is in bits, as in the book, while the regions built from
+  `entropicRegion` and `shannonRegion` (such as the region `R'` through `C₄`) are in nats.
 * **Codes and achievability.** The block codes, achievable rate tuples and the achievable rate
   region of Definitions 21.1–21.3 are those of the noiseless networks of Lecture 16 of
   [elgamal2010]: `NetCode`, `RateCode`, `IsAchievable` and `capacityRegion`

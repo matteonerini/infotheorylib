@@ -325,7 +325,9 @@ theorem kraft_of_isUniquelyDecodableCode [Fintype X] [Fintype α] [Nonempty α] 
   rwa [sum_image fun x _ y _ hxy => hinj hxy] at h
 
 /-- **Theorem 5.5.1 (McMillan, converse).** Given lengths satisfying the Kraft inequality, there is
-a uniquely decodable code (indeed a prefix code) with these lengths. -/
+a uniquely decodable code (indeed a prefix code) with these lengths. We assume two symbols at least:
+a single symbol of length `0` satisfies the Kraft inequality, but its code `[]` is not uniquely
+decodable. -/
 theorem exists_uniquelyDecodableCode_of_kraft [Fintype X] [Nontrivial X] [Fintype α] [Nonempty α]
     (l : X → ℕ) (h : ∑ x, (1 / Fintype.card α : ℝ) ^ l x ≤ 1) :
     ∃ C : X → List α, IsUniquelyDecodableCode C ∧ ∀ x, (C x).length = l x := by

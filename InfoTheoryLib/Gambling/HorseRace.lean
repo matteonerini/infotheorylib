@@ -62,7 +62,8 @@ reinvesting, where `S(x) = b(x) o(x)` is the wealth relative. -/
 def wealth (b o : α → ℝ) {n : ℕ} (x : Fin n → α) : ℝ := ∏ i, b (x i) * o (x i)
 
 /-- **Theorem 6.1.1, (6.3)–(6.5).** If the races are i.i.d. with law `p`, the wealth grows
-exponentially at rate `W(b, p)`: `(1/n) log Sₙ → W(b, p)` in probability. -/
+exponentially at rate `W(b, p)`: `(1/n) log Sₙ → W(b, p)` in probability. We assume a positive
+bet on every horse, which keeps `log Sₙ` finite. -/
 theorem log_wealth_div_tendstoInProb {p b o : α → ℝ} (hp : IsPMF p)
     (hbo : ∀ x, 0 < b x * o x) :
     TendstoInProb (fun n => iidPMF p n) (fun n x => log (wealth b o x) / n)
@@ -224,12 +225,16 @@ theorem cashDoublingRate_le {p b o : α → ℝ} {b₀ : ℝ} (hp : IsPMF p) (hb
           · exact mul_le_mul_of_nonneg_left (log_le_log (hpos x h0.ne') (hle x)) h0.le
     _ ≤ _ := doublingRate_le hp hb'' hpb ho
 
-/-- **Section 6.1, subcase 2 (Dutch book).** With superfair odds, betting `1/o(x)` on each horse
-and keeping `1 - ∑ 1/o(x)` as cash returns `2 - ∑ 1/o(x) > 1` whichever horse wins: a gain with no
-risk. -/
-theorem dutchBook_wealthRelative {o : α → ℝ} (ho : ∀ x, 0 < o x) (x : α) :
-    (1 - ∑ y, 1 / o y) + 1 / o x * o x = 2 - ∑ y, 1 / o y := by
-  rw [one_div_mul_cancel (ho x).ne']
-  ring
+/-- **Section 6.1, subcase 2 (Dutch book).** With superfair odds, `∑ 1/o(x) < 1`, the bet
+`b(x) = c/o(x)` with `c = 1/∑ 1/o(x)` is a bet, `∑ b(x) = 1`, and returns `b(x) o(x) = c > 1`
+whichever horse `x` wins: a gain with no risk. -/
+theorem dutchBook_wealthRelative {o : α → ℝ} (ho : ∀ x, 0 < o x) (hsf : ∑ y, 1 / o y < 1)
+    (x : α) :
+    ∑ y, 1 / o y / (∑ z, 1 / o z) = 1 ∧ 1 / o x / (∑ y, 1 / o y) * o x = 1 / ∑ y, 1 / o y ∧
+      1 < 1 / ∑ y, 1 / o y := by
+  have hs : 0 < ∑ y, 1 / o y := (one_div_pos.2 (ho x)).trans_le
+    (single_le_sum (fun y _ => (one_div_pos.2 (ho y)).le) (mem_univ x))
+  refine ⟨by rw [← sum_div, div_self hs.ne'], ?_, (one_lt_div hs).2 hsf⟩
+  field_simp [(ho x).ne']
 
 end InfoTheory
