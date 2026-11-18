@@ -10,10 +10,11 @@ public import InfoTheoryLib.GaussianChannel.Capacity
 /-!
 # Gaussian multiple-user channels
 
-Section 15.1 describes the capacity regions of the Gaussian multiple-access, broadcast, relay,
-interference and two-way channels in terms of the function `C(x) = ½ log (1 + x)`, the capacity
-of a Gaussian channel with signal-to-noise ratio `x`. The coding theorems are stated there without
-proof; this file proves the properties of the regions that the book derives from the formulas.
+Section 15.1 of [cover2006] describes the capacity regions of the Gaussian multiple-access,
+broadcast, relay, interference and two-way channels in terms of the function
+`C(x) = ½ log (1 + x)`, the capacity of a Gaussian channel with signal-to-noise ratio `x`. The
+coding theorems are stated there without proof; this file proves the properties of the regions that
+the book derives from the formulas.
 
 ## Main definitions
 
@@ -44,6 +45,8 @@ proof; this file proves the properties of the regions that the book derives from
 * `fdmaRate_add_le`, `fdmaRate_add_eq`: frequency-division multiplexing reaches the sum capacity
   only when the bandwidths are proportional to the powers (Figure 15.18); `tdma_le`, `tdma_eq`:
   the same for time division with power boosting.
+* `gaussCap_noise_le_tdma`: time division with power control at `t = S₁/(S₁ + S₂)` beats treating
+  the other codeword as noise ([elgamal2010], Lecture 4).
 
 ## Implementation notes
 
@@ -53,8 +56,12 @@ needed.
 
 ## References
 
+Numbers without a source refer to [cover2006].
+
 * [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Sections 15.1 and
   15.3.6
+* [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
+  Lecture 4
 -/
 
 open Real Finset Filter Topology
@@ -368,5 +375,50 @@ theorem gaussCap_lt_iff_strong_interference {a P N : ℝ} (hP : 0 < P) (hN : 0 <
     field_simp; ring
   rw [e]
   exact ⟨fun h => pos_of_mul_pos_right h (by positivity), fun h => by positivity⟩
+
+/-- `C(x) ≤ x/2`. -/
+lemma gaussCap_le_half {x : ℝ} (hx : 0 ≤ x) : gaussCap x ≤ x / 2 := by
+  have := log_le_sub_one_of_pos (by linarith : (0 : ℝ) < 1 + x)
+  unfold gaussCap
+  linarith
+
+/-- `C(x) ≥ x / (2 (1 + x))`. -/
+lemma div_le_gaussCap {x : ℝ} (hx : 0 ≤ x) : x / (2 * (1 + x)) ≤ gaussCap x := by
+  have h := one_sub_inv_le_log_of_pos (by linarith : (0 : ℝ) < 1 + x)
+  have e : 1 - (1 + x)⁻¹ = x / (1 + x) := by field_simp; ring
+  rw [e] at h
+  unfold gaussCap
+  rw [show x / (2 * (1 + x)) = 1 / 2 * (x / (1 + x)) by field_simp]
+  linarith
+
+/-- **TDMA with power control (Lecture 4 of [elgamal2010]).** With received SNRs `S₁, S₂ > 0` and
+`t = S₁/(S₁ + S₂)`, time division with power control, which gives sender 1 the rate
+`t C(S₁/t)` and sender 2 the rate `(1 - t) C(S₂/(1 - t))`, beats treating the other codeword as
+noise, which gives the rates `C(S₁/(1 + S₂))` and `C(S₂/(1 + S₁))`. -/
+theorem gaussCap_noise_le_tdma {S₁ S₂ : ℝ} (h₁ : 0 < S₁) (h₂ : 0 < S₂) :
+    gaussCap (S₁ / (1 + S₂)) ≤ S₁ / (S₁ + S₂) * gaussCap (S₁ / (S₁ / (S₁ + S₂))) ∧
+      gaussCap (S₂ / (1 + S₁)) ≤
+        (1 - S₁ / (S₁ + S₂)) * gaussCap (S₂ / (1 - S₁ / (S₁ + S₂))) := by
+  have hs : 0 < S₁ + S₂ := by linarith
+  have e₁ : S₁ / (S₁ / (S₁ + S₂)) = S₁ + S₂ := by field_simp
+  have e₂ : 1 - S₁ / (S₁ + S₂) = S₂ / (S₁ + S₂) := by field_simp; ring
+  have e₃ : S₂ / (S₂ / (S₁ + S₂)) = S₁ + S₂ := by field_simp
+  rw [e₁, e₂, e₃]
+  -- `C(S₁ + S₂) = C(Sⱼ) + C(Sᵢ/(1 + Sⱼ))`, and `Sⱼ C(Sᵢ/(1 + Sⱼ)) ≤ Sᵢ C(Sⱼ)`.
+  have key : ∀ {a b : ℝ}, 0 < a → 0 < b →
+      gaussCap (a / (1 + b)) ≤ a / (a + b) * gaussCap (a + b) := fun {a b} ha hb => by
+    have hab : 0 < a + b := by linarith
+    have hsum := gaussCap_add_gaussCap hb.le ha.le one_pos
+    rw [div_one, div_one, show a / (b + 1) = a / (1 + b) by ring, add_comm b a] at hsum
+    have hu := gaussCap_le_half (by positivity : 0 ≤ a / (1 + b))
+    have hl := div_le_gaussCap hb.le
+    have h3 : b * gaussCap (a / (1 + b)) ≤ a * gaussCap b := by
+      calc b * gaussCap (a / (1 + b)) ≤ b * (a / (1 + b) / 2) :=
+            mul_le_mul_of_nonneg_left hu hb.le
+        _ = a * (b / (2 * (1 + b))) := by field_simp
+        _ ≤ a * gaussCap b := mul_le_mul_of_nonneg_left hl ha.le
+    rw [← hsum, div_mul_eq_mul_div, le_div_iff₀ hab]
+    nlinarith [h3]
+  exact ⟨key h₁ h₂, by simpa [add_comm] using key h₂ h₁⟩
 
 end InfoTheory

@@ -27,15 +27,16 @@ fair odds yields wealth `S(x) ≥ 2^{l(x) - K(x)}` (Theorem 14.9.1).
 
 ## Main statements
 
-* `Computer.universalProb_le_one`, `Computer.omega_le_one`, `Computer.omega_pos`.
+* `Computer.universalProb_le_one`, `Computer.omega_le_one`, `Computer.IsUniversal.omega_pos`.
 * `Computer.IsUniversal.universalProb_ge`: **Theorem 14.6.1**, `P_U(x) ≥ 2^{-c_A} P_A(x)`.
 * `Computer.two_pow_neg_complexity_le_universalProb`: **(14.69), (14.91)**, the lower half of
   **Theorem 14.11.1**, `2^{-K(x)} ≤ P_U(x)`, that is `log₂ 1/P_U(x) ≤ K(x)` (14.90).
 * `Computer.summable_two_pow_neg_complexity`, `Computer.tsum_two_pow_neg_complexity_le_omega`:
   **(14.77)**, the bets of universal gambling sum to at most `Ω ≤ 1`.
 * `Computer.length_le_logb_gamblingWealth_add`: **Theorem 14.9.1**, `log₂ S(x) + K(x) ≥ l(x)`.
-* `Computer.structureFunction_le_length`, `Computer.structureFunction_eq_zero`,
-  `Computer.structureFunction_antitone`: properties of the structure function (Section 14.12).
+* `Computer.IsUniversal.structureFunction_le_length`,
+  `Computer.IsUniversal.structureFunction_eq_zero`, `Computer.structureFunction_antitone`:
+  properties of the structure function (Section 14.12).
 
 ## Implementation notes
 

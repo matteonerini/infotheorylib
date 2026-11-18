@@ -17,11 +17,16 @@ first `n` terms is `prefixRV X n = (X₀, …, X_{n-1}) : Ω → (Fin n → α)`
 
 * `prefixRV X n`: the random vector `(X₀, …, X_{n-1})`.
 * `IndepFamily μ X n`: mutual independence of `X₀, …, X_{n-1}`.
+* `PairwiseIndep μ X n`: pairwise independence of `X₀, …, X_{n-1}`.
 
 ## Main statements
 
 * `indepFamily_iff`: `X₀, …, X_{n-1}` are independent iff each `Xᵢ` is independent of
   `(X₀, …, X_{i-1})`.
+
+## References
+
+* [R. W. Yeung, *Information Theory and Network Coding*][yeung2008], Definition 2.3
 -/
 
 open Real Finset Filter Topology
@@ -112,5 +117,24 @@ lemma indepFamily_iff [Finite α] {μ : Ω → ℝ} (hμ : IsPMF μ) (X : ℕ �
     · intro h
       exact ⟨fun i hi => h i (mem_range.2 (Nat.lt_succ_of_lt (mem_range.1 hi))),
         h n (mem_range.2 n.lt_succ_self)⟩
+
+/-- **Definition 2.3 of [yeung2008].** Pairwise independence of `X₀, …, X_{n-1}`. -/
+def PairwiseIndep (μ : Ω → ℝ) (X : ℕ → Ω → α) (n : ℕ) : Prop :=
+  ∀ i j, i < j → j < n → IndepRV μ (X i) (X j)
+
+omit [Fintype α] in
+/-- The first terms of an independent family are independent. -/
+theorem IndepFamily.mono [Finite α] {μ : Ω → ℝ} (hμ : IsPMF μ) {X : ℕ → Ω → α} {m n : ℕ}
+    (hmn : m ≤ n) (h : IndepFamily μ X n) : IndepFamily μ X m := by
+  induction n, hmn using Nat.le_induction with
+  | base => exact h
+  | succ n _ ih => exact ih ((indepFamily_succ_iff hμ X n).1 h).1
+
+omit [Fintype α] in
+/-- Mutual independence implies pairwise independence. -/
+theorem IndepFamily.pairwiseIndep [Finite α] {μ : Ω → ℝ} (hμ : IsPMF μ) {X : ℕ → Ω → α} {n : ℕ}
+    (h : IndepFamily μ X n) : PairwiseIndep μ X n := fun i j hij hj => by
+  have h' := ((indepFamily_succ_iff hμ X j).1 (h.mono hμ (show j + 1 ≤ n from hj))).2
+  exact h'.comp (fun v => v ⟨i, hij⟩) id
 
 end InfoTheory

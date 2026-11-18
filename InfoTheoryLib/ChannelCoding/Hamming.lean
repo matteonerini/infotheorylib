@@ -141,7 +141,6 @@ theorem hammingDecode_add_single {c : Fin 7 → ZMod 2} (hc : c ∈ hammingCode)
     rw [this, add_zero]
   · next h' => exact absurd h h'
 
-
 /-- **Section 7.11.** Syndrome decoding leaves codewords unchanged. -/
 theorem hammingDecode_of_mem {c : Fin 7 → ZMod 2} (hc : c ∈ hammingCode) : hammingDecode c = c := by
   have h : ¬ ∃ i : Fin 7, hammingH *ᵥ c = fun s => hammingH s i := by

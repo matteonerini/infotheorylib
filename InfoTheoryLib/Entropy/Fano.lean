@@ -26,6 +26,7 @@ on the same space as `X` and `Y`), and its alphabet `𝒳̂` may be larger than 
 ## Main statements
 
 * `fano_estimator`: Theorem 2.10.1, `H(Pₑ) + Pₑ log |𝒳| ≥ H(X | X̂) ≥ H(X | Y)`.
+* `fano_lt`: the strict form `H(X | Y) < 1 + Pₑ log |𝒳|` (in bits).
 * `fano_estimator_weak`, `fano_estimator_lower_bound`: the weakened forms (2.131)–(2.132),
   `1 + Pₑ log |𝒳| ≥ H(X | Y)` and `Pₑ ≥ (H(X | Y) - 1) / log |𝒳|` (in bits).
 * `fano_of_eq`: Corollary (2.139), `H(p) + p log |𝒳| ≥ H(X | Y)` for `p = Pr{X ≠ Y}`.
@@ -36,7 +37,12 @@ on the same space as `X` and `Y`), and its alphabet `𝒳̂` may be larger than 
 
 ## References
 
+Numbers without a source refer to [cover2006].
+
 * [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Section 2.10
+* [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
+  Lecture 2
+* [R. W. Yeung, *Information Theory and Network Coding*][yeung2008], Corollary 2.48
 -/
 
 open Real Finset Filter Topology
@@ -355,7 +361,7 @@ theorem condEntropy_eq_zero_of_errProb_eq_zero {μ : Ω → ℝ} (hμ : IsPMF μ
   rw [h, binEntropy_zero, zero_mul, add_zero] at this
   have h' : 0 ≤ H[X | Y ; μ] := by
     have := condEntropy_eq_sub hμ X Y
-    rw [condEntropy, ← sum_const_zero (s := (univ : Finset β))] 
+    rw [condEntropy, ← sum_const_zero (s := (univ : Finset β))]
     refine sum_le_sum fun y _ => mul_nonneg (dist_nonneg hμ _ _) ?_
     rcases (dist_nonneg hμ Y y).eq_or_lt with hy | hy
     · simp [condEntropyAt, condDist, ← hy, entropy]
@@ -447,5 +453,73 @@ theorem fano_sharp {k : ℕ} (hk : 0 < k) {Pe : ℝ} (h0 : 0 ≤ Pe) (h1 : Pe �
       rw [log_div hpos.ne' hk']
       field_simp
       ring
+
+/-- **`H(g(X)) ≤ H(X)`, the equality case (Lecture 2 of [elgamal2010]).** `H(g(X)) = H(X)` if and
+only if `g` is one-to-one on the support of `X`. -/
+theorem entropyRV_comp_eq_iff {Ω α β : Type*} [Fintype Ω] [Fintype α] [Fintype β] {μ : Ω → ℝ}
+    (hμ : IsPMF μ) (X : Ω → α) (f : α → β) :
+    H[f ∘ X ; μ] = H[X ; μ] ↔ Set.InjOn f {a | dist μ X a ≠ 0} := by
+  classical
+  have hsupp : ∀ ω, μ ω ≠ 0 → dist μ X (X ω) ≠ 0 := fun ω hω h => by
+    have h0 := (sum_eq_zero_iff_of_nonneg fun ω' _ => ?_).1 h ω (mem_univ ω)
+    · simp only [ite_true] at h0
+      exact hω h0
+    · split_ifs
+      exacts [hμ.nonneg ω', le_rfl]
+  have hsupp' : ∀ a, dist μ X a ≠ 0 → ∃ ω, μ ω ≠ 0 ∧ X ω = a := fun a ha => by
+    by_contra hn
+    push Not at hn
+    apply ha
+    refine sum_eq_zero fun ω _ => ?_
+    split_ifs with h
+    · by_contra hω
+      exact hn ω hω h
+    · rfl
+  have hchain : H[X ; μ] = H[f ∘ X ; μ] + H[X | f ∘ X ; μ] := by
+    have h1 := chain_rule hμ X (f ∘ X)
+    have h2 := chain_rule hμ (f ∘ X) X
+    rw [condEntropy_comp_self hμ, add_zero, entropyRV_pair_comm] at h1
+    linarith
+  have hiff : H[f ∘ X ; μ] = H[X ; μ] ↔ H[X | f ∘ X ; μ] = 0 := by
+    constructor <;> intro h <;> linarith
+  rw [hiff, condEntropy_eq_zero_iff hμ]
+  constructor
+  · rintro ⟨g, hg⟩ a ha b hb hab
+    obtain ⟨ω, hω, rfl⟩ := hsupp' a ha
+    obtain ⟨ω', hω', rfl⟩ := hsupp' b hb
+    rw [hg ω hω, hg ω' hω']
+    simp only [Function.comp_apply]
+    rw [hab]
+  · intro hinj
+    obtain ⟨ω₀⟩ : Nonempty Ω := Fintype.card_pos_iff.1 (card_pos_of_isPMF hμ)
+    have hα : Nonempty α := ⟨X ω₀⟩
+    refine ⟨Function.invFunOn f {a | dist μ X a ≠ 0}, fun ω hω => ?_⟩
+    exact (hinj.leftInvOn_invFunOn (hsupp ω hω)).symm
+
+/-- **Corollary 2.48 of [yeung2008]**, the strict form of the weakened Fano inequality, for a
+deterministic estimator `g(Y)`. In nats: `H(X|Y) < log 2 + Pₑ log |𝒳|`. -/
+theorem fano_lt {μ : Ω → ℝ} (hμ : IsPMF μ) (X : Ω → α) (Y : Ω → β) (g : β → α) :
+    H[X | Y ; μ] < log 2 + errProb μ X Y g * log (Fintype.card α) := by
+  have hcard : 0 < Fintype.card α := card_pos_of_isPMF (hμ.dist X)
+  have h := fano hμ X Y g
+  have hlog2 : 0 < log 2 := log_pos one_lt_two
+  have hP := errProb_nonneg hμ X Y g
+  have hlogc : 0 ≤ log (Fintype.card α) := log_natCast_nonneg _
+  rcases hP.eq_or_lt with h0 | h0
+  · rw [← h0] at h ⊢
+    simp only [binEntropy_zero, zero_mul, add_zero] at h ⊢
+    linarith
+  · rcases Nat.lt_or_ge (Fintype.card α) 2 with hc | hc
+    · have hc1 : Fintype.card α = 1 := by omega
+      have h1 := condEntropy_le_entropy hμ X Y
+      have h2 := entropy_le_log_card (hμ.dist X)
+      rw [hc1, Nat.cast_one, log_one] at h2
+      rw [hc1, Nat.cast_one, log_one, mul_zero, add_zero]
+      exact (h1.trans h2).trans_lt hlog2
+    · have hc' : (2 : ℝ) ≤ Fintype.card α := by exact_mod_cast hc
+      have hlt : log ((Fintype.card α : ℝ) - 1) < log (Fintype.card α) :=
+        log_lt_log (by linarith) (by linarith)
+      have := mul_lt_mul_of_pos_left hlt h0
+      linarith [binEntropy_le_log_two (p := errProb μ X Y g)]
 
 end InfoTheory

@@ -42,7 +42,11 @@ with `D' < σ²`.
 
 ## References
 
+Numbers without a source refer to [cover2006].
+
 * [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Section 10.3.2
+* [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
+  Lectures 1 and 3
 -/
 
 open Real MeasureTheory ProbabilityTheory Filter Topology
@@ -317,5 +321,19 @@ theorem gaussianInfoRD_le_iff {S D : ℝ≥0} (hS : S ≠ 0) (hD : D ≠ 0) {R :
     have : S * exp (-(2 * R)) ≤ S := mul_le_of_le_one_right hS'.le
       (exp_le_one_iff.2 (by linarith))
     exact this.trans (by exact_mod_cast hDS.le)
+
+/-- **Notation (Lecture 1 of [elgamal2010]).** The quadratic Gaussian rate function
+`R(x) = ½ log x` for `x ≥ 1` and `0` otherwise, in nats. -/
+def gaussianRateFun (x : ℝ) : ℝ := if 1 ≤ x then 1 / 2 * log x else 0
+
+/-- **Theorem 6 of Lecture 3 of [elgamal2010]**, for the information rate–distortion function:
+for a `N(0, P)` source with squared-error distortion, `R(D) = R(P/D)`. -/
+theorem gaussianInfoRD_eq_gaussianRateFun {S D : ℝ≥0} (hS : S ≠ 0) (hD : D ≠ 0) :
+    gaussianInfoRD S D = gaussianRateFun (S / D) := by
+  have hD' : (0 : ℝ) < D := by positivity
+  rw [gaussianInfoRD_eq hS hD, gaussianRateFun]
+  by_cases h : D ≤ S
+  · rw [ite_eq_left h, ite_eq_left ((one_le_div hD').2 (by exact_mod_cast h))]
+  · rw [ite_eq_right h, ite_eq_right fun h' => h (by exact_mod_cast (one_le_div hD').1 h')]
 
 end InfoTheory

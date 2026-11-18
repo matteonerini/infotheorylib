@@ -37,7 +37,8 @@ Likelihood ratio tests are optimal (Neyman–Pearson). If `α` is only required 
 
 Logarithms are natural. The relative entropy typical set also requires `P₁ⁿ(x), P₂ⁿ(x) > 0`, so
 that the bounds of property 1 hold; this changes nothing under `P₁` when `P₁ ≪ P₂`. In the
-Neyman–Pearson lemma we assume `T > 0` (for `T = 0` the conclusion can fail).
+Neyman–Pearson lemma we assume `T > 0`, where the book allows `T ≥ 0`: the case `T = 0` also holds
+for `P₂ ≥ 0`, but needs a separate argument.
 
 ## References
 

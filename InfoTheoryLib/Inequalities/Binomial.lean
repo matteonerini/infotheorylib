@@ -13,10 +13,9 @@ public import Mathlib.Analysis.Real.Pi.Bounds
 /-!
 # Combinatorial bounds on entropy
 
-Tight bounds on binomial coefficients (Lemma 17.5.1, after Wozencraft and Reiffen): for
-`0 < k < n` and `p = k/n`,
-`1/√(8npq) ≤ C(n, k) e^{-n H(p)} ≤ 1/√(πnpq)`, where `q = 1 - p` and `H` is the binary entropy
-in nats.
+Tight bounds on binomial coefficients (Lemma 17.5.1, after Wozencraft and Reiffen): for `0 < k < n`
+and `p = k/n`, `1/√(8npq) ≤ C(n, k) e^{-n H(p)} ≤ 1/√(πnpq)`, where `q = 1 - p` and `H` is the
+binary entropy in nats.
 
 Write `sₙ = n!/(√(2n) (n/e)ⁿ)` for Mathlib's Stirling sequence. Then
 `C(n, k) pᵏ q^{n-k} = sₙ/(sₖ s_{n-k}) · 1/√(2npq)`, and the bounds follow from
@@ -49,7 +48,7 @@ open Real Nat Stirling
 namespace InfoTheory
 
 /-- `sₙ ≤ s₁ = e/√2` for `n ≥ 1`. -/
-lemma stirlingSeq_le_one {n : ℕ} (hn : 1 ≤ n) : stirlingSeq n ≤ exp 1 / √2 := by
+lemma stirlingSeq_le_exp_one_div_sqrt_two {n : ℕ} (hn : 1 ≤ n) : stirlingSeq n ≤ exp 1 / √2 := by
   obtain ⟨n, rfl⟩ := exists_add_of_le hn
   rw [← stirlingSeq_one, add_comm]
   exact stirlingSeq'_antitone (Nat.zero_le n)
@@ -192,7 +191,7 @@ theorem choose_mul_pow_le' {k m : ℕ} (hk : 0 < k) (hm : 0 < m) :
   have hσ : π ≤ stirlingSeq k * stirlingSeq m := by
     rw [← hpi]; exact mul_le_mul hsk hsm (sqrt_nonneg _) ((sqrt_nonneg _).trans hsk)
   have hN : stirlingSeq (k + m) * √2 ≤ exp 1 := by
-    have := stirlingSeq_le_one (n := k + m) (by omega)
+    have := stirlingSeq_le_exp_one_div_sqrt_two (n := k + m) (by omega)
     rwa [le_div_iff₀ (sqrt_pos.2 two_pos)] at this
   have he : exp 1 * √π ≤ 2 * π := by
     have := sqrt_pi_gt

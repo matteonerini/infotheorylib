@@ -29,8 +29,7 @@ are partial recursive with prefix-free programs, and let a universal computer si
 * `fromBits l`: the number with binary digits `l`, least significant first.
 * `sdParse q`: the decoder of the self-delimiting code `eliasGamma` of a positive integer,
   returning the rest of the input and the integer minus one.
-* `Computer.ofOption f`, `lengthComputer`, `Computer.withLength B`, `zerosComputer`,
-  `alternatingComputer`.
+* `Computer.ofOption f`, `lengthComputer`, `Computer.withLength B`.
 
 ## Main statements
 

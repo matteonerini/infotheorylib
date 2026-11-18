@@ -22,6 +22,10 @@ public import InfoTheoryLib.Probability.Conditional
 * `indepRV_iff_dist_eq`: independence as an equality of pmfs.
 * `condIndep_iff_dist_eq`: `CondIndep μ X Y Z` iff the law of `(Z, X, Y)` is
   `condProdDist μ X Y Z`.
+
+## References
+
+* [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Section 2.8
 -/
 
 open Real Finset Filter Topology
@@ -39,6 +43,20 @@ def IndepRV (μ : Ω → ℝ) (X : Ω → α) (Y : Ω → β) : Prop :=
 omit [Fintype α] [Fintype β] in
 lemma IndepRV.symm {μ : Ω → ℝ} {X : Ω → α} {Y : Ω → β} (h : IndepRV μ X Y) : IndepRV μ Y X :=
   fun y x => by rw [dist_pair_swap, h, mul_comm]
+
+omit [Fintype α] [Fintype β] [Fintype γ] [Fintype δ] in
+/-- Functions of independent random variables are independent. -/
+lemma IndepRV.comp [Finite α] [Finite β] {μ : Ω → ℝ} {X : Ω → α} {Y : Ω → β}
+    (h : IndepRV μ X Y) (f : α → γ) (g : β → δ) : IndepRV μ (f ∘ X) (g ∘ Y) := by
+  classical
+  have := Fintype.ofFinite α
+  have := Fintype.ofFinite β
+  intro c d
+  have e : pair (f ∘ X) (g ∘ Y) = Prod.map f g ∘ pair X Y := rfl
+  rw [e, dist_comp, dist_comp, dist_comp, Fintype.sum_prod_type, sum_mul_sum]
+  refine sum_congr rfl fun a _ => sum_congr rfl fun b _ => ?_
+  rw [h]
+  by_cases ha : f a = c <;> by_cases hb : g b = d <;> simp [ha, hb]
 
 omit [Fintype α] [Fintype β] in
 lemma indepRV_iff_dist_eq (μ : Ω → ℝ) (X : Ω → α) (Y : Ω → β) :

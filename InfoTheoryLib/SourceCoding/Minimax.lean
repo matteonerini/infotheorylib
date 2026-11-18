@@ -72,24 +72,12 @@ theorem redundancy_eq_relEntropyReal {p q : β → ℝ} (hpq : AbsCont p q) :
 
 variable {p : α → ℝ} {W : α → β → ℝ}
 
-/-- **(13.15)** `D(p(θ) p(x|θ) ‖ p(θ) r(x)) = ∑_θ p(θ) D(p_θ ‖ r)`. -/
-lemma relEntropy_jointOf_prodDist_eq_sum (r : β → ℝ) :
-    relEntropyReal (jointOf p W) (prodDist p r) = ∑ x, p x * relEntropyReal (W x) r := by
-  rw [relEntropyReal, Fintype.sum_prod_type]
-  refine sum_congr rfl fun x _ => ?_
-  rw [relEntropyReal, mul_sum]
-  refine sum_congr rfl fun y _ => ?_
-  simp only [jointOf, prodDist]
-  rcases eq_or_ne (p x) 0 with h | h
-  · simp [h]
-  · rw [mul_div_mul_left _ _ h, mul_assoc]
-
 /-- **(13.14)–(13.20)** `∑_θ π(θ) D(p_θ ‖ q) = I_π(θ; X) + D(q_π ‖ q)`, for every `q` with
 `q_π ≪ q`. -/
 theorem sum_relEntropy_eq (hp : IsPMF p) (hW : IsChannel W) {q : β → ℝ}
     (hq : AbsCont (outDist p W) q) :
     ∑ x, p x * relEntropyReal (W x) q = mutualInfoOf p W + relEntropyReal (outDist p W) q := by
-  rw [← relEntropy_jointOf_prodDist_eq_sum, relEntropy_jointOf_prodDist_eq hp hW hq]
+  rw [← relEntropyReal_jointOf_prodDist, relEntropy_jointOf_prodDist_eq hp hW hq]
 
 /-- `I_π(θ; X) = ∑_θ π(θ) D(p_θ ‖ q_π)`. -/
 lemma mutualInfoOf_eq_sum_relEntropy (hp : IsPMF p) (hW : IsChannel W) :
@@ -210,7 +198,7 @@ lemma exists_relEntropy_mix_gt {w r : β → ℝ} (hw : IsPMF w) (hr : IsPMF r) 
 
 /-- At the output distribution `q*` of a capacity-achieving input `π*`, every row `p_θ` is
 absolutely continuous with respect to `q*` and has `D(p_θ ‖ q*) ≤ C`. -/
-theorem relEntropy_le_capacity [Nonempty α] (hp : IsPMF p) (hW : IsChannel W)
+theorem relEntropy_le_capacity (hp : IsPMF p) (hW : IsChannel W)
     (hpC : mutualInfoOf p W = capacity W) (x₀ : α) :
     AbsCont (W x₀) (outDist p W) ∧ relEntropyReal (W x₀) (outDist p W) ≤ capacity W := by
   classical
@@ -247,7 +235,7 @@ theorem relEntropy_le_capacity [Nonempty α] (hp : IsPMF p) (hW : IsChannel W)
   exact hmix t ht.1 ht.2
 
 /-- The rows charged by a capacity-achieving input are at distance exactly `C` from `q*`. -/
-theorem relEntropy_eq_capacity [Nonempty α] (hp : IsPMF p) (hW : IsChannel W)
+theorem relEntropy_eq_capacity (hp : IsPMF p) (hW : IsChannel W)
     (hpC : mutualInfoOf p W = capacity W) {x₀ : α} (hx₀ : 0 < p x₀) :
     relEntropyReal (W x₀) (outDist p W) = capacity W := by
   have hle := fun x => (relEntropy_le_capacity hp hW hpC x).2
@@ -297,7 +285,7 @@ theorem isLeast_maxRedundancy [Nonempty α] (hW : IsChannel W) :
 
 /-- **Theorem 13.1.1 (uniqueness).** A coding distribution `q` with worst-case redundancy `C` is
 the output distribution `q*` of every capacity-achieving input. -/
-theorem eq_outDist_of_relEntropy_le_capacity [Nonempty α] (hp : IsPMF p) (hW : IsChannel W)
+theorem eq_outDist_of_relEntropy_le_capacity (hp : IsPMF p) (hW : IsChannel W)
     (hpC : mutualInfoOf p W = capacity W) {q : β → ℝ} (hq : IsPMF q)
     (hqW : ∀ x, AbsCont (W x) q) (hR : ∀ x, relEntropyReal (W x) q ≤ capacity W) :
     q = outDist p W := by

@@ -6,6 +6,8 @@ Authors: Matteo Nerini
 module
 
 public import InfoTheoryLib.DifferentialEntropy.Gaussian
+public import Mathlib.Analysis.Convex.Jensen
+public import Mathlib.Analysis.Convex.SpecificFunctions.Basic
 
 /-!
 # The multivariate normal distribution
@@ -28,6 +30,8 @@ the same covariance. Applied to the independence bound, this gives Hadamard's in
 * `diffEntropy_le_of_covariance`, `diffEntropy_eq_of_covariance_iff`: Theorem 8.6.5, a density
   with covariance `K` has `h ≤ ½ log ((2πe)ⁿ |K|)`, with equality iff it is `N(m, K)`.
 * `det_le_prod_diag`: Hadamard's inequality (8.64), `|K| ≤ ∏ᵢ Kᵢᵢ`.
+* `diffEntropy_le_of_covariance_trace`: Lecture 2 of [elgamal2010],
+  `h(X) ≤ (n/2) log (2πe (1/n) ∑ᵢ Kᵢᵢ)`.
 
 ## Implementation notes
 
@@ -37,8 +41,12 @@ variables the density is a product of one-dimensional normal densities.
 
 ## References
 
+Numbers without a source refer to [cover2006].
+
 * [T. M. Cover and J. A. Thomas, *Elements of Information Theory*][cover2006], Sections 8.4 and
   8.6
+* [A. El Gamal and Y.-H. Kim, *Lecture Notes on Network Information Theory*][elgamal2010],
+  Lecture 2
 -/
 
 open Real MeasureTheory ProbabilityTheory Matrix Filter
@@ -484,5 +492,46 @@ theorem det_le_prod_diag : K.det ≤ ∏ i, K i i := by
   rw [log_le_log_iff (by have := hK.det_pos; positivity) (by positivity)] at hlog
   rw [← hDdet]
   exact le_of_mul_le_mul_left hlog (by positivity)
+
+omit [DecidableEq ι] in
+/-- **Lecture 2 of [elgamal2010].** A density with covariance `K` on `ℝⁿ` has
+`h(X) ≤ (n/2) log (2πe (1/n) ∑ᵢ Kᵢᵢ)`: its differential entropy is at most that of `n` i.i.d.
+Gaussian coordinates whose variance is the average variance. -/
+theorem diffEntropy_le_of_covariance_trace [Nonempty ι] {g : (ι → ℝ) → ℝ} (hg : IsPDF volume g)
+    (hent : Integrable fun x => negMulLog (g x)) (m : ι → ℝ)
+    (hint : ∀ a b, Integrable fun x => g x * ((x - m) a * (x - m) b))
+    (hcov : ∀ a b, ∫ x, g x * ((x - m) a * (x - m) b) = K a b) :
+    diffEntropy volume g ≤
+      Fintype.card ι / 2 * log (2 * π * exp 1 * ((∑ i, K i i) / Fintype.card ι)) := by
+  classical
+  have h1 := diffEntropy_le_of_covariance hK hg hent m hint hcov
+  set n := Fintype.card ι
+  have hn : (0 : ℝ) < n := by exact_mod_cast Fintype.card_pos
+  have hdiag : ∀ i, 0 < K i i := fun i => hK.diag_pos
+  have hdet := hK.det_pos
+  have hc : 0 < 2 * π * exp 1 := by positivity
+  have havg : 0 < (∑ i, K i i) / n :=
+    div_pos (Finset.sum_pos (fun i _ => hdiag i) Finset.univ_nonempty) hn
+  -- `log |K| ≤ ∑ᵢ log Kᵢᵢ ≤ n log ((1/n) ∑ᵢ Kᵢᵢ)`, by Hadamard and the concavity of `log`.
+  have h2 : log K.det ≤ ∑ i, log (K i i) := by
+    rw [← log_prod (fun i _ => (hdiag i).ne')]
+    exact log_le_log hdet (det_le_prod_diag hK)
+  have h3 : ∑ i, log (K i i) ≤ n * log ((∑ i, K i i) / n) := by
+    have h := strictConcaveOn_log_Ioi.concaveOn.le_map_sum (t := Finset.univ)
+      (w := fun _ => 1 / (n : ℝ)) (p := fun i => K i i) (fun _ _ => by positivity)
+      (by rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]; field_simp; rfl)
+      (fun i _ => hdiag i)
+    simp only [smul_eq_mul] at h
+    rw [← Finset.mul_sum, ← Finset.mul_sum,
+      show 1 / (n : ℝ) * ∑ i, K i i = (∑ i, K i i) / n by ring] at h
+    have h' := mul_le_mul_of_nonneg_left h hn.le
+    rwa [← mul_assoc, mul_one_div_cancel hn.ne', one_mul] at h'
+  calc diffEntropy volume g ≤ 1 / 2 * log ((2 * π * exp 1) ^ n * K.det) := h1
+    _ = 1 / 2 * (n * log (2 * π * exp 1) + log K.det) := by
+        rw [log_mul (by positivity) hdet.ne', log_pow]
+    _ ≤ 1 / 2 * (n * log (2 * π * exp 1) + n * log ((∑ i, K i i) / n)) := by linarith
+    _ = n / 2 * log (2 * π * exp 1 * ((∑ i, K i i) / n)) := by
+        rw [log_mul hc.ne' havg.ne']
+        ring
 
 end InfoTheory

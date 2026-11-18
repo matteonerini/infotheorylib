@@ -12,6 +12,18 @@ are adapted from [Mathlib's](https://leanprover-community.github.io/contribute/i
   `InfoTheoryLib.lean`. `lake exe mk_all --check` checks it is up to date.
 * A change is ready when `lake build --wfail` succeeds: no errors, no warnings and no `sorry`.
   A statement that is planned but not yet proved can be recorded with `proof_wanted`.
+* Continuous integration also runs `axiom-audit`, since `--wfail` does not report `axiom`
+  declarations.
+* Before a release, replay the proofs through the kernel with `leanchecker`, which takes about 20
+  minutes. It runs one module per process because of
+  [lean4#16267](https://github.com/leanprover/lean4/issues/16267), which makes
+  `leanchecker InfoTheoryLib` crash on this Lean version:
+  ```sh
+  git ls-files 'InfoTheoryLib/*.lean' | sed 's/\.lean$//; s|/|.|g' |
+    LEAN_NUM_THREADS=1 lake env xargs -P 4 -n 1 leanchecker
+  ```
+* Also before a release, run `lake check --paranoid` once. It uses independent proof checkers too,
+  but it re-checks Mathlib, so it can take a long time. On macOS, add `--inadvisably-no-sandbox`.
 
 ## Where things go
 
@@ -21,11 +33,18 @@ are adapted from [Mathlib's](https://leanprover-community.github.io/contribute/i
   grows past about 1000 lines.
 * **`ForMathlib/`** holds results that do not mention information theory, such as facts about
   `Real.log`. They are candidates for upstreaming to Mathlib.
-* **`Book/ChapterN.lean`** holds material specific to Cover & Thomas: its worked examples,
-  textbook-only definitions and the index of the chapter, in namespace `InfoTheory.CoverThomas`.
-  Each numbered lemma or theorem gets an alias named after its number (`theorem_2_6_5`) pointing to
-  the library declaration. Results that are useful beyond the book belong in a topic folder, with a
-  descriptive name.
+* **`Books/CoverThomas/ChapterN.lean`** and **`Books/ElGamalKim/LectureN.lean`** hold material
+  specific to one text: its worked examples, text-only definitions and the index of the chapter or
+  lecture. Cover & Thomas is in `Books/CoverThomas/` (namespace `InfoTheory.CoverThomas`), with one
+  file per chapter, and El Gamal & Kim's lecture notes are in `Books/ElGamalKim/` (namespace
+  `InfoTheory.ElGamalKim`), with one file per lecture or appendix; a long lecture can have extra
+  files (`Lecture14Binary.lean`). Yeung's book is in `Books/Yeung/` (namespace `InfoTheory.Yeung`),
+  with one file per chapter. Each numbered lemma or theorem gets an alias
+  named after its number (`theorem_2_6_5`; `theorem_3_2` for Theorem 2 of Lecture 3) pointing to the
+  library declaration; a named but unnumbered result gets an alias named after it
+  (`mrs_gerber_lemma`). Results that are useful beyond the text belong in a topic folder, with a
+  descriptive name, and a result that several texts state is proved once and indexed in each of
+  their files.
 * Check Mathlib before defining something: reuse `Real.negMulLog`, `Real.binEntropy`,
   `ConvexOn`, and so on.
 
@@ -73,13 +92,15 @@ end InfoTheory
 ```
 
 The header linter requires the copyright block exactly in this form. Every file uses Lean's
-module system: a `module` header, `public import`s, and `@[expose] public noncomputable section`,
-which makes all declarations and definition bodies visible to other files. Mathlib imports its
-own dependencies privately, so a lemma is available only after importing the Mathlib file that
-declares it (or one that imports it publicly), and the bodies of Mathlib definitions that are not
-exposed cannot be unfolded: use their characterizing lemmas instead (see
-`binEntropy_eq_mul_log_inv`). Import only the modules that are needed; the base files `ForMathlib/Log.lean` and `Probability/FinitePMF.lean` import
-`Mathlib`. Add any new reference to `docs/references.bib` and cite it by its key.
+module system: a `module` header, `public import`s, and `@[expose] public noncomputable section`
+(`@[expose] public section` in a file that needs no `noncomputable`, such as
+`ChannelCoding/Hamming.lean`), which makes all declarations and definition bodies visible to other
+files. Mathlib imports its own dependencies privately, so a lemma is available only after
+importing the Mathlib file that declares it (or one that imports it publicly), and the bodies of
+Mathlib definitions that are not exposed cannot be unfolded: use their characterizing lemmas
+instead (see `binEntropy_eq_mul_log_inv`). Import only the modules that are needed; a few base
+files, such as `ForMathlib/Log.lean` and `Probability/FinitePMF.lean`, import `Mathlib`. Add any
+new reference to `docs/references.bib` and cite it by its key.
 
 ## Mathematical conventions
 
@@ -106,6 +127,10 @@ exposed cannot be unfolded: use their characterizing lemmas instead (see
 * A docstring of a result from a book starts with its number and name in bold, for example
   `/-- **Theorem 2.6.3 (Information inequality).** ... -/`, and cites equation numbers such as
   `(2.82)`.
+* A number such as `Theorem 1` or `(2.82)` may omit its source only if the file's `## References`
+  section lists exactly one text, and, for the lecture notes, one lecture or appendix. Otherwise
+  name the source at the number (`(2.82) of [cover2006]`, `Theorem 2 of Lecture 11`), or start the
+  section with `Numbers without a source refer to [cover2006].` if most numbers come from one text.
 * Every definition and every main theorem has a docstring. Lines are at most 100 characters.
 * Do not use `open Classical` or `open scoped Classical` for a whole file. Use the `classical`
   tactic inside proofs, or `open Classical in` before a single declaration whose statement needs

@@ -286,8 +286,8 @@ theorem subsetExpAvg_succ_le (hf : IsSubmodular f) (h0 : f ∅ = 0) {r : ℝ} (h
           X * (n.choose k * ((n : ℝ) - k)) / (k + 1) by ring, ← hid]
         field_simp
 
-/-- **Theorem 17.6.3 (Han), (17.60)–(17.64).** For a submodular set function with `f(∅) = 0`, the
-average per element of the conditional quantities `f(univ) - f(Sᶜ)` increases with `k`. -/
+/-- **Theorem 17.6.3 (Han), (17.60)–(17.64).** For a submodular set function, the average per
+element of the conditional quantities `f(univ) - f(Sᶜ)` increases with `k`. -/
 theorem subsetCondAvg_le_succ (hf : IsSubmodular f) {k : ℕ} (hk : 1 ≤ k) (hkn : k + 1 ≤ n) :
     subsetCondAvg f k ≤ subsetCondAvg f (k + 1) := by
   classical

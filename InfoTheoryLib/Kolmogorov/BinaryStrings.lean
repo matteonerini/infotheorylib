@@ -34,11 +34,13 @@ bits). Hence `K(x | n) ≤ n H₀(k/n) + log₂ (n + 1) + c` (Example 14.2.8, Th
 
 ## Implementation notes
 
-The book states (14.24) with `½ log n` for all strings, but its proof uses (14.14), which holds
-only for `0 < k < n`, and the term `-½ log (π (k/n)(1 - k/n))` it drops is itself of order
-`½ log n` when `k` or `n - k` is bounded (for `k = 1`, `K(x | n) ≈ 2 log n` while
-`n H₀(1/n) ≈ log n`). We prove the bound with `log₂ (n + 1)` for all strings, which is what the
-later theorems use, and the refined bound for `0 < k < n` with the extra term. Entropies are
+The book states (14.24) with `½ log n` for all strings. Its proof uses (14.14), which holds only
+for `0 < k < n`, and drops the term `-½ log (π (k/n)(1 - k/n))`, which is of order `½ log n` when
+`k` or `n - k` is bounded; with `k` described by `log n` bits the proof then gives about
+`nH₀(k/n) + log n`. The bound with `½ log n` still holds for all strings, by describing `k` more
+cheaply (its order of magnitude first), but we do not formalize that. We prove the bound with
+`log₂ (n + 1)` for all strings, which is what the later theorems use, and the refined bound for
+`0 < k < n` with the extra term. Entropies are
 in bits here: `H₀ = binEntropy / log 2`.
 
 ## References

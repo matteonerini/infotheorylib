@@ -3,7 +3,9 @@ message: "If you use this library, please cite it as below."
 title: "infotheorylib: a Lean 4 formalization of information theory"
 abstract: >-
   A Lean 4 and Mathlib library of information theory, following T. M. Cover and J. A. Thomas,
-  Elements of Information Theory (2nd ed., 2006).
+  Elements of Information Theory (2nd ed., 2006), A. El Gamal and Y.-H. Kim, Lecture Notes on
+  Network Information Theory (arXiv:1001.3404v4, 2010), and R. W. Yeung, Information Theory and
+  Network Coding (Springer, 2008).
 type: software
 authors:
   - family-names: Nerini
@@ -28,3 +30,22 @@ references:
       name: "John Wiley & Sons"
     year: 2006
     doi: "10.1002/047174882X"
+  - type: generic
+    title: "Lecture Notes on Network Information Theory"
+    authors:
+      - family-names: El Gamal
+        given-names: Abbas
+      - family-names: Kim
+        given-names: Young-Han
+    year: 2010
+    url: "https://arxiv.org/abs/1001.3404v4"
+  - type: book
+    title: "Information Theory and Network Coding"
+    authors:
+      - family-names: Yeung
+        given-names: Raymond W.
+    publisher:
+      name: "Springer"
+    year: 2008
+    doi: "10.1007/978-0-387-79234-7"
+    notes: "The library follows the numbering of the author's draft of 15 November 2007."

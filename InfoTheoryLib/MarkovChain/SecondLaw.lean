@@ -142,10 +142,13 @@ private lemma law3_isPMF {ν : α → ℝ} {r : α → α → ℝ} (hν : IsPMF 
   simp only [law3, Fintype.sum_prod_type, ← mul_sum, (transPow_isStochastic hr n _).sum_eq_one,
     mul_one, (hr _).sum_eq_one, hν.sum_eq_one]
 
+/-- The first coordinate of a triple. -/
 private def X0 : α × α × α → α := fun t => t.1
 
+/-- The second coordinate of a triple. -/
 private def X1 : α × α × α → α := fun t => t.2.1
 
+/-- The third coordinate of a triple. -/
 private def X2 : α × α × α → α := fun t => t.2.2
 
 /-- Marginalizing the middle coordinate. -/

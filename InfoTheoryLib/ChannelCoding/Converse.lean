@@ -115,14 +115,20 @@ lemma dist_of_channel [Finite γ]
   simp only [h]
   exact sum_dist_mul_comp f μ Z fun x => W x y
 
+/-- In the same situation, `H(Y) - H(Y | Z) = I(f(Z); Y)`. -/
+lemma entropy_sub_condEntropy_eq_mutualInfoOf (hμ : IsPMF μ) (hW : IsChannel W)
+    (h : ∀ z y, dist μ (pair Z Y) (z, y) = dist μ Z z * W (f z) y) :
+    H[Y ; μ] - H[Y | Z ; μ] = mutualInfoOf (dist μ (f ∘ Z)) W := by
+  rw [condEntropy_of_channel f h, entropyRV, dist_of_channel f h,
+    ← mutualInfoOf_eq (hμ.dist (f ∘ Z)) hW]
+
 include f in
 /-- In the same situation, `H(Y) - H(Y | Z) = I(f(Z); Y) ≤ C`. -/
 lemma entropy_sub_condEntropy_le_capacity (hμ : IsPMF μ) (hW : IsChannel W)
     (h : ∀ z y, dist μ (pair Z Y) (z, y) = dist μ Z z * W (f z) y) :
     H[Y ; μ] - H[Y | Z ; μ] ≤ capacity W := by
-  have hp := hμ.dist (f ∘ Z)
-  rw [condEntropy_of_channel f h, entropyRV, dist_of_channel f h, ← mutualInfoOf_eq hp hW]
-  exact mutualInfoOf_le_capacity hp hW
+  rw [entropy_sub_condEntropy_eq_mutualInfoOf f hμ hW h]
+  exact mutualInfoOf_le_capacity (hμ.dist (f ∘ Z)) hW
 
 end General
 
@@ -171,11 +177,13 @@ lemma dist_fbLaw_init (hW : IsChannel W) (k : ℕ) :
   rw [sum_eq_single u (fun u' _ hu' => by simp [hu']) (by simp)]
   simp [fbLaw_snoc, ← mul_sum, (hW _).sum_eq_one]
 
-/-- **(7.125)–(7.132)** Each channel use increases the mutual information between the message and
-the outputs by at most the capacity: `I(W; Yᵏ⁺¹) ≤ I(W; Yᵏ) + C`. -/
-theorem mutualInfo_fbLaw_succ_le (hν : IsPMF ν) (hW : IsChannel W) (k : ℕ) :
+/-- **(7.125)–(7.131)** Each channel use increases the mutual information between the message and
+the outputs by at most the mutual information between the input `Xₖ₊₁` and the output `Yₖ₊₁`:
+`I(W; Yᵏ⁺¹) ≤ I(W; Yᵏ) + I(Xₖ₊₁; Yₖ₊₁)`. -/
+theorem mutualInfo_fbLaw_succ_le_mutualInfoOf (hν : IsPMF ν) (hW : IsChannel W) (k : ℕ) :
     I[Prod.fst : Prod.snd ; fbLaw ν W enc (k + 1)] ≤
-      I[Prod.fst : Prod.snd ; fbLaw ν W enc k] + capacity W := by
+      I[Prod.fst : Prod.snd ; fbLaw ν W enc k] +
+        mutualInfoOf (dist (fbLaw ν W enc (k + 1)) fun z => enc k z.1 (Fin.init z.2)) W := by
   classical
   set μ := fbLaw ν W enc (k + 1)
   have hμ : IsPMF μ := fbLaw_isPMF hν hW (k + 1)
@@ -218,10 +226,20 @@ theorem mutualInfo_fbLaw_succ_le (hν : IsPMF ν) (hW : IsChannel W) (k : ℕ) :
       exact this
     rw [e1, e2]
     exact fbLaw_snoc k w u b
-  have h5 := entropy_sub_condEntropy_le_capacity (fun z : (Fin k → β) × 𝒲 => enc k z.2 z.1) hμ
-    hW hchan
+  have h5 := entropy_sub_condEntropy_eq_mutualInfoOf (fun z : (Fin k → β) × 𝒲 => enc k z.2 z.1)
+    hμ hW hchan
+  have h6 : mutualInfoOf (dist μ ((fun z : (Fin k → β) × 𝒲 => enc k z.2 z.1) ∘ pair Yp Wv)) W =
+      mutualInfoOf (dist (fbLaw ν W enc (k + 1)) fun z => enc k z.1 (Fin.init z.2)) W := rfl
   rw [h1, h2, h3]
   linarith
+
+/-- **(7.125)–(7.132)** Each channel use increases the mutual information between the message and
+the outputs by at most the capacity: `I(W; Yᵏ⁺¹) ≤ I(W; Yᵏ) + C`. -/
+theorem mutualInfo_fbLaw_succ_le (hν : IsPMF ν) (hW : IsChannel W) (k : ℕ) :
+    I[Prod.fst : Prod.snd ; fbLaw ν W enc (k + 1)] ≤
+      I[Prod.fst : Prod.snd ; fbLaw ν W enc k] + capacity W :=
+  (mutualInfo_fbLaw_succ_le_mutualInfoOf hν hW k).trans
+    (add_le_add_right (mutualInfoOf_le_capacity ((fbLaw_isPMF hν hW _).dist _) hW) _)
 
 /-- **(7.125)–(7.132)** The message and the outputs of `n` uses of the channel, with or without
 feedback, satisfy `I(W; Yⁿ) ≤ nC`. -/
@@ -498,7 +516,7 @@ theorem IsAchievableRate.isAchievableRateFB [Nonempty α] (hW : IsChannel W) {R 
     exact (c n).avgErrProb_le_maxErrProb
 
 /-- **(7.122)–(7.134)** Rates achievable with feedback are at most the capacity. -/
-theorem IsAchievableRateFB.le_capacity [Nonempty α] (hW : IsChannel W) {R : ℝ}
+theorem IsAchievableRateFB.le_capacity (hW : IsChannel W) {R : ℝ}
     (h : IsAchievableRateFB W R) : R ≤ capacity W := by
   obtain ⟨c, hc⟩ := h
   refine le_of_converse_bound hc (fun n => ?_) fun n _ =>

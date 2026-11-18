@@ -118,17 +118,6 @@ lemma dist_comp_equiv {Ω Ω' : Type*} [Fintype Ω] [Finite Ω'] (μ : Ω' → �
   rw [dist, ← e.symm.sum_comp]
   simp
 
-/-- Conditioning on less information increases the conditional entropy:
-`H(X | Y) ≤ H(X | h(Y))`. -/
-lemma condEntropy_le_condEntropy_comp {Ω γ δ : Type*} [Fintype Ω] [Fintype γ] [Fintype δ]
-    {μ : Ω → ℝ} (hμ : IsPMF μ) (X : Ω → β) (Y : Ω → γ) (h : γ → δ) :
-    H[X | Y ; μ] ≤ H[X | h ∘ Y ; μ] := by
-  have e : H[X | Y ; μ] = H[X | pair Y (h ∘ Y) ; μ] :=
-    (condEntropy_congr_right hμ X (fun y => (y, h y)) (fun a b hab => (Prod.mk.inj hab).1)
-      (fun _ => rfl)).symm
-  rw [e]
-  exact condEntropy_le_condEntropy hμ X Y (h ∘ Y)
-
 /-! ### The Markov property across a split in time -/
 
 variable {μ : α → ℝ} {r : α → α → ℝ}

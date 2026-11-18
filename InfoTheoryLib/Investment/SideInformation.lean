@@ -104,9 +104,8 @@ variable {γ : Type*} [Fintype γ]
 
 /-- **Theorem 16.4.2, (16.48)–(16.53).** Side information `Y` about the market `X`, with joint pmf
 `q(x, y)`, increases the optimal growth rate by at most `I(X; Y)`: the investor who knows `Y = y`
-uses the log-optimal portfolio of `q(·, y)`, and
-`∑_y W*(q(·, y)) - W*(q_X) ≤ I(X; Y)`. Since `W*` is homogeneous,
-`W*(q(·, y)) = q(y) W*(q(· | y))`. -/
+uses the log-optimal portfolio of `q(·, y)`, and `∑_y W*(q(·, y)) - W*(q_X) ≤ I(X; Y)`. Since `W*`
+is homogeneous, `W*(q(·, y)) = q(y) W*(q(· | y))`. -/
 theorem sideInfo_gain_le (hm : 0 < m) {q : ι × γ → ℝ} (hq : IsPMF q) (hx : IsPosMarket x) :
     ∑ y, optGrowthRate (fun k => q (k, y)) x - optGrowthRate (dist q Prod.fst) x ≤
       I[Prod.fst : Prod.snd ; q] := by

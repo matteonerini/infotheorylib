@@ -213,7 +213,7 @@ theorem card_typeClass_mul_prod_factorial {n : ℕ} (x : Fin n → α) :
       omega
     · have hn' : (n : ℝ) ≠ 0 := by exact_mod_cast hn.ne'
       simp only [typeOf] at h
-      exact_mod_cast (div_left_inj' hn').1 h
+      exact_mod_cast (div_left_inj₀ hn').1 h
   have hfib : ∀ y ∈ typeClass (typeOf x) n,
       (univ.filter fun σ : Equiv.Perm (Fin n) => x ∘ σ = y).card =
         Fintype.card {σ : Equiv.Perm (Fin n) // x ∘ σ = x} := by
@@ -284,7 +284,7 @@ theorem prob_typeClass_le_self {n : ℕ} (hn : 0 < n) (x y : Fin n → α) :
     have h := congrFun (mem_typeClass.1 hw) a
     have hn' : (n : ℝ) ≠ 0 := by exact_mod_cast hn.ne'
     simp only [typeOf] at h
-    rw [show symbolCount w a = symbolCount z a by exact_mod_cast (div_left_inj' hn').1 h]
+    rw [show symbolCount w a = symbolCount z a by exact_mod_cast (div_left_inj₀ hn').1 h]
   have hT : ∀ z : Fin n → α, ((typeClass (typeOf z) n).card : ℝ) =
       n.factorial / ∏ a, ((symbolCount z a).factorial : ℝ) := fun z => by
     rw [eq_div_iff (prod_ne_zero_iff.2 fun a _ => by positivity)]

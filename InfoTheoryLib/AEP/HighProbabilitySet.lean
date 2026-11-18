@@ -141,7 +141,8 @@ lemma minHighProbCard_pos {p : α → ℝ} (hp : IsPMF p) (n : ℕ) {δ : ℝ} (
   rw [h, prob_empty] at hpB
   linarith
 
-/-- **(3.30)** The smallest set of probability at least `1 - δ` has `(1/n) log |B_δ^(n)| → H`. -/
+/-- **(3.30)** The smallest set of probability at least `1 - δ` has `(1/n) log |B_δ^(n)| → H`. We
+assume `δ > 0`: for `δ = 0` the smallest such set is the whole support of `pⁿ`. -/
 theorem tendsto_log_minHighProbCard {p : α → ℝ} (hp : IsPMF p) {δ : ℝ} (hδ0 : 0 < δ)
     (hδ1 : δ < 1) :
     Tendsto (fun n => log (minHighProbCard p n δ) / n) atTop (𝓝 (entropy p)) := by
@@ -175,8 +176,9 @@ theorem minHighProbCard_expEq {p : α → ℝ} (hp : IsPMF p) {δ : ℝ} (hδ0 :
     exact_mod_cast minHighProbCard_pos hp n hδ0.le hδ1) _).2
     (tendsto_log_minHighProbCard hp hδ0 hδ1)
 
-/-- **(3.27)** The typical set has `e^{nH}` elements to first order in the exponent: for
-`0 < ε < 1` and `η > 0`, eventually `H - ε - η < (1/n) log |A_ε^(n)| ≤ H + ε`. -/
+/-- **(3.27)**, for a fixed `ε`. The typical set has about `e^{nH}` elements: for `0 < ε < 1` and
+`η > 0`, eventually `H - ε - η < (1/n) log |A_ε^(n)| ≤ H + ε`. The book's `≐` form, with `ε → 0`,
+is not formalized. -/
 theorem eventually_log_card_typicalSet {p : α → ℝ} (hp : IsPMF p) {ε : ℝ} (hε0 : 0 < ε)
     (hε1 : ε < 1) {η : ℝ} (hη : 0 < η) :
     ∀ᶠ n : ℕ in atTop, entropy p - ε - η < log (typicalSet p n ε).card / n ∧

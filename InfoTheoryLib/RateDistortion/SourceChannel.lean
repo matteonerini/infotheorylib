@@ -88,7 +88,8 @@ theorem LossySourceChannelCode.infoRD_le_capacity [Nonempty α] [Nonempty 𝒱']
   exact le_of_mul_le_mul_left this hn'
 
 /-- **Theorem 10.4.1 (converse).** If the distortion `D` is achievable over a channel of capacity
-`C`, then `R(D) ≤ C`. -/
+`C`, then `R(D) ≤ C`. The book states the theorem as "achievable iff `C > R(D)`", whose strict
+"only if" can fail at the boundary; the non-strict converse is the one its proof gives. -/
 theorem IsAchievableSCDistortion.infoRD_le_capacity [Nonempty α] [Nonempty 𝒱'] (hp : IsPMF p)
     (hW : IsChannel W) {D : ℝ} (h : IsAchievableSCDistortion p W d D) :
     infoRD p d D ≤ capacity W := by
@@ -195,7 +196,8 @@ theorem distortion_concatCode_le [Finite 𝒱'] [Nonempty 𝒱] [Nonempty 𝒱']
         · exact c₂.condErrProb_le_maxErrProb w
 
 /-- **Theorem 10.4.1 (achievability).** If `R(D) < C`, the distortion `D` is achievable: a rate
-distortion code of rate `R` with `R(D) < R < C` followed by a channel code of rate `R`. -/
+distortion code of rate `R` with `R(D) < R < C` followed by a channel code of rate `R`. We also
+assume `D ≥ D_min`, as `R(D)` is `0` below the smallest achievable distortion `D_min`. -/
 theorem isAchievableSCDistortion_of_infoRD_lt [Nonempty α] [Nonempty 𝒱'] (hp : IsPMF p)
     (hW : IsChannel W) (hd : ∀ x y, 0 ≤ d x y) {D : ℝ} (hD : minDistortion p d ≤ D)
     (hC : infoRD p d D < capacity W) : IsAchievableSCDistortion p W d D := by
