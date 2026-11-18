@@ -59,11 +59,11 @@ To use the library in your own project, add it to the `lakefile.toml` of the pro
 [[require]]
 name = "infotheorylib"
 git = "https://github.com/matteonerini/infotheorylib"
-rev = "v4.36.0-rc2"
+rev = "v4.36.0"
 ```
 
 then run `lake update infotheorylib` and `lake exe cache get`. A Lake project can contain only one
-version of Mathlib, so your project must use the same Lean toolchain (`v4.36.0-rc2`) and Mathlib
+version of Mathlib, so your project must use the same Lean toolchain (`v4.36.0`) and Mathlib
 version as the release you depend on. Releases are tagged with the Lean version they support;
 the available versions are listed on the
 [releases page](https://github.com/matteonerini/infotheorylib/releases).

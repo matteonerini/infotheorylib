@@ -586,7 +586,7 @@ theorem condEntropy_viewB_compl (hp : IsPMF p) (hθ : ∀ j, IsPMF (θ j)) (S : 
     fun w => rfl
   have hunion : (Sᶜ ∪ S) = univ := by
     ext x
-    by_cases hx : x ∈ S <;> simp [hx]
+    by_cases hx : x ∈ S <;> simp
   have hseed : H[pair (maskL Sᶜ) (maskL S) ; seedsLaw θ] = H[maskL univ ; seedsLaw θ] :=
     (entropyRV_eq_of_mutual hρ (fun v => (restrictMask Sᶜ v, restrictMask S v))
       (fun v => unionMask Sᶜ v.1 v.2)

@@ -132,7 +132,7 @@ lemma exists_const_of_interior_eq_empty {S : Set E} (hS : Convex ℝ S) (hne : S
     exact (AffineSubspace.direction_eq_top_iff_of_nonempty hAne).1 h
   obtain ⟨φ, hφ, hle⟩ := A.direction.exists_le_ker_of_lt_top hdir
   have hcl : closure S ⊆ A :=
-    closure_minimal (subset_affineSpan ℝ S) A.closed_of_finiteDimensional
+    closure_minimal (subset_affineSpan ℝ S) A.isClosed_of_finiteDimensional
   refine ⟨LinearMap.toContinuousLinearMap φ, fun h => hφ ?_, fun x hx y hy => ?_⟩
   · ext v
     have := congrArg (fun F : StrongDual ℝ E => F v) h

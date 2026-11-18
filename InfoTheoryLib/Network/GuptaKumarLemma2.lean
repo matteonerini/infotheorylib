@@ -388,7 +388,7 @@ def gkUnif (k : ℝ) : Measure ℝ := ENNReal.ofReal k⁻¹ • volume.restrict 
 
 lemma isProbabilityMeasure_gkUnif {k : ℝ} (hk : 0 < k) : IsProbabilityMeasure (gkUnif k) := by
   refine ⟨?_⟩
-  simp only [gkUnif, Measure.smul_apply, Measure.restrict_apply MeasurableSet.univ, univ_inter,
+  simp only [gkUnif, smul_apply, Measure.restrict_apply MeasurableSet.univ, univ_inter,
     Real.volume_Ioc, sub_zero, smul_eq_mul]
   rw [← ENNReal.ofReal_mul (by positivity), inv_mul_cancel₀ hk.ne', ENNReal.ofReal_one]
 

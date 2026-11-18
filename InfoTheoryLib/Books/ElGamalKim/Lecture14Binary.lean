@@ -146,7 +146,7 @@ lemma mutualInfo_mdExX_fst_le : I[mdExX : Prod.fst ; mdExLaw] ≤ 1 / 2 * log 2 
       funext ⟨y, x⟩
       cases y <;> cases x <;>
         simp [dist, pair, mdExLaw, mdExX, jointOf, Fintype.sum_prod_type, bernoulliPMF]
-      all_goals ring
+      ring
     rw [heq, hj, Fintype.sum_bool]
     simp [entropy_bernoulliPMF, bernoulliPMF]
   rw [mutualInfo_eq_entropy_sub_condEntropy mdExLaw_isPMF, entropy_mdExX, hc]

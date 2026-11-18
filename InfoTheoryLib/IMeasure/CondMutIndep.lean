@@ -111,7 +111,7 @@ theorem IsSignedMeasure.inf_inter_inf_sdiff_eq_sum {α κ : Type*} [Fintype α] 
   -- (12.47), from Theorem 3.19
   have hne : (S ∪ T).Nonempty := hS.mono subset_union_left
   have h₄ := hm.inf_sdiff_eq_sum hne A B
-  rw [inf'_eq_inf, inf_union, inf_eq_inter] at h₄
+  rw [inf'_eq_inf, inf_union] at h₄
   have h₅ : ∑ U ∈ (S ∪ T).powerset, (-1 : ℝ) ^ #U * m (U.biUnion A \ B) =
       -∑ U ∈ (S ∪ T).powerset with U.Nonempty, (-1 : ℝ) ^ (#U + 1) * m (U.biUnion A \ B) := by
     rw [← sum_filter_add_sum_filter_not (S ∪ T).powerset (fun U => U.Nonempty)]
@@ -159,7 +159,7 @@ theorem iMeasure_inf_sdiff_eq_zero_of_condInfo (hμ : IsPMF μ) {G₁ G₂ B : F
     (hI : condInfo (blockEntropy μ X) G₁ G₂ B = 0) :
     iMeasure μ X ((G₁ ∪ G₂).inf (fun l => tilde {l}) \ tilde B) = 0 := by
   have hf := isPolymatroid_blockEntropy (X := X) hμ
-  rw [inf_union, inf_eq_inter,
+  rw [inf_union,
     (isSignedMeasure_iMeasure μ X).inf_inter_inf_sdiff_eq_sum h₁ h₂ hd]
   refine sum_eq_zero fun S' hS' => sum_eq_zero fun T' hT' => ?_
   rw [biUnion_tilde_singleton, biUnion_tilde_singleton, biUnion_tilde_singleton,

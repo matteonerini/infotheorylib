@@ -730,7 +730,7 @@ lemma ne_nil_of_prefixClosed {D ws : List (List Bool)} (h : PrefixClosed D ws) :
 lemma clog_mul_log_two_le (c : ℕ) : (Nat.clog 2 c : ℝ) * log 2 ≤ log c + log 2 := by
   have hl : 0 < log 2 := log_pos (by norm_num)
   rcases Nat.lt_or_ge 1 c with hc | hc
-  · have h := Nat.pow_pred_clog_lt_self (b := 2) (by norm_num) hc
+  · have h := Nat.pow_pred_clog_lt_self 2 hc
     have h' : ((2 : ℝ) ^ (Nat.clog 2 c).pred) < c := by exact_mod_cast h
     have := log_lt_log (by positivity) h'
     rw [log_pow] at this

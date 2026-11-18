@@ -519,8 +519,7 @@ theorem stateCapacity_defect_none_false {p : ℝ} (h0 : 0 ≤ p) (h1 : p ≤ 1) 
   have e : strategyChannel defectChannel (defectState p) (fun x _ => x) = bsc (p / 2) := by
     funext x y
     cases x <;> cases y <;>
-      · simp [strategyChannel, defectState, Fintype.sum_option, defectChannel, bsc]
-        try ring
+      simp [strategyChannel, defectState, Fintype.sum_option, defectChannel, bsc] <;> ring
   rw [e, (capacity_bsc (by linarith) (by linarith)).1]
 
 /-- **Example (Lecture 7), page 7-29.** If both the writer and the reader know the fault locations,

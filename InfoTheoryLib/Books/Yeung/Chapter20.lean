@@ -167,7 +167,7 @@ lemma oneCycle_eqs {g : R} {f : Fin 5 → Fin 2 → R}
   simp only [sum_filter, Fin.sum_univ_five] at h0 h1 h2 h3 h4
   simp only [oneCycleNet, idSrc, oneCycleLocal] at h0 h1 h2 h3 h4
   refine ⟨h0.trans ?_, h1.trans ?_, h2.trans ?_, h3.trans ?_, h4.trans ?_⟩ <;>
-    congr 1 <;> (try funext i; fin_cases i) <;> simp
+    congr 1 <;> (funext i; fin_cases i) <;> simp
 
 /-- **Example 20.2.** On the network of Figure 20.2, the local encoding kernels of
 Figure 20.2(a) admit no global encoding kernels: (20.8)–(20.10) sum up to (20.11). -/

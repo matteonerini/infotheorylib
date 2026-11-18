@@ -231,7 +231,7 @@ lemma admissible_mix {P₁ P₂ a b : ℝ} (ha : 0 ≤ a) (hb : 0 ≤ b) (hab : 
   have := h₁.1
   have := h₂.1
   refine ⟨⟨?_⟩, ?_, ?_⟩
-  · simp only [Measure.add_apply, Measure.smul_apply, measure_univ, smul_eq_mul, mul_one]
+  · simp only [add_apply, smul_apply, measure_univ, smul_eq_mul, mul_one]
     rw [← ENNReal.ofReal_add ha hb, hab, ENNReal.ofReal_one]
   · exact (h₁.2.1.smul_measure ENNReal.ofReal_ne_top).add_measure
       (h₂.2.1.smul_measure ENNReal.ofReal_ne_top)

@@ -144,7 +144,7 @@ theorem example_13_6 :
         example136c = example136Qᵀ *ᵥ p.1 + p.2 • example136b := by
   have hsol : example136c = (1 : ℝ) • example136b + example136Qᵀ *ᵥ ![1] := by
     ext i
-    fin_cases i <;> simp [example136Q, example136b, example136c, mulVec, dotProduct]
+    fin_cases i <;> simp [example136Q, example136b, example136c]
   have heq := ineqEquivOn_of_eq one_pos ![1] hsol
   have hb : example136b ∉ rowSpace example136Q := by
     rw [mem_span_rows_iff_exists]
