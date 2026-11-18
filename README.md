@@ -44,6 +44,11 @@ the text it covers. All the definitions and theorems can be browsed in the
 You need [elan](https://github.com/leanprover/elan). The Lean version is pinned in
 `lean-toolchain` and Mathlib is pinned in `lakefile.toml`.
 
+There are two ways to get the library: build this repository on its own, or add it to your own
+project. Follow one of the two subsections below, then see [Using the library](#using-the-library).
+
+### Building this repository
+
 ```sh
 git clone https://github.com/matteonerini/infotheorylib
 cd infotheorylib
@@ -53,7 +58,9 @@ lake build           # build the library
 
 The first build compiles the whole library, which takes a while.
 
-To use the library in your own project, add it to the project's `lakefile.toml`:
+### Adding it to your own project
+
+Add the library to your project's `lakefile.toml`:
 
 ```toml
 [[require]]
@@ -76,8 +83,10 @@ Releases are tagged with the Lean version they support; the available versions a
 [releases page](https://github.com/matteonerini/infotheorylib/releases). The library can be
 imported from both module and non-module files.
 
-To use the library, import it and open the `InfoTheory` namespace, which also activates the
-notation `H[X ; μ]`, `H[X | Y ; μ]`, `I[X : Y ; μ]` and `I[X : Y | Z ; μ]`:
+### Using the library
+
+Whichever way you got the library, import it and open the `InfoTheory` namespace, which also
+activates the notation `H[X ; μ]`, `H[X | Y ; μ]`, `I[X : Y ; μ]` and `I[X : Y | Z ; μ]`:
 
 ```lean
 import InfoTheoryLib
