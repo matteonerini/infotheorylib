@@ -15,18 +15,6 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      # Generating the documentation runs several Lean processes at once, and for a library of
-      # this size they need more than the 16 GB of memory of the runner. Extra swap space lets
-      # them finish instead of failing with "not enough memory".
-      - name: Add swap space
-        run: |
-          dir=/mnt; [ -d /mnt ] || dir=/
-          sudo fallocate -l 16G "$dir/docs-swapfile"
-          sudo chmod 600 "$dir/docs-swapfile"
-          sudo mkswap "$dir/docs-swapfile"
-          sudo swapon "$dir/docs-swapfile"
-          free -h
-          df -h / "$dir"
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
