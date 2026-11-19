@@ -47,7 +47,7 @@ variable {α γ β υ : Type*} [Fintype α] [Fintype γ] [Fintype υ]
 
 /-- The prefix `yⁱ` of a sequence, with the coordinates up to `i` included. -/
 def prefixSeq {n : ℕ} (y : Fin n → γ) (i : Fin n) : Fin (i + 1) → γ :=
-  fun j => y (Fin.castLE (Nat.succ_le_of_lt i.2) j)
+  fun j => y (Fin.castLE (Nat.succ_le_of_lt i.isLt) j)
 
 /-- **Lecture 12 of [elgamal2010], page 12-5.** A rate–distortion code with side information
 available causally at the decoder: an encoder `m(xⁿ)` and a decoder `x̂ᵢ(m, yⁱ)`. -/

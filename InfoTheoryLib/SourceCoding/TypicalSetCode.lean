@@ -81,7 +81,7 @@ lemma card_univ_le_two_pow {p : α → ℝ} (hp : IsPMF p) (n : ℕ) :
     (univ : Finset (Fin n → α)).card ≤ 2 ^ rawLength α n := by
   apply card_le_two_pow_ceil
   have hα : (0 : ℝ) < Fintype.card α := by exact_mod_cast card_pos_of_isPMF hp
-  rw [card_univ, Fintype.card_fun, Fintype.card_fin, Nat.cast_pow, exp_nat_mul, exp_log hα]
+  rw [card_univ, Fintype.card_fun, Fintype.card_fin, Nat.cast_pow, exp_natCast_mul, exp_log hα]
 
 /-- **The code is one-to-one** (and therefore invertible): the initial bit is a flag telling
 whether the sequence is typical, and each part is indexed injectively. -/

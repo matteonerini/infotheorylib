@@ -259,7 +259,7 @@ lemma exp_neg_binEntropy {k m : ℕ} (hk : 0 < k) (hm : 0 < m) :
   rw [show -(((k : ℝ) + m) * (-(k / (k + m)) * Real.log (k / (k + m)) +
       -(m / (k + m)) * Real.log (m / (k + m)))) =
       k * Real.log (k / (k + m)) + m * Real.log (m / (k + m)) by field_simp; ring,
-    exp_add, exp_nat_mul, exp_nat_mul, exp_log (by positivity), exp_log (by positivity)]
+    exp_add, exp_natCast_mul, exp_natCast_mul, exp_log (by positivity), exp_log (by positivity)]
 
 /-- **Lemma 17.5.1, (17.41), upper bound.** For `0 < k < n` and `p = k/n`, `q = 1 - p`,
 `C(n, k) pᵏ q^{n-k} ≤ 1/√(π npq)`. -/

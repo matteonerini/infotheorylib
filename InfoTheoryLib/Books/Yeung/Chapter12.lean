@@ -172,7 +172,7 @@ alias proposition_12_26 := not_reachableOutside_union_sdiff
 
 /-- **Lemma 12.29.** (12.102) -/
 theorem lemma_12_29 {n : ℕ} (a : NAtom (Fin n)) :
-    ¬IsTypeTwoAtom (SimpleGraph.pathGraph n) a ↔ ∃ l u, l ≤ u ∧ a.1 = Icc l u :=
+    ¬IsTypeTwoAtom (SimpleGraph.pathGraph n) a ↔ ∃ l u, l ≤ u ∧ a.val = Icc l u :=
   not_isTypeTwoAtom_pathGraph_iff a
 
 /-- **Theorem 12.30.** -/
@@ -194,8 +194,8 @@ lemma isFull_indepThree : indepThree.IsFull := by
 /-- **Example 12.1.** `X₁`, `X₂` and `X₃` are mutually independent if and only if `μ*` vanishes on
 the atoms in the intersection of two of the `X̃ᵢ`, (12.12)–(12.13). -/
 theorem example_12_1 (hμ : IsPMF μ) (X : ∀ i, Ω → A i) :
-    indepThree.Holds μ X ↔ ∀ a : NAtom (Fin 3), 2 ≤ #a.1 → iMeasure μ X {a} = 0 := by
-  have key : ∀ a : NAtom (Fin 3), a ∈ indepThree.image ↔ 2 ≤ #a.1 := by
+    indepThree.Holds μ X ↔ ∀ a : NAtom (Fin 3), 2 ≤ #a.val → iMeasure μ X {a} = 0 := by
+  have key : ∀ a : NAtom (Fin 3), a ∈ indepThree.image ↔ 2 ≤ #a.val := by
     intro a
     rw [FCMI.mem_image_iff isFull_indepThree]
     simp only [mem_sdiff, mem_inter, mem_tilde]

@@ -333,7 +333,7 @@ theorem exists_eps_chain (Φ : Fin q → ℝ → ℝ → Prop) {εb εt : ℝ} (
       simp only [e₁, e₂, le_refl]
   · simp [hg0]
   · have e : q - (l : ℕ) = (q - ((l : ℕ) + 1)) + 1 := by omega
-    have hl := l.2
+    have hl := l.isLt
     simp only [e]
     rw [hgs, dite_eq_left (by omega)]
     have e₂ : (⟨q - 1 - (q - ((l : ℕ) + 1)), by omega⟩ : Fin q) = l := Fin.ext (by
@@ -534,7 +534,7 @@ theorem KBook.distortion₁_le [Finite β₁] (B : KBook L M n υ) (hP : IsPMF P
     by_cases hg : B.Good spk μ ε₂ εd q ε ω
     · rw [ite_eq_left hg, mul_zero, add_zero, seqDistortion, div_le_iff₀ hn']
       obtain ⟨h₁, h₂⟩ := (B.proto spk μ ε₂ εd).view_code (f₁ := f₁) (f₂ := f₂)
-        (x₁ := fstSeq ω) (x₂ := sndSeq ω) fun l => hg.2 l l.2
+        (x₁ := fstSeq ω) (x₂ := sndSeq ω) fun l => hg.2 l l.isLt
       have hs := sum_le_card_mul_of_mem_robustTypicalSet hg.1
         (g := fun w : (α₁ × α₂) × (Fin q → υ) => d₁ w.1 (f₁ w.2 w.1.2)) fun w => hd _ _
       have e₁ : expect (dist μ (kState q)) (fun w : (α₁ × α₂) × (Fin q → υ) =>
@@ -597,7 +597,7 @@ theorem KBook.distortion₂_le [Finite β₂] (B : KBook L M n υ) (hP : IsPMF P
     by_cases hg : B.Good spk μ ε₂ εd q ε ω
     · rw [ite_eq_left hg, mul_zero, add_zero, seqDistortion, div_le_iff₀ hn']
       obtain ⟨h₁, h₂⟩ := (B.proto spk μ ε₂ εd).view_code (f₁ := f₁) (f₂ := f₂)
-        (x₁ := fstSeq ω) (x₂ := sndSeq ω) fun l => hg.2 l l.2
+        (x₁ := fstSeq ω) (x₂ := sndSeq ω) fun l => hg.2 l l.isLt
       have hs := sum_le_card_mul_of_mem_robustTypicalSet hg.1
         (g := fun w : (α₁ × α₂) × (Fin q → υ) => d₂ w.1 (f₂ w.2 w.1.1)) fun w => hd _ _
       have e₁ : expect (dist μ (kState q)) (fun w : (α₁ × α₂) × (Fin q → υ) =>

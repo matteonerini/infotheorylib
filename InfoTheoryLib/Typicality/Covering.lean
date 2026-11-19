@@ -158,7 +158,7 @@ theorem prob_forall_not_mem_robustTypicalSet_le {Ω ι : Type*} [Fintype Ω] [Fi
       have h1 : s w ≤ exp (-a) := (hs1 w).trans
         ((sub_le_sub_left (ha w hw) 1).trans (by linarith [add_one_le_exp (-a)]))
       calc s w ^ Fintype.card ι ≤ exp (-a) ^ Fintype.card ι := pow_le_pow_left₀ (hs0 w) h1 _
-        _ = exp (-(Fintype.card ι * a)) := by rw [← exp_nat_mul]; ring_nf
+        _ = exp (-(Fintype.card ι * a)) := by rw [← exp_natCast_mul]; ring_nf
     · rw [ite_eq_right hw]
       have hp0 := prob_nonneg (hV0 w) (C w)
       have : s w ^ Fintype.card ι ≤ 1 := pow_le_one₀ (hs0 w) ((hs1 w).trans (by linarith))

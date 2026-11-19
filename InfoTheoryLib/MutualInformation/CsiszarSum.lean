@@ -127,7 +127,7 @@ lemma suffixRV_eq_cons (X : ℕ → Ω → α) {i n : ℕ} (hi : i < n) :
   refine ⟨fun v => (v ⟨0, by omega⟩, fun j => v ⟨j + 1, by omega⟩), fun v w h => ?_, fun ω => ?_⟩
   · simp only [Prod.mk.injEq] at h
     funext j
-    rcases Nat.eq_zero_or_pos j.1 with hj | hj
+    rcases Nat.eq_zero_or_pos j.val with hj | hj
     · rw [show j = ⟨0, by omega⟩ from Fin.ext hj, h.1]
     · have := congrFun h.2 ⟨j - 1, by omega⟩
       simp only at this
@@ -141,9 +141,9 @@ lemma suffixRV_eq_cons (X : ℕ → Ω → α) {i n : ℕ} (hi : i < n) :
 omit [Fintype Ω] [Fintype α] in
 /-- The empty suffix `(Xₙ, …, X_{n-1})` is constant. -/
 lemma suffixRV_self (X : ℕ → Ω → α) (n : ℕ) (ω : Ω) :
-    suffixRV X n n ω = fun j => absurd j.2 (by simp) := by
+    suffixRV X n n ω = fun j => absurd j.isLt (by simp) := by
   funext j
-  exact absurd j.2 (by simp)
+  exact absurd j.isLt (by simp)
 
 /-- **Csiszár sum identity (Lecture 2).** For random sequences `Xⁿ`, `Yⁿ` and a random
 variable `U`, `∑ᵢ I(X_{i+1}ⁿ; Yᵢ | Y^{i-1}, U) = ∑ᵢ I(Y^{i-1}; Xᵢ | X_{i+1}ⁿ, U)`. -/
@@ -166,7 +166,7 @@ theorem csiszar_sum {μ : Ω → ℝ} (hμ : IsPMF μ) (X : ℕ → Ω → α) (
     exact condMutualInfo_const_left hμ _ _ _
   have hn : T n = 0 := by
     simp only [T]
-    rw [show suffixRV X n n = fun _ => fun j => absurd j.2 (by simp) from
+    rw [show suffixRV X n n = fun _ => fun j => absurd j.isLt (by simp) from
       funext (suffixRV_self X n)]
     exact condMutualInfo_const_mid hμ _ _ _
   have := sum_range_sub T n

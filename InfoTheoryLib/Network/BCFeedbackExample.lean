@@ -140,7 +140,7 @@ lemma dueckCode_good (h₁ : a₁ + 1 ≤ n) (h₂ : a₂ + 1 ≤ n) (w : Fin (2
   · simp only [dueckCode]
     rw [Equiv.symm_apply_eq]
     funext i
-    have hin : (i : ℕ) + 1 < n := by have := i.2; omega
+    have hin : (i : ℕ) + 1 < n := by have := i.isLt; omega
     rw [dite_eq_left hin]
     obtain ⟨b, h₃, -, h₅, -⟩ := hstep i hin
     rw [h₃, h₅, hbit]
@@ -148,7 +148,7 @@ lemma dueckCode_good (h₁ : a₁ + 1 ≤ n) (h₂ : a₂ + 1 ≤ n) (w : Fin (2
   · simp only [dueckCode]
     rw [Equiv.symm_apply_eq]
     funext i
-    have hin : (i : ℕ) + 1 < n := by have := i.2; omega
+    have hin : (i : ℕ) + 1 < n := by have := i.isLt; omega
     rw [dite_eq_left hin]
     obtain ⟨b, -, h₄, -, h₆⟩ := hstep i hin
     rw [h₄, h₆, hbit]
@@ -416,15 +416,15 @@ lemma dueckNF_errProb {a₁ a₂ : ℕ} (h : a₁ + a₂ ≤ n) :
     simp only [dueckNF]
     rw [Equiv.symm_apply_eq]
     funext i
-    have hin : (i : ℕ) < n := by have := i.2; omega
+    have hin : (i : ℕ) < n := by have := i.isLt; omega
     rw [dite_eq_left hin, (hi ⟨i, hin⟩).1]
     change (if (i : ℕ) < a₁ then _ else _) = _
-    rw [ite_eq_left i.2, hbit]
+    rw [ite_eq_left i.isLt, hbit]
   have h₂ : (dueckNF a₁ a₂ n).dec₂ (fun i => (y i).2) = w.2 := by
     simp only [dueckNF]
     rw [Equiv.symm_apply_eq]
     funext i
-    have hin : a₁ + (i : ℕ) < n := by have := i.2; omega
+    have hin : a₁ + (i : ℕ) < n := by have := i.isLt; omega
     rw [dite_eq_left hin, (hi ⟨a₁ + i, hin⟩).2]
     change (if a₁ + (i : ℕ) < a₁ then _ else _) = _
     rw [ite_eq_right (by omega), Nat.add_sub_cancel_left, hbit]

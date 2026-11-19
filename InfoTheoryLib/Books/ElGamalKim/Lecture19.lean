@@ -173,7 +173,7 @@ theorem printed_ffd_counterexample :
     have : ffdG printedFfdG {0, 1} = 0 := by
       ext l j
       have hl : (l : Fin 3) = 2 := by
-        have := l.2
+        have := l.property
         revert this
         generalize (l : Fin 3) = t
         fin_cases t <;> simp
@@ -192,7 +192,7 @@ theorem printed_ffd_counterexample :
     · by_contra hlt
       have h0 : (ffdG printedFfdG {0}).rank = 0 := by omega
       have hr : LinearMap.range (ffdG printedFfdG {0}).mulVecLin = ⊥ :=
-        Submodule.finrank_eq_zero.mp h0
+        Submodule.finrank_eq_zero.mp ((Matrix.finrank_range_mulVecLin _).trans h0)
       have hv : (ffdG printedFfdG {0}).mulVec (fun _ => 1) ∈
           LinearMap.range (ffdG printedFfdG {0}).mulVecLin :=
         ⟨fun _ => 1, Matrix.mulVecLin_apply _ _⟩

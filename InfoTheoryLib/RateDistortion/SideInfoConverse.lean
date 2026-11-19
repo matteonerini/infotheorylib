@@ -216,7 +216,7 @@ lemma causalRecon_aux (z₀ : α × γ) (i : Fin n) (ω : Fin n → α × γ) :
   · simp only [Fin.snoc_last, prefixSeq, sndSeq]
     congr 2
   · simp only [Fin.snoc_castSucc, prefixSeq, sndSeq, prefixRV]
-    have hk : (k : ℕ) < n := k.2.trans i.2
+    have hk : (k : ℕ) < n := k.isLt.trans i.isLt
     simp only [seqZ, hk, ↓reduceDIte]
     congr 2
 

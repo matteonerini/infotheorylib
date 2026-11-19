@@ -642,17 +642,17 @@ private lemma exists_gvCode_of_product (hU : Uᵀ * U = 1) (hU' : U * Uᵀ = 1)
     ∃ c : GVCode M n r t, c.SatisfiesPower P ∧ c.avgErrProb G ≤ ∑ k, (cs k).maxErrProb 1 := by
   classical
   have : Nonempty (Fin M) := ⟨⟨0, hM⟩⟩
-  have hγ : ∀ k : {k // γ k ≠ 0}, γ k ^ 2 ≠ 0 := fun k => pow_ne_zero 2 k.2
+  have hγ : ∀ k : {k // γ k ≠ 0}, γ k ^ 2 ≠ 0 := fun k => pow_ne_zero 2 k.property
   set v : Fin M → Fin n → r → ℝ := fun w i k =>
     if h : γ k ≠ 0 then (γ k)⁻¹ * (cs ⟨k, h⟩).enc (φ w ⟨k, h⟩) i else 0 with hv
   have hvs : ∀ w i (k : {k // γ k ≠ 0}), v w i k = (γ k)⁻¹ * (cs k).enc (φ w k) i := fun w i k => by
-    simp [hv, k.2]
+    simp [hv, k.property]
   set B := blockRot n Uᵀ with hB
   have hBo : Bᵀ * B = 1 := blockRot_orth (by rw [transpose_transpose]; exact hU')
   have hBm : Measurable fun z : Fin n × r → ℝ => B *ᵥ z :=
     (Matrix.mulVecLin B).continuous_of_finiteDimensional.measurable
   set D : (Fin n × r → ℝ) → ∀ k, Fin (m k) :=
-    fun y k => (cs k).dec fun i => (B *ᵥ y) (i, k.1) with hD
+    fun y k => (cs k).dec fun i => (B *ᵥ y) (i, k.val) with hD
   have hDm : Measurable D := by
     refine measurable_pi_iff.2 fun k => (cs k).measurable_dec.comp ?_
     exact measurable_pi_iff.2 fun i => (measurable_pi_apply _).comp hBm
@@ -665,7 +665,7 @@ private lemma exists_gvCode_of_product (hU : Uᵀ * U = 1) (hU' : U * Uᵀ = 1)
       change ∑ l, (Ψ *ᵥ v w i) l ^ 2 = _
       rw [sum_sq_mulVec_svd hΨ]
       rw [sum_subtype_of_zero γ fun k hk => by simp [svdSupport, hk]]
-      exact sum_congr rfl fun k _ => by simp [svdSupport, k.2]
+      exact sum_congr rfl fun k _ => by simp [svdSupport, k.property]
     simp only [e1]
     rw [sum_comm]
     have e2 : ∀ k : {k // γ k ≠ 0}, ∑ i, v w i k ^ 2 ≤ n * p k := fun k => by
@@ -681,15 +681,15 @@ private lemma exists_gvCode_of_product (hU : Uᵀ * U = 1) (hU' : U * Uᵀ = 1)
       _ = n * ∑ k, p k := by rw [mul_sum]
       _ ≤ n * P := mul_le_mul_of_nonneg_left hP (Nat.cast_nonneg n)
   · -- The probability of error.
-    have hBout : ∀ w (i : Fin n) (k : {k // γ k ≠ 0}), (B *ᵥ c.out G w) (i, k.1) =
+    have hBout : ∀ w (i : Fin n) (k : {k // γ k ≠ 0}), (B *ᵥ c.out G w) (i, k.val) =
         (cs k).enc (φ w k) i := fun w i k => by
       rw [hB, blockRot_mulVec]
-      change (Uᵀ *ᵥ (G *ᵥ (Ψ *ᵥ v w i))) k.1 = _
-      rw [mulVec_svd hU hG hΨ, hvs, ← mul_assoc, mul_inv_cancel₀ k.2, one_mul]
+      change (Uᵀ *ᵥ (G *ᵥ (Ψ *ᵥ v w i))) k.val = _
+      rw [mulVec_svd hU hG hΨ, hvs, ← mul_assoc, mul_inv_cancel₀ k.property, one_mul]
     have hfib : ∀ k : {k // γ k ≠ 0},
-        (stdNoise (Fin n × r)).map (fun z (i : Fin n) => (B *ᵥ z) (i, k.1)) = noiseLaw 1 n :=
+        (stdNoise (Fin n × r)).map (fun z (i : Fin n) => (B *ᵥ z) (i, k.val)) = noiseLaw 1 n :=
       fun k => by
-      have hf : Measurable fun (z : Fin n × r → ℝ) (i : Fin n) => z (i, k.1) := by fun_prop
+      have hf : Measurable fun (z : Fin n × r → ℝ) (i : Fin n) => z (i, k.val) := by fun_prop
       have h := Measure.map_map (μ := stdNoise (Fin n × r)) hf hBm
       rw [map_stdNoise_of_orthogonal hBo, map_stdNoise_fiber] at h
       exact h.symm
@@ -699,14 +699,14 @@ private lemma exists_gvCode_of_product (hU : Uᵀ * U = 1) (hU' : U * Uᵀ = 1)
       have hmeas : MeasurableSet {y : Fin n → ℝ | (cs k).dec ((cs k).enc (φ w k) + y) ≠ φ w k} :=
         ((cs k).measurable_dec.comp (measurable_const_add _))
           (measurableSet_singleton _).compl
-      have hTm : Measurable fun (z : Fin n × r → ℝ) (i : Fin n) => (B *ᵥ z) (i, k.1) :=
+      have hTm : Measurable fun (z : Fin n × r → ℝ) (i : Fin n) => (B *ᵥ z) (i, k.val) :=
         measurable_pi_iff.2 fun i => (measurable_pi_apply _).comp hBm
       rw [GaussianCode.condErrProb, ← hfib k, map_measureReal_apply hTm hmeas]
       congr 1
       ext z
       simp only [Set.mem_ofPred_eq, Set.mem_preimage, hD, Matrix.mulVec_add]
-      have ez : (fun i => (B *ᵥ c.out G w + B *ᵥ z) (i, k.1)) =
-          (cs k).enc (φ w k) + fun i => (B *ᵥ z) (i, k.1) := by
+      have ez : (fun i => (B *ᵥ c.out G w + B *ᵥ z) (i, k.val)) =
+          (cs k).enc (φ w k) + fun i => (B *ᵥ z) (i, k.val) := by
         funext i
         simp only [Pi.add_apply, hBout]
       rw [ez]
@@ -815,7 +815,7 @@ theorem isAchievableGV_of_lt_gvRate {G : Matrix r t ℝ} {P : ℝ≥0} {K : Matr
         (p := q) (fun k => hpow k n) hqP
       exact ⟨c, h1, fun _ => h2⟩
     · exact ⟨⟨fun _ _ _ => 0, fun _ => ⟨0, hMpos⟩, measurable_const⟩,
-        fun w => by simpa using mul_nonneg (Nat.cast_nonneg n) P.2, fun h' => absurd h' h⟩
+        fun w => by simpa using mul_nonneg (Nat.cast_nonneg n) P.property, fun h' => absurd h' h⟩
   choose c hcp hce using hsub
   refine ⟨c, hcp, ?_⟩
   have hlim : Tendsto (fun n => ∑ k, (cs k n).maxErrProb 1) atTop (𝓝 0) := by

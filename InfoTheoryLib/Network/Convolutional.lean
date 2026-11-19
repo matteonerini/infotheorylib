@@ -197,7 +197,7 @@ theorem existsUnique_isConvCode {ks : Fin ω → E → F⟦X⟧} {k : E → E �
   have : f₀ = fun e i => (f' e i : F⟦X⟧) := (huniq _ hf'').symm
   intro e i
   rw [this]
-  exact (f' e i).2
+  exact (f' e i).property
 
 /-! ### Decoding -/
 
@@ -255,11 +255,11 @@ theorem exists_decoder_of_det_ne_zero {f : E → Fin ω → F⟦X⟧}
   have hL : S.subtype.mapMatrix L' = L := rfl
   have hdetS : L.det ∈ S := by
     rw [← hL, ← RingHom.map_det]
-    exact (L'.det).2
+    exact (L'.det).property
   have hadj : ∀ i j, L.adjugate i j ∈ S := by
     intro i j
     rw [← hL, ← RingHom.map_adjugate]
-    exact (L'.adjugate i j).2
+    exact (L'.adjugate i j).property
   have hwS : w ∈ S := mem_ratPowerSeries_of_X_pow_mul n (hLw ▸ hdetS)
   let D : Matrix E (Fin ω) F⟦X⟧ := Matrix.of fun e i =>
     ∑ j, if ι j = e then X * w⁻¹ * L.adjugate j i else 0

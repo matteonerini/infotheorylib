@@ -99,7 +99,7 @@ lemma binaryLabel_isPrefixCode {k N : ℕ} (hN : N ≤ 2 ^ k) :
     IsPrefixCode (binaryLabel k (N := N)) := by
   intro x y h
   have := h.eq_of_length (by rw [length_binaryLabel, length_binaryLabel])
-  exact Fin.ext (binaryDigits_inj (x.2.trans_le hN) (y.2.trans_le hN) this)
+  exact Fin.ext (binaryDigits_inj (x.isLt.trans_le hN) (y.isLt.trans_le hN) this)
 
 lemma expectedLength_binaryLabel {k N : ℕ} {p : Fin N → ℝ} (hp : IsPMF p) :
     expectedLength p (binaryLabel k) = k := by

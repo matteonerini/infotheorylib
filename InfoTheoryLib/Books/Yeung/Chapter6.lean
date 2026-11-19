@@ -151,7 +151,7 @@ lemma iidPMF_seq_6_2 (k : ℕ) :
       rw [seq_6_2, Fin.append_right]; norm_num [pmf_6_2]
     rw [iidPMF, Fin.prod_univ_add]
     simp only [h₄, h₅, prod_const, card_univ, Fintype.card_fin]
-  rw [h₃, h₁, h₂, ← exp_nat_mul, ← exp_nat_mul, ← exp_add, entropy_pmf_6_2]
+  rw [h₃, h₁, h₂, ← exp_natCast_mul, ← exp_natCast_mul, ← exp_add, entropy_pmf_6_2]
   congr 1
   push_cast
   ring

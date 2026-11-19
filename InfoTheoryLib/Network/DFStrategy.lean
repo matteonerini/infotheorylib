@@ -98,7 +98,7 @@ lemma buildAt_ge (s : ∀ k, NetStrat X k) (l : Fin N) : ∀ t j, (l : ℕ) - j 
     rw [this]
   | succ t ih =>
     intro j hj hl
-    have hjN : j < N := lt_of_le_of_lt hl l.2
+    have hjN : j < N := lt_of_le_of_lt hl l.isLt
     rw [buildAt_of_lt d₀ s hjN, Function.update_of_ne (fun h => by
       have := congrArg Fin.val h
       simp at this
@@ -117,7 +117,7 @@ theorem buildAt_eq_fillGe (s : ∀ k, NetStrat X k) (j : ℕ) :
 /-- The value of the entry `l` of the whole tuple. -/
 lemma buildAt_zero_apply (s : ∀ k, NetStrat X k) (l : Fin N) :
     buildAt d₀ s 0 l = s l (fillGe d₀ (l + 1) (buildAt d₀ s 0)) := by
-  rw [buildAt_ge d₀ s l _ 0 rfl (Nat.zero_le _), buildAt_of_lt d₀ s l.2, Function.update_self,
+  rw [buildAt_ge d₀ s l _ 0 rfl (Nat.zero_le _), buildAt_of_lt d₀ s l.isLt, Function.update_self,
     buildAt_eq_fillGe d₀ s]
 
 /-- **When strategies build a given tuple.** -/
@@ -135,7 +135,7 @@ theorem build_eq_iff (s : ∀ k, NetStrat X k) (x : ∀ l, X l) :
         intro j hj
         rw [buildAt_of_ge d₀ s (by omega)]
         funext l
-        have := l.2
+        have := l.isLt
         simp only [fillGe]
         rw [ite_eq_right (by omega)]
       | succ t ih =>
@@ -252,7 +252,7 @@ theorem prod_kernel_eq {κ : ∀ k, (∀ l, X l) → X k → ℝ} (hp : IsPMF p)
     simp only [P]
     have e : ∀ z : ∀ l, X l, fillGe d₀ j z = d₀ := fun z => by
       funext l
-      have := l.2
+      have := l.isLt
       simp only [fillGe]
       rw [ite_eq_right (by omega)]
     simp only [dist, e, ite_true]
@@ -266,7 +266,7 @@ theorem prod_kernel_eq {κ : ∀ k, (∀ l, X l) → X k → ℝ} (hp : IsPMF p)
       intro j hj
       rw [hPN j (by omega), filter_false_of_mem, prod_empty]
       intro k _
-      have := k.2
+      have := k.isLt
       omega
     | succ t ih =>
       intro j hj

@@ -171,7 +171,7 @@ theorem chernoff_bound (h0 : 0 ≤ p) (h1 : p ≤ 1) (hδ : 0 < δ) (hδ2 : δ �
         exact sum_congr rfl fun a _ => by ring
     _ ≤ exp (-(l * t)) * exp (n * (p * δ)) := by
         refine mul_le_mul_of_nonneg_left ?_ (exp_pos _).le
-        rw [exp_nat_mul]
+        rw [exp_natCast_mul]
         refine pow_le_pow_left₀ (by nlinarith) ?_ _
         have := add_one_le_exp (p * δ)
         linarith
@@ -207,7 +207,7 @@ theorem printed_chernoff_false :
     linarith
   have h4 : (20 : ℝ) < exp 4 := by
     have h5 : exp 4 = exp 1 ^ 4 := by
-      rw [← exp_nat_mul]
+      rw [← exp_natCast_mul]
       norm_num
     rw [h5]
     calc (20 : ℝ) < 2.7 ^ 4 := by norm_num

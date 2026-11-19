@@ -156,8 +156,8 @@ lemma finProd_div_mod' (hn : 0 < n) (j : Fin t) (i : Fin n) :
   have hval : ((finProdFinEquiv (j, i) : Fin (t * n)) : ℕ) = i + n * j := rfl
   rw [hval]
   refine ⟨?_, ?_⟩
-  · rw [Nat.add_mul_div_left _ _ hn, Nat.div_eq_of_lt i.2, zero_add]
-  · rw [Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt i.2]
+  · rw [Nat.add_mul_div_left _ _ hn, Nat.div_eq_of_lt i.isLt, zero_add]
+  · rw [Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt i.isLt]
 
 /-- The state of a node, for the blocks of a code of `t * n` symbols. -/
 def nncSt (pk : ∀ k, (Fin n → X k) → (Fin (K k) → Fin n → V k) → (Fin n → Y k) → Fin (K k))
@@ -188,7 +188,7 @@ theorem nncCode_law (L : NNCΩ X Y V → ℝ) (ε : ℝ)
   rw [hdiv, hin]
   have hst : nncStK k (pk k) (fun j => Cs j k) (m k) (getBlock (dY k)
       fun s : Fin (finProdFinEquiv (j, i) : Fin (t * n)) =>
-        z ⟨s, s.2.trans (finProdFinEquiv (j, i)).2⟩ k) j =
+        z ⟨s, s.isLt.trans (finProdFinEquiv (j, i)).isLt⟩ k) j =
       nncStK k (pk k) (fun i => Cs i k) (m k) (getBlock (dY k) fun s => z s k) j := by
     refine nncStK_congr k (pk k) _ (m k) j fun j' hj' => ?_
     funext i'
@@ -196,10 +196,10 @@ theorem nncCode_law (L : NNCΩ X Y V → ℝ) (ε : ℝ)
       have hval : ((finProdFinEquiv (j, i) : Fin (t * n)) : ℕ) = i + n * j := rfl
       rw [hval]
       have h₁ : n * (j' + 1) ≤ n * j := Nat.mul_le_mul_left _ hj'
-      have h₂ := i'.2
+      have h₂ := i'.isLt
       rw [Nat.mul_add, Nat.mul_one] at h₁
       omega
-    have hlt' : i'.val + n * j' < t * n := lt_trans hlt (finProdFinEquiv (j, i)).2
+    have hlt' : i'.val + n * j' < t * n := lt_trans hlt (finProdFinEquiv (j, i)).isLt
     simp only [getBlock, dite_eq_left hlt, dite_eq_left hlt']
   rw [hst]
 
@@ -257,7 +257,7 @@ theorem nncCode_dec_eq (L : NNCΩ X Y V → ℝ) (ε : ℝ)
   refine nncDecOf_eq hM ?_ ?_
   · -- the true path
     refine ⟨fun j => st (j + 1), rfl, fun j => ⟨?_, ?_⟩⟩
-    · exact (hstk (j + 1) j.2).symm
+    · exact (hstk (j + 1) j.isLt).symm
     · have hp : pathPrev (0 : ∀ k, Fin (K k)) (fun j : Fin t => st (j + 1)) j = st j :=
         pathPrev_of_st (st := st) rfl (fun _ => rfl) j
       rw [hp]
@@ -277,7 +277,7 @@ theorem nncCode_dec_eq (L : NNCΩ X Y V → ℝ) (ε : ℝ)
     by_contra hne
     refine h₂ m' hne hd ℓ fun j => ⟨?_, ?_⟩
     · have := (hℓ j).1
-      rw [hstk (j + 1) j.2] at this
+      rw [hstk (j + 1) j.isLt] at this
       rw [this, hst]
       simp only [stOf]
       rw [harr j]
@@ -302,7 +302,7 @@ omit [∀ k, Fintype (X k)] [∀ k, Fintype (Y k)] [∀ k, Fintype (V k)] [∀ k
 lemma getBlock_nncBlocks {β : Type*} (d : β) (z : Fin (t * n) → β) (j : Fin t) :
     getBlock d z j = nncBlocks z j := by
   funext i
-  have hlt : i.val + n * j < t * n := (finProdFinEquiv (j, i) : Fin (t * n)).2
+  have hlt : i.val + n * j < t * n := (finProdFinEquiv (j, i) : Fin (t * n)).isLt
   simp only [getBlock, dite_eq_left hlt]
   rfl
 
@@ -414,7 +414,7 @@ theorem nncCode_law_run (L : NNCΩ X Y V → ℝ) (ε : ℝ)
       rfl
     rw [hC]
     refine nncStK_congr k (pk k) _ (m k) j fun j' hj' => ?_
-    have hlt : j' < t := hj'.trans j.2
+    have hlt : j' < t := hj'.trans j.isLt
     have e₁ : arrOf dξ (nncSeqOf Cst z) j' = (Cst ⟨j', hlt⟩, nncBlocks z ⟨j', hlt⟩) :=
       arrOf_coe dξ _ ⟨j', hlt⟩
     rw [e₁]
@@ -544,10 +544,10 @@ lemma nncPass_congr [∀ k, Fintype (X k)] [∀ k, Fintype (Y k)] [∀ k, Fintyp
     nncPass L ε pk Cs t k mk Z m' ℓ ↔ nncPass L ε pk Cs t k mk Z' m' ℓ := by
   have hst : ∀ j : Fin t, nncStK k (pk k) (fun i => Cs i k) mk Z (j + 1) =
       nncStK k (pk k) (fun i => Cs i k) mk Z' (j + 1) := fun j =>
-    nncStK_congr k (pk k) _ mk _ fun j' hj' => h j' (by have := j.2; omega)
+    nncStK_congr k (pk k) _ mk _ fun j' hj' => h j' (by have := j.isLt; omega)
   simp only [nncPass]
   refine and_congr_right fun _ => forall_congr' fun j => ?_
-  rw [hst j, h j j.2]
+  rw [hst j, h j j.isLt]
 
 /-- **A longer code.** The rest of the symbols are not used, so the error is the same. -/
 theorem nncCode_errProb_pad (hW : IsChannel W) (L : NNCΩ X Y V → ℝ) (ε : ℝ)
@@ -560,7 +560,7 @@ theorem nncCode_errProb_pad (hW : IsChannel W) (L : NNCΩ X Y V → ℝ) (ε : �
   set c' := nncCode L ε pk Cs t dY hM N' with hc'
   set c := nncCode L ε pk Cs t dY hM (t * n) with hc
   let T : (∀ k, Fin (M k)) × (Fin N' → ∀ k, Y k) → (∀ k, Fin (M k)) × (Fin (t * n) → ∀ k, Y k) :=
-    fun z => (z.1, fun s => z.2 ⟨s, lt_of_lt_of_le s.2 hN⟩)
+    fun z => (z.1, fun s => z.2 ⟨s, lt_of_lt_of_le s.isLt hN⟩)
   have hlaw : dist (c'.law W) T = c.law W := dist_fbLaw_prefix hW (t * n) N' hN
   have hdec : ∀ z, c'.Wrong D z ↔ c.Wrong D (T z) := by
     intro z
@@ -576,7 +576,7 @@ theorem nncCode_errProb_pad (hW : IsChannel W) (L : NNCΩ X Y V → ℝ) (ε : �
         funext i
         have hlt : i.val + n * j < t * n := by
           have h₁ : n * (j + 1) ≤ n * t := Nat.mul_le_mul_left _ hj
-          have h₂ := i.2
+          have h₂ := i.isLt
           rw [Nat.mul_add, Nat.mul_one] at h₁
           rw [Nat.mul_comm t n]
           omega

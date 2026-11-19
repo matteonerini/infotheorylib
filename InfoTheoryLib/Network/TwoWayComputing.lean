@@ -115,7 +115,7 @@ theorem KBook.errProb₁_le (B : KBook L M n υ) (hP : IsPMF P) {g₁ : α₁ ×
   have h0 := iidPMF_nonneg hP.nonneg ω
   by_cases hg : B.Good spk μ ε₂ εd q ε ω
   · obtain ⟨h₁, h₂⟩ := (B.proto spk μ ε₂ εd).view_code (f₁ := f₁) (f₂ := f₂)
-      (x₁ := fstSeq ω) (x₂ := sndSeq ω) fun l => hg.2 l l.2
+      (x₁ := fstSeq ω) (x₂ := sndSeq ω) fun l => hg.2 l l.isLt
     have hdec : ((B.proto spk μ ε₂ εd).code f₁ f₂).dec₁ (fun i => (ω i).2)
         (((B.proto spk μ ε₂ εd).code f₁ f₂).trans (fun i => (ω i).1) fun i => (ω i).2) =
         fun i => g₁ (ω i) := by
@@ -145,7 +145,7 @@ theorem KBook.errProb₂_le (B : KBook L M n υ) (hP : IsPMF P) {g₂ : α₁ ×
   have h0 := iidPMF_nonneg hP.nonneg ω
   by_cases hg : B.Good spk μ ε₂ εd q ε ω
   · obtain ⟨h₁, h₂⟩ := (B.proto spk μ ε₂ εd).view_code (f₁ := f₁) (f₂ := f₂)
-      (x₁ := fstSeq ω) (x₂ := sndSeq ω) fun l => hg.2 l l.2
+      (x₁ := fstSeq ω) (x₂ := sndSeq ω) fun l => hg.2 l l.isLt
     have hdec : ((B.proto spk μ ε₂ εd).code f₁ f₂).dec₂ (fun i => (ω i).1)
         (((B.proto spk μ ε₂ εd).code f₁ f₂).trans (fun i => (ω i).1) fun i => (ω i).2) =
         fun i => g₂ (ω i) := by

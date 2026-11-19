@@ -250,15 +250,16 @@ lemma entropyRV_copy_map (S : Finset (Fin 4)) (e : Fin 4 ↪ Fin 6)
     (hV : ∀ q i, copyFamily X (e i) q = ⟨i, V q i⟩) :
     H[blockRV (copyFamily X) (S.map e) ; copyMeasure μ X] =
       H[fun q (i : S) => V q i ; copyMeasure μ X] := by
-  have hmem : ∀ j : S.map e, copyIdx j.1 ∈ S := fun j => by
-    obtain ⟨i, hi, hj⟩ := mem_map.1 j.2
+  have hmem : ∀ j : S.map e, copyIdx j.val ∈ S := fun j => by
+    obtain ⟨i, hi, hj⟩ := mem_map.1 j.property
     rw [← hj, he]
     exact hi
-  refine entropyRV_eq_of_injective _ (fun v (j : S.map e) => ⟨copyIdx j.1, v ⟨_, hmem j⟩⟩)
+  refine entropyRV_eq_of_injective _ (fun v (j : S.map e) => ⟨copyIdx j.val, v ⟨_, hmem j⟩⟩)
     (fun v w hvw => funext fun k => ?_) fun q => funext fun ⟨j, hj⟩ => ?_
-  · have h₁ := congrFun hvw ⟨e k, mem_map_of_mem e k.2⟩
+  · have h₁ := congrFun hvw ⟨e k, mem_map_of_mem e k.property⟩
     simp only [Sigma.mk.inj_iff, heq_eq_eq, true_and] at h₁
-    have h₂ : (⟨copyIdx (e k), hmem ⟨e k, mem_map_of_mem e k.2⟩⟩ : S) = k := Subtype.ext (he k)
+    have h₂ : (⟨copyIdx (e k), hmem ⟨e k, mem_map_of_mem e k.property⟩⟩ : S) = k :=
+      Subtype.ext (he k)
     have key : ∀ z : S, z = k → v z = w z → v k = w k := by
       rintro z rfl h
       exact h
@@ -322,27 +323,27 @@ theorem copy_markov (hμ : IsPMF μ) : condInfo (copyEntropy μ X) {0, 1} {4, 5}
       True := fun _ _ _ _ _ _ => trivial
   have e₁ : blockRV (copyFamily X) {0, 1} =
       (fun x (j : ({0, 1} : Finset (Fin 6))) =>
-        if j.1 = 0 then (⟨0, x.1⟩ : Σ i, A i) else ⟨1, x.2⟩) ∘ fun q => P q.1 := by
+        if j.val = 0 then (⟨0, x.1⟩ : Σ i, A i) else ⟨1, x.2⟩) ∘ fun q => P q.1 := by
     funext q ⟨j, hj⟩
     simp only [mem_insert, mem_singleton] at hj
     rcases hj with rfl | rfl <;> rfl
   have e₂ : blockRV (copyFamily X) {4, 5} =
       (fun x (j : ({4, 5} : Finset (Fin 6))) =>
-        if j.1 = 4 then (⟨0, x.1⟩ : Σ i, A i) else ⟨1, x.2⟩) ∘ fun q => P q.2 := by
+        if j.val = 4 then (⟨0, x.1⟩ : Σ i, A i) else ⟨1, x.2⟩) ∘ fun q => P q.2 := by
     funext q ⟨j, hj⟩
     simp only [mem_insert, mem_singleton] at hj
     rcases hj with rfl | rfl <;> rfl
   have e₃ : blockRV (copyFamily X) {2, 3} =
       (fun x (j : ({2, 3} : Finset (Fin 6))) =>
-        if j.1 = 2 then (⟨2, x.1⟩ : Σ i, A i) else ⟨3, x.2⟩) ∘ fun q => K q.1 := by
+        if j.val = 2 then (⟨2, x.1⟩ : Σ i, A i) else ⟨3, x.2⟩) ∘ fun q => K q.1 := by
     funext q ⟨j, hj⟩
     simp only [mem_insert, mem_singleton] at hj
     rcases hj with rfl | rfl <;> rfl
   have inj : ∀ (a b : Fin 6) (i₁ i₂ : Fin 4), a ≠ b → ∀ {x y : A i₁ × A i₂},
       (fun (j : ({a, b} : Finset (Fin 6))) =>
-        if j.1 = a then (⟨i₁, x.1⟩ : Σ i, A i) else ⟨i₂, x.2⟩) =
+        if j.val = a then (⟨i₁, x.1⟩ : Σ i, A i) else ⟨i₂, x.2⟩) =
       (fun (j : ({a, b} : Finset (Fin 6))) =>
-        if j.1 = a then (⟨i₁, y.1⟩ : Σ i, A i) else ⟨i₂, y.2⟩) → x = y := by
+        if j.val = a then (⟨i₁, y.1⟩ : Σ i, A i) else ⟨i₂, y.2⟩) → x = y := by
     intro a b i₁ i₂ hab x y h
     have h₁ := congrFun h ⟨a, by simp⟩
     have h₂ := congrFun h ⟨b, by simp⟩

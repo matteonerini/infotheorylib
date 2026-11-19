@@ -84,7 +84,7 @@ theorem sum_prod_mul_exp_sum_le (hP : ∀ i, IsPMF (P i)) (hf0 : ∀ i, ∑ b, P
   calc ∏ i, ∑ b, P i b * exp (s * f i b) ≤ ∏ _i : Fin n, exp (s ^ 2) :=
         prod_le_prod₀ (fun i _ => hn0 i) fun i _ => hone i
     _ = exp (n * s ^ 2) := by
-        rw [prod_const, card_univ, Fintype.card_fin, ← exp_nat_mul]
+        rw [prod_const, card_univ, Fintype.card_fin, ← exp_natCast_mul]
 
 open Classical in
 omit [Fintype α] [Fintype γ] in

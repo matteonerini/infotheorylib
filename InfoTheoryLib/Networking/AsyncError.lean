@@ -200,7 +200,7 @@ theorem asyncE_fail_le (hp₁ : IsPMF p₁) (hp₂ : IsPMF p₂) (hW : IsChannel
         exp (-(l * log (r x₁ x₂ y)))) ^ G.card ≤ exp (-(l * (I - c))) ^ G.card :=
       pow_le_pow_left₀ (asyncMGF_nonneg hp₁ hp₂ hW r l) hM _
     have h3 : exp (-(l * (I - c))) ^ G.card = exp (G.card * (-(l * (I - c)))) :=
-      (exp_nat_mul _ _).symm
+      (exp_natCast_mul _ _).symm
     rw [h3] at h2
     calc _ ≤ exp (l * (G.card * I - D)) * exp (G.card * (-(l * (I - c)))) :=
           mul_le_mul_of_nonneg_left h2 (exp_pos _).le
@@ -360,7 +360,7 @@ lemma pow_le_two_pow_exp {V a S : ℕ} {K r : ℝ} (hV : (V : ℝ) ≤ 2 * exp (
     (V : ℝ) ^ a ≤ 2 ^ S * exp (a * K * r) := by
   calc (V : ℝ) ^ a ≤ (2 * exp (K * r)) ^ a := pow_le_pow_left₀ (by positivity) hV _
     _ = 2 ^ a * exp (a * K * r) := by
-        rw [mul_pow, ← exp_nat_mul]
+        rw [mul_pow, ← exp_natCast_mul]
         congr 2
         ring
     _ ≤ _ := mul_le_mul_of_nonneg_right
@@ -512,7 +512,7 @@ lemma two_le_of_fresh {V M : ℕ} [NeZero V] {D : Finset (Fin (b + 3))}
   classical
   obtain ⟨v, hv⟩ : ((asyncHyp D).filter fun v => asyncFresh D (asyncThree sub m) v = J).Nonempty :=
     card_pos.1 (Nat.pos_of_ne_zero hN)
-  obtain ⟨j, hj⟩ := nonempty_iff_ne_empty.2 hJ
+  obtain ⟨j, hj⟩ := ne_empty_iff_nonempty.1 hJ
   rw [← (mem_filter.1 hv).2] at hj
   have h3 : v j ∉ asyncThree sub m j := (mem_filter.1 hj).2
   have h4 : sub (m 0) j ∈ asyncThree sub m j := mem_image_of_mem _ (mem_univ _)

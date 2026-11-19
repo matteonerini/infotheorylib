@@ -390,7 +390,7 @@ lemma card_filter_diff_le (hq : IsPMF q) {ε : ℝ} (ω : Fin n → ∀ j, α j)
     have hrest : (fun i => swRest S (ω' i)) = fun i => swRest S (ω i) := by
       funext i
       funext j
-      exact congrFun (key j j.2) i
+      exact congrFun (key j j.property) i
     refine Finset.mem_coe.2 (mem_condRobustTypicalSet.2 ?_)
     have h := comp_mem_robustTypicalSet hT fun x => (swRest S x, swPart S x)
     have e : zipSeq (fun i => swRest S (ω i)) (fun i => swPart S (ω' i)) =

@@ -85,8 +85,7 @@ lemma condEntropy_ffd {p : (Fin N → F) → ℝ} (hp : IsPMF p) (g : Fin N → 
 lemma log_card_range {m k : Type*} [Fintype k] (A : Matrix m k F)
     [Fintype (LinearMap.range A.mulVecLin)] :
     log (Fintype.card (LinearMap.range A.mulVecLin)) = A.rank * log (Fintype.card F) := by
-  rw [card_eq_pow_finrank (K := F), Nat.cast_pow, log_pow]
-  rfl
+  rw [card_eq_pow_finrank (K := F), Nat.cast_pow, log_pow, Matrix.finrank_range_mulVecLin]
 
 /-- The logarithm of the number of elements of the kernel of a matrix. -/
 lemma log_card_ker {m k : Type*} [Fintype k] (A : Matrix m k F)
@@ -97,7 +96,8 @@ lemma log_card_ker {m k : Type*} [Fintype k] (A : Matrix m k F)
   congr 1
   have h := LinearMap.finrank_range_add_finrank_ker A.mulVecLin
   rw [finrank_fintype_fun_eq_card] at h
-  have h₂ : A.rank = finrank F (LinearMap.range A.mulVecLin) := rfl
+  have h₂ : A.rank = finrank F (LinearMap.range A.mulVecLin) :=
+    (Matrix.finrank_range_mulVecLin A).symm
   rw [h₂, ← h]
   push_cast
   ring

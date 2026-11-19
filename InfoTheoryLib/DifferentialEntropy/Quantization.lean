@@ -195,7 +195,7 @@ theorem tendsto_entropy_quantPMF_add_log (hf : IsPDF volume f) (hab : a < b)
       negMulLog (quantPMF f a b N k / Δ)) -
         ∫ x in binEdge a b N k..binEdge a b N (k + 1), negMulLog (f x)‖ ≤ η' * Δ := by
     intro k
-    have hk : (k : ℕ) < N := k.2
+    have hk : (k : ℕ) < N := k.isLt
     have hsub := Icc_binEdge_subset hab.le hk
     have hle := binEdge_le_succ (a := a) (b := b) (N := N) hab.le k
     have hwidth := binEdge_succ_sub (a := a) (b := b) (N := N) k

@@ -165,7 +165,7 @@ theorem one_sub_mul_pow_le {x y : ℝ} (hx0 : 0 ≤ x) (hx1 : x ≤ 1) (hy1 : y 
     (Set.mem_Ici.2 zero_le_one) hx0 (sub_nonneg.2 hx1) (by ring)
   simp only [smul_eq_mul, one_pow, mul_one] at hconv
   have hexp : (1 - y) ^ n ≤ exp (-(y * n)) := by
-    rw [show exp (-(y * n)) = exp (-y) ^ n by rw [← exp_nat_mul]; ring_nf]
+    rw [show exp (-(y * n)) = exp (-y) ^ n by rw [← exp_natCast_mul]; ring_nf]
     exact pow_le_pow_left₀ (sub_nonneg.2 hy1) (by linarith [add_one_le_exp (-y)]) n
   calc (1 - x * y) ^ n = (x * (1 - y) + (1 - x)) ^ n := by ring_nf
     _ ≤ x * (1 - y) ^ n + (1 - x) := hconv

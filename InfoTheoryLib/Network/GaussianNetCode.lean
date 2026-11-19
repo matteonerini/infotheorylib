@@ -292,7 +292,7 @@ lemma cut_condErr_le {D : t → Finset r} (hkD : ∀ j : A, kj j ∈ D j)
     funext j
     have h₁ := hn j (kj j) (hkD j)
     have hmj : m j = (Fintype.equivFin (∀ j : A, Fin (M j))).symm w j := by
-      simp [hm, merge, j.2]
+      simp [hm, merge, j.property]
     rw [hmj] at h₁
     rw [← h₁]
     congr 1
@@ -372,7 +372,7 @@ theorem one_sub_errProb_mul_le (hM : ∀ j, 0 < M j) (hn : 0 < n) {P : ℝ}
   have : Nonempty (∀ j, Fin (M j)) := ⟨fun j => ⟨0, hM j⟩⟩
   have hA' : Nonempty (∀ j : A, Fin (M j)) := ⟨fun j => ⟨0, hM j⟩⟩
   have hC' : Nonempty (∀ j : {j // j ∉ A}, Fin (M j)) := ⟨fun j => ⟨0, hM j⟩⟩
-  have hdest : ∀ j : A, ∃ k, k ∈ B ∧ k ∈ D j := fun j => hAB j j.2
+  have hdest : ∀ j : A, ∃ k, k ∈ B ∧ k ∈ D j := fun j => hAB j j.property
   choose kj hkjB hkjD using hdest
   -- the choice of the messages of the other senders
   set e := Equiv.piEquivPiSubtypeProd (fun j => j ∈ A) (fun j => Fin (M j)) with he

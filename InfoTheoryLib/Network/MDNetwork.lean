@@ -177,13 +177,13 @@ theorem MDNetCode.mdnCutset_of_code (hP : IsPMF P) (hn : 0 < n) (c : MDNetCode s
   refine ⟨κ, hκ, fun l _ => ?_, fun S hS => ?_⟩
   · rw [hcost]
     exact le_of_eq (sum_mix_mul hn fun x i => d l (x i) (c.out x l i))
-  · set τ := ∀ e : {e // e ∈ mdnCut S}, Fin (M e.1.1 e.1.2) with hτ
-    let Mx : (Fin n → α) → τ := fun x e => c.edge x e.1.1 e.1.2
+  · set τ := ∀ e : {e // e ∈ mdnCut S}, Fin (M e.val.1 e.val.2) with hτ
+    let Mx : (Fin n → α) → τ := fun x e => c.edge x e.val.1 e.val.2
     let f : (Fin n → α) → Fin n → ∀ j : {j // j ∉ S}, β j := fun x i j => c.out x j i
     have hfM : ∀ x x', Mx x = Mx x' → f x = f x' := fun x x' h => by
       funext i j
       have hout := c.out_congr hS (x := x) (x' := x') (S := S) (fun a ha b hb => by
-        exact congrFun h ⟨(a, b), mem_filter.2 ⟨mem_univ _, ha, hb⟩⟩) j.2
+        exact congrFun h ⟨(a, b), mem_filter.2 ⟨mem_univ _, ha, hb⟩⟩) j.property
       simp only [f]
       rw [hout]
     let Y : Fin n → τ → ∀ j : {j // j ∉ S}, β j := fun i t =>
@@ -404,7 +404,7 @@ theorem MDNetCode.ofParts (part : Fin N → Fin N → T → T)
   have hne : ∀ j k, Nonempty (Set.range (part j k)) := fun j k =>
     ⟨⟨part j k (Classical.arbitrary T), ⟨_, rfl⟩⟩⟩
   let idx : ∀ j k, T → Fin (M j k) := fun j k t => emb j k ⟨part j k t, ⟨t, rfl⟩⟩
-  let unidx : ∀ j k, Fin (M j k) → T := fun j k m => (Function.invFun (emb j k) m).1
+  let unidx : ∀ j k, Fin (M j k) → T := fun j k m => (Function.invFun (emb j k) m).val
   have hun : ∀ j k t, unidx j k (idx j k t) = part j k t := fun j k t => by
     simp only [unidx, idx]
     rw [Function.leftInverse_invFun (emb j k).injective]

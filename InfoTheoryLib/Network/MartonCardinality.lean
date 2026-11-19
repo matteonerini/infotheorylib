@@ -264,7 +264,7 @@ lemma exists_perturbation [Fintype α] (x : 𝒰₁ × 𝒰₂ → α)
   obtain ⟨φ₀, hφ₀, hne⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hk
   obtain ⟨s, hs⟩ := Function.ne_iff.1 hne
   set φ : 𝒰₁ → ℝ := fun u => if h : u ∈ S then φ₀ ⟨u, h⟩ else 0 with hφ
-  refine ⟨φ, fun u hu => by simp [hφ, hu], ⟨s, s.2, by simpa [hφ] using hs⟩, ?_⟩
+  refine ⟨φ, fun u hu => by simp [hφ, hu], ⟨s, s.property, by simpa [hφ] using hs⟩, ?_⟩
   funext a
   have hz : (M.mulVec φ₀) a = 0 := by
     have := LinearMap.mem_ker.1 hφ₀
@@ -277,7 +277,7 @@ lemma exists_perturbation [Fintype α] (x : 𝒰₁ × 𝒰₂ → α)
     · have : u ∉ S := fun h => hu ⟨⟨u, h⟩, rfl⟩
       simp [mPert, hφ, this]
     · refine sum_congr rfl fun v _ => ?_
-      by_cases h : x (t.1, v) = a <;> simp [mPert, hφ, h]
+      by_cases h : x (t.val, v) = a <;> simp [mPert, hφ, h]
   rw [hsum, hz]
   rfl
 
@@ -554,7 +554,7 @@ theorem exists_marton_card [Fintype α] {W : α → β₁ × β₂ → ℝ} (hq 
   -- Restrict to the supports.
   set S₁ := {u // u ∈ mSupp₁ q₂}
   set S₂ := {v // v ∈ mSupp₂ q₂}
-  have hre : martonPhi (fun z : S₁ × S₂ => q₂ (z.1.1, z.2.1)) (fun z => x (z.1.1, z.2.1))
+  have hre : martonPhi (fun z : S₁ × S₂ => q₂ (z.1.val, z.2.val)) (fun z => x (z.1.val, z.2.val))
       (bcMarg₁ W) (bcMarg₂ W) = martonPhi q₂ x (bcMarg₁ W) (bcMarg₂ W) := by
     refine martonPhi_relabel Subtype.val_injective Subtype.val_injective (fun z hz => ?_) _ _ _
     refine ⟨⟨⟨z.1, ?_⟩, rfl⟩, ⟨⟨z.2, ?_⟩, rfl⟩⟩
@@ -562,7 +562,7 @@ theorem exists_marton_card [Fintype α] {W : α → β₁ × β₂ → ℝ} (hq 
       exact hz (eq_zero_of_notMem_mSupp₁ hq₂.nonneg hn z.2)
     · by_contra hn
       exact hz (eq_zero_of_notMem_mSupp₂ hq₂.nonneg hn z.1)
-  have hsum : ∑ z : S₁ × S₂, q₂ (z.1.1, z.2.1) = 1 := by
+  have hsum : ∑ z : S₁ × S₂, q₂ (z.1.val, z.2.val) = 1 := by
     rw [← hq₂.sum_eq_one]
     refine Fintype.sum_of_injective (Prod.map Subtype.val Subtype.val)
       (Subtype.val_injective.prodMap Subtype.val_injective) _ _ (fun z hz => ?_) fun _ => rfl
@@ -579,12 +579,13 @@ theorem exists_marton_card [Fintype α] {W : α → β₁ × β₂ → ℝ} (hq 
     Function.Embedding.nonempty_of_card_le (by simpa [S₂] using hc₂)
   have hinj : (Prod.map ψ₁ ψ₂).Injective := ψ₁.injective.prodMap ψ₂.injective
   set q₄ : Fin (Fintype.card α) × Fin (Fintype.card α) → ℝ :=
-    Function.extend (Prod.map ψ₁ ψ₂) (fun z : S₁ × S₂ => q₂ (z.1.1, z.2.1)) 0 with hq₄
+    Function.extend (Prod.map ψ₁ ψ₂) (fun z : S₁ × S₂ => q₂ (z.1.val, z.2.val)) 0 with hq₄
   set x₄ : Fin (Fintype.card α) × Fin (Fintype.card α) → α :=
-    Function.extend (Prod.map ψ₁ ψ₂) (fun z : S₁ × S₂ => x (z.1.1, z.2.1)) fun _ => x z₀ with hx₄
-  have hq₄e : ∀ z : S₁ × S₂, q₄ (ψ₁ z.1, ψ₂ z.2) = q₂ (z.1.1, z.2.1) := fun z =>
+    Function.extend (Prod.map ψ₁ ψ₂) (fun z : S₁ × S₂ => x (z.1.val, z.2.val))
+      fun _ => x z₀ with hx₄
+  have hq₄e : ∀ z : S₁ × S₂, q₄ (ψ₁ z.1, ψ₂ z.2) = q₂ (z.1.val, z.2.val) := fun z =>
     hinj.extend_apply _ _ z
-  have hx₄e : ∀ z : S₁ × S₂, x₄ (ψ₁ z.1, ψ₂ z.2) = x (z.1.1, z.2.1) := fun z =>
+  have hx₄e : ∀ z : S₁ × S₂, x₄ (ψ₁ z.1, ψ₂ z.2) = x (z.1.val, z.2.val) := fun z =>
     hinj.extend_apply _ _ z
   have hq₄0 : ∀ z, z ∉ Set.range (Prod.map ψ₁ ψ₂) → q₄ z = 0 := fun z hz => by
     rw [hq₄, Function.extend_apply' _ _ _ fun ⟨t, ht⟩ => hz ⟨t, ht⟩]

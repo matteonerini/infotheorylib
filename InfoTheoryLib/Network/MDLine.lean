@@ -121,7 +121,7 @@ lemma lineCov_top (hμ : IsPMF μ) : LineCov μ L N := by
   set d : ∀ l, β l := fun _ => Classical.arbitrary _ with hd
   have htail : ∀ z : ∀ l, β l, tailOf N z = d := fun z => by
     funext l
-    have : ¬ (N ≤ (l : ℕ)) := not_le.2 l.2
+    have : ¬ (N ≤ (l : ℕ)) := not_le.2 l.isLt
     simp [tailOf, this, hd]
   have hdist : dist μ (pair (fun z : α × ∀ l, β l => tailOf N z.2) Prod.fst) =
       dist P (fun a => (d, a)) := by
@@ -467,7 +467,7 @@ lemma sum_condInfo_le {μ' : (α × ∀ l, β l) → ℝ} (hμ : IsPMF μ') (k :
   | zero =>
     have : (univ.filter fun i : Fin (m + 1) => m + 1 - 0 ≤ (i : ℕ)) = ∅ := by
       ext i
-      have := i.2
+      have := i.isLt
       simp
       omega
     rw [this, sum_empty]
@@ -480,7 +480,7 @@ lemma sum_condInfo_le {μ' : (α × ∀ l, β l) → ℝ} (hμ : IsPMF μ') (k :
           insert K (univ.filter fun i : Fin (m + 1) => m + 1 - d ≤ (i : ℕ)) := by
         ext i
         simp only [mem_filter, mem_univ, true_and, mem_insert, hK, Fin.ext_iff]
-        have := i.2
+        have := i.isLt
         omega
       have hnot : K ∉ univ.filter fun i : Fin (m + 1) => m + 1 - d ≤ (i : ℕ) := by
         simp only [mem_filter, mem_univ, true_and, hK]
@@ -627,7 +627,7 @@ theorem isAchievableMDN_line (hP : IsPMF P) (hd : ∀ l x y, 0 ≤ d l x y) {κ 
         omega)
       set Q := {i : Fin (m + 1) // (k : ℕ) ≤ i} with hQ
       have h₁ : Nat.card (Set.range (part j k)) ≤ Nat.card (∀ i : Q, Fin (L n i)) := by
-        refine Nat.card_le_card_of_injective (fun t i => t.1 i) ?_
+        refine Nat.card_le_card_of_injective (fun t i => t.val i) ?_
         rintro ⟨_, t, rfl⟩ ⟨_, t', rfl⟩ h
         have h₂ := fun i => congrFun h i
         simp only [part, hjk, ite_true] at h₂ ⊢
@@ -668,7 +668,7 @@ theorem isAchievableMDN_line (hP : IsPMF P) (hd : ∀ l x y, 0 ≤ d l x y) {κ 
           have e₁ : ∑ i : Q, r i = ∑ i ∈ univ.filter (fun i : Fin (m + 1) => (k : ℕ) ≤ (i : ℕ)),
               r i := (sum_subtype _ (by simp) r).symm
           rw [e₁, sum_add_distrib]
-          have h₄ := sum_condInfo_le hμ (k : ℕ) k.2.le
+          have h₄ := sum_condInfo_le hμ (k : ℕ) k.isLt.le
           have h₅ : ∑ _i ∈ univ.filter (fun i : Fin (m + 1) => (k : ℕ) ≤ (i : ℕ)), δ ≤
               ((m : ℝ) + 1) * δ := by
             rw [sum_const, nsmul_eq_mul]

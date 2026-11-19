@@ -259,7 +259,7 @@ theorem printed_slater_relint_false :
     rw [mem_interior]
     refine ⟨{z | 0 < (z : EuclideanSpace ℝ (Fin 2)) 1}, fun z hz => ?_, ?_, by simp⟩
     · have hz' : 0 < (z : EuclideanSpace ℝ (Fin 2)) 1 := hz
-      exact mem_feasible_slaterGapProgram.2 ⟨hspan z z.2, hz'.le⟩
+      exact mem_feasible_slaterGapProgram.2 ⟨hspan z z.property, hz'.le⟩
     · exact isOpen_lt continuous_const (by fun_prop)
   · simp [slaterGapProgram, norm_plane]
   · refine le_antisymm (iInf₂_le_of_le _ hmem ?_) (le_iInf₂ fun x hx => ?_)

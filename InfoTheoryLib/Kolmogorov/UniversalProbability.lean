@@ -117,7 +117,7 @@ theorem IsUniversal.universalProb_ge {U : Computer} (hU : U.IsUniversal) (A : Co
   set e : A.programsFor x y → U.programsFor x y := fun p => ⟨s ++ p, by
     change x ∈ U.run (s ++ p) y
     rw [hs]
-    exact p.2⟩
+    exact p.property⟩
   have he : Function.Injective e := fun p q h => by
     have := congrArg Subtype.val h
     exact Subtype.ext (List.append_cancel_left this)

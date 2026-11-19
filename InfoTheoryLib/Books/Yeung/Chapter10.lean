@@ -193,10 +193,10 @@ theorem example_10_16 (m : ℝ) {v w : ℝ≥0} (hv : v ≠ 0) {a : ℝ} (ha : a
   have hw0 : w ≠ 0 := by
     intro h
     rw [h, NNReal.coe_zero] at hw
-    have : (0 : ℝ) < a ^ 2 * v := mul_pos (by positivity) (lt_of_le_of_ne v.2 (by
+    have : (0 : ℝ) < a ^ 2 * v := mul_pos (by positivity) (lt_of_le_of_ne v.property (by
       exact_mod_cast (Ne.symm hv)))
     linarith
-  have hv' : (0 : ℝ) < v := lt_of_le_of_ne v.2 (by exact_mod_cast (Ne.symm hv))
+  have hv' : (0 : ℝ) < v := lt_of_le_of_ne v.property (by exact_mod_cast (Ne.symm hv))
   rw [diffEntropy_gaussianPDFReal _ hw0, diffEntropy_gaussianPDFReal _ hv, hw]
   have h₁ : (0 : ℝ) < 2 * π * exp 1 := by positivity
   rw [show 2 * π * exp 1 * (a ^ 2 * v) = a ^ 2 * (2 * π * exp 1 * v) by ring,

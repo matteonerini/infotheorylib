@@ -148,7 +148,7 @@ lemma condInfo_blockEntropy_eq_iMeasure (hμ : IsPMF μ) (S T K : Finset ι) :
 omit [Fintype ι] in
 /-- The atoms in `⋂_{l ∈ U} X̃ₗ - X̃_V` are those containing `U` and disjoint from `V`. -/
 lemma mem_inf_tilde_sdiff [Fintype ι] {U V : Finset ι} {a : NAtom ι} :
-    a ∈ U.inf (fun l => tilde {l}) \ tilde V ↔ U ⊆ a.1 ∧ Disjoint a.1 V := by
+    a ∈ U.inf (fun l => tilde {l}) \ tilde V ↔ U ⊆ a.val ∧ Disjoint a.val V := by
   simp only [mem_sdiff, mem_inf, mem_tilde, mem_singleton, exists_eq_left, subset_iff,
     disjoint_right, not_exists, not_and]
 
@@ -309,7 +309,7 @@ theorem condMutIndep_blocks_iff_iMeasure (hμ : IsPMF μ) {T : Finset ι} {Q : �
     intro i
     rw [condInfo_blockEntropy_eq_iMeasure hμ, (isSignedMeasure_iMeasure μ X).eq_sum_singleton]
     set F := (tilde (Q i) ∩ tilde ((univ.erase i).biUnion Q)) \ tilde T with hF
-    have hmaps : ∀ a ∈ F, (fun j => a.1 ∩ Q j) ∈ (Fintype.piFinset fun j => (Q j).powerset).filter
+    have hmaps : ∀ a ∈ F, (fun j => a.val ∩ Q j) ∈ (Fintype.piFinset fun j => (Q j).powerset).filter
         fun W => (W i).Nonempty ∧ ∃ j ≠ i, (W j).Nonempty := by
       intro a ha
       simp only [hF, mem_sdiff, mem_inter, mem_tilde] at ha
@@ -323,13 +323,13 @@ theorem condMutIndep_blocks_iff_iMeasure (hμ : IsPMF μ) {T : Finset ι} {Q : �
     rw [mem_filter, Fintype.mem_piFinset] at hW
     obtain ⟨hWQ', hWi, j, hji, hWj⟩ := hW
     have hWQ : ∀ j, W j ⊆ Q j := fun j => mem_powerset.1 (hWQ' j)
-    have e : F.filter (fun a => (fun j => a.1 ∩ Q j) = W) = (univ.biUnion W).inf
+    have e : F.filter (fun a => (fun j => a.val ∩ Q j) = W) = (univ.biUnion W).inf
         (fun l => tilde {l}) \ tilde (T ∪ univ.biUnion fun j => Q j \ W j) := by
       ext a
       rw [mem_filter, mem_inf_tilde_sdiff]
       constructor
       · rintro ⟨haF, hkey⟩
-        have hk : ∀ j, a.1 ∩ Q j = W j := fun j => congrFun hkey j
+        have hk : ∀ j, a.val ∩ Q j = W j := fun j => congrFun hkey j
         simp only [hF, mem_sdiff, mem_tilde, not_exists, not_and] at haF
         refine ⟨fun l hl => ?_, ?_⟩
         · obtain ⟨j, -, hlj⟩ := mem_biUnion.1 hl
@@ -342,7 +342,7 @@ theorem condMutIndep_blocks_iff_iMeasure (hμ : IsPMF μ) {T : Finset ι} {Q : �
           exact (mem_sdiff.1 hl).2 (mem_inter.2 ⟨hla, (mem_sdiff.1 hl).1⟩)
       · rintro ⟨hsub, hdisj⟩
         rw [disjoint_union_right, disjoint_biUnion_right] at hdisj
-        have hk : ∀ j, a.1 ∩ Q j = W j := fun j => by
+        have hk : ∀ j, a.val ∩ Q j = W j := fun j => by
           ext l
           constructor
           · intro hl
@@ -389,22 +389,22 @@ def IsFull (K : FCMI ι) : Prop :=
 /-- The conditional mutual independency `K` holds for the random variables `X`. -/
 def Holds {Ω : Type*} [Fintype Ω] {A : ι → Type*} (μ : Ω → ℝ) (X : ∀ i, Ω → A i)
     (K : FCMI ι) : Prop :=
-  CondMutIndep μ (fun q : K.parts => blockRV X q.1) (blockRV X K.cond)
+  CondMutIndep μ (fun q : K.parts => blockRV X q.val) (blockRV X K.cond)
 
 open Classical in
 /-- **Definition 12.13.** The image `Im(K)` of `K`: the atoms of the form
 `⋂_{l ∈ ⋃ Wᵢ} X̃ₗ - X̃_{T ∪ ⋃ (Qᵢ - Wᵢ)}` (12.57), with `Wᵢ ⊆ Qᵢ` and at least two `Wᵢ` nonempty.
 -/
 def image (K : FCMI ι) : Finset (NAtom ι) :=
-  univ.filter fun a => ∃ W : K.parts → Finset ι, (∀ q, W q ⊆ q.1) ∧
+  univ.filter fun a => ∃ W : K.parts → Finset ι, (∀ q, W q ⊆ q.val) ∧
     (∃ q q', q ≠ q' ∧ (W q).Nonempty ∧ (W q').Nonempty) ∧
       ({a} : Finset (NAtom ι)) = (univ.biUnion W).inf (fun l => tilde {l}) \
-        tilde (K.cond ∪ univ.biUnion fun q => q.1 \ W q)
+        tilde (K.cond ∪ univ.biUnion fun q => q.val \ W q)
 
 lemma mem_image {K : FCMI ι} {a : NAtom ι} : a ∈ K.image ↔ ∃ W : K.parts → Finset ι,
-    (∀ q, W q ⊆ q.1) ∧ (∃ q q', q ≠ q' ∧ (W q).Nonempty ∧ (W q').Nonempty) ∧
+    (∀ q, W q ⊆ q.val) ∧ (∃ q q', q ≠ q' ∧ (W q).Nonempty ∧ (W q').Nonempty) ∧
       ({a} : Finset (NAtom ι)) = (univ.biUnion W).inf (fun l => tilde {l}) \
-        tilde (K.cond ∪ univ.biUnion fun q => q.1 \ W q) := by
+        tilde (K.cond ∪ univ.biUnion fun q => q.val \ W q) := by
   rw [image, mem_filter]
   exact and_iff_right (mem_univ a)
 
@@ -414,13 +414,13 @@ lemma isFull_iff {K : FCMI ι} : K.IsFull ↔ (∀ q ∈ K.parts, Disjoint K.con
       K.cond ∪ K.parts.biUnion id = univ := Iff.rfl
 
 lemma pairwise_disjoint {K : FCMI ι} (hK : K.IsFull) :
-    Pairwise (Disjoint on fun q : K.parts => q.1) :=
-  fun q q' hqq' => hK.2.1 q.2 q'.2 fun h => hqq' (Subtype.ext h)
+    Pairwise (Disjoint on fun q : K.parts => q.val) :=
+  fun q q' hqq' => hK.2.1 q.property q'.property fun h => hqq' (Subtype.ext h)
 
 /-- For an FCMI, the set (12.57) is the atom `⋂_{l ∈ ⋃ Wᵢ} X̃ₗ - X̃_{(⋃ Wᵢ)ᶜ}`, (12.72). -/
 lemma inf_tilde_sdiff_eq_singleton {K : FCMI ι} (hK : K.IsFull) {W : K.parts → Finset ι}
-    (hW : ∀ q, W q ⊆ q.1) (hne : (univ.biUnion W).Nonempty) :
-    (univ.biUnion W).inf (fun l => tilde {l}) \ tilde (K.cond ∪ univ.biUnion fun q => q.1 \ W q) =
+    (hW : ∀ q, W q ⊆ q.val) (hne : (univ.biUnion W).Nonempty) :
+    (univ.biUnion W).inf (fun l => tilde {l}) \ tilde (K.cond ∪ univ.biUnion fun q => q.val \ W q) =
       {⟨univ.biUnion W, hne⟩} := by
   ext b
   rw [mem_inf_tilde_sdiff, mem_singleton]
@@ -439,7 +439,7 @@ lemma inf_tilde_sdiff_eq_singleton {K : FCMI ι} (hK : K.IsFull) {W : K.parts �
     refine ⟨subset_rfl, ?_⟩
     rw [disjoint_union_right, disjoint_biUnion_right]
     refine ⟨(disjoint_biUnion_left _ _ _).2 fun q _ =>
-      disjoint_of_subset_left (hW q) (hK.1 q.1 q.2).symm, fun q' _ => ?_⟩
+      disjoint_of_subset_left (hW q) (hK.1 q.val q.property).symm, fun q' _ => ?_⟩
     rw [disjoint_biUnion_left]
     intro q _
     by_cases hqq : q = q'
@@ -457,9 +457,9 @@ theorem mem_image_iff {K : FCMI ι} (hK : K.IsFull) {a : NAtom ι} :
   constructor
   · rintro ⟨W, hW, ⟨q, q', hqq', ⟨l, hl⟩, ⟨l', hl'⟩⟩, ha⟩
     have hmem : a ∈ (univ.biUnion W).inf (fun l => tilde {l}) \
-        tilde (K.cond ∪ univ.biUnion fun q => q.1 \ W q) := ha ▸ mem_singleton_self a
+        tilde (K.cond ∪ univ.biUnion fun q => q.val \ W q) := ha ▸ mem_singleton_self a
     rw [mem_inf_tilde_sdiff, disjoint_union_right] at hmem
-    refine ⟨q.1, q.2, q'.1, q'.2, fun h => hqq' (Subtype.ext h), ?_⟩
+    refine ⟨q.val, q.property, q'.val, q'.property, fun h => hqq' (Subtype.ext h), ?_⟩
     simp only [mem_sdiff, mem_inter, mem_tilde, not_exists, not_and]
     refine ⟨⟨⟨l, hW q hl, hmem.1 (mem_biUnion.2 ⟨q, mem_univ _, hl⟩)⟩,
       ⟨l', hW q' hl', hmem.1 (mem_biUnion.2 ⟨q', mem_univ _, hl'⟩)⟩⟩, fun l hl hla => ?_⟩
@@ -467,9 +467,9 @@ theorem mem_image_iff {K : FCMI ι} (hK : K.IsFull) {a : NAtom ι} :
   · rintro ⟨q, hq, q', hq', hqq', ha⟩
     simp only [mem_sdiff, mem_inter, mem_tilde, not_exists, not_and] at ha
     obtain ⟨⟨⟨l, hlq, hla⟩, ⟨l', hlq', hla'⟩⟩, haT⟩ := ha
-    set W : K.parts → Finset ι := fun p => a.1 ∩ p.1 with hWdef
-    have hW : ∀ p, W p ⊆ p.1 := fun p => inter_subset_right
-    have hUa : univ.biUnion W = a.1 := by
+    set W : K.parts → Finset ι := fun p => a.val ∩ p.val with hWdef
+    have hW : ∀ p, W p ⊆ p.val := fun p => inter_subset_right
+    have hUa : univ.biUnion W = a.val := by
       ext m
       simp only [hWdef, mem_biUnion, mem_univ, true_and, mem_inter]
       constructor
@@ -481,7 +481,7 @@ theorem mem_image_iff {K : FCMI ι} (hK : K.IsFull) {a : NAtom ι} :
         · exact absurd hm (haT m hT)
         · obtain ⟨p, hp, hmp⟩ := mem_biUnion.1 hQ
           exact ⟨⟨p, hp⟩, hm, hmp⟩
-    have hne : (univ.biUnion W).Nonempty := hUa ▸ a.2
+    have hne : (univ.biUnion W).Nonempty := hUa ▸ a.property
     refine ⟨W, hW, ⟨⟨q, hq⟩, ⟨q', hq'⟩, fun h => hqq' (congrArg Subtype.val h),
       ⟨l, mem_inter.2 ⟨hla, hlq⟩⟩, ⟨l', mem_inter.2 ⟨hla', hlq'⟩⟩⟩, ?_⟩
     rw [inf_tilde_sdiff_eq_singleton hK hW hne]

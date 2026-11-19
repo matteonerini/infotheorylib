@@ -62,7 +62,7 @@ lemma integrable_gaussianPDFReal_mul_sq (m : ℝ) {v : ℝ≥0} (hv : v ≠ 0) :
 lemma log_gaussianPDFReal (m : ℝ) {v : ℝ≥0} (hv : v ≠ 0) (x : ℝ) :
     log (gaussianPDFReal m v x) = -(log (2 * π * v) / 2) - (x - m) ^ 2 / (2 * v) := by
   have hpos : 0 < 2 * π * (v : ℝ) := by
-    have : (0 : ℝ) < v := lt_of_le_of_ne v.2 (by exact_mod_cast hv.symm)
+    have : (0 : ℝ) < v := lt_of_le_of_ne v.property (by exact_mod_cast hv.symm)
     positivity
   rw [gaussianPDFReal, log_mul (inv_ne_zero (sqrt_ne_zero'.2 hpos)) (exp_pos _).ne', log_inv,
     log_exp, log_sqrt hpos.le]
@@ -91,7 +91,7 @@ lemma half_log_add_half {v : ℝ} (hv : 0 < v) :
 differential entropy `h = ½ log (2πe v)` nats. -/
 theorem diffEntropy_gaussianPDFReal (m : ℝ) {v : ℝ≥0} (hv : v ≠ 0) :
     diffEntropy volume (gaussianPDFReal m v) = 1 / 2 * log (2 * π * exp 1 * v) := by
-  have hv' : (0 : ℝ) < v := lt_of_le_of_ne v.2 (by exact_mod_cast hv.symm)
+  have hv' : (0 : ℝ) < v := lt_of_le_of_ne v.property (by exact_mod_cast hv.symm)
   rw [diffEntropy]
   simp only [negMulLog_gaussianPDFReal m hv]
   rw [integral_add ((integrable_gaussianPDFReal m v).const_mul _)
@@ -108,7 +108,7 @@ lemma crossEntropy_gaussianPDFReal {g : ℝ → ℝ} (hg : IsPDF volume g) {m : 
     (hv : v ≠ 0) (hvar : ∫ x, g x * (x - m) ^ 2 = v) :
     Integrable (fun x => g x * log (gaussianPDFReal m v x)) ∧
       -∫ x, g x * log (gaussianPDFReal m v x) = 1 / 2 * log (2 * π * exp 1 * v) := by
-  have hv' : (0 : ℝ) < v := lt_of_le_of_ne v.2 (by exact_mod_cast hv.symm)
+  have hv' : (0 : ℝ) < v := lt_of_le_of_ne v.property (by exact_mod_cast hv.symm)
   have hsq : Integrable fun x => g x * (x - m) ^ 2 :=
     Integrable.of_integral_ne_zero (by rw [hvar]; exact hv'.ne')
   have e : (fun x => g x * log (gaussianPDFReal m v x)) =

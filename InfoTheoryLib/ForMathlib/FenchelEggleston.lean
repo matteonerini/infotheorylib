@@ -365,8 +365,9 @@ theorem exists_convex_combination_le_finrank {R : Set E} (hR : IsPreconnected R)
   obtain ⟨t, htR, htc, hxt⟩ := exists_finset_of_mem_convexHull hR hd hx
   obtain ⟨a, ha0, ha1, hax⟩ := Finset.mem_convexHull'.1 hxt
   set e := t.equivFin
-  refine ⟨t.card, htc, fun i => a (e.symm i), fun i => (e.symm i : E), fun i => htR (e.symm i).2,
-    fun i => ha0 _ (e.symm i).2, ?_, ?_⟩
+  refine ⟨t.card, htc, fun i => a (e.symm i), fun i => (e.symm i : E),
+      fun i => htR (e.symm i).property,
+    fun i => ha0 _ (e.symm i).property, ?_, ?_⟩
   · rw [e.symm.sum_comp (fun y : t => a y), ← ha1]
     exact sum_coe_sort t a
   · rw [e.symm.sum_comp (fun y : t => a y • (y : E)), ← hax]

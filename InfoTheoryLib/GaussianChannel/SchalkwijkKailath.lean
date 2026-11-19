@@ -540,7 +540,7 @@ lemma skIdx_eq [NeZero M] (hP : 0 < P) (m : Fin M) {e : ℝ} (he : |e| < √P / 
     constructor <;> linarith [hd.1, hd.2]
   refine Fin.ext ?_
   simp only [skIdx, hfl]
-  have := m.2
+  have := m.isLt
   omega
 
 section Analysis
@@ -549,7 +549,7 @@ variable [NeZero M] {ν : Measure ℝ}
 
 lemma skTheta_sq_le (hP : 0 ≤ P) (m : Fin M) : skTheta M P m ^ 2 ≤ P := by
   have hM : (0 : ℝ) < M := by exact_mod_cast NeZero.pos M
-  have hm : (m : ℝ) + 1 ≤ M := by exact_mod_cast m.2
+  have hm : (m : ℝ) + 1 ≤ M := by exact_mod_cast m.isLt
   have hm0 : (0 : ℝ) ≤ m := Nat.cast_nonneg _
   simp only [skTheta, mul_pow]
   rw [sq_sqrt hP]
@@ -711,11 +711,12 @@ theorem isAchievableAddFB_of_lt {ν : Measure ℝ} (hν : IsUnitNoise ν) {P R :
       have e : 2 * gaussCap P = log (1 + P) := by
         simp only [gaussCap]
         ring
-      rw [e, exp_neg, exp_nat_mul, exp_log h1]
+      rw [e, exp_neg, exp_natCast_mul, exp_log h1]
       rfl
     have hMsq : (((2 ^ a : ℕ) : ℝ)) ^ 2 = exp (2 * (a * log 2)) := by
       push_cast
-      rw [← pow_mul, ← exp_log (by norm_num : (0 : ℝ) < 2), ← exp_nat_mul, exp_log (by norm_num)]
+      rw [← pow_mul, ← exp_log (by norm_num : (0 : ℝ) < 2), ← exp_natCast_mul,
+          exp_log (by norm_num)]
       congr 1
       push_cast
       ring

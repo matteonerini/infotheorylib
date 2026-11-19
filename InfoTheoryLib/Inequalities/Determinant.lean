@@ -106,7 +106,7 @@ lemma det_submatrix_eq_principalMinor {τ : Type*} [Fintype τ] [DecidableEq τ]
     (K.submatrix f f).det = principalMinor K S := by
   let e : τ ≃ S := Equiv.ofBijective (fun t => ⟨f t, (hS _).2 ⟨t, rfl⟩⟩)
     ⟨fun a b h => hf (congrArg Subtype.val h), fun x => by
-      obtain ⟨t, ht⟩ := (hS x).1 x.2
+      obtain ⟨t, ht⟩ := (hS x).1 x.property
       exact ⟨t, Subtype.ext ht⟩⟩
   have : K.submatrix f f =
       (K.submatrix (fun i : S => (i : ι)) (fun i : S => (i : ι))).submatrix e e := rfl
@@ -136,12 +136,12 @@ theorem principalMinor_union_mul_inter_le (hK : K.PosDef) (A B : Finset ι) :
   have hF : Function.Injective F := by
     refine Subtype.val_injective.sumElim (Subtype.val_injective.sumElim Subtype.val_injective
       fun a b h => ?_) fun a b h => ?_
-    · have ha := a.2; have hb := b.2
+    · have ha := a.property; have hb := b.property
       simp only [mem_sdiff] at ha hb
       exact ha.2 (h ▸ hb.1)
-    · have ha := a.2
+    · have ha := a.property
       simp only [mem_inter] at ha
-      rcases b with b | b <;> have hb := b.2 <;> simp only [mem_sdiff] at hb <;>
+      rcases b with b | b <;> have hb := b.property <;> simp only [mem_sdiff] at hb <;>
         simp only [Sum.elim_inl, Sum.elim_inr] at h
       · exact hb.2 (h ▸ ha.2)
       · exact hb.2 (h ▸ ha.1)
@@ -156,12 +156,12 @@ theorem principalMinor_union_mul_inter_le (hK : K.PosDef) (A B : Finset ι) :
       · have hB : x ∈ B := by rcases mem_union.1 hx with h | h; exacts [absurd h hA, h]
         exact ⟨Sum.inr (Sum.inr ⟨x, mem_sdiff.2 ⟨hB, hA⟩⟩), rfl⟩
     · rintro ⟨t | t | t, rfl⟩
-      · exact mem_union_left _ (mem_inter.1 t.2).1
-      · exact mem_union_left _ (mem_sdiff.1 t.2).1
-      · exact mem_union_right _ (mem_sdiff.1 t.2).1
+      · exact mem_union_left _ (mem_inter.1 t.property).1
+      · exact mem_union_left _ (mem_sdiff.1 t.property).1
+      · exact mem_union_right _ (mem_sdiff.1 t.property).1
   have e2 : (K.submatrix F F).toBlocks₁₁.det = principalMinor K (A ∩ B) :=
     det_submatrix_eq_principalMinor K Subtype.val_injective fun x =>
-      ⟨fun hx => ⟨⟨x, hx⟩, rfl⟩, by rintro ⟨t, rfl⟩; exact t.2⟩
+      ⟨fun hx => ⟨⟨x, hx⟩, rfl⟩, by rintro ⟨t, rfl⟩; exact t.property⟩
   have e3 : ((K.submatrix F F).submatrix (Sum.map id Sum.inl) (Sum.map id Sum.inl)).det =
       principalMinor K A := by
     rw [submatrix_submatrix]
@@ -172,8 +172,8 @@ theorem principalMinor_union_mul_inter_le (hK : K.PosDef) (A B : Finset ι) :
       · exact ⟨Sum.inl ⟨x, mem_inter.2 ⟨hx, hB⟩⟩, rfl⟩
       · exact ⟨Sum.inr ⟨x, mem_sdiff.2 ⟨hx, hB⟩⟩, rfl⟩
     · rintro ⟨t | t, rfl⟩
-      · exact (mem_inter.1 t.2).1
-      · exact (mem_sdiff.1 t.2).1
+      · exact (mem_inter.1 t.property).1
+      · exact (mem_sdiff.1 t.property).1
   have e4 : ((K.submatrix F F).submatrix (Sum.map id Sum.inr) (Sum.map id Sum.inr)).det =
       principalMinor K B := by
     rw [submatrix_submatrix]
@@ -184,8 +184,8 @@ theorem principalMinor_union_mul_inter_le (hK : K.PosDef) (A B : Finset ι) :
       · exact ⟨Sum.inl ⟨x, mem_inter.2 ⟨hA, hx⟩⟩, rfl⟩
       · exact ⟨Sum.inr ⟨x, mem_sdiff.2 ⟨hx, hA⟩⟩, rfl⟩
     · rintro ⟨t | t, rfl⟩
-      · exact (mem_inter.1 t.2).2
-      · exact (mem_sdiff.1 t.2).1
+      · exact (mem_inter.1 t.property).2
+      · exact (mem_sdiff.1 t.property).1
   rwa [e1, e2, e3, e4] at h
 
 /-! ### Han's inequalities for principal minors -/

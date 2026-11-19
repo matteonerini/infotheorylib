@@ -165,7 +165,7 @@ lemma quantPMF_uniformPDF {a b : ℝ} (hab : a < b) {N : ℕ} (k : Fin N) :
     intervalIntegral.integral_const, binEdge_succ_sub, smul_eq_mul]
   · field_simp
   · rw [uIcc_of_le (binEdge_le_succ hab.le k)] at hx
-    exact indicator_of_mem (Icc_binEdge_subset hab.le k.2 hx) _
+    exact indicator_of_mem (Icc_binEdge_subset hab.le k.isLt hx) _
 
 /-- The quantization of the uniform distribution on `[a, b]` into `N` bins is uniform:
 `H(X^Δ) = log N`. -/

@@ -70,7 +70,7 @@ lemma runTo_of_le (g : ∀ l, (∀ l', A l') → A l) {r : ℕ} {l : Fin q} (h :
 
 /-- The index of round `l` of the transcript. -/
 lemma run_apply (g : ∀ l, (∀ l', A l') → A l) (l : Fin q) : run g l = g l (runTo g l) :=
-  runTo_of_lt g l.2
+  runTo_of_lt g l.isLt
 
 /-- Two protocols that agree along the run of the first one have the same run. -/
 lemma runTo_congr {g g' : ∀ l, (∀ l', A l') → A l} {r : ℕ}

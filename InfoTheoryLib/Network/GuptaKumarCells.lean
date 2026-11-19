@@ -151,7 +151,7 @@ theorem gkProb_count_ge {q : ℝ} (hq : (#{a | A a} : ℝ) / Fintype.card α ≤
     rw [← mul_sum, ← Fintype.sum_pow, Fintype.card_fun, Fintype.card_fin]
     push_cast
     have h₄ := pow_le_pow_left₀ hw0 hsum₂ n
-    rw [mul_pow, ← exp_nat_mul] at h₄
+    rw [mul_pow, ← exp_natCast_mul] at h₄
     have hpos : (0 : ℝ) < (Fintype.card α : ℝ) ^ n := by positivity
     rw [div_le_iff₀ hpos]
     calc exp (-(t * s)) * (∑ a, w a) ^ n
@@ -186,7 +186,7 @@ theorem gkProb_forall_not {p : ℝ} (hp : p ≤ (#{a | A a} : ℝ) / Fintype.car
       have h₂ := one_sub_le_exp_neg p
       nlinarith
     have h₄ := pow_le_pow_left₀ (sum_nonneg fun a _ => hw0 a) hle n
-    rw [mul_pow, ← exp_nat_mul] at h₄
+    rw [mul_pow, ← exp_natCast_mul] at h₄
     push_cast
     have hpos : (0 : ℝ) < (Fintype.card α : ℝ) ^ n := by positivity
     rw [div_le_iff₀ hpos]

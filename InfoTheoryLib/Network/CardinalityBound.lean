@@ -50,7 +50,7 @@ theorem isClosed_exists_forall_le {X E J : Type*} [TopologicalSpace X] [Topologi
   · rintro ⟨q, hq, h⟩
     exact ⟨(⟨q, hq⟩, R), h, rfl⟩
   · rintro ⟨⟨q, R'⟩, h, rfl⟩
-    exact ⟨q, q.2, h⟩
+    exact ⟨q, q.property, h⟩
 
 section Continuity
 

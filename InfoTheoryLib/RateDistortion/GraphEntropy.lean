@@ -184,7 +184,7 @@ theorem condGraphEntropy_bot (hP : IsPMF P) : condGraphEntropy (⊥ : SimpleGrap
   have hsub : Subsingleton ↥(maxIndepSets (⊥ : SimpleGraph α)) := by
     refine ⟨fun a b => Subtype.ext ?_⟩
     have huniv : ∀ w : ↥(maxIndepSets (⊥ : SimpleGraph α)), (w : Finset α) = univ := fun w => by
-      have h := mem_maxIndepSets.1 w.2
+      have h := mem_maxIndepSets.1 w.property
       exact (h.2 univ (fun _ _ _ _ _ => by simp) (subset_univ _)).symm
     rw [huniv a, huniv b]
   obtain ⟨q, hq, he⟩ := exists_condGraphEntropy_eq hP (⊥ : SimpleGraph α)
@@ -200,7 +200,7 @@ theorem condGraphEntropy_top (hP : IsPMF P) :
   have hsing : ∀ w : ↥(maxIndepSets (⊤ : SimpleGraph α)), ∀ x x', x ∈ (w : Finset α) →
       x' ∈ (w : Finset α) → x = x' := fun w x x' hx hx' => by
     by_contra hne
-    exact (mem_maxIndepSets.1 w.2).1 hx hx' hne (by simpa using hne)
+    exact (mem_maxIndepSets.1 w.property).1 hx hx' hne (by simpa using hne)
   obtain ⟨z⟩ : Nonempty (α × γ) := Fintype.card_pos_iff.1 (card_pos_of_isPMF hP)
   have hf : ∀ u : (α × γ) × ↥(maxIndepSets (⊤ : SimpleGraph α)), siLaw P q u ≠ 0 →
       (fun (w : ↥(maxIndepSets (⊤ : SimpleGraph α))) (_ : γ) =>
@@ -252,7 +252,7 @@ lemma isFunOf_of_isGraphKernel {g : α × γ → β} {q : α → ↥(maxIndepSet
   obtain ⟨hx₀, hP₀⟩ := hex.choose_spec
   by_contra hne
   have hxne : hex.choose ≠ x := fun h => hne (by rw [h])
-  exact (mem_maxIndepSets.1 w.2).1 hx₀ hx hxne ⟨hxne, y, hP₀, hP0, hne⟩
+  exact (mem_maxIndepSets.1 w.property).1 hx₀ hx hxne ⟨hxne, y, hP₀, hP0, hne⟩
 
 /-- **Lecture 22, page 22-41.** The support `{x : p(u, x) > 0}` of `U = u` is independent if
 `H(Z | U, Y) = 0`. The notes say that it is maximally independent, which it need not be. -/

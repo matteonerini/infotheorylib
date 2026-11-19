@@ -225,7 +225,7 @@ def svdNoise (γ : r → ℝ) : {k // γ k ≠ 0} → ℝ := fun k => (γ k ^ 2)
 
 omit [Fintype r] [DecidableEq r] in
 lemma svdNoise_pos (γ : r → ℝ) (k : {k // γ k ≠ 0}) : 0 < svdNoise γ k :=
-  inv_pos.2 (pow_pos (lt_of_le_of_ne (abs_nonneg _) (abs_ne_zero.2 k.2).symm) 2 |>.trans_eq
+  inv_pos.2 (pow_pos (lt_of_le_of_ne (abs_nonneg _) (abs_ne_zero.2 k.property).symm) 2 |>.trans_eq
     (sq_abs _))
 
 omit [Fintype r] [DecidableEq r] in
@@ -280,11 +280,11 @@ theorem exists_gvRate_waterFill (hU : Uᵀ * U = 1) (hU' : U * Uᵀ = 1)
     · exact waterFill_nonneg _ _ _
     · exact le_rfl
   have hpv : ∀ k : {k // γ k ≠ 0}, p k = waterFill (svdNoise γ) ν k := fun k => by
-    simp [hpd, k.2]
+    simp [hpd, k.property]
   refine ⟨Ψ * diagonal p * Ψᵀ, posSemidef_mul_diagonal_mul Ψ hp, ?_, ?_⟩
   · rw [trace_mul_diagonal_mul hΨ, sum_subtype_of_zero γ (fun k hk => by simp [svdSupport, hk])]
     refine sum_congr rfl fun k _ => ?_
-    simp [svdSupport, k.2, hpv]
+    simp [svdSupport, k.property, hpv]
   · rw [gvRate_diagonal hU hU' hG hΨ hp, sum_subtype_of_zero γ (fun k hk => by simp [hk])]
     refine sum_congr rfl fun k _ => ?_
     rw [hpv, svdNoise, div_inv_eq_mul, mul_comm (γ _ ^ 2)]

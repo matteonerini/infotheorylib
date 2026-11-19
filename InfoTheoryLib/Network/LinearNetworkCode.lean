@@ -82,10 +82,10 @@ variable {V E K L : Type*}
 def globalVec [LinearOrder V] [Fintype V] [Fintype E] [CommRing K] {b : V → ℕ}
     (G : Multigraph V E) (a : LinCoeff K E b) (e : E) (r : Σ j, Fin (b j)) : K :=
   (if r.1 = G.tail e then a.y r e else 0) +
-    ∑ e' : {e' // G.head e' = G.tail e}, a.x e'.1 e * globalVec G a e'.1 r
+    ∑ e' : {e' // G.head e' = G.tail e}, a.x e'.val e * globalVec G a e'.val r
 termination_by (wellFounded_lt (α := V)).wrap (G.tail e)
 decreasing_by
-  exact (G.lt e'.1).trans_eq e'.2
+  exact (G.lt e'.val).trans_eq e'.property
 
 variable [LinearOrder V] [Fintype V] [Fintype E] {b : V → ℕ}
 
@@ -95,14 +95,14 @@ variable [CommRing K] [CommRing L]
 
 lemma globalVec_eq (G : Multigraph V E) (a : LinCoeff K E b) (e : E) (r : Σ j, Fin (b j)) :
     globalVec G a e r = (if r.1 = G.tail e then a.y r e else 0) +
-      ∑ e' : {e' // G.head e' = G.tail e}, a.x e'.1 e * globalVec G a e'.1 r := by
+      ∑ e' : {e' // G.head e' = G.tail e}, a.x e'.val e * globalVec G a e'.val r := by
   rw [globalVec]
 
 /-- **Page 16-18 of [elgamal2010].** The matrix `A_t(α)`: the estimate of the message symbol `r` at
 node `t` has coefficient `transfer G a t r r'` on the message symbol `r'`. -/
 def transfer (G : Multigraph V E) (a : LinCoeff K E b) (t : V) :
     Matrix (Σ j, Fin (b j)) (Σ j, Fin (b j)) K :=
-  fun r r' => ∑ e : {e // G.head e = t}, a.z t e.1 r * globalVec G a e.1 r'
+  fun r r' => ∑ e : {e // G.head e = t}, a.z t e.val r * globalVec G a e.val r'
 
 /-- Coefficients under a ring homomorphism. -/
 def LinCoeff.map (φ : K →+* L) (a : LinCoeff K E b) : LinCoeff L E b :=
@@ -117,7 +117,7 @@ lemma map_globalVec (G : Multigraph V E) (φ : K →+* L) (a : LinCoeff K E b) (
     · simp only [LinCoeff.map]
       split_ifs <;> simp
     · refine Finset.sum_congr rfl fun e' _ => ?_
-      have hlt : G.tail e'.1 < k := (G.lt e'.1).trans_eq (e'.2.trans hk)
+      have hlt : G.tail e'.val < k := (G.lt e'.val).trans_eq (e'.property.trans hk)
       rw [map_mul, ih _ hlt _ rfl]
       rfl
 
@@ -203,7 +203,7 @@ theorem exists_coeff_of_bit {𝕜 : Type*} [CommRing 𝕜] (G : Multigraph V E) 
     | ind k ih =>
       rw [globalVec_eq]
       -- the sum over incoming edges
-      have hsum : ∑ e' : {e' // G.head e' = G.tail e}, a.x e'.1 e * globalVec G a e'.1 r' =
+      have hsum : ∑ e' : {e' // G.head e' = G.tail e}, a.x e'.val e * globalVec G a e'.val r' =
           if ∃ r, bit e = some r ∧ r.1 ≠ G.tail e ∧ r = r' then 1 else 0 := by
         by_cases hcase : ∃ r, bit e = some r ∧ r.1 ≠ G.tail e
         · obtain ⟨r, hr, hrt⟩ := hcase
@@ -214,10 +214,10 @@ theorem exists_coeff_of_bit {𝕜 : Type*} [CommRing 𝕜] (G : Multigraph V E) 
           set p := Classical.choose hex with hp
           obtain ⟨hp₁, hp₂⟩ : G.head p = G.tail e ∧ bit p = some r := Classical.choose_spec hex
           have hx : ∀ e' : {e' // G.head e' = G.tail e},
-              a.x e'.1 e = if e'.1 = p then 1 else 0 := by
+              a.x e'.val e = if e'.val = p then 1 else 0 := by
             intro e'
             simp only [a]
-            by_cases he' : e'.1 = p
+            by_cases he' : e'.val = p
             · rw [ite_eq_left he', ite_eq_left ⟨r, hr, hrt, by rw [hprev, he']⟩]
             · rw [ite_eq_right he', ite_eq_right]
               rintro ⟨r₁, hr₁, -, hr₂⟩
@@ -241,10 +241,10 @@ theorem exists_coeff_of_bit {𝕜 : Type*} [CommRing 𝕜] (G : Multigraph V E) 
               rw [hr] at hr₁
               exact hrr (Option.some.inj hr₁)
           · intro e' _ he'
-            have : e'.1 ≠ p := fun h => he' (Subtype.ext h)
+            have : e'.val ≠ p := fun h => he' (Subtype.ext h)
             simp [this]
           · simp
-        · have hx : ∀ e' : {e' // G.head e' = G.tail e}, a.x e'.1 e = 0 := by
+        · have hx : ∀ e' : {e' // G.head e' = G.tail e}, a.x e'.val e = 0 := by
             intro e'
             simp only [a]
             rw [ite_eq_right]
@@ -274,12 +274,13 @@ theorem exists_coeff_of_bit {𝕜 : Type*} [CommRing 𝕜] (G : Multigraph V E) 
   refine ⟨a, ?_⟩
   ext r r'
   simp only [transfer]
-  have hzz : ∀ e : {e // G.head e = t}, a.z t e.1 r = if e.1 = dl r then 1 else 0 := fun _ => rfl
+  have hzz : ∀ e : {e // G.head e = t}, a.z t e.val r = if e.val = dl r then 1 else 0 :=
+    fun _ => rfl
   simp only [hzz, hvec]
   rw [Finset.sum_eq_single (⟨dl r, hdl₁ r⟩ : {e // G.head e = t})]
   · simp only [ite_true, one_mul, hdl₂ r, Option.some.injEq, Matrix.one_apply]
   · intro e _ he
-    have : e.1 ≠ dl r := fun h => he (Subtype.ext h)
+    have : e.val ≠ dl r := fun h => he (Subtype.ext h)
     simp [this]
   · simp
 
@@ -311,27 +312,28 @@ theorem detGeneric_ne_zero_of_cuts {𝕜 : Type*} [CommRing 𝕜] [Nontrivial �
     exact hB₁ k l
   let pos : ∀ k l, ↥(B k l) ↪ {e // G.tail e = k ∧ G.head e = l} := fun k l => (hpos k l).some
   let bit : E → Option (Σ j, Fin (b j)) := fun e =>
-    if h : ∃ r : ↥(B (G.tail e) (G.head e)), (pos _ _ r).1 = e then some (Classical.choose h).1
+    if h : ∃ r : ↥(B (G.tail e) (G.head e)), (pos _ _ r).val = e then some (Classical.choose h).val
     else none
   have hbit₁ : ∀ e r, bit e = some r → r ∈ B (G.tail e) (G.head e) := by
     intro e r he
     simp only [bit] at he
     split_ifs at he with hex
     rw [← Option.some.inj he]
-    exact (Classical.choose hex).2
-  have hkey : ∀ r k l (hr : r ∈ B k l) (e : E), (pos k l ⟨r, hr⟩).1 = e → bit e = some r := by
+    exact (Classical.choose hex).property
+  have hkey : ∀ r k l (hr : r ∈ B k l) (e : E), (pos k l ⟨r, hr⟩).val = e → bit e = some r := by
     intro r k l hr e he
-    have h₁ : G.tail e = k := he ▸ (pos k l ⟨r, hr⟩).2.1
-    have h₂ : G.head e = l := he ▸ (pos k l ⟨r, hr⟩).2.2
+    have h₁ : G.tail e = k := he ▸ (pos k l ⟨r, hr⟩).property.1
+    have h₂ : G.head e = l := he ▸ (pos k l ⟨r, hr⟩).property.2
     subst h₁ h₂
-    have hex : ∃ r' : ↥(B (G.tail e) (G.head e)), (pos _ _ r').1 = e := ⟨⟨r, hr⟩, he⟩
+    have hex : ∃ r' : ↥(B (G.tail e) (G.head e)), (pos _ _ r').val = e := ⟨⟨r, hr⟩, he⟩
     simp only [bit, dite_eq_left hex]
-    have hspec : (pos _ _ (Classical.choose hex)).1 = e := Classical.choose_spec hex
+    have hspec : (pos _ _ (Classical.choose hex)).val = e := Classical.choose_spec hex
     have : Classical.choose hex = ⟨r, hr⟩ :=
       (pos _ _).injective (Subtype.ext (hspec.trans he.symm))
     rw [this]
   have hbit₂ : ∀ k l, ∀ r ∈ B k l, ∃ e, G.tail e = k ∧ G.head e = l ∧ bit e = some r :=
-    fun k l r hr => ⟨(pos k l ⟨r, hr⟩).1, (pos k l ⟨r, hr⟩).2.1, (pos k l ⟨r, hr⟩).2.2,
+    fun k l r hr => ⟨(pos k l ⟨r, hr⟩).val, (pos k l ⟨r, hr⟩).property.1,
+      (pos k l ⟨r, hr⟩).property.2,
       hkey r k l hr _ rfl⟩
   obtain ⟨a, ha⟩ := exists_coeff_of_bit (𝕜 := 𝕜) G t bit
     (fun e r he => by
@@ -342,7 +344,7 @@ theorem detGeneric_ne_zero_of_cuts {𝕜 : Type*} [CommRing 𝕜] [Nontrivial �
     (fun r => by
       have hrt : r.1 ≠ t := by
         intro hrt
-        have hi := r.2.2
+        have hi := r.2.isLt
         have hbr : b r.1 = 0 := by rw [hrt]; exact hb
         omega
       obtain ⟨i, -, hi⟩ := hB₃ r hrt
@@ -367,31 +369,31 @@ of `A_l(α)`. -/
 def LinCoeff.code (G : Multigraph V E) (a : LinCoeff F E b) :
     NetCode V (fun k l => {e // G.tail e = k ∧ G.head e = l} → F) (fun j => Fin (b j) → F) where
   enc k _ u mk := fun e =>
-    ∑ i : Fin (b k), a.y ⟨k, i⟩ e.1 * mk i +
-      ∑ e' : {e' // G.head e' = k}, a.x e'.1 e.1 *
-        u (G.tail e'.1) ((G.lt e'.1).trans_eq e'.2) ⟨e'.1, rfl, e'.2⟩
+    ∑ i : Fin (b k), a.y ⟨k, i⟩ e.val * mk i +
+      ∑ e' : {e' // G.head e' = k}, a.x e'.val e.val *
+        u (G.tail e'.val) ((G.lt e'.val).trans_eq e'.property) ⟨e'.val, rfl, e'.property⟩
   dec l j u := fun i =>
-    Matrix.mulVec (transfer G a l)⁻¹ (fun r => ∑ e : {e // G.head e = l}, a.z l e.1 r *
-      u (G.tail e.1) ((G.lt e.1).trans_eq e.2) ⟨e.1, rfl, e.2⟩) ⟨j, i⟩
+    Matrix.mulVec (transfer G a l)⁻¹ (fun r => ∑ e : {e // G.head e = l}, a.z l e.val r *
+      u (G.tail e.val) ((G.lt e.val).trans_eq e.property) ⟨e.val, rfl, e.property⟩) ⟨j, i⟩
 
 /-- The symbol on an edge is the linear combination of the message symbols given by the global
 coding vector. -/
 lemma LinCoeff.code_edge (G : Multigraph V E) (a : LinCoeff F E b) (m : ∀ j, Fin (b j) → F)
     (k : V) : ∀ (l : V) (e : {e // G.tail e = k ∧ G.head e = l}),
-      (a.code G).edge m k l e = ∑ r : Σ j, Fin (b j), globalVec G a e.1 r * m r.1 r.2 := by
+      (a.code G).edge m k l e = ∑ r : Σ j, Fin (b j), globalVec G a e.val r * m r.1 r.2 := by
   induction k using WellFoundedLT.induction with
   | ind k ih =>
     rintro _ ⟨e, rfl, rfl⟩
     rw [NetCode.edge_eq]
     change ∑ i : Fin (b (G.tail e)), a.y ⟨G.tail e, i⟩ e * m (G.tail e) i +
-      ∑ e' : {e' // G.head e' = G.tail e}, a.x e'.1 e *
-        (a.code G).edge m (G.tail e'.1) (G.tail e) ⟨e'.1, rfl, e'.2⟩ = _
+      ∑ e' : {e' // G.head e' = G.tail e}, a.x e'.val e *
+        (a.code G).edge m (G.tail e'.val) (G.tail e) ⟨e'.val, rfl, e'.property⟩ = _
     have hin : ∀ e' : {e' // G.head e' = G.tail e},
-        (a.code G).edge m (G.tail e'.1) (G.tail e) ⟨e'.1, rfl, e'.2⟩ =
-          ∑ r : Σ j, Fin (b j), globalVec G a e'.1 r * m r.1 r.2 := fun e' =>
-      ih _ ((G.lt e'.1).trans_eq e'.2) _ ⟨e'.1, rfl, e'.2⟩
+        (a.code G).edge m (G.tail e'.val) (G.tail e) ⟨e'.val, rfl, e'.property⟩ =
+          ∑ r : Σ j, Fin (b j), globalVec G a e'.val r * m r.1 r.2 := fun e' =>
+      ih _ ((G.lt e'.val).trans_eq e'.property) _ ⟨e'.val, rfl, e'.property⟩
     have hv : ∀ r, globalVec G a e r = (if r.1 = G.tail e then a.y r e else 0) +
-        ∑ e' : {e' // G.head e' = G.tail e}, a.x e'.1 e * globalVec G a e'.1 r :=
+        ∑ e' : {e' // G.head e' = G.tail e}, a.x e'.val e * globalVec G a e'.val r :=
       globalVec_eq G a e
     simp only [hin, hv, add_mul, Finset.sum_add_distrib, Finset.sum_mul, Finset.mul_sum, mul_assoc]
     congr 1
@@ -409,16 +411,16 @@ theorem LinCoeff.code_correct (G : Multigraph V E) (a : LinCoeff F E b) {D : V �
     (a.code G).Correct D m := by
   intro j l hl
   funext i
-  have hrecv : (fun r => ∑ e : {e // G.head e = l}, a.z l e.1 r *
-      (a.code G).edge m (G.tail e.1) l ⟨e.1, rfl, e.2⟩) =
+  have hrecv : (fun r => ∑ e : {e // G.head e = l}, a.z l e.val r *
+      (a.code G).edge m (G.tail e.val) l ⟨e.val, rfl, e.property⟩) =
       Matrix.mulVec (transfer G a l) fun r => m r.1 r.2 := by
     funext r
     simp only [LinCoeff.code_edge, Matrix.mulVec, dotProduct, transfer, Finset.mul_sum,
       Finset.sum_mul, mul_assoc]
     rw [Finset.sum_comm]
   have hdet : IsUnit (transfer G a l).det := isUnit_iff_ne_zero.mpr (h j l hl)
-  change Matrix.mulVec (transfer G a l)⁻¹ (fun r => ∑ e : {e // G.head e = l}, a.z l e.1 r *
-    (a.code G).edge m (G.tail e.1) l ⟨e.1, rfl, e.2⟩) ⟨j, i⟩ = m j i
+  change Matrix.mulVec (transfer G a l)⁻¹ (fun r => ∑ e : {e // G.head e = l}, a.z l e.val r *
+    (a.code G).edge m (G.tail e.val) l ⟨e.val, rfl, e.property⟩) ⟨j, i⟩ = m j i
   rw [hrecv, Matrix.mulVec_mulVec, Matrix.nonsing_inv_mul _ hdet, Matrix.one_mulVec]
 
 /-- **Page 16-21 of [elgamal2010].** If `|A_t(x)|` is a nonzero polynomial then the cut conditions
@@ -519,12 +521,13 @@ lemma degreeOf_globalVec_eq_zero (G : Multigraph V E) (e : E) (r : Σ j, Fin (b 
       · simp
     · refine (degreeOf_sum_le _ _ _).trans (Finset.sup_le fun e' _ => ?_)
       refine (degreeOf_mul_le _ _ _).trans ?_
-      have hne : v ≠ .inr (.inl (e'.1, e)) := by
+      have hne : v ≠ .inr (.inl (e'.val, e)) := by
         rintro rfl
         exact lt_irrefl _ hv
-      have hlt : G.tail e'.1 < G.tail e := (G.lt e'.1).trans_eq e'.2
-      have h₁ : degreeOf v ((genericCoeff (E := E) (b := b) 𝕜).x e'.1 e) = 0 := degreeOf_X_of_ne hne
-      rw [h₁, ih _ hlt e'.1 (varAfter_mono G hlt.le hv) rfl]
+      have hlt : G.tail e'.val < G.tail e := (G.lt e'.val).trans_eq e'.property
+      have h₁ : degreeOf v ((genericCoeff (E := E) (b := b) 𝕜).x e'.val e) = 0 :=
+        degreeOf_X_of_ne hne
+      rw [h₁, ih _ hlt e'.val (varAfter_mono G hlt.le hv) rfl]
 
 /-- Each indeterminate appears at most once along a path, so a global coding vector has degree at
 most `1` in it. -/
@@ -542,17 +545,17 @@ lemma degreeOf_globalVec_le (G : Multigraph V E) (e : E) (r : Σ j, Fin (b j)) (
       · simp
     · refine (degreeOf_sum_le _ _ _).trans (Finset.sup_le fun e' _ => ?_)
       refine (degreeOf_mul_le _ _ _).trans ?_
-      have hlt : G.tail e'.1 < G.tail e := (G.lt e'.1).trans_eq e'.2
-      by_cases hv : v = .inr (.inl (e'.1, e))
-      · have h₂ : degreeOf v (globalVec G (genericCoeff (E := E) (b := b) 𝕜) e'.1 r) = 0 :=
-          degreeOf_globalVec_eq_zero G e'.1 r (by subst hv; exact hlt)
-        rw [h₂, add_zero, show (genericCoeff (E := E) (b := b) 𝕜).x e'.1 e =
-          X (.inr (.inl (e'.1, e))) from rfl, degreeOf_X]
+      have hlt : G.tail e'.val < G.tail e := (G.lt e'.val).trans_eq e'.property
+      by_cases hv : v = .inr (.inl (e'.val, e))
+      · have h₂ : degreeOf v (globalVec G (genericCoeff (E := E) (b := b) 𝕜) e'.val r) = 0 :=
+          degreeOf_globalVec_eq_zero G e'.val r (by subst hv; exact hlt)
+        rw [h₂, add_zero, show (genericCoeff (E := E) (b := b) 𝕜).x e'.val e =
+          X (.inr (.inl (e'.val, e))) from rfl, degreeOf_X]
         split_ifs <;> simp
-      · have h₁ : degreeOf v ((genericCoeff (E := E) (b := b) 𝕜).x e'.1 e) = 0 :=
+      · have h₁ : degreeOf v ((genericCoeff (E := E) (b := b) 𝕜).x e'.val e) = 0 :=
           degreeOf_X_of_ne hv
         rw [h₁, zero_add]
-        exact ih _ hlt e'.1 rfl
+        exact ih _ hlt e'.val rfl
 
 /-- **Page 16-22 of [elgamal2010].** The polynomial `|A_t(x)|` has degree at most `R` in each
 indeterminate. -/
@@ -563,15 +566,16 @@ lemma degreeOf_detGeneric_le (G : Multigraph V E) (t : V) (v : LinVar E b) :
     intro r r'
     refine (degreeOf_sum_le _ _ _).trans (Finset.sup_le fun e _ => ?_)
     refine (degreeOf_mul_le _ _ _).trans ?_
-    by_cases hv : v = .inr (.inr (t, e.1, r))
-    · have h₂ : degreeOf v (globalVec G (genericCoeff (E := E) (b := b) 𝕜) e.1 r') = 0 :=
-        degreeOf_globalVec_eq_zero G e.1 r' (by subst hv; trivial)
-      rw [h₂, add_zero, show (genericCoeff (E := E) (b := b) 𝕜).z t e.1 r =
-        X (.inr (.inr (t, e.1, r))) from rfl, degreeOf_X]
+    by_cases hv : v = .inr (.inr (t, e.val, r))
+    · have h₂ : degreeOf v (globalVec G (genericCoeff (E := E) (b := b) 𝕜) e.val r') = 0 :=
+        degreeOf_globalVec_eq_zero G e.val r' (by subst hv; trivial)
+      rw [h₂, add_zero, show (genericCoeff (E := E) (b := b) 𝕜).z t e.val r =
+        X (.inr (.inr (t, e.val, r))) from rfl, degreeOf_X]
       split_ifs <;> simp
-    · have h₁ : degreeOf v ((genericCoeff (E := E) (b := b) 𝕜).z t e.1 r) = 0 := degreeOf_X_of_ne hv
+    · have h₁ : degreeOf v ((genericCoeff (E := E) (b := b) 𝕜).z t e.val r) = 0 :=
+        degreeOf_X_of_ne hv
       rw [h₁, zero_add]
-      exact degreeOf_globalVec_le G e.1 r' v
+      exact degreeOf_globalVec_le G e.val r' v
   unfold detGeneric
   rw [Matrix.det_apply']
   refine (degreeOf_sum_le _ _ _).trans (Finset.sup_le fun σ _ => ?_)

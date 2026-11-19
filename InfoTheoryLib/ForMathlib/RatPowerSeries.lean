@@ -139,6 +139,6 @@ power series. -/
 lemma isUnit_ratPowerSeries {f : ratPowerSeries k} (hf : constantCoeff (f : k⟦X⟧) ≠ 0) :
     IsUnit f :=
   isUnit_iff_exists_inv.mpr
-    ⟨⟨_, inv_mem_ratPowerSeries f.2⟩, Subtype.ext (PowerSeries.mul_inv_cancel _ hf)⟩
+    ⟨⟨_, inv_mem_ratPowerSeries f.property⟩, Subtype.ext (PowerSeries.mul_inv_cancel _ hf)⟩
 
 end InfoTheory

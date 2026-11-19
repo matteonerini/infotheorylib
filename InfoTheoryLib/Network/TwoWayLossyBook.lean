@@ -334,7 +334,7 @@ lemma KBook.good_succ₁ {l : Fin q} (hs : spk l = true) (B : KBook L M n υ)
     KBook.past_update B l D _ _ le_rfl
   have hnext : (KBook.proto (Function.update B l D) spk μ ε₂ εd).past (fstSeq ω) (sndSeq ω)
       (l + 1 : ℕ) = kUpd l v (C lstar) := by
-    simp only [KProto.past, dite_eq_left l.2, Fin.eta, hp']
+    simp only [KProto.past, dite_eq_left l.isLt, Fin.eta, hp']
     simp only [KBook.proto, KProto.idx, hs, ite_true, Function.update_self]
     rfl
   have hT' := mem_condRobustTypicalSet.1 hT
@@ -467,7 +467,7 @@ lemma KBook.good_succ₂ {l : Fin q} (hs : spk l = false) (B : KBook L M n υ)
     KBook.past_update B l D _ _ le_rfl
   have hnext : (KBook.proto (Function.update B l D) spk μ ε₂ εd).past (fstSeq ω) (sndSeq ω)
       (l + 1 : ℕ) = kUpd l v (C lstar) := by
-    simp only [KProto.past, dite_eq_left l.2, Fin.eta, hp']
+    simp only [KProto.past, dite_eq_left l.isLt, Fin.eta, hp']
     simp only [KBook.proto, KProto.idx, hs, Function.update_self]
     rfl
   have hT' := mem_condRobustTypicalSet.1 hT

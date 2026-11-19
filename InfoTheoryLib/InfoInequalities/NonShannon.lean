@@ -141,7 +141,7 @@ def zyNat (s : Finset (Fin 4)) : ℕ :=
   if s = ∅ then 0 else if #s = 1 then 2 else if s = {0, 1} then 4 else if #s = 2 then 3 else 4
 
 /-- The vector `h̃(a)` of (15.85). -/
-def zyPoint (a : ℝ) : EntropySpace (Fin 4) := fun α => a * zyNat α.1
+def zyPoint (a : ℝ) : EntropySpace (Fin 4) := fun α => a * zyNat α.val
 
 lemma extend_zyPoint (a : ℝ) : (zyPoint a).extend = a • fun s => (zyNat s : ℝ) := by
   funext s

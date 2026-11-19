@@ -148,7 +148,7 @@ theorem mutualInfo_fbLaw_le_sum {𝒲 α β : Type*} [Fintype 𝒲] [Fintype α]
   have hl : ∀ k (i : Fin k), dist (fbLaw ν W enc k) (fun z => enc i z.1 (fbPre i z.2)) =
       dist (fbLaw ν W enc (i + 1)) fun z => enc i z.1 (Fin.init z.2) := by
     intro k i
-    have h := dist_fbLaw_prefix (ν := ν) (W := W) (enc := enc) hW (i + 1) k i.2
+    have h := dist_fbLaw_prefix (ν := ν) (W := W) (enc := enc) hW (i + 1) k i.isLt
     rw [← h, ← dist_comp_eq]
     rfl
   induction n with

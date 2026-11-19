@@ -49,7 +49,7 @@ theorem isAchievableRC_of_cfBlocks [Nonempty X] [Nonempty U] [Nonempty Y] [Nonem
     positivity
   have hexp : exp ((B₁ : ℝ) * ((n : ℝ) * R₀)) ≤ (M₀ : ℝ) := by
     have h₁ : exp (n * R₀) ≤ ((⌈exp (n * R₀)⌉₊ : ℕ) : ℝ) := Nat.le_ceil _
-    rw [exp_nat_mul, hM₀]
+    rw [exp_natCast_mul, hM₀]
     push_cast
     exact pow_le_pow_left₀ (exp_pos _).le h₁ _
   let e : Fin M₀ ≃ (Fin B₁ → Fin ⌈exp (n * R₀)⌉₊) := (Fintype.equivFinOfCardEq (by simp [hM₀])).symm

@@ -65,10 +65,10 @@ theorem iMeasure_nonneg_markov_three (hμ : IsPMF μ) (h : MarkovChain μ (X 0) 
     (F : Finset (NAtom (Fin 3))) : 0 ≤ iMeasure μ X F := by
   rw [(isSignedMeasure_iMeasure μ X).eq_sum_singleton F]
   refine sum_nonneg fun a _ => ?_
-  by_cases ha : #a.1 ≤ 2
+  by_cases ha : #a.val ≤ 2
   · exact iMeasure_atom_nonneg hμ a ha
-  · have hle : #a.1 ≤ 3 := by simpa using card_le_univ a.1
-    have hu : a.1 = univ := (card_eq_iff_eq_univ _).1 (by simp; omega)
+  · have hle : #a.val ≤ 3 := by simpa using card_le_univ a.val
+    have hu : a.val = univ := (card_eq_iff_eq_univ _).1 (by simp; omega)
     have ha' : a = ⟨{0, 1, 2}, insert_nonempty 0 _⟩ := Subtype.ext (hu.trans (by decide))
     have hc : ({0, 1, 2} : Finset (Fin 3))ᶜ = ∅ := by decide
     rw [ha', singleton_atom_triple, hc, tilde_empty, sdiff_empty,
@@ -86,15 +86,15 @@ omit [Fintype Ω] in
 lemma rvEquiv_blockRV_map (Z : ∀ i, Ω → A i) (G : Finset (Fin n)) :
     RVEquiv (blockRV Z (G.map Fin.valEmbedding)) (blockRV (fun i : Fin n => Z i) G) := by
   have hlt : ∀ j : G.map Fin.valEmbedding, (j : ℕ) < n := fun j => by
-    obtain ⟨i, _, hi⟩ := mem_map.1 j.2
+    obtain ⟨i, _, hi⟩ := mem_map.1 j.property
     rw [← hi]
-    exact i.2
+    exact i.isLt
   have hmem : ∀ j : G.map Fin.valEmbedding, (⟨j, hlt j⟩ : Fin n) ∈ G := fun j => by
-    obtain ⟨i, hi, hij⟩ := mem_map.1 j.2
+    obtain ⟨i, hi, hij⟩ := mem_map.1 j.property
     have : (⟨j, hlt j⟩ : Fin n) = i := Fin.ext hij.symm
     rwa [this]
   exact ⟨⟨fun t j => t ⟨⟨j, hlt j⟩, hmem j⟩, fun _ => rfl⟩,
-    ⟨fun t i => t ⟨i, mem_map.2 ⟨i, i.2, rfl⟩⟩, fun _ => rfl⟩⟩
+    ⟨fun t i => t ⟨i, mem_map.2 ⟨i, i.property, rfl⟩⟩, fun _ => rfl⟩⟩
 
 variable [∀ i, Fintype (A i)] {μ : Ω → ℝ} {Z : ∀ i, Ω → A i}
 
@@ -113,10 +113,10 @@ theorem IsMarkovChain.blockEntropy_fin (hμ : IsPMF μ) (hn : 2 ≤ n) (h : IsMa
       exact hP j hj)
     (fun i hi => by
       obtain ⟨j, hj, rfl⟩ := mem_map.1 hi
-      exact ⟨hS j hj, j.2⟩)
+      exact ⟨hS j hj, j.isLt⟩)
     (fun i hi => by
       obtain ⟨j, hj, rfl⟩ := mem_map.1 hi
-      exact ⟨hF j hj, j.2⟩)
+      exact ⟨hF j hj, j.isLt⟩)
   rw [markovChain_iff_condIndep hμ, ← condMutualInfo_eq_zero_iff hμ,
     condMutualInfo_eq_blockEntropy hμ (rvEquiv_blockRV_map Z P) (rvEquiv_blockRV_map Z F)
       (rvEquiv_blockRV_map Z S)] at hm

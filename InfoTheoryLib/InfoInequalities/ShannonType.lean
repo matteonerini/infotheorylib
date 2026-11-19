@@ -70,7 +70,7 @@ abbrev ElemForm (ι : Type*) :=
 `f (K ∪ {i}) + f (K ∪ {j}) - f (K ∪ {i, j}) - f K` for `p = {i, j}`. -/
 def elemValue : ElemForm ι → (Finset ι → ℝ) → ℝ
   | .inl i, f => f univ - f (univ.erase i)
-  | .inr pK, f => ∑ x ∈ pK.1.1, f (pK.1.2 ∪ {x}) - f (pK.1.2 ∪ pK.1.1) - f pK.1.2
+  | .inr pK, f => ∑ x ∈ pK.val.1, f (pK.val.2 ∪ {x}) - f (pK.val.2 ∪ pK.val.1) - f pK.val.2
 
 omit [Fintype ι] in
 lemma condInfo_singleton_eq (f : Finset ι → ℝ) {i j : ι} (hij : i ≠ j) (K : Finset ι) :
@@ -106,7 +106,7 @@ theorem card_elemForm :
           exact ⟨mem_univ K, hp, disjoint_right.2 fun x hx => (mem_sdiff.1 (hK hx)).2⟩
       rw [e, card_powerset, card_sdiff_of_subset (subset_univ p), card_univ, hp]
     · rw [Fintype.card_eq_zero_iff]
-      exact ⟨fun K => hp K.2.1⟩
+      exact ⟨fun K => hp K.property.1⟩
   rw [Fintype.sum_congr _ _ hK, sum_ite, sum_const_zero, add_zero, sum_const, smul_eq_mul]
   congr 1
   rw [← powerset_univ, ← powersetCard_eq_filter, card_powersetCard, card_univ]
@@ -319,8 +319,8 @@ theorem zero_mem_shannonRegion : (0 : EntropySpace ι) ∈ shannonRegion ι := b
 /-- **(14.25)** `Γₙ` lies in the nonnegative orthant. -/
 theorem nonneg_of_mem_shannonRegion {h : EntropySpace ι} (hh : h ∈ shannonRegion ι)
     (α : {α : Finset ι // α.Nonempty}) : 0 ≤ h α := by
-  have := (mem_shannonRegion_iff.1 hh).nonneg α.1
-  simpa [EntropySpace.extend, α.2] using this
+  have := (mem_shannonRegion_iff.1 hh).nonneg α.val
+  simpa [EntropySpace.extend, α.property] using this
 
 end Region
 
@@ -443,7 +443,7 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 `X̃ᵢ ∩ X̃ⱼ - X̃_K`. -/
 def elemAtoms : ElemForm ι → Finset (NAtom ι)
   | .inl i => {⟨{i}, singleton_nonempty i⟩}
-  | .inr pK => univ.filter fun a => pK.1.1 ⊆ a.1 ∧ Disjoint a.1 pK.1.2
+  | .inr pK => univ.filter fun a => pK.val.1 ⊆ a.val ∧ Disjoint a.val pK.val.2
 
 /-- In terms of the values `u` of a signed measure on the atoms, an elemental form is the measure
 of its set of atoms. -/
@@ -470,13 +470,13 @@ theorem elemValue_atomsToEntropy (u : NAtom ι → ℝ) (e : ElemForm ι) :
     rw [mem_sdiff, mem_tilde, mem_tilde, mem_singleton]
     constructor
     · rintro ⟨-, h⟩
-      have h' : ∀ x ∈ a.1, x = i := fun x hx => by
+      have h' : ∀ x ∈ a.val, x = i := fun x hx => by
         by_contra hxi
         exact h ⟨x, mem_erase.2 ⟨hxi, mem_univ x⟩, hx⟩
       refine Subtype.ext (Finset.ext fun x => ⟨fun hx => mem_singleton.2 (h' x hx), fun hx => ?_⟩)
       rw [mem_singleton] at hx
       subst hx
-      obtain ⟨y, hy⟩ := a.2
+      obtain ⟨y, hy⟩ := a.property
       rwa [← h' y hy]
     · rintro rfl
       refine ⟨⟨i, mem_univ i, mem_singleton_self i⟩, ?_⟩
@@ -509,7 +509,7 @@ theorem exists_elemental_nonredundant (e : ElemForm ι) :
   simp only [elemMatrix_mulVec]
   rcases e with i | ⟨⟨p, K⟩, hp, hd⟩
   · -- an `α`-inequality: `-1` on the atom `X̃ᵢ - X̃_{N - i}`
-    refine ⟨atomsToEntropy fun a => if a.1 = {i} then -1 else 1, ?_, ?_⟩ <;>
+    refine ⟨atomsToEntropy fun a => if a.val = {i} then -1 else 1, ?_, ?_⟩ <;>
       simp only [elemValue_atomsToEntropy]
     · simp [elemAtoms]
     · rintro (i' | ⟨⟨p', K'⟩, hp', hd'⟩) hne
@@ -518,7 +518,7 @@ theorem exists_elemental_nonredundant (e : ElemForm ι) :
         simp [this]
       · refine sum_nonneg fun a ha => ?_
         have hpa := (mem_filter.1 ha).2.1
-        have : a.1 ≠ {i} := fun h => by
+        have : a.val ≠ {i} := fun h => by
           have := card_le_card hpa
           rw [h, hp', card_singleton] at this
           omega
@@ -530,7 +530,7 @@ theorem exists_elemental_nonredundant (e : ElemForm ι) :
       exact ⟨x, hpK hx⟩
     set a₀ : NAtom ι := ⟨univ \ K, hne₀⟩ with ha₀
     set u : NAtom ι → ℝ := fun a =>
-      if a = a₀ then -1 else if p ⊆ a.1 ∧ Disjoint a.1 K then 0 else 1 with hu
+      if a = a₀ then -1 else if p ⊆ a.val ∧ Disjoint a.val K then 0 else 1 with hu
     have hu_ge : ∀ a, a ≠ a₀ → 0 ≤ u a := fun a ha => by
       simp only [hu, ha, ite_false]
       split_ifs <;> norm_num
@@ -540,7 +540,7 @@ theorem exists_elemental_nonredundant (e : ElemForm ι) :
     · rw [sum_eq_single_of_mem a₀ ha₀mem]
       · simp [hu]
       · intro b hb hba
-        have hb' : p ⊆ b.1 ∧ Disjoint b.1 K := (mem_filter.1 hb).2
+        have hb' : p ⊆ b.val ∧ Disjoint b.val K := (mem_filter.1 hb).2
         simp only [hu, hba, ite_false, hb', and_self, ite_true]
     · rintro (i' | ⟨⟨p', K'⟩, hp', hd'⟩) hne
       · -- `α`-inequalities: the atom `{i'}` is not in `X̃ᵢ ∩ X̃ⱼ - X̃_K`
@@ -569,7 +569,7 @@ theorem exists_elemental_nonredundant (e : ElemForm ι) :
               refine ⟨⟨insert k p', insert_nonempty k p'⟩, mem_filter.2 ⟨mem_univ _,
                 subset_insert k p', disjoint_insert_left.2 ⟨hkK', hd'⟩⟩, ?_⟩
               have hna : (⟨insert k p', insert_nonempty k p'⟩ : NAtom ι) ≠ a₀ := fun h => by
-                have := congrArg (fun a : NAtom ι => k ∈ a.1) h
+                have := congrArg (fun a : NAtom ι => k ∈ a.val) h
                 simp only [ha₀, mem_insert_self, mem_sdiff, mem_univ, true_and] at this
                 exact this.mp trivial hkK
               simp only [hu, hna, ite_false, ite_eq_right_iff]

@@ -107,7 +107,7 @@ theorem RCCode.exists_sub [NeZero M] (c : RCCode M N X X₁ Y Y₁) {M' : ℕ} (
   have hM'pos : (0 : ℝ) < M' := by exact_mod_cast hM'
   -- the error of a message
   let P : Fin M → (Fin N → Y × Y₁) → ℝ := fun w z =>
-    ∏ i : Fin N, W (c.fbEnc i w fun t : Fin i => z ⟨t, t.2.trans i.2⟩) (z i)
+    ∏ i : Fin N, W (c.fbEnc i w fun t : Fin i => z ⟨t, t.isLt.trans i.isLt⟩) (z i)
   have hP0 : ∀ w z, 0 ≤ P w z := fun w z => prod_nonneg fun i _ => (hW _).nonneg _
   let f : Fin M → ℝ := fun w => ∑ z, P w z * ind (c.dec (fun i => (z i).1) ≠ w)
   have hc : c.errProb W = (∑ w, f w) / M := by
@@ -129,7 +129,7 @@ theorem RCCode.exists_sub [NeZero M] (c : RCCode M N X X₁ Y Y₁) {M' : ℕ} (
       if hy : ∃ t, ι t = c.dec y then Classical.choose hy else 0⟩
   refine ⟨c', ?_⟩
   have hrow : ∀ t : Fin M', (∑ z : Fin N → Y × Y₁, (∏ i : Fin N, W (c'.fbEnc i t fun u : Fin i =>
-      z ⟨u, u.2.trans i.2⟩) (z i)) * ind (c'.dec (fun i => (z i).1) ≠ t)) ≤ f (ι t) := by
+      z ⟨u, u.isLt.trans i.isLt⟩) (z i)) * ind (c'.dec (fun i => (z i).1) ≠ t)) ≤ f (ι t) := by
     intro t
     refine sum_le_sum fun z _ => ?_
     refine mul_le_mul_of_nonneg_left (ind_mono ?_) (hP0 (ι t) z)
@@ -141,7 +141,7 @@ theorem RCCode.exists_sub [NeZero M] (c : RCCode M N X X₁ Y Y₁) {M' : ℕ} (
     exact hι ((Classical.choose_spec hy).trans heq)
   have hc' : c'.errProb W =
     (∑ t, ∑ z : Fin N → Y × Y₁, (∏ i : Fin N, W (c'.fbEnc i t fun u : Fin i =>
-      z ⟨u, u.2.trans i.2⟩) (z i)) * ind (c'.dec (fun i => (z i).1) ≠ t)) / M' := by
+      z ⟨u, u.isLt.trans i.isLt⟩) (z i)) * ind (c'.dec (fun i => (z i).1) ≠ t)) / M' := by
     rw [errProb_eq, Fintype.sum_prod_type, sum_div]
     refine sum_congr rfl fun w _ => ?_
     rw [sum_div]
@@ -258,7 +258,7 @@ theorem isAchievableRC_of_codes {ρ R : ℝ} (hρ0 : 0 ≤ ρ) (hR : R * log 2 <
         have h₂ : ((2 ^ ⌈(N : ℝ) * R⌉₊ : ℕ) : ℝ) ≤ (M₀ : ℝ) := by
           refine le_trans ?_ hexp
           push_cast
-          rw [← exp_log (by norm_num : (0 : ℝ) < 2), ← exp_nat_mul]
+          rw [← exp_log (by norm_num : (0 : ℝ) < 2), ← exp_natCast_mul]
           refine exp_le_exp.mpr ?_
           have h₃ : (B₁ : ℝ) * ((N : ℝ) / ((B₁ : ℝ) + 1) * ρ) = (N : ℝ) *
             ((B₁ : ℝ) / (B₁ + 1) * ρ) := by
@@ -303,7 +303,7 @@ theorem isAchievableRC_of_blocks {R' R'' R : ℝ} (hR' : 0 ≤ R') (hR'' : 0 ≤
     have h₂ : exp (n * R'') ≤ ((⌈exp (n * R'')⌉₊ : ℕ) : ℝ) := Nat.le_ceil _
     have h₃ : exp ((B₁ : ℝ) * ((n : ℝ) * (R' + R''))) =
         exp (n * R') ^ B₁ * exp (n * R'') ^ B₁ := by
-      rw [← exp_nat_mul, ← exp_nat_mul, ← exp_add]
+      rw [← exp_natCast_mul, ← exp_natCast_mul, ← exp_add]
       congr 1
       ring
     rw [h₃, hM₀]

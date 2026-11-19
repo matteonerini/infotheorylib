@@ -70,7 +70,7 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 /-- **The entropy function** `H_Θ` of random variables, (13.23): `h_α = H(X_α)`. -/
 def entropyVector {Ω : Type*} [Fintype Ω] {A : ι → Type*} [∀ i, Fintype (A i)] (μ : Ω → ℝ)
     (X : ∀ i, Ω → A i) : EntropySpace ι :=
-  fun α => blockEntropy μ X α.1
+  fun α => blockEntropy μ X α.val
 
 /-- An information expression in canonical form, `b ⬝ h = ∑_α b_α h_α`, (13.29). -/
 def infoExpr (b h : EntropySpace ι) : ℝ := ∑ α, b α * h α
@@ -88,7 +88,7 @@ lemma infoExpr_sub_left (b₁ b₂ h : EntropySpace ι) :
 /-- The entropies `h = Cₙ u` of the signed measure with the values `u` on the nonempty atoms,
 (13.35): `h_α = ∑_{A ⊆ X̃_α} u(A)`. -/
 def atomsToEntropy (u : NAtom ι → ℝ) : EntropySpace ι :=
-  fun α => ∑ a ∈ tilde α.1, u a
+  fun α => ∑ a ∈ tilde α.val, u a
 
 lemma atomsToEntropy_sub (u v : NAtom ι → ℝ) :
     atomsToEntropy (u - v) = atomsToEntropy u - atomsToEntropy v := by
@@ -100,10 +100,10 @@ lemma exists_atomsToEntropy_eq (h : EntropySpace ι) : ∃ u, atomsToEntropy u =
   classical
   set g : Finset ι → ℝ := fun G => if hG : G.Nonempty then h ⟨G, hG⟩ else 0 with hg
   have h0 : g ∅ = 0 := by simp [hg]
-  refine ⟨fun a => atomValue g a.1, funext fun α => ?_⟩
-  change signedMeasureOf g (tilde α.1) = h α
+  refine ⟨fun a => atomValue g a.val, funext fun α => ?_⟩
+  change signedMeasureOf g (tilde α.val) = h α
   rw [signedMeasureOf_tilde h0]
-  simp [hg, α.2]
+  simp [hg, α.property]
 
 /-- The extension `h_∅ = 0` of a vector of the entropy space to all subsets. -/
 def EntropySpace.extend (h : EntropySpace ι) (s : Finset ι) : ℝ :=
@@ -142,8 +142,8 @@ theorem zero_mem_entropicRegion : (0 : EntropySpace ι) ∈ entropicRegion ι :=
   refine ⟨PUnit, inferInstance, fun _ => PUnit, inferInstance, _, fun _ _ => PUnit.unit, hμ, ?_⟩
   funext α
   have h₁ := entropyRV_le_log_card hμ (blockRV (fun (_ : ι) (_ : PUnit.{u + 1}) =>
-    PUnit.unit) α.1)
-  have h₂ := entropyRV_nonneg hμ (blockRV (fun (_ : ι) (_ : PUnit.{u + 1}) => PUnit.unit) α.1)
+    PUnit.unit) α.val)
+  have h₂ := entropyRV_nonneg hμ (blockRV (fun (_ : ι) (_ : PUnit.{u + 1}) => PUnit.unit) α.val)
   rw [Fintype.card_unique, Nat.cast_one, log_one] at h₁
   exact le_antisymm h₁ h₂
 
@@ -163,7 +163,7 @@ theorem atomsToEntropy_mem_entropicRegion {u : NAtom ι → ℝ} (hu : ∀ a, 0 
     u ∈ entropicAtomRegion ι := by
   obtain ⟨Ω, _, A, _, μ, X, hμ, hv⟩ := exists_iMeasure_eq u hu
   refine ⟨Ω, inferInstance, A, inferInstance, μ, X, hμ, funext fun α => ?_⟩
-  change blockEntropy μ X α.1 = ∑ a ∈ tilde α.1, u a
+  change blockEntropy μ X α.val = ∑ a ∈ tilde α.val, u a
   rw [blockEntropy, ← iMeasure_tilde hμ, (isSignedMeasure_iMeasure μ X).eq_sum_singleton]
   exact sum_congr rfl fun a _ => hv a
 

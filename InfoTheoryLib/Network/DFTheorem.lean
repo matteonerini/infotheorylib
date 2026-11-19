@@ -142,7 +142,7 @@ theorem sum_dfE_eq (hp : IsPMF p) (hW : IsChannel W) (d : Fin N) :
     refine sum_bij (fun k _ => (k : ℕ)) (fun k hk => mem_range.mpr (mem_filter.mp hk).2)
       (fun a _ b _ h => Fin.ext h) (fun t ht => ?_) fun _ _ => rfl
     have ht' := mem_range.mp ht
-    exact ⟨⟨t, ht'.trans d.2⟩, mem_filter.mpr ⟨mem_univ _, ht'⟩, rfl⟩
+    exact ⟨⟨t, ht'.trans d.isLt⟩, mem_filter.mpr ⟨mem_univ _, ht'⟩, rfl⟩
   rw [hsum, sum_range_sub]
   rw [dfInfo, condMutualInfo_comm hL, condMutualInfo_eq' hL]
   congr 1
@@ -151,7 +151,7 @@ theorem sum_dfE_eq (hp : IsPMF p) (hW : IsChannel W) (d : Fin N) :
         if hl : l ∈ (dfLt d)ᶜ then c ⟨l, hl⟩ else d₀ l : ∀ l, X l)) (fun a b h => ?_) fun ω => ?_)
     · funext l
       have := congrFun h l
-      simpa [l.2] using this
+      simpa [l.property] using this
     · funext l
       by_cases hl : (d : ℕ) ≤ l
       · have hm : l ∈ (dfLt d)ᶜ := by
@@ -199,7 +199,7 @@ theorem dfCode_errProb_pad (hW : IsChannel W) (d₀ : ∀ l, X l) (L₀ : (∀ l
   set c' := dfCode d₀ L₀ ε Cs s₀ e dY hM N' with hc'
   set c := dfCode d₀ L₀ ε Cs s₀ e dY hM (t * n) with hc
   let T : (∀ k, Fin (M k)) × (Fin N' → ∀ k, Y k) → (∀ k, Fin (M k)) × (Fin (t * n) → ∀ k, Y k) :=
-    fun z => (z.1, fun s => z.2 ⟨s, lt_of_lt_of_le s.2 hN⟩)
+    fun z => (z.1, fun s => z.2 ⟨s, lt_of_lt_of_le s.isLt hN⟩)
   have hlaw : dist (c'.law W) T = c.law W := dist_fbLaw_prefix hW (t * n) N' hN
   have hdec : ∀ z, c'.Wrong D z ↔ c.Wrong D (T z) := by
     intro z
@@ -211,13 +211,13 @@ theorem dfCode_errProb_pad (hW : IsChannel W) (d₀ : ∀ l, X l) (L₀ : (∀ l
         funext j
         refine dfEst_congr d₀ L₀ ε Cs B' k _ fun B hB => ?_
         have hBt : B < t := by
-          have := j.2
-          have := k.2
+          have := j.isLt
+          have := k.isLt
           omega
         funext i
         have hlt : i.val + n * B < t * n := by
           have h₁ : n * (B + 1) ≤ n * t := Nat.mul_le_mul_left _ hBt
-          have h₂ := i.2
+          have h₂ := i.isLt
           rw [Nat.mul_add, Nat.mul_one] at h₁
           rw [Nat.mul_comm t n]
           omega
@@ -357,7 +357,7 @@ theorem isAchievableMN_df (hp : IsPMF p) (hW : IsChannel W) {s₀ : Fin N} (hs :
     have htp : 0 < t + 1 := htpos
     set n := N' / t with hn
     have htn0 : 0 < t := by
-      have := s₀.2
+      have := s₀.isLt
       omega
     have hnge : n₀ ≤ n := by
       rw [hn, Nat.le_div_iff_mul_le htn0]
@@ -410,7 +410,7 @@ theorem isAchievableMN_df (hp : IsPMF p) (hW : IsChannel W) {s₀ : Fin N} (hs :
         nlinarith
       have h₅ : exp (B' * ((n : ℝ) * (r + ξ₃))) ≤ ((Mn n ^ B' : ℕ) : ℝ) := by
         push_cast
-        rw [exp_nat_mul]
+        rw [exp_natCast_mul]
         exact pow_le_pow_left₀ (exp_pos _).le (hMnge n) B'
       exact_mod_cast h₄.trans h₅
     obtain ⟨ef⟩ := Function.Embedding.nonempty_of_card_le (α := Fin (M s₀))

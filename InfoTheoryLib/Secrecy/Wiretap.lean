@@ -842,15 +842,15 @@ theorem one_sub_errProb_mul_log_le [NeZero M] [Nonempty α] (hW : IsChannel W) :
   set Mv : (Fin M × (Fin n → α)) × (Fin n → β × γ) → Fin M := fun z => z.1.1 with hMv
   have hYn : prefixRV Y n = outY := by
     funext z j
-    simp [prefixRV, hY, outY, j.2]
+    simp [prefixRV, hY, outY, j.isLt]
   have hZn : I[Mv : suffixRV Z 0 n ; c.law W] = I[Mv : outZ ; c.law W] := by
-    refine mutualInfo_congr_right hμ Mv (fun v j => v ⟨j, by have := j.2; omega⟩)
+    refine mutualInfo_congr_right hμ Mv (fun v j => v ⟨j, by have := j.isLt; omega⟩)
       (fun a b hab => ?_) fun z => ?_
     · funext j
-      have := congrFun hab ⟨j, by have := j.2; omega⟩
+      have := congrFun hab ⟨j, by have := j.isLt; omega⟩
       simpa using this
     · funext j
-      have hj : (0 + (j : ℕ)) < n := by have := j.2; omega
+      have hj : (0 + (j : ℕ)) < n := by have := j.isLt; omega
       simp [suffixRV, hZ, outZ]
   -- Fano's inequality.
   have hF := fano_weak hμ Mv outY c.dec
@@ -880,7 +880,7 @@ theorem one_sub_errProb_mul_log_le [NeZero M] [Nonempty α] (hW : IsChannel W) :
       have hV : ∀ t a, V' (Function.update t ⟨i, hin⟩ a) = V' t := fun t a => by
         refine Prod.ext ?_ ?_
         · funext j
-          have hj : (j : ℕ) < i := j.2
+          have hj : (j : ℕ) < i := j.isLt
           simp only [hV']
           split_ifs with h
           · rw [Function.update_of_ne]

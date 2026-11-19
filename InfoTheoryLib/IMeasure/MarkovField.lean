@@ -202,7 +202,7 @@ def IsMarkovField (μ : Ω → ℝ) (X : ∀ i, Ω → A i) (G : SimpleGraph ι)
 /-- **Definition 12.24.** A nonempty atom `A` is a *Type II* atom if `G \ U_A` is disconnected,
 where `U_A` is the set of indices complemented in `A`, (12.73); otherwise it is a *Type I* atom. -/
 def IsTypeTwoAtom (G : SimpleGraph ι) (a : NAtom ι) : Prop :=
-  1 < #(componentsOutside G a.1ᶜ)
+  1 < #(componentsOutside G a.valᶜ)
 
 omit [Fintype Ω] [∀ i, Fintype (A i)] in
 /-- (12.91): the image of the FCMIs of a graph is the set of Type II atoms. -/
@@ -229,11 +229,11 @@ lemma fcmiImage_cutFCMI :
   · -- (12.92)–(12.95)
     intro ha
     change IsTypeTwoAtom G a at ha
-    refine ⟨cutFCMI G a.1ᶜ, ⟨a.1ᶜ, ha, rfl⟩, ?_⟩
+    refine ⟨cutFCMI G a.valᶜ, ⟨a.valᶜ, ha, rfl⟩, ?_⟩
     rw [FCMI.mem_image_iff isFull_cutFCMI]
     obtain ⟨l, hl, l', hl', h⟩ := one_lt_card_componentsOutside.1 ha
-    refine ⟨componentOutside G a.1ᶜ l, mem_image_of_mem _ (mem_compl.2 hl),
-      componentOutside G a.1ᶜ l', mem_image_of_mem _ (mem_compl.2 hl'),
+    refine ⟨componentOutside G a.valᶜ l, mem_image_of_mem _ (mem_compl.2 hl),
+      componentOutside G a.valᶜ l', mem_image_of_mem _ (mem_compl.2 hl'),
       fun he => h ((componentOutside_eq_iff hl).1 he), ?_⟩
     simp only [mem_sdiff, mem_inter, mem_tilde, not_exists, not_and]
     exact ⟨⟨⟨l, mem_componentOutside.2 (.refl hl), by simpa using hl⟩,
@@ -329,7 +329,7 @@ lemma reachableOutside_pathGraph_iff {U : Finset (Fin n)} {l l' : Fin n} (hll' :
 /-- **Lemma 12.29.** For the Markov chain represented by a path, an atom is a Type II atom if and
 only if the indices that are not complemented in it are not consecutive. -/
 theorem isTypeTwoAtom_pathGraph_iff (a : NAtom (Fin n)) :
-    IsTypeTwoAtom (SimpleGraph.pathGraph n) a ↔ ¬IsInterval a.1 := by
+    IsTypeTwoAtom (SimpleGraph.pathGraph n) a ↔ ¬IsInterval a.val := by
   rw [IsTypeTwoAtom, one_lt_card_componentsOutside]
   constructor
   · rintro ⟨l, hl, l', hl', h⟩ hint
@@ -348,8 +348,8 @@ theorem isTypeTwoAtom_pathGraph_iff (a : NAtom (Fin n)) :
 /-- **Lemma 12.29**, (12.102): an atom is a Type I atom if and only if its uncomplemented indices
 form an interval `{l, l + 1, …, u}`. -/
 theorem not_isTypeTwoAtom_pathGraph_iff (a : NAtom (Fin n)) :
-    ¬IsTypeTwoAtom (SimpleGraph.pathGraph n) a ↔ ∃ l u, l ≤ u ∧ a.1 = Icc l u := by
-  rw [isTypeTwoAtom_pathGraph_iff, not_not, isInterval_iff_eq_Icc a.2]
+    ¬IsTypeTwoAtom (SimpleGraph.pathGraph n) a ↔ ∃ l u, l ≤ u ∧ a.val = Icc l u := by
+  rw [isTypeTwoAtom_pathGraph_iff, not_not, isInterval_iff_eq_Icc a.property]
 
 variable {Ω : Type*} [Fintype Ω] {A : Fin n → Type*} [∀ i, Fintype (A i)] {μ : Ω → ℝ}
   {X : ∀ i, Ω → A i}
@@ -357,7 +357,7 @@ variable {Ω : Type*} [Fintype Ω] {A : Fin n → Type*} [∀ i, Fintype (A i)] 
 /-- (12.107)–(12.110): if `μ*` vanishes on the atoms whose indices are not consecutive, then its
 value on the atom with indices `{l, …, u}` is `I(X_l; X_u | X_{U_A})`. -/
 theorem iMeasure_Icc_eq_condMutualInfo (hμ : IsPMF μ)
-    (h0 : ∀ a : NAtom (Fin n), ¬IsInterval a.1 → iMeasure μ X {a} = 0) {l u : Fin n}
+    (h0 : ∀ a : NAtom (Fin n), ¬IsInterval a.val → iMeasure μ X {a} = 0) {l u : Fin n}
     (hlu : l < u) :
     iMeasure μ X {⟨Icc l u, nonempty_Icc.2 hlu.le⟩} = I[X l : X u | blockRV X (Icc l u)ᶜ ; μ] := by
   rw [← iMeasure_inter_sdiff hμ (rvEquiv_blockRV_singleton X l) (rvEquiv_blockRV_singleton X u)
@@ -380,12 +380,12 @@ theorem iMeasure_Icc_eq_condMutualInfo (hμ : IsPMF μ)
 /-- (12.111)–(12.113): if `μ*` vanishes on the atoms whose indices are not consecutive, then `μ*`
 is nonnegative. -/
 theorem iMeasure_nonneg_of_isInterval (hμ : IsPMF μ)
-    (h0 : ∀ a : NAtom (Fin n), ¬IsInterval a.1 → iMeasure μ X {a} = 0)
+    (h0 : ∀ a : NAtom (Fin n), ¬IsInterval a.val → iMeasure μ X {a} = 0)
     (F : Finset (NAtom (Fin n))) : 0 ≤ iMeasure μ X F := by
   rw [(isSignedMeasure_iMeasure μ X).eq_sum_singleton]
   refine sum_nonneg fun a _ => ?_
-  by_cases ha : IsInterval a.1
-  · obtain ⟨l, u, hlu, he⟩ := (isInterval_iff_eq_Icc a.2).1 ha
+  by_cases ha : IsInterval a.val
+  · obtain ⟨l, u, hlu, he⟩ := (isInterval_iff_eq_Icc a.property).1 ha
     rcases hlu.lt_or_eq with hlt | rfl
     · have e : a = ⟨Icc l u, nonempty_Icc.2 hlt.le⟩ := Subtype.ext he
       rw [e, iMeasure_Icc_eq_condMutualInfo hμ h0 hlt]
@@ -412,20 +412,20 @@ variable {n : ℕ} {Ω : Type*} [Fintype Ω] {A : ℕ → Type*} [∀ i, Fintype
 /-- For a Markov chain `X₁ → ⋯ → Xₙ` (Definition 2.6), `μ*` vanishes on the atoms whose
 uncomplemented indices are not consecutive, the Type II atoms of Lemma 12.29. -/
 theorem IsMarkovChain.iMeasure_eq_zero (hμ : IsPMF μ) (h : IsMarkovChain μ Z n)
-    (a : NAtom (Fin n)) (ha : ¬IsInterval a.1) : iMeasure μ (fun i : Fin n => Z i) {a} = 0 := by
+    (a : NAtom (Fin n)) (ha : ¬IsInterval a.val) : iMeasure μ (fun i : Fin n => Z i) {a} = 0 := by
   simp only [IsInterval, not_forall] at ha
   obtain ⟨l, hl, u, hu, c, h₁, h₂, hc⟩ := ha
   have hlc : l < c := lt_of_le_of_ne h₁ fun e => hc (e ▸ hl)
   have hcu : c < u := lt_of_le_of_ne h₂ fun e => hc (e ▸ hu)
   have hn : 2 ≤ n := by
-    have := u.2
+    have := u.isLt
     rw [Fin.lt_def] at hlc hcu
     omega
   set f := blockEntropy μ (fun i : Fin n => Z i) with hfdef
   have hf : IsPolymatroid f := isPolymatroid_blockEntropy hμ
-  set G₁ := a.1.filter (· < c) with hG₁
-  set G₂ := a.1.filter (c < ·) with hG₂
-  have hU : a.1 = G₁ ∪ G₂ := by
+  set G₁ := a.val.filter (· < c) with hG₁
+  set G₂ := a.val.filter (c < ·) with hG₂
+  have hU : a.val = G₁ ∪ G₂ := by
     ext m
     simp only [hG₁, hG₂, mem_union, mem_filter]
     constructor
@@ -437,9 +437,9 @@ theorem IsMarkovChain.iMeasure_eq_zero (hμ : IsPMF μ) (h : IsMarkovChain μ Z 
     · rintro (⟨hm, -⟩ | ⟨hm, -⟩) <;> exact hm
   have hd : Disjoint G₁ G₂ := disjoint_filter.2 fun m _ h₁ h₂ => lt_asymm h₁ h₂
   -- the Markov chain splits at `c`: `I(X_{< c}; X_{> c} | X_c) = 0`
-  set D := a.1ᶜ.filter (· < c) with hD
-  set E := a.1ᶜ.filter (c < ·) with hE
-  have hC : a.1ᶜ = {c} ∪ D ∪ E := by
+  set D := a.valᶜ.filter (· < c) with hD
+  set E := a.valᶜ.filter (c < ·) with hE
+  have hC : a.valᶜ = {c} ∪ D ∪ E := by
     ext m
     simp only [hD, hE, mem_union, mem_filter, mem_singleton, mem_compl]
     constructor
@@ -465,12 +465,12 @@ theorem IsMarkovChain.iMeasure_eq_zero (hμ : IsPMF μ) (h : IsMarkovChain μ Z 
   have hle := hf.condInfo_le_condInfo_union G₁ G₂ {c} D E
   rw [← hC, hP, hF] at hle
   rw [← hfdef] at hM
-  have hI : condInfo f G₁ G₂ a.1ᶜ = 0 := by
-    have h0 := hf.condInfo_nonneg G₁ G₂ a.1ᶜ
+  have hI : condInfo f G₁ G₂ a.valᶜ = 0 := by
+    have h0 := hf.condInfo_nonneg G₁ G₂ a.valᶜ
     simp only [condInfo, ← union_assoc] at hle hM h0 ⊢
     linarith
   have hsingle : ({a} : Finset (NAtom (Fin n))) =
-      (G₁ ∪ G₂).inf (fun l => tilde {l}) \ tilde a.1ᶜ := by
+      (G₁ ∪ G₂).inf (fun l => tilde {l}) \ tilde a.valᶜ := by
     rw [singleton_eq_inf_tilde, inf'_eq_inf, ← hU]
   rw [hsingle]
   exact iMeasure_inf_sdiff_eq_zero_of_condInfo hμ hd ⟨l, mem_filter.2 ⟨hl, hlc⟩⟩

@@ -859,7 +859,7 @@ theorem isAchievableAsync_of_lt [Nonempty α₁] [Nonempty α₂] (hp₁ : IsPMF
       rw [← mul_pow]
       exact pow_le_pow_left₀ (by positivity) hu'' _
     have hexp : exp (-(ν * (k : ℝ))) = exp (-ν) ^ k := by
-      rw [← exp_nat_mul]
+      rw [← exp_natCast_mul]
       congr 1
       ring
     rw [hexp]

@@ -432,7 +432,7 @@ theorem IsAchievableLook.le_capacity (h₁ : IsChannel W₁) (h₂ : IsChannel W
       rw [fbLaw_eq_prod]
       congr 1
       refine prod_congr rfl fun i _ => ?_
-      simp only [enc, dite_eq_left i.2]
+      simp only [enc, dite_eq_left i.isLt]
     let Mv : (Fin M × (Fin n → Y₁)) × (Fin n → Y) → Fin M := fun z => z.1.1
     -- Fano's inequality
     have hF := fano_weak hμ Mv Prod.snd (c n).dec

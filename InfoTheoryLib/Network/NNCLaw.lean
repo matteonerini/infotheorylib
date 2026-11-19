@@ -240,7 +240,7 @@ omit [∀ k, Fintype (X k)] [∀ k, Fintype (Y k)] [∀ k, Fintype (V k)] in
 lemma nncMerge_right {S : Finset (Fin N)} (cS : ∀ k : S, (Fin n → X k) × (Fin n → V k))
     (cC : ∀ k : {k // k ∉ S}, (Fin n → X k) × (Fin n → V k)) (k : {k // k ∉ S}) :
     nncMerge S cS cC k = cC k := by
-  simp [nncMerge, k.2]
+  simp [nncMerge, k.property]
 
 open Classical in
 /-- **The number of tuples of fresh sequences that pass the test.** -/
@@ -255,7 +255,8 @@ lemma card_nnc_fresh_le (hL : IsPMF L) (S : Finset (Fin N)) (d : Fin N) (ε : �
     refine condEntropy_eq_of_dist_pair_eq hL'P hL ?_
     rw [hL', pair_fst_snd, dist_id]
   let z : Fin n → ((∀ k : (Sᶜ : Finset (Fin N)), X k) × (∀ k : (Sᶜ : Finset (Fin N)), V k)) × Y d :=
-    fun i => ((fun k => (cC ⟨k, mem_compl.mp k.2⟩).1 i, fun k => (cC ⟨k, mem_compl.mp k.2⟩).2 i),
+    fun i => ((fun k => (cC ⟨k, mem_compl.mp k.property⟩).1 i,
+      fun k => (cC ⟨k, mem_compl.mp k.property⟩).2 i),
       yd i)
   let φ : (∀ k : S, (Fin n → X k) × (Fin n → V k)) → Fin n → (∀ k : S, X k) × (∀ k : S, V k) :=
     fun cS i => (fun k => (cS k).1 i, fun k => (cS k).2 i)
@@ -285,9 +286,9 @@ lemma card_nnc_fresh_le (hL : IsPMF L) (S : Finset (Fin N)) (d : Fin N) (ε : �
     refine Prod.ext (Prod.ext (Prod.ext (funext fun k => ?_) (funext fun k => ?_)) rfl)
       (Prod.ext (funext fun k => ?_) (funext fun k => ?_))
     · change (cC ⟨k, _⟩).1 i = (nncMerge S cS cC k).1 i
-      rw [nncMerge_right cS cC ⟨k, mem_compl.mp k.2⟩]
+      rw [nncMerge_right cS cC ⟨k, mem_compl.mp k.property⟩]
     · change (cC ⟨k, _⟩).2 i = (nncMerge S cS cC k).2 i
-      rw [nncMerge_right cS cC ⟨k, mem_compl.mp k.2⟩]
+      rw [nncMerge_right cS cC ⟨k, mem_compl.mp k.property⟩]
     · change (cS k).1 i = (nncMerge S cS cC k).1 i
       rw [nncMerge_left cS cC k]
     · change (cS k).2 i = (nncMerge S cS cC k).2 i
@@ -325,7 +326,7 @@ theorem sum_nnc_fresh_le (hL : IsPMF L) {q : ∀ k, X k → V k → ℝ}
         have h₁ := nncTest_iid_le hL hT k
         have h₂ := nncTest_chan_le hL hq hT k
         rw [nncMerge_left cS cC k] at h₁ h₂
-        refine (hS k k.2 (cS k)).trans (mul_le_mul_of_nonneg_left ?_ (ha k))
+        refine (hS k k.property (cS k)).trans (mul_le_mul_of_nonneg_left ?_ (ha k))
         calc _ ≤ exp (-(n * (H[fun ω : NNCΩ X Y V => ω.1 k ; L] -
                 ε * H[fun ω : NNCΩ X Y V => ω.1 k ; L]))) *
               exp (-(n * (H[Prod.snd | Prod.fst ; nncRho L k] -
@@ -395,7 +396,7 @@ theorem sum_nnc_fresh_le (hL : IsPMF L) {q : ∀ k, X k → V k → ℝ}
     rw [sum_prod_pi (A := fun k : {k // k ∉ S} => (Fin n → X k) × (Fin n → V k))
       fun k c => μ k c]
     rw [← hsub a]
-    exact prod_le_prod₀ (fun k _ => sum_nonneg fun c _ => hμ0 k c) fun k _ => hSc k k.2
+    exact prod_le_prod₀ (fun k _ => sum_nonneg fun c _ => hμ0 k c) fun k _ => hSc k k.property
   have hE : E₁ * E₂ = exp (-(n * (nncJ L S d - ε * nncC L S d))) := by
     rw [hE₁, hE₂, ← exp_add]
     congr 1

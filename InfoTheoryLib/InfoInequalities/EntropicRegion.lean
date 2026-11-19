@@ -150,10 +150,10 @@ theorem add_mem_entropicRegion {h h' : EntropySpace ι} (hh : h ∈ entropicRegi
   obtain ⟨Ω₂, _, A₂, _, μ₂, X₂, hμ₂, rfl⟩ := hh'
   refine ⟨Ω₁ × Ω₂, inferInstance, fun i => A₁ i × A₂ i, inferInstance, prodDist μ₁ μ₂,
     fun i ω => (X₁ i ω.1, X₂ i ω.2), hμ₁.prodDist hμ₂, funext fun α => ?_⟩
-  change H[blockRV (fun i (ω : Ω₁ × Ω₂) => (X₁ i ω.1, X₂ i ω.2)) α.1 ; prodDist μ₁ μ₂] =
-    H[blockRV X₁ α.1 ; μ₁] + H[blockRV X₂ α.1 ; μ₂]
+  change H[blockRV (fun i (ω : Ω₁ × Ω₂) => (X₁ i ω.1, X₂ i ω.2)) α.val ; prodDist μ₁ μ₂] =
+    H[blockRV X₁ α.val ; μ₁] + H[blockRV X₂ α.val ; μ₂]
   rw [← entropyRV_prodDist_pair hμ₁ hμ₂]
-  exact entropyRV_eq_of_injective _ (fun p (i : α.1) => (p.1 i, p.2 i))
+  exact entropyRV_eq_of_injective _ (fun p (i : α.val) => (p.1 i, p.2 i))
     (fun p q e => Prod.ext (funext fun i => (Prod.mk.inj (congrFun e i)).1)
       (funext fun i => (Prod.mk.inj (congrFun e i)).2)) fun _ => rfl
 
@@ -177,24 +177,24 @@ theorem exists_mem_entropicRegion_eq_binEntropy_add {h : EntropySpace ι}
   have hμ : IsPMF (prodDist ν μ₁) := hνp.prodDist hμ₁
   refine ⟨Bool × Ω₁, inferInstance, fun i => Option (A₁ i), inferInstance, prodDist ν μ₁, X, hμ,
     funext fun α => ?_⟩
-  obtain ⟨i₀, hi₀⟩ := α.2
-  change H[blockRV X α.1 ; prodDist ν μ₁] = binEntropy δ + δ * H[blockRV X₁ α.1 ; μ₁]
-  set V := blockRV X α.1 with hV
+  obtain ⟨i₀, hi₀⟩ := α.property
+  change H[blockRV X α.val ; prodDist ν μ₁] = binEntropy δ + δ * H[blockRV X₁ α.val ; μ₁]
+  set V := blockRV X α.val with hV
   -- the coin is a function of `V`
   have hUV : H[Prod.fst | V ; prodDist ν μ₁] = 0 :=
     condEntropy_eq_zero_of_eq_comp hμ (fun v => (v ⟨i₀, hi₀⟩).isSome) fun ω => by
       rcases ω with ⟨b, ω⟩
       cases b <;> rfl
-  have hVU : H[V | Prod.fst ; prodDist ν μ₁] = δ * H[blockRV X₁ α.1 ; μ₁] := by
+  have hVU : H[V | Prod.fst ; prodDist ν μ₁] = δ * H[blockRV X₁ α.val ; μ₁] := by
     rw [condEntropy_fst_prodDist hμ₁, Fintype.sum_bool]
-    have hc : (fun ω => V (false, ω)) = fun _ => (fun _ => none : ∀ i : α.1, Option (A₁ i)) := by
+    have hc : (fun ω => V (false, ω)) = fun _ => (fun _ => none : ∀ i : α.val, Option (A₁ i)) := by
       funext ω i
       rfl
     have hf : H[fun ω => V (false, ω) ; μ₁] = 0 := by
       rw [hc]
       exact entropyRV_const hμ₁ _
-    have ht : H[fun ω => V (true, ω) ; μ₁] = H[blockRV X₁ α.1 ; μ₁] :=
-      entropyRV_eq_of_injective μ₁ (fun v (i : α.1) => some (v i))
+    have ht : H[fun ω => V (true, ω) ; μ₁] = H[blockRV X₁ α.val ; μ₁] :=
+      entropyRV_eq_of_injective μ₁ (fun v (i : α.val) => some (v i))
         (fun v w e => funext fun i => Option.some_injective _ (congrFun e i)) fun _ => rfl
     rw [hf, ht]
     simp [hν]
@@ -423,7 +423,7 @@ lemma exists_entropyRV_eq_log (hμ : IsPMF μ) {Y : Ω → β}
 end Three
 
 /-- The rank function `min(|α|, r)` of the uniform matroid, as a vector of the entropy space. -/
-def rankVector (ι : Type*) (r : ℕ) : EntropySpace ι := fun α => (min #α.1 r : ℕ)
+def rankVector (ι : Type*) (r : ℕ) : EntropySpace ι := fun α => (min #α.val r : ℕ)
 
 lemma extend_rankVector {ι : Type*} (r : ℕ) :
     (rankVector ι r).extend = fun s => ((min #s r : ℕ) : ℝ) := by
@@ -562,14 +562,14 @@ lemma atomsToEntropy_smul {ι : Type*} [Fintype ι] [DecidableEq ι] (c : ℝ) (
   simp [atomsToEntropy, mul_sum]
 
 /-- The values `(0, 0, 0, 1, 1, 1, -1)` of `μ*` on the atoms of `ℱ₃`, (15.53). -/
-def xorAtoms (a : NAtom (Fin 3)) : ℤ := if #a.1 = 2 then 1 else if #a.1 = 3 then -1 else 0
+def xorAtoms (a : NAtom (Fin 3)) : ℤ := if #a.val = 2 then 1 else if #a.val = 3 then -1 else 0
 
 lemma atomsToEntropy_xorAtoms :
     atomsToEntropy (fun a => (xorAtoms a : ℝ)) = rankVector (Fin 3) 2 := by
   have h : ∀ s : Finset (Fin 3), s.Nonempty → ∑ a ∈ tilde s, xorAtoms a = (min #s 2 : ℕ) := by
     decide
   funext α
-  have := h α.1 α.2
+  have := h α.val α.property
   simp only [atomsToEntropy, rankVector]
   exact_mod_cast this
 
@@ -584,21 +584,21 @@ theorem closure_entropicRegion_fin_three :
   have hn := atom_nonneg_of_mem_shannonRegion hh
   set top : NAtom (Fin 3) := ⟨univ, univ_nonempty⟩ with htop
   -- (15.15): the elemental inequalities in terms of the atoms
-  have key₁ : ∀ a : NAtom (Fin 3), #a.1 = 1 → ∃ e : ElemForm (Fin 3), elemAtoms e = {a} := by
+  have key₁ : ∀ a : NAtom (Fin 3), #a.val = 1 → ∃ e : ElemForm (Fin 3), elemAtoms e = {a} := by
     decide
-  have key₂ : ∀ a : NAtom (Fin 3), #a.1 = 2 → ∃ e : ElemForm (Fin 3), elemAtoms e = {a} := by
+  have key₂ : ∀ a : NAtom (Fin 3), #a.val = 2 → ∃ e : ElemForm (Fin 3), elemAtoms e = {a} := by
     decide
-  have key₃ : ∀ a : NAtom (Fin 3), #a.1 = 2 →
+  have key₃ : ∀ a : NAtom (Fin 3), #a.val = 2 →
       ∃ e : ElemForm (Fin 3), elemAtoms e = {a, ⟨univ, univ_nonempty⟩} := by
     decide
-  have key₄ : ∀ a : NAtom (Fin 3), #a.1 = 1 ∨ #a.1 = 2 ∨ a = ⟨univ, univ_nonempty⟩ := by decide
-  have hsing : ∀ a : NAtom (Fin 3), #a.1 = 1 → 0 ≤ u a := fun a ha => by
+  have key₄ : ∀ a : NAtom (Fin 3), #a.val = 1 ∨ #a.val = 2 ∨ a = ⟨univ, univ_nonempty⟩ := by decide
+  have hsing : ∀ a : NAtom (Fin 3), #a.val = 1 → 0 ≤ u a := fun a ha => by
     obtain ⟨e, he⟩ := key₁ a ha
     simpa [he] using hn e
-  have hpair : ∀ a : NAtom (Fin 3), #a.1 = 2 → 0 ≤ u a := fun a ha => by
+  have hpair : ∀ a : NAtom (Fin 3), #a.val = 2 → 0 ≤ u a := fun a ha => by
     obtain ⟨e, he⟩ := key₂ a ha
     simpa [he] using hn e
-  have hpair' : ∀ a : NAtom (Fin 3), #a.1 = 2 → 0 ≤ u a + u top := fun a ha => by
+  have hpair' : ∀ a : NAtom (Fin 3), #a.val = 2 → 0 ≤ u a + u top := fun a ha => by
     obtain ⟨e, he⟩ := key₃ a ha
     have hne : a ≠ top := fun h' => by
       rw [h', htop, card_univ, Fintype.card_fin] at ha

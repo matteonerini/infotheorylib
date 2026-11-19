@@ -100,9 +100,9 @@ def stratEnc (k : ℕ) : ∀ i, Strat k X₁ Y × Strat k X₂ Y → (Fin i → 
 omit [Fintype X₁] [Fintype X₂] [Fintype Y] in
 lemma stratW_eq_prod (s : Strat k X₁ Y × Strat k X₂ Y) (y : Fin k → Y) :
     stratW V k s y =
-      ∏ i : Fin k, V (stratEnc k i s fun t : Fin i => y ⟨t, t.2.trans i.2⟩) (y i) := by
+      ∏ i : Fin k, V (stratEnc k i s fun t : Fin i => y ⟨t, t.isLt.trans i.isLt⟩) (y i) := by
   refine prod_congr rfl fun i _ => ?_
-  simp [stratEnc, i.2]
+  simp [stratEnc, i.isLt]
   rfl
 
 omit [Fintype X₁] [Fintype X₂] in

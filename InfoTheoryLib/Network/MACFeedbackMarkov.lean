@@ -309,12 +309,12 @@ theorem MACFBCode.exists_sub [NeZero M₁] [NeZero M₂] (c : MACFBCode M₁ M�
   have : Nonempty (Fin M₂') := ⟨⟨0, h₂'⟩⟩
   -- the error of a pair of messages
   let P : Fin M₁ × Fin M₂ → (Fin N → Y) → ℝ := fun w y =>
-    ∏ i : Fin N, W (c.fbEnc i w fun t : Fin i => y ⟨t, t.2.trans i.2⟩) (y i)
+    ∏ i : Fin N, W (c.fbEnc i w fun t : Fin i => y ⟨t, t.isLt.trans i.isLt⟩) (y i)
   have hP0 : ∀ w y, 0 ≤ P w y := fun w y => prod_nonneg fun i _ => (hW _).nonneg _
   let f : Fin M₁ × Fin M₂ → ℝ := fun w => ∑ y, P w y * ind (c.dec y ≠ w)
   have hf0 : ∀ w, 0 ≤ f w := fun w => sum_nonneg fun y _ => mul_nonneg (hP0 w y) (ind_nonneg _)
   have herr : ∀ {A₁ A₂ : ℕ} (d : MACFBCode A₁ A₂ N X₁ X₂ Y), d.errProb W =
-      (∑ w, ∑ y, (∏ i : Fin N, W (d.fbEnc i w fun t : Fin i => y ⟨t, t.2.trans i.2⟩) (y i)) *
+      (∑ w, ∑ y, (∏ i : Fin N, W (d.fbEnc i w fun t : Fin i => y ⟨t, t.isLt.trans i.isLt⟩) (y i)) *
         ind (d.dec y ≠ w)) / ((A₁ : ℝ) * A₂) := by
     intro A₁ A₂ d
     rw [MACFBCode.errProb_eq, Fintype.sum_prod_type, sum_div]
@@ -338,7 +338,7 @@ theorem MACFBCode.exists_sub [NeZero M₁] [NeZero M₂] (c : MACFBCode M₁ M�
       fun y => (Function.invFun ι₁ (c.dec y).1, Function.invFun ι₂ (c.dec y).2)⟩
   refine ⟨c', ?_⟩
   have hrow : ∀ t : Fin M₁' × Fin M₂', (∑ y, (∏ i : Fin N, W (c'.fbEnc i t fun u : Fin i =>
-      y ⟨u, u.2.trans i.2⟩) (y i)) * ind (c'.dec y ≠ t)) ≤ f (ι₁ t.1, ι₂ t.2) := by
+      y ⟨u, u.isLt.trans i.isLt⟩) (y i)) * ind (c'.dec y ≠ t)) ≤ f (ι₁ t.1, ι₂ t.2) := by
     intro t
     refine sum_le_sum fun y _ => ?_
     refine mul_le_mul_of_nonneg_left (ind_mono ?_) (hP0 (ι₁ t.1, ι₂ t.2) y)
@@ -390,7 +390,7 @@ lemma two_pow_ceil_le_of_exp {ρ R η : ℝ} {B₁ n N M₀ : ℕ} (hρ0 : 0 ≤
     have h₂ : ((2 ^ ⌈(N : ℝ) * R⌉₊ : ℕ) : ℝ) ≤ (M₀ : ℝ) := by
       refine le_trans ?_ hexp
       push_cast
-      rw [← exp_log (by norm_num : (0 : ℝ) < 2), ← exp_nat_mul]
+      rw [← exp_log (by norm_num : (0 : ℝ) < 2), ← exp_natCast_mul]
       refine exp_le_exp.mpr ?_
       have h₃ : (B₁ : ℝ) * ((N : ℝ) / ((B₁ : ℝ) + 1) * ρ) = (N : ℝ) *
         ((B₁ : ℝ) / (B₁ + 1) * ρ) := by
@@ -505,7 +505,7 @@ theorem isAchievableMACFB_coverLeung (hu : IsPMF pu) (hA : IsChannel A) (hB : Is
     have hexpM : ∀ r : ℝ, exp ((B₁ : ℝ) * ((n : ℝ) * r)) ≤ ((⌈exp (n * r)⌉₊ ^ B₁ : ℕ) : ℝ) := by
       intro r
       have h₁ : exp (n * r) ≤ ((⌈exp (n * r)⌉₊ : ℕ) : ℝ) := Nat.le_ceil _
-      rw [exp_nat_mul]
+      rw [exp_natCast_mul]
       push_cast
       exact pow_le_pow_left₀ (exp_pos _).le h₁ _
     have hpos₁ : 0 < ⌈exp (n * r₁)⌉₊ ^ B₁ := pow_pos (NeZero.pos _) _

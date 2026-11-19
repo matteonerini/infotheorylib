@@ -85,7 +85,7 @@ def IsAchievableAWGNRate (g : ℝ) (P : ℝ≥0) (R : ℝ) : Prop :=
 def opCapacityAWGN (g : ℝ) (P : ℝ≥0) : ℝ := sSup {R | IsAchievableAWGNRate g P R}
 
 /-- The received power `S = g²P` as a nonnegative real. -/
-def receivedPower (g : ℝ) (P : ℝ≥0) : ℝ≥0 := ⟨g ^ 2 * P, mul_nonneg (sq_nonneg g) P.2⟩
+def receivedPower (g : ℝ) (P : ℝ≥0) : ℝ≥0 := ⟨g ^ 2 * P, mul_nonneg (sq_nonneg g) P.property⟩
 
 lemma coe_receivedPower (g : ℝ) (P : ℝ≥0) : (receivedPower g P : ℝ) = g ^ 2 * P := rfl
 
@@ -117,7 +117,7 @@ theorem isAchievableAWGNRate_of_lt {g : ℝ} (hg : g ≠ 0) {P : ℝ≥0} {R : �
     have h1 : ∀ n : ℕ, 2 ^ ⌈n * R⌉₊ = 1 := fun n => by
       rw [Nat.ceil_eq_zero.2 (mul_nonpos_of_nonneg_of_nonpos (Nat.cast_nonneg n) hR0), pow_zero]
     refine ⟨fun n => ⟨fun _ => 0, fun _ => ⟨0, by rw [h1 n]; norm_num⟩, measurable_const⟩,
-      fun n w => by simpa using mul_nonneg (Nat.cast_nonneg n) P.2, ?_⟩
+      fun n w => by simpa using mul_nonneg (Nat.cast_nonneg n) P.property, ?_⟩
     refine tendsto_const_nhds.congr fun n => ?_
     symm
     refine le_antisymm ?_ (GaussianCode.avgErrProb_nonneg _ _)
@@ -165,7 +165,7 @@ theorem isAchievableAWGNRate_of_lt {g : ℝ} (hg : g ≠ 0) {P : ℝ≥0} {R : �
             (by positivity) fun j => ?_)
           exact ((c' n).condErrProb_reindex_le 1 _ j).trans ((c' n).condErrProb_le_maxErrProb 1 _)
       · exact ⟨⟨fun _ => 0, fun _ => 0, measurable_const⟩,
-          fun w => by simpa using mul_nonneg (Nat.cast_nonneg n) P.2, fun h' => absurd h' h⟩
+          fun w => by simpa using mul_nonneg (Nat.cast_nonneg n) P.property, fun h' => absurd h' h⟩
     choose c hpow hc using hsub
     refine ⟨c, hpow, tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hc'
       (Eventually.of_forall fun n => GaussianCode.avgErrProb_nonneg _ _) ?_⟩
@@ -179,7 +179,7 @@ theorem opCapacityAWGN_eq {g : ℝ} (hg : g ≠ 0) (P : ℝ≥0) :
     opCapacityAWGN g P = gaussianCapacityFun (g ^ 2 * P) / log 2 := by
   have hl := log_pos one_lt_two
   have hC : 0 ≤ gaussianCapacityFun (g ^ 2 * P) / log 2 :=
-    div_nonneg (mul_nonneg (by norm_num) (log_nonneg (by nlinarith [sq_nonneg g, P.2])))
+    div_nonneg (mul_nonneg (by norm_num) (log_nonneg (by nlinarith [sq_nonneg g, P.property])))
       hl.le
   refine csSup_eq_of_forall_le_of_forall_lt_exists_gt
     ⟨-1, isAchievableAWGNRate_of_lt hg (by linarith)⟩ (fun R hR => hR.le) fun w hw => ?_

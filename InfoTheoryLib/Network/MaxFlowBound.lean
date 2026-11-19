@@ -184,7 +184,7 @@ theorem card_le_prod_eta [DecidableEq V] [Fintype E] [DecidableEq E] [Fintype X]
     {t : V} (ht : t ∈ T) {U : Finset V} (hs : s ∈ U) (htU : t ∉ U) :
     Fintype.card X ≤ ∏ e ∈ G.cutEdges U, c.eta e := by
   classical
-  let φ : X → ∀ k : {k : Fin c.K // c.edge k ∈ G.cutEdges U}, c.A k.1 := fun x k => c.val x k.1
+  let φ : X → ∀ k : {k : Fin c.K // c.edge k ∈ G.cutEdges U}, c.A k.val := fun x k => c.val x k.val
   have hinj : Function.Injective φ := by
     intro x x' hxx
     have hcut : ∀ k, G.tail (c.edge k) ∈ U → G.head (c.edge k) ∉ U → c.val x k = c.val x' k :=
@@ -193,9 +193,9 @@ theorem card_le_prod_eta [DecidableEq V] [Fintype E] [DecidableEq E] [Fintype X]
     congr 1
     funext k hk
     exact c.val_congr hs hcut k (by rw [hk]; exact htU)
-  calc Fintype.card X ≤ Fintype.card (∀ k : {k : Fin c.K // c.edge k ∈ G.cutEdges U}, c.A k.1) :=
+  calc Fintype.card X ≤ Fintype.card (∀ k : {k : Fin c.K // c.edge k ∈ G.cutEdges U}, c.A k.val) :=
         Fintype.card_le_of_injective φ hinj
-    _ = ∏ k : {k : Fin c.K // c.edge k ∈ G.cutEdges U}, Fintype.card (c.A k.1) :=
+    _ = ∏ k : {k : Fin c.K // c.edge k ∈ G.cutEdges U}, Fintype.card (c.A k.val) :=
         Fintype.card_pi
     _ = ∏ k with c.edge k ∈ G.cutEdges U, Fintype.card (c.A k) :=
         (prod_subtype _ (by simp) fun k => Fintype.card (c.A k)).symm

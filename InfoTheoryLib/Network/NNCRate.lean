@@ -59,11 +59,11 @@ theorem condEntropy_restr_le {μ : Ω → ℝ} (hμ : IsPMF μ) (Z : Ω → ∀ 
   | insert k S hk ih =>
     rw [sum_insert hk]
     let g : (∀ j : (insert k S : Finset (Fin N)), β j) → β k × (∀ j : S, β j) := fun r =>
-      (r ⟨k, mem_insert_self k S⟩, fun j => r ⟨j, mem_insert_of_mem j.2⟩)
+      (r ⟨k, mem_insert_self k S⟩, fun j => r ⟨j, mem_insert_of_mem j.property⟩)
     have hg : Function.Injective g := by
       intro r r' h
       funext j
-      rcases mem_insert.mp j.2 with hj | hj
+      rcases mem_insert.mp j.property with hj | hj
       · have e : j = ⟨k, mem_insert_self k S⟩ := Subtype.ext hj
         rw [e]
         exact (Prod.ext_iff.mp h).1
