@@ -68,8 +68,8 @@ lemma fixedLengthCode_injOn {β : Type*} {S : Finset β} {k : ℕ} (hS : S.card 
     Set.InjOn (fixedLengthCode S k) S := by
   intro x hx y hy h
   simp only [fixedLengthCode, mem_coe.1 hx, mem_coe.1 hy, dite_true] at h
-  have h' := binaryDigits_inj ((S.equivFin ⟨x, hx⟩).2.trans_le hS)
-    ((S.equivFin ⟨y, hy⟩).2.trans_le hS) h
+  have h' := binaryDigits_inj ((S.equivFin ⟨x, hx⟩).isLt.trans_le hS)
+    ((S.equivFin ⟨y, hy⟩).isLt.trans_le hS) h
   have := S.equivFin.injective (Fin.ext h')
   exact congrArg Subtype.val this
 

@@ -273,9 +273,9 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 abbrev NAtom (ι : Type*) := {S : Finset ι // S.Nonempty}
 
 /-- **(3.26)** The set `X̃_G = ⋃_{i ∈ G} X̃ᵢ`, as a set of nonempty atoms. -/
-def tilde (G : Finset ι) : Finset (NAtom ι) := univ.filter fun a => ¬ Disjoint a.1 G
+def tilde (G : Finset ι) : Finset (NAtom ι) := univ.filter fun a => ¬ Disjoint a.val G
 
-lemma mem_tilde {G : Finset ι} {a : NAtom ι} : a ∈ tilde G ↔ ∃ i ∈ G, i ∈ a.1 := by
+lemma mem_tilde {G : Finset ι} {a : NAtom ι} : a ∈ tilde G ↔ ∃ i ∈ G, i ∈ a.val := by
   simp only [tilde, mem_filter, mem_univ, true_and, not_disjoint_iff]
   exact ⟨fun ⟨i, h₁, h₂⟩ => ⟨i, h₂, h₁⟩, fun ⟨i, h₁, h₂⟩ => ⟨i, h₂, h₁⟩⟩
 
@@ -297,7 +297,7 @@ lemma tilde_union (G G' : Finset ι) : tilde (G ∪ G') = tilde G ∪ tilde G' :
 /-- **(3.23)** The universal set is the union of the `X̃ᵢ`. -/
 @[simp] lemma tilde_univ : tilde (univ : Finset ι) = univ := by
   ext a
-  obtain ⟨i, hi⟩ := a.2
+  obtain ⟨i, hi⟩ := a.property
   simpa [mem_tilde] using ⟨i, hi⟩
 
 lemma tilde_singleton_eq_baseSet (i : ι) :
@@ -312,7 +312,7 @@ lemma biUnion_tilde_singleton (T : Finset ι) : T.biUnion (fun i => tilde {i}) =
 /-- **(3.149)** A nonempty atom is the intersection of the `X̃ᵢ` with `i ∈ S`, minus the union of
 the others. -/
 theorem singleton_eq_inf_tilde (S : NAtom ι) :
-    ({S} : Finset (NAtom ι)) = S.1.inf' S.2 (fun i => tilde {i}) \ tilde S.1ᶜ := by
+    ({S} : Finset (NAtom ι)) = S.val.inf' S.property (fun i => tilde {i}) \ tilde S.valᶜ := by
   ext a
   simp only [mem_singleton, mem_sdiff, mem_inf', mem_tilde, mem_compl, not_exists, not_and]
   constructor
@@ -332,7 +332,7 @@ theorem card_nAtom : Fintype.card (NAtom ι) = 2 ^ Fintype.card ι - 1 := by
   rw [Fintype.card_subtype]
   have e : (univ.filter fun S : Finset ι => S.Nonempty) = univ.erase ∅ := by
     ext S
-    simp [nonempty_iff_ne_empty]
+    simp
   rw [e, card_erase_of_mem (mem_univ _), card_univ, Fintype.card_finset]
 
 /-- A function on the nonempty atoms vanishes if its sums on all the sets `X̃_G` vanish. -/
@@ -341,19 +341,19 @@ lemma eq_zero_of_sum_tilde_eq_zero {u : NAtom ι → ℝ}
   have htotal : ∑ a, u a = 0 := by
     rcases isEmpty_or_nonempty ι with hι | hι
     · have : IsEmpty (NAtom ι) := ⟨fun a => by
-        obtain ⟨i, _⟩ := a.2
+        obtain ⟨i, _⟩ := a.property
         exact isEmptyElim i⟩
       simp
     · rw [← h univ univ_nonempty, tilde_univ]
-  have hsub : ∀ W : Finset ι, ∑ a ∈ univ.filter (fun a : NAtom ι => a.1 ⊆ W), u a = 0 := by
+  have hsub : ∀ W : Finset ι, ∑ a ∈ univ.filter (fun a : NAtom ι => a.val ⊆ W), u a = 0 := by
     intro W
-    have hsplit := sum_filter_add_sum_filter_not (univ : Finset (NAtom ι)) (fun a => a.1 ⊆ W) u
+    have hsplit := sum_filter_add_sum_filter_not (univ : Finset (NAtom ι)) (fun a => a.val ⊆ W) u
     rcases eq_or_ne W univ with rfl | hW
     · simpa using htotal
     · have hne : (Wᶜ).Nonempty := by
-        rw [nonempty_iff_ne_empty, Ne, compl_eq_empty_iff]
+        rw [← ne_empty_iff_nonempty, Ne, compl_eq_empty_iff]
         exact hW
-      have e : (univ.filter fun a : NAtom ι => ¬ a.1 ⊆ W) = tilde Wᶜ := by
+      have e : (univ.filter fun a : NAtom ι => ¬ a.val ⊆ W) = tilde Wᶜ := by
         ext a
         simp only [mem_filter, mem_univ, true_and, mem_tilde, mem_compl, subset_iff, not_forall]
         constructor
@@ -370,11 +370,11 @@ lemma eq_zero_of_sum_tilde_eq_zero {u : NAtom ι → ℝ}
       intro hS
       have h₀ := hsub S
       rwa [sum_eq_single_of_mem (⟨S, hS⟩ : NAtom ι) (by simp) fun b hb hne => ?_] at h₀
-      have hb' : b.1 ⊆ S := (mem_filter.1 hb).2
-      have hss : b.1 ⊂ S := hb'.ssubset_of_ne fun e => hne (Subtype.ext e)
-      exact ih b.1 hss b.2
+      have hb' : b.val ⊆ S := (mem_filter.1 hb).2
+      have hss : b.val ⊂ S := hb'.ssubset_of_ne fun e => hne (Subtype.ext e)
+      exact ih b.val hss b.property
   funext a
-  exact key a.1 a.2
+  exact key a.val a.property
 
 /-- **Theorem 3.6.** A signed measure on the field is completely specified by its values on the sets
 `X̃_G`, `G ≠ ∅`, and these can be any real numbers. -/
@@ -383,7 +383,7 @@ theorem existsUnique_isSignedMeasure_tilde (h : Finset ι → ℝ) :
       IsSignedMeasure m ∧ ∀ G : Finset ι, G.Nonempty → m (tilde G) = h G := by
   -- the map `u ↦ (∑_{a ∈ X̃_G} u a)_G` of (3.27), from the values on the atoms
   let C : (NAtom ι → ℝ) →ₗ[ℝ] (NAtom ι → ℝ) :=
-    { toFun := fun u G => ∑ a ∈ tilde G.1, u a
+    { toFun := fun u G => ∑ a ∈ tilde G.val, u a
       map_add' := fun u v => by
         funext G
         simp [sum_add_distrib]
@@ -395,7 +395,7 @@ theorem existsUnique_isSignedMeasure_tilde (h : Finset ι → ℝ) :
     intro u hu
     refine eq_zero_of_sum_tilde_eq_zero fun G hG => ?_
     exact congrFun hu ⟨G, hG⟩
-  obtain ⟨u, hu⟩ := (LinearMap.injective_iff_surjective.1 hinj) fun G => h G.1
+  obtain ⟨u, hu⟩ := (LinearMap.injective_iff_surjective.1 hinj) fun G => h G.val
   refine ⟨fun A => ∑ a ∈ A, u a, ⟨isSignedMeasure_sum u, fun G hG => congrFun hu ⟨G, hG⟩⟩, ?_⟩
   rintro m ⟨hm, hmh⟩
   funext A
@@ -404,8 +404,8 @@ theorem existsUnique_isSignedMeasure_tilde (h : Finset ι → ℝ) :
   have : (fun a => m {a}) = u := by
     apply hinj
     funext G
-    change ∑ a ∈ tilde G.1, m {a} = (C u) G
-    rw [← hm.eq_sum_singleton, hmh _ G.2, hu]
+    change ∑ a ∈ tilde G.val, m {a} = (C u) G
+    rw [← hm.eq_sum_singleton, hmh _ G.property, hu]
   exact congrFun this a
 
 /-- The value on the nonempty atom `S` of the signed measure with `μ(X̃_G) = h G`, by (3.29) and
@@ -417,14 +417,14 @@ def atomValue (h : Finset ι → ℝ) (S : Finset ι) : ℝ :=
 its values on the sets `X̃_G`. -/
 theorem IsSignedMeasure.singleton_eq_atomValue {m : Finset (NAtom ι) → ℝ}
     (hm : IsSignedMeasure m) (S : NAtom ι) :
-    m {S} = atomValue (fun G => m (tilde G)) S.1 := by
+    m {S} = atomValue (fun G => m (tilde G)) S.val := by
   rw [singleton_eq_inf_tilde, hm.inf_sdiff_eq_sum, atomValue]
   refine sum_congr rfl fun T _ => ?_
   rw [biUnion_tilde_singleton, hm.sdiff_eq, tilde_union]
 
 /-- The signed measure with the values `h G` on the sets `X̃_G`. -/
 def signedMeasureOf (h : Finset ι → ℝ) (A : Finset (NAtom ι)) : ℝ :=
-  ∑ a ∈ A, atomValue h a.1
+  ∑ a ∈ A, atomValue h a.val
 
 /-- `signedMeasureOf h` is a signed measure. -/
 theorem isSignedMeasure_signedMeasureOf (h : Finset ι → ℝ) : IsSignedMeasure (signedMeasureOf h) :=

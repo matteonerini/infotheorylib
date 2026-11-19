@@ -130,7 +130,7 @@ variable {ι : Type*} {G : Type*} [Group G]
 `(G, G₁, …, Gₙ)` is a group characterization of `h` (Definition 16.17) when
 `h = groupEntropy H`. -/
 def groupEntropy (H : ι → Subgroup G) : EntropySpace ι :=
-  fun α => log (Nat.card G / Nat.card (subgroupInter H α.1))
+  fun α => log (Nat.card G / Nat.card (subgroupInter H α.val))
 
 lemma extend_groupEntropy [Finite G] (H : ι → Subgroup G) (s : Finset ι) :
     (groupEntropy H).extend s = log (Nat.card G) - log (Nat.card (subgroupInter H s)) := by
@@ -143,7 +143,7 @@ lemma extend_groupEntropy [Finite G] (H : ι → Subgroup G) (s : Finset ι) :
 /-- The trivial characterization `Gᵢ = G` gives the origin. -/
 lemma groupEntropy_top [Finite G] : groupEntropy (fun _ : ι => (⊤ : Subgroup G)) = 0 := by
   funext α
-  have : subgroupInter (fun _ : ι => (⊤ : Subgroup G)) α.1 = ⊤ := by simp [subgroupInter]
+  have : subgroupInter (fun _ : ι => (⊤ : Subgroup G)) α.val = ⊤ := by simp [subgroupInter]
   rw [groupEntropy, this, Subgroup.card_top,
     div_self (by exact_mod_cast Nat.card_pos.ne'), log_one, Pi.zero_apply]
 
@@ -172,17 +172,17 @@ theorem groupEntropy_mem_entropicRegion {ι G : Type u} [Fintype ι] [DecidableE
   refine ⟨G, inferInstance, fun i => G ⧸ H i, fun _ => inferInstance, uniformPMF G,
     fun i g => (g : G ⧸ H i), uniformPMF_isPMF, funext fun α => ?_⟩
   -- the fiber of `ω` is the coset `ω G_α`
-  have hfib : ∀ ω ω', blockRV (fun i (g : G) => (g : G ⧸ H i)) α.1 ω' =
-      blockRV (fun i (g : G) => (g : G ⧸ H i)) α.1 ω ↔ ω⁻¹ * ω' ∈ subgroupInter H α.1 := by
+  have hfib : ∀ ω ω', blockRV (fun i (g : G) => (g : G ⧸ H i)) α.val ω' =
+      blockRV (fun i (g : G) => (g : G ⧸ H i)) α.val ω ↔ ω⁻¹ * ω' ∈ subgroupInter H α.val := by
     intro ω ω'
     simp only [blockRV, funext_iff, Subtype.forall, mem_subgroupInter]
     refine forall₂_congr fun i _ => ?_
     rw [eq_comm, QuotientGroup.eq]
-  have hk : ∀ ω, Nat.card {ω' // blockRV (fun i (g : G) => (g : G ⧸ H i)) α.1 ω' =
-      blockRV (fun i (g : G) => (g : G ⧸ H i)) α.1 ω} = Nat.card (subgroupInter H α.1) :=
+  have hk : ∀ ω, Nat.card {ω' // blockRV (fun i (g : G) => (g : G ⧸ H i)) α.val ω' =
+      blockRV (fun i (g : G) => (g : G ⧸ H i)) α.val ω} = Nat.card (subgroupInter H α.val) :=
     fun ω => Nat.card_congr
-      { toFun := fun ω' => ⟨ω⁻¹ * ω'.1, (hfib ω ω'.1).1 ω'.2⟩
-        invFun := fun x => ⟨ω * x.1, (hfib ω _).2 (by simp)⟩
+      { toFun := fun ω' => ⟨ω⁻¹ * ω'.val, (hfib ω ω'.val).1 ω'.property⟩
+        invFun := fun x => ⟨ω * x.val, (hfib ω _).2 (by simp)⟩
         left_inv := fun ω' => by ext; simp
         right_inv := fun x => by ext; simp }
   rw [entropyVector, blockEntropy, entropyRV_uniformPMF_of_card_fiber _ _ hk, groupEntropy,
@@ -263,9 +263,9 @@ lemma groupEntropy_permStab {ι Ω : Type*} [DecidableEq ι] {A : ι → Type*}
     [∀ i, Fintype (A i)] (X : ∀ i, Ω → A i) {r : ℕ} (x : Fin r → Ω)
     (α : {s : Finset ι // s.Nonempty}) :
     groupEntropy (fun i => permStab (X i ∘ x)) α =
-      log #(typeClass (typeOf (blockRV X α.1 ∘ x)) r) := by
-  have h := card_typeClass_mul_card_permStab (blockRV X α.1 ∘ x)
-  have hpos : (0 : ℝ) < Nat.card (permStab (blockRV X α.1 ∘ x)) := by
+      log #(typeClass (typeOf (blockRV X α.val ∘ x)) r) := by
+  have h := card_typeClass_mul_card_permStab (blockRV X α.val ∘ x)
+  have hpos : (0 : ℝ) < Nat.card (permStab (blockRV X α.val ∘ x)) := by
     exact_mod_cast Nat.card_pos
   rw [groupEntropy, subgroupInter_permStab, Nat.card_perm, Nat.card_fin, ← h]
   push_cast
@@ -377,34 +377,34 @@ theorem exists_tendsto_smul_groupEntropy {h : EntropySpace ι} (hh : h ∈ entro
     simpa using this.add_const (μ ω)
   refine tendsto_pi_nhds.2 fun α => ?_
   -- the entropy of the type of the `α`-coordinates converges to `H(X_α)`, (16.81)
-  have hH : Tendsto (fun r => entropy (typeOf (blockRV X α.1 ∘ x r))) atTop
+  have hH : Tendsto (fun r => entropy (typeOf (blockRV X α.val ∘ x r))) atTop
       (𝓝 (entropyVector μ X α)) := by
-    refine (((continuous_entropy_dist (blockRV X α.1)).tendsto μ).comp hP).congr fun r => ?_
+    refine (((continuous_entropy_dist (blockRV X α.val)).tendsto μ).comp hP).congr fun r => ?_
     simp only [Function.comp_apply]
     congr 1
     funext b
     rw [typeOf_comp]
-  have hlog := tendsto_log_add_one_div.const_mul (Fintype.card (∀ i : α.1, A i) : ℝ)
+  have hlog := tendsto_log_add_one_div.const_mul (Fintype.card (∀ i : α.val, A i) : ℝ)
   rw [mul_zero] at hlog
   have hlow := hH.sub hlog
   rw [sub_zero] at hlow
   refine tendsto_of_tendsto_of_tendsto_of_le_of_le' hlow hH ?_ ?_
   · filter_upwards [eventually_gt_atTop 0] with r hr
     have hr' : (0 : ℝ) < r := by exact_mod_cast hr
-    have := sub_le_log_card_typeClass hr (blockRV X α.1 ∘ x r)
+    have := sub_le_log_card_typeClass hr (blockRV X α.val ∘ x r)
     rw [Pi.smul_apply, smul_eq_mul, groupEntropy_permStab]
-    calc entropy (typeOf (blockRV X α.1 ∘ x r)) -
-          Fintype.card (∀ i : α.1, A i) * (log ((r : ℝ) + 1) / r)
-        = (r : ℝ)⁻¹ * (r * entropy (typeOf (blockRV X α.1 ∘ x r)) -
-          Fintype.card (∀ i : α.1, A i) * log ((r : ℝ) + 1)) := by field_simp
+    calc entropy (typeOf (blockRV X α.val ∘ x r)) -
+          Fintype.card (∀ i : α.val, A i) * (log ((r : ℝ) + 1) / r)
+        = (r : ℝ)⁻¹ * (r * entropy (typeOf (blockRV X α.val ∘ x r)) -
+          Fintype.card (∀ i : α.val, A i) * log ((r : ℝ) + 1)) := by field_simp
       _ ≤ _ := mul_le_mul_of_nonneg_left this (inv_nonneg.2 hr'.le)
   · filter_upwards [eventually_gt_atTop 0] with r hr
     have hr' : (0 : ℝ) < r := by exact_mod_cast hr
     rw [Pi.smul_apply, smul_eq_mul, groupEntropy_permStab]
-    calc (r : ℝ)⁻¹ * log #(typeClass (typeOf (blockRV X α.1 ∘ x r)) r)
-        ≤ (r : ℝ)⁻¹ * (r * entropy (typeOf (blockRV X α.1 ∘ x r))) :=
+    calc (r : ℝ)⁻¹ * log #(typeClass (typeOf (blockRV X α.val ∘ x r)) r)
+        ≤ (r : ℝ)⁻¹ * (r * entropy (typeOf (blockRV X α.val ∘ x r))) :=
           mul_le_mul_of_nonneg_left (log_card_typeClass_le hr _) (inv_nonneg.2 hr'.le)
-      _ = entropy (typeOf (blockRV X α.1 ∘ x r)) := by field_simp
+      _ = entropy (typeOf (blockRV X α.val ∘ x r)) := by field_simp
 
 /-- **Corollary 16.24.** The closure of the convex hull of `Υₙ` is the closure of `Γ*ₙ`. -/
 theorem closure_convexHull_groupCharRegion :
@@ -465,7 +465,7 @@ theorem card_mul_mul_card_inf [Finite G] (H K : Subgroup G) :
     ext y
     constructor
     · rintro ⟨⟨a, b⟩, rfl⟩
-      exact Set.mul_mem_mul a.2 b.2
+      exact Set.mul_mem_mul a.property b.property
     · intro hy
       obtain ⟨a, ha, b, hb, rfl⟩ := Set.mem_mul.1 hy
       exact ⟨(⟨a, ha⟩, ⟨b, hb⟩), rfl⟩
@@ -474,13 +474,14 @@ theorem card_mul_mul_card_inf [Finite G] (H K : Subgroup G) :
       #(univ.filter fun p' => m p' = m p) = Fintype.card (H ⊓ K : Subgroup G) := by
     intro p
     rw [← card_univ]
-    refine card_bij (fun p' hp' => ⟨(p.1 : G)⁻¹ * p'.1, H.mul_mem (H.inv_mem p.1.2) p'.1.2, ?_⟩)
+    refine card_bij (fun p' hp' => ⟨(p.1 : G)⁻¹ * p'.1,
+        H.mul_mem (H.inv_mem p.1.property) p'.1.property, ?_⟩)
       (fun _ _ => mem_univ _) (fun p' hp' q' hq' h => ?_) (fun k _ => ?_)
     · have e : (p'.1 : G) * p'.2 = p.1 * p.2 := (mem_filter.1 hp').2
       rw [show (p.1 : G)⁻¹ * p'.1 = p.2 * (p'.2 : G)⁻¹ by
         rw [inv_mul_eq_iff_eq_mul, ← mul_assoc, eq_mul_inv_iff_mul_eq]
         exact e]
-      exact K.mul_mem p.2.2 (K.inv_mem p'.2.2)
+      exact K.mul_mem p.2.property (K.inv_mem p'.2.property)
     · have e₁ : (p'.1 : G) * p'.2 = p.1 * p.2 := (mem_filter.1 hp').2
       have e₂ : (q'.1 : G) * q'.2 = p.1 * p.2 := (mem_filter.1 hq').2
       have h₁ : (p'.1 : G) = q'.1 := mul_left_cancel (congrArg Subtype.val h)
@@ -488,8 +489,9 @@ theorem card_mul_mul_card_inf [Finite G] (H K : Subgroup G) :
         rw [← e₂, h₁] at e₁
         exact mul_left_cancel e₁
       exact Prod.ext (Subtype.ext h₁) (Subtype.ext h₂)
-    · refine ⟨(⟨p.1 * k, H.mul_mem p.1.2 (Subgroup.mem_inf.1 k.2).1⟩,
-        ⟨(k : G)⁻¹ * p.2, K.mul_mem (K.inv_mem (Subgroup.mem_inf.1 k.2).2) p.2.2⟩), ?_, ?_⟩
+    · refine ⟨(⟨p.1 * k, H.mul_mem p.1.property (Subgroup.mem_inf.1 k.property).1⟩,
+        ⟨(k : G)⁻¹ * p.2,
+            K.mul_mem (K.inv_mem (Subgroup.mem_inf.1 k.property).2) p.2.property⟩), ?_, ?_⟩
       · simp [hm, mul_assoc]
       · ext
         simp
@@ -558,7 +560,7 @@ theorem card_inf_pow_mul_le_of_zhangYeung {G : Type} [Group G] [Finite G]
   push_cast
   rw [hx (H 0 ⊓ H 2), hx (H 0 ⊓ H 3), hx (H 2 ⊓ H 3), hx (H 1 ⊓ H 2), hx (H 1 ⊓ H 3), hx (H 0),
     hx (H 0 ⊓ H 1), hx (H 2), hx (H 3), hx (H 0 ⊓ H 2 ⊓ H 3), hx (H 1 ⊓ H 2 ⊓ H 3)]
-  simp only [← exp_nat_mul, ← exp_add, exp_le_exp]
+  simp only [← exp_natCast_mul, ← exp_add, exp_le_exp]
   push_cast
   linarith
 

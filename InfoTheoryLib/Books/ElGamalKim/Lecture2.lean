@@ -237,7 +237,7 @@ theorem typicalSet_uniform_bool (n : ℕ) {ε : ℝ} (hε : 0 ≤ ε) :
   have hH : entropy (uniformPMF Bool) = log 2 := by
     rw [entropy_uniformPMF, Fintype.card_bool, Nat.cast_ofNat]
   have hp : ∀ x : Fin n → Bool, iidPMF (uniformPMF Bool) n x = exp (-(n * log 2)) := fun x => by
-    rw [exp_neg, exp_nat_mul, exp_log two_pos]
+    rw [exp_neg, exp_natCast_mul, exp_log two_pos]
     simp [iidPMF, uniformPMF]
   ext x
   simp only [typicalSet, mem_filter, mem_univ, true_and, iff_true, hp, hH, exp_le_exp]

@@ -305,7 +305,7 @@ theorem isAchievableGN_tdm [Nonempty t] {dest : t → r} (hg : ∀ j, G (dest j)
   choose R' hR'₁ hR'₂ using hex
   have hsmall : ∀ η > 0, ∀ᶠ n : ℕ in atTop,
       ∃ c : {c : GNCode (fun j => 2 ^ ⌈(n : ℝ) * R j⌉₊) n r // c.SatisfiesPower P},
-        c.1.errProb G (fun j => {dest j}) ≤ η := by
+        c.val.errProb G (fun j => {dest j}) ≤ η := by
     intro η hη
     have hε : 0 < η / T := by positivity
     have hcodes : ∀ᶠ m : ℕ in atTop, ∀ j, ∀ M : ℕ, 0 < M → 2 * M ≤ 2 ^ ⌈(m : ℝ) * R' j⌉₊ →
@@ -378,9 +378,9 @@ theorem isAchievableGN_tdm [Nonempty t] {dest : t → r} (hg : ∀ j, G (dest j)
       positivity⟩⟩
   obtain ⟨c, hc⟩ := exists_seq_tendsto
     (C := fun n : ℕ => {c : GNCode (fun j => 2 ^ ⌈(n : ℝ) * R j⌉₊) n r // c.SatisfiesPower P})
-    (fun n c => c.1.errProb G fun j => {dest j})
+    (fun n c => c.val.errProb G fun j => {dest j})
     (fun n c => div_nonneg (sum_nonneg fun _ _ => measureReal_nonneg) (Nat.cast_nonneg _)) hsmall
-  exact ⟨fun n => (c n).1, fun n => (c n).2, hc⟩
+  exact ⟨fun n => (c n).val, fun n => (c n).property, hc⟩
 
 end TDM
 

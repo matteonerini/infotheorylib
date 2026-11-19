@@ -104,7 +104,7 @@ theorem dfCode_law (d₀ : ∀ l, X l) (L₀ : (∀ l, X l) × (∀ l, Y l) → 
   · simp only [hk, ite_false]
     have htag : (dfTagD d₀ L₀ ε Cs B' k (getBlock (dY k)
         fun s : Fin (finProdFinEquiv (B, i) : Fin (t * n)) =>
-          z ⟨s, s.2.trans (finProdFinEquiv (B, i)).2⟩ k) B : DFTag N Mm) =
+          z ⟨s, s.isLt.trans (finProdFinEquiv (B, i)).isLt⟩ k) B : DFTag N Mm) =
         dfTagD d₀ L₀ ε Cs B' k (getBlock (dY k) fun s => z s k) B := by
       refine dfTagD_congr d₀ L₀ ε Cs B' k _ fun j' hj' => ?_
       funext i'
@@ -112,10 +112,10 @@ theorem dfCode_law (d₀ : ∀ l, X l) (L₀ : (∀ l, X l) × (∀ l, Y l) → 
         have hval : ((finProdFinEquiv (B, i) : Fin (t * n)) : ℕ) = i + n * B := rfl
         rw [hval]
         have h₁ : n * (j' + 1) ≤ n * B := Nat.mul_le_mul_left _ hj'
-        have h₂ := i'.2
+        have h₂ := i'.isLt
         rw [Nat.mul_add, Nat.mul_one] at h₁
         omega
-      have hlt' : i'.val + n * j' < t * n := lt_trans hlt (finProdFinEquiv (B, i)).2
+      have hlt' : i'.val + n * j' < t * n := lt_trans hlt (finProdFinEquiv (B, i)).isLt
       simp only [getBlock, dite_eq_left hlt, dite_eq_left hlt']
     rw [htag]
 
@@ -167,7 +167,7 @@ lemma dfGood_win {d₀ : ∀ l, X l} {L₀ : (∀ l, X l) × (∀ l, Y l) → �
         (fun B i => (arrOf dξ (dfSeqOf Cst z) B).2 i d) (j + k) := by
     intro j hj k hk
     have hlt : j + k < t := by
-      have := k.2
+      have := k.isLt
       omega
     have h₁ := getBlock_col dY z d ⟨j + k, hlt⟩
     have e : arrOf dξ (dfSeqOf Cst z) (j + k) = dfSeqOf Cst z ⟨j + k, hlt⟩ :=

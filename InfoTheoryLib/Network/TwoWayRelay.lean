@@ -440,15 +440,15 @@ lemma add_mod_sub_mod {a b K : ℕ} (ha : a < K) (hb : b < K) : ((a + b) % K + K
 lemma subFin_addFin_left {A B K : ℕ} [NeZero B] [NeZero K] (hA : A ≤ K) (hB : B ≤ K) (a : Fin A)
     (b : Fin B) : subFin (addFin a b : Fin K) a = b := by
   have e : (((addFin a b : Fin K) : ℕ) + K - a) % K = b :=
-    add_mod_sub_mod (a.2.trans_le hA) (b.2.trans_le hB)
-  simp only [subFin, e, b.2, ↓reduceDIte]
+    add_mod_sub_mod (a.isLt.trans_le hA) (b.isLt.trans_le hB)
+  simp only [subFin, e, b.isLt, ↓reduceDIte]
 
 lemma subFin_addFin_right {A B K : ℕ} [NeZero A] [NeZero K] (hA : A ≤ K) (hB : B ≤ K) (a : Fin A)
     (b : Fin B) : subFin (addFin a b : Fin K) b = a := by
   have e : (((addFin a b : Fin K) : ℕ) + K - b) % K = a := by
-    have := add_mod_sub_mod (b.2.trans_le hB) (a.2.trans_le hA)
+    have := add_mod_sub_mod (b.isLt.trans_le hB) (a.isLt.trans_le hA)
     rwa [Nat.add_comm (b : ℕ)] at this
-  simp only [subFin, e, a.2, ↓reduceDIte]
+  simp only [subFin, e, a.isLt, ↓reduceDIte]
 
 lemma dist_swap_apply (P : α₁ × α₂ → ℝ) (z : α₂ × α₁) : dist P Prod.swap z = P z.swap := by
   classical

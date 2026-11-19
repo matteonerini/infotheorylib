@@ -87,7 +87,7 @@ def tabAt {α : Type*} {B : ℕ} (t : Fin (B + 1) → α) (j : ℕ) : α :=
 
 lemma tabAt_val {α : Type*} {B : ℕ} (t : Fin (B + 1) → α) (j : Fin (B + 1)) :
     tabAt t j = t j := by
-  simp [tabAt, j.2]
+  simp [tabAt, j.isLt]
 
 lemma tabAt_update {α : Type*} {B : ℕ} (t : Fin (B + 1) → α) (j : Fin (B + 1)) (a : α) :
     tabAt (Function.update t j a) j = a := by
@@ -95,7 +95,7 @@ lemma tabAt_update {α : Type*} {B : ℕ} (t : Fin (B + 1) → α) (j : Fin (B +
 
 lemma tabAt_update_ne {α : Type*} {B : ℕ} (t : Fin (B + 1) → α) (j : Fin (B + 1)) (a : α) {i : ℕ}
     (hi : i < j) : tabAt (Function.update t j a) i = tabAt t i := by
-  have hlt : i < B + 1 := hi.trans j.2
+  have hlt : i < B + 1 := hi.trans j.isLt
   simp only [tabAt, hlt, dite_true]
   refine Function.update_of_ne (fun h => ?_) _ _
   have := congrArg Fin.val h
@@ -207,8 +207,8 @@ lemma code_dec_eq {M₀ : ℕ} (e : Fin M₀ ≃ (Fin B → Fin M)) (m₀ : Fin 
   simp only [code]
   rw [Equiv.symm_apply_eq]
   funext j
-  have h₁ := C.hatS_eq hL j (by have := j.2; omega)
-  have h₂ := C.hatS_eq hL (j + 1) (by have := j.2; omega)
+  have h₁ := C.hatS_eq hL j (by have := j.isLt; omega)
+  have h₂ := C.hatS_eq hL (j + 1) (by have := j.isLt; omega)
   rw [h₁, h₂]
   simp only [st, add_sub_cancel_right]
   exact hM j
@@ -322,7 +322,7 @@ lemma blockLaw_update (d₁ : S) (j : Fin (B + 1)) (θ : Fin (B + 1) → Fin M �
   refine prod_congr rfl fun i _ => ?_
   congr 1
   simp only [blockEnc]
-  have hi : (i : ℕ) < j := i.2
+  have hi : (i : ℕ) < j := i.isLt
   have hfst : (fun t => (Function.update θ j a t).1) =
       Function.update (fun t => (θ t).1) j a.1 := by
     funext t
@@ -362,7 +362,7 @@ theorem sum_blockLoss (hV : IsChannel V) (d₁ : S) (j : Fin (B + 1)) :
       C.blockLoss d₁ j θ z = ∑ u, C.blockLaw V d₁ j (θ, u) *
         C.rowErr V (C.st (fun i => (θ i).2) (arrS d₁ u) j) (tabAt (fun i => (θ i).1) j) := by
     intro θ
-    rw [C.sum_blockLoss_later hV d₁ j θ (B + 1) j.2, C.sum_blockLoss_self]
+    rw [C.sum_blockLoss_later hV d₁ j θ (B + 1) j.isLt, C.sum_blockLoss_self]
   simp_rw [h₁]
   rw [sum_comm]
   have h₂ : ∀ u : Fin j → (Fin n → Y) × (Fin n → S),
@@ -455,17 +455,17 @@ lemma code_law {M₀ : ℕ} (e : Fin M₀ ≃ (Fin B → Fin M)) (m₀ : Fin M) 
   have hin : (⟨((finProdFinEquiv (j, i) : Fin ((B + 1) * n)) : ℕ) % n,
       Nat.mod_lt _ (NeZero.pos n)⟩ : Fin n) = i := Fin.ext hmod
   have hst : C.st d (getBlock d₁ fun t : Fin (finProdFinEquiv (j, i) : Fin ((B + 1) * n)) =>
-      (z ⟨t, t.2.trans (finProdFinEquiv (j, i)).2⟩).2) j =
-      C.st d (arrS d₁ fun t : Fin j => blockEquiv z ⟨t, t.2.trans j.2⟩) j := by
+      (z ⟨t, t.isLt.trans (finProdFinEquiv (j, i)).isLt⟩).2) j =
+      C.st d (arrS d₁ fun t : Fin j => blockEquiv z ⟨t, t.isLt.trans j.isLt⟩) j := by
     refine C.st_congr d j fun j' hj' => ?_
     funext i'
-    have hj'B : j' < B + 1 := hj'.trans j.2
+    have hj'B : j' < B + 1 := hj'.trans j.isLt
     have hlt : i'.val + n * j' <
         ((finProdFinEquiv (j, i) : Fin ((B + 1) * n)) : ℕ) := by
       have hval : ((finProdFinEquiv (j, i) : Fin ((B + 1) * n)) : ℕ) = i + n * j := rfl
       rw [hval]
       have h₁ : n * (j' + 1) ≤ n * j := Nat.mul_le_mul_left _ hj'
-      have h₂ := i'.2
+      have h₂ := i'.isLt
       rw [Nat.mul_add, Nat.mul_one] at h₁
       omega
     simp only [getBlock, dite_eq_left hlt, arrS, dite_eq_left hj']
@@ -483,7 +483,7 @@ lemma ind_dec_le {M₀ : ℕ} (e : Fin M₀ ≃ (Fin B → Fin M)) (m₀ : Fin M
   classical
   have hnn : ∀ j : Fin (B + 1), 0 ≤ C.blockLoss d₁ j (tableOf e m₀ d w) (blockEquiv z) := by
     intro j
-    simp only [blockLoss, j.2, dite_true]
+    simp only [blockLoss, j.isLt, dite_true]
     exact C.loss_nonneg _ _ _
   by_cases h : (C.code (X := X) e m₀ d d₁ dy).dec (fun i => (z i).1) = w
   · rw [ind_of_neg (not_not.mpr h)]
@@ -498,7 +498,7 @@ lemma ind_dec_le {M₀ : ℕ} (e : Fin M₀ ≃ (Fin B → Fin M)) (m₀ : Fin M
       C.loss (C.st d (arrS d₁ (blockEquiv z)) j) (Fin.snoc (α := fun _ => Fin M) (e w) m₀ j)
         (blockEquiv z j) := by
     intro j
-    simp only [blockLoss, j.2, dite_true, tableOf, tabAt_val]
+    simp only [blockLoss, j.isLt, dite_true, tableOf, tabAt_val]
   have hind : ∀ {P Q : Prop}, ind P + ind Q < 1 → ¬ P ∧ ¬ Q := by
     intro P Q hPQ
     refine ⟨fun hP => ?_, fun hQ => ?_⟩
@@ -521,7 +521,7 @@ lemma ind_dec_le {M₀ : ℕ} (e : Fin M₀ ≃ (Fin B → Fin M)) (m₀ : Fin M
     funext i
     have hi : i.val + n * j < (B + 1) * n := by
       have h₁ : n * (j + 1) ≤ n * (B + 1) := Nat.mul_le_mul_left _ hj
-      have h₂ := i.2
+      have h₂ := i.isLt
       rw [Nat.mul_add, Nat.mul_one] at h₁
       rw [Nat.mul_comm (B + 1) n]
       omega
@@ -531,7 +531,7 @@ lemma ind_dec_le {M₀ : ℕ} (e : Fin M₀ ≃ (Fin B → Fin M)) (m₀ : Fin M
   · have hj' : j < B + 1 := by omega
     rw [hb j hj']
     exact (hgood ⟨j, hj'⟩).1
-  · have hj' : (j : ℕ) < B + 1 := by have := j.2; omega
+  · have hj' : (j : ℕ) < B + 1 := by have := j.isLt; omega
     have hg := (hgood ⟨j, hj'⟩).2
     have hc : (⟨j, hj'⟩ : Fin (B + 1)) = Fin.castSucc j := rfl
     rw [hc, Fin.snoc_castSucc] at hg

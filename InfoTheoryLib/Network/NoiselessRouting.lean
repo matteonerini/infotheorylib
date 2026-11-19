@@ -69,10 +69,10 @@ open Classical in
 def RoutingScheme.code (S : RoutingScheme cap b D) :
     NetCode V (fun k l => ↥(S.carry k l) → Bool) (fun j => Fin (b j) → Bool) where
   enc k l u mk := fun r =>
-    if h : r.1.1 = k then mk (h ▸ r.1.2)
+    if h : r.val.1 = k then mk (h ▸ r.val.2)
     else
-      have hex := (S.forward k l r.1 r.2).resolve_left h
-      u (Classical.choose hex) (Classical.choose_spec hex).1 ⟨r.1, (Classical.choose_spec hex).2⟩
+      have hex := (S.forward k l r.val r.property).resolve_left h
+      u (Classical.choose hex) (Classical.choose_spec hex).1 ⟨r.val, (Classical.choose_spec hex).2⟩
   dec l j u := fun i =>
     if h : l ∈ D j then
       have hex := S.deliver ⟨j, i⟩ l h
@@ -82,7 +82,7 @@ def RoutingScheme.code (S : RoutingScheme cap b D) :
 omit [Fintype V] in
 /-- Every index of the code of a routing scheme is the tuple of the right bits. -/
 lemma RoutingScheme.code_edge [Finite V] (S : RoutingScheme cap b D) (m : ∀ j, Fin (b j) → Bool)
-    (k : V) : ∀ (l : V) (r : ↥(S.carry k l)), S.code.edge m k l r = m r.1.1 r.1.2 := by
+    (k : V) : ∀ (l : V) (r : ↥(S.carry k l)), S.code.edge m k l r = m r.val.1 r.val.2 := by
   induction k using WellFoundedLT.induction with
   | ind k ih =>
     intro l r
@@ -93,7 +93,7 @@ lemma RoutingScheme.code_edge [Finite V] (S : RoutingScheme cap b D) (m : ∀ j,
       simp only at h
       subst h
       rfl
-    · have hex := (S.forward k l r.1 r.2).resolve_left h
+    · have hex := (S.forward k l r.val r.property).resolve_left h
       exact ih _ (Classical.choose_spec hex).1 _ _
 
 omit [Fintype V] in
@@ -331,7 +331,7 @@ theorem isRoutingAchievable_all_nodes {s : V} {R : ℝ} (hR : 0 ≤ R)
     rintro ⟨j, i⟩
     by_contra hj
     have h0 := ceil_singleRate_of_ne s R n (j := j) hj
-    have hi := i.2
+    have hi := i.isLt
     omega
   have hcover : ∀ k, k ≠ s → Fintype.card (Σ j, Fin (⌈(n : ℝ) * singleRate s R j⌉₊)) ≤
       ∑ j, ⌊(n : ℝ) * N.C j k⌋₊ := by

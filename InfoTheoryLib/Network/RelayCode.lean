@@ -123,7 +123,7 @@ variable {𝒲 α β : Type*} {ν : 𝒲 → ℝ} {W : α → β → ℝ} {enc :
 /-- **The closed form of a feedback law.** -/
 lemma fbLaw_eq_prod (k : ℕ) (w : 𝒲) (z : Fin k → β) :
     fbLaw ν W enc k (w, z) =
-      ν w * ∏ i : Fin k, W (enc i w fun t : Fin i => z ⟨t, t.2.trans i.2⟩) (z i) := by
+      ν w * ∏ i : Fin k, W (enc i w fun t : Fin i => z ⟨t, t.isLt.trans i.isLt⟩) (z i) := by
   induction k with
   | zero => simp [fbLaw]
   | succ k ih =>

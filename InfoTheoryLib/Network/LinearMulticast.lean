@@ -117,7 +117,7 @@ abbrev SrcIdx (s : V) (ω : ℕ) := Σ j, Fin (srcDim s ω j)
 omit [Fintype V] in
 lemma SrcIdx.fst_eq {s : V} {ω : ℕ} (r : SrcIdx s ω) : r.1 = s := by
   by_contra h
-  have := r.2.2
+  have := r.2.isLt
   simp [srcDim, h] at this
 
 lemma card_srcIdx (s : V) (ω : ℕ) : Fintype.card (SrcIdx s ω) = ω := by
@@ -153,7 +153,7 @@ def Multigraph.maxflowEdges [DecidableEq E] (s : V) (ξ : Finset E) : ℕ :=
 /-- (19.17) without the source: off the source, a global encoding kernel is the combination of the
 kernels of the channels into its tail with the local encoding kernels. -/
 lemma globalVec_eq_sum (a : LinCoeff F E (srcDim s ω)) {e : E} (he : G.tail e ≠ s) :
-    globalVec G a e = ∑ d : {d // G.head d = G.tail e}, a.x d.1 e • globalVec G a d.1 := by
+    globalVec G a e = ∑ d : {d // G.head d = G.tail e}, a.x d.val e • globalVec G a d.val := by
   funext r
   have hr : ¬ r.1 = G.tail e := by rw [SrcIdx.fst_eq r]; exact Ne.symm he
   rw [globalVec_eq]
@@ -168,11 +168,11 @@ lemma globalVec_mem_span_crossEdges (a : LinCoeff F E (srcDim s ω)) {U : Finset
   | ind k ih =>
     rw [globalVec_eq_sum G a (fun h => he (h ▸ hs))]
     refine Submodule.sum_mem _ fun d _ => Submodule.smul_mem _ _ ?_
-    by_cases hd : G.tail d.1 ∈ U
-    · refine Submodule.subset_span ⟨d.1, ?_, rfl⟩
+    by_cases hd : G.tail d.val ∈ U
+    · refine Submodule.subset_span ⟨d.val, ?_, rfl⟩
       simp only [Multigraph.crossEdges, coe_filter, mem_univ, true_and, Set.mem_ofPred_eq]
-      exact ⟨hd, by rw [d.2]; exact he⟩
-    · exact ih _ ((G.lt d.1).trans_eq (d.2.trans hk)) d.1 hd rfl
+      exact ⟨hd, by rw [d.property]; exact he⟩
+    · exact ih _ ((G.lt d.val).trans_eq (d.property.trans hk)) d.val hd rfl
 
 /-- The kernels of the channels into the nodes beyond a cut lie in the span of the cut. -/
 lemma nodeSpan_le_span_crossEdges (a : LinCoeff F E (srcDim s ω)) {U T : Finset V} (hs : s ∈ U)
@@ -269,7 +269,7 @@ variable (G a)
 
 /-- The matrix `F_{In(t)}` of (19.42), with the channels into `t` as rows. -/
 def inKernels (t : V) : Matrix {e // G.head e = t} (SrcIdx s ω) F :=
-  fun e r => globalVec G a e.1 r
+  fun e r => globalVec G a e.val r
 
 lemma nodeSpan_singleton_eq (t : V) :
     nodeSpan G a {t} = Submodule.span F (Set.range (inKernels G a t).row) := by
@@ -280,12 +280,12 @@ lemma nodeSpan_singleton_eq (t : V) :
   · rintro ⟨e, he, rfl⟩
     exact ⟨⟨e, mem_singleton.1 he⟩, rfl⟩
   · rintro ⟨e, rfl⟩
-    exact ⟨e.1, mem_singleton.2 e.2, rfl⟩
+    exact ⟨e.val, mem_singleton.2 e.property, rfl⟩
 
 /-- `dim V_t` is the rank of `F_{In(t)}`. -/
 lemma finrank_nodeSpan_singleton (t : V) :
     finrank F (nodeSpan G a {t}) = (inKernels G a t).rank := by
-  rw [Matrix.rank_eq_finrank_span_row, nodeSpan_singleton_eq]
+  rw [← Matrix.finrank_span_range_row, nodeSpan_singleton_eq]
 
 /-- **(19.43)–(19.44)** Node `t` can recover the message `x` from the symbols `x ⬝ fₑ` received on
 its input channels if and only if `dim V_t = ω`. -/
@@ -294,7 +294,7 @@ theorem injective_received_iff (t : V) :
   classical
   have hd : finrank F (SrcIdx s ω → F) = ω := by
     rw [Module.finrank_fintype_fun_eq_card, card_srcIdx]
-  rw [finrank_nodeSpan_singleton, Matrix.rank]
+  rw [finrank_nodeSpan_singleton, ← Matrix.finrank_range_mulVecLin]
   constructor
   · intro h
     exact (LinearMap.finrank_range_of_inj (f := (inKernels G a t).mulVecLin) h).trans hd
@@ -307,7 +307,7 @@ theorem injective_received_iff (t : V) :
 lemma le_finrank_of_det_transfer_ne_zero (t : V) (h : (transfer G a t).det ≠ 0) :
     ω ≤ finrank F (nodeSpan G a {t}) := by
   classical
-  let Z : Matrix (SrcIdx s ω) {e // G.head e = t} F := fun r e => a.z t e.1 r
+  let Z : Matrix (SrcIdx s ω) {e // G.head e = t} F := fun r e => a.z t e.val r
   have htr : transfer G a t = Z * inKernels G a t := by
     ext r r'
     rw [Matrix.mul_apply]
@@ -387,21 +387,21 @@ lemma globalVec_transform (a : LinCoeff F E (srcDim s ω)) (A : Matrix (SrcIdx s
   induction hk : G.tail e using WellFoundedLT.induction generalizing e with
   | ind k ih =>
     funext r
-    have hih : ∀ d : {d // G.head d = G.tail e}, globalVec G (a.transform A) d.1 =
-        A.mulVec (globalVec G a d.1) := fun d =>
-      ih _ ((G.lt d.1).trans_eq (d.2.trans hk)) d.1 rfl
+    have hih : ∀ d : {d // G.head d = G.tail e}, globalVec G (a.transform A) d.val =
+        A.mulVec (globalVec G a d.val) := fun d =>
+      ih _ ((G.lt d.val).trans_eq (d.property.trans hk)) d.val rfl
     rw [globalVec_eq, Matrix.mulVec, dotProduct]
     simp only [globalVec_eq G a e, mul_add, sum_add_distrib]
     congr 1
     · simp only [SrcIdx.fst_eq, LinCoeff.transform, mul_ite, mul_zero]
       split_ifs <;> simp
-    · have hd : ∀ d : {d // G.head d = G.tail e}, globalVec G (a.transform A) d.1 r =
-          ∑ r', A r r' * globalVec G a d.1 r' := fun d => by rw [hih d]; rfl
+    · have hd : ∀ d : {d // G.head d = G.tail e}, globalVec G (a.transform A) d.val r =
+          ∑ r', A r r' * globalVec G a d.val r' := fun d => by rw [hih d]; rfl
       simp only [hd, mul_sum]
       rw [sum_comm]
       refine sum_congr rfl fun r' _ => sum_congr rfl fun d _ => ?_
-      change a.x d.1 e * (A r r' * globalVec G a d.1 r') =
-        A r r' * (a.x d.1 e * globalVec G a d.1 r')
+      change a.x d.val e * (A r r' * globalVec G a d.val r') =
+        A r r' * (a.x d.val e * globalVec G a d.val r')
       ring
 
 /-- The spans of the transformation are the images of the spans under `A`. -/

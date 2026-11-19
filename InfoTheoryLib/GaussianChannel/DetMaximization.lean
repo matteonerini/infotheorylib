@@ -318,10 +318,10 @@ def burgProgram (l : ℕ) (a : ℕ → ℝ) :
   dom := {K | K.PosDef}
   obj K := -log K.det
   ineq j _ := nomatch j
-  A := { toFun := fun K s => K s.1.1 s.1.2
+  A := { toFun := fun K s => K s.val.1 s.val.2
          map_add' := fun _ _ => rfl
          map_smul' := fun _ _ => rfl }
-  b s := a ((s.1.2 : ℕ) - s.1.1)
+  b s := a ((s.val.2 : ℕ) - s.val.1)
 
 /-- **Page E-2 of [elgamal2010].** The problem of Burg is convex. -/
 theorem burgProgram_isConvex (l : ℕ) (a : ℕ → ℝ) : (burgProgram (d := d) l a).IsConvex :=

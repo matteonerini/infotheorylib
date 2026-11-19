@@ -61,7 +61,7 @@ lemma condMutIndepOn_empty (Z : ∀ j, Ω → B j) (Y : Ω → γ) : CondMutInde
   rw [card_empty, pow_zero, mul_one, prod_empty, mul_one]
   refine dist_congr_of_iff μ fun ω => ?_
   have hw : blockRV Z ∅ ω = fun j : (∅ : Finset κ) => z j :=
-    funext fun j => absurd j.2 (notMem_empty _)
+    funext fun j => absurd j.property (notMem_empty _)
   simp [hw]
 
 /-- Conditional mutual independence is the product form for the whole family. -/
@@ -94,7 +94,8 @@ variable [DecidableEq κ]
 /-- Two vectors on `insert a s` that agree at `a` and on `s` are equal. -/
 lemma eq_of_insert_restrict {a : κ} {s : Finset κ} {w w' : ∀ j : ↥(insert a s), B j}
     (h₁ : w ⟨a, mem_insert_self a s⟩ = w' ⟨a, mem_insert_self a s⟩)
-    (h₂ : ∀ j : s, w ⟨j, mem_insert_of_mem j.2⟩ = w' ⟨j, mem_insert_of_mem j.2⟩) : w = w' := by
+    (h₂ : ∀ j : s, w ⟨j, mem_insert_of_mem j.property⟩ =
+      w' ⟨j, mem_insert_of_mem j.property⟩) : w = w' := by
   funext ⟨j, hj⟩
   rcases mem_insert.1 hj with rfl | hj'
   · exact h₁
@@ -106,7 +107,8 @@ lemma dist_pair_blockRV_insert (μ : Ω → ℝ) (Z : ∀ j, Ω → B j) (Y : Ω
     dist μ (pair Y (blockRV Z (insert a s))) (y, fun j => z j) =
       dist μ (pair (Z a) (pair Y (blockRV Z s))) (z a, (y, fun j : s => z j)) := by
   have hr : Function.Injective fun p : γ × (∀ j : ↥(insert a s), B j) =>
-      (p.2 ⟨a, mem_insert_self a s⟩, (p.1, fun j : s => p.2 ⟨j, mem_insert_of_mem j.2⟩)) := by
+      (p.2 ⟨a, mem_insert_self a s⟩,
+        (p.1, fun j : s => p.2 ⟨j, mem_insert_of_mem j.property⟩)) := by
     rintro ⟨y₁, w₁⟩ ⟨y₂, w₂⟩ h
     simp only [Prod.mk.injEq] at h
     obtain ⟨h₁, h₂, h₃⟩ := h
@@ -134,7 +136,7 @@ theorem condMutIndepOn_insert_iff [∀ j, Finite (B j)] (hμ : IsPMF μ) (Z : �
         rw [dist_pair_blockRV_insert, card_insert_of_notMem ha, prod_insert ha,
           Function.update_self] at hx
         have e₁ : (fun j : s => Function.update z a x j) = fun j : s => z j :=
-          funext fun j => Function.update_of_ne (hne j j.2) _ _
+          funext fun j => Function.update_of_ne (hne j j.property) _ _
         have e₂ : ∏ j ∈ s, dist μ (pair Y (Z j)) (y, Function.update z a x j) =
             ∏ j ∈ s, dist μ (pair Y (Z j)) (y, z j) :=
           prod_congr rfl fun j hj => by rw [Function.update_of_ne (hne j hj)]
@@ -154,7 +156,7 @@ theorem condMutIndepOn_insert_iff [∀ j, Finite (B j)] (hμ : IsPMF μ) (Z : �
       with hz
     have hza : z a = x := Function.update_self _ _ _
     have hzs : (fun j : s => z j) = w := funext fun j => by
-      simp [hz, Function.update_of_ne (hne j j.2), j.2]
+      simp [hz, Function.update_of_ne (hne j j.property), j.property]
     have h₁ := h y z
     rw [dist_pair_blockRV_insert, card_insert_of_notMem ha, prod_insert ha, hza, hzs] at h₁
     have h₂ := hs y z
@@ -181,7 +183,8 @@ theorem condEntropy_blockRV_insert (hμ : IsPMF μ) (Z : ∀ j, Ω → B j) (Y :
   rw [condEntropy_eq_sub hμ, condEntropy_eq_sub hμ, condEntropy_eq_sub hμ,
     entropyRV_pair_comm μ (blockRV Z s) Y]
   have hf : Function.Injective fun p : γ × (∀ j : ↥(insert a s), B j) =>
-      ((fun j : s => p.2 ⟨j, mem_insert_of_mem j.2⟩, p.1), p.2 ⟨a, mem_insert_self a s⟩) := by
+      ((fun j : s => p.2 ⟨j, mem_insert_of_mem j.property⟩, p.1),
+        p.2 ⟨a, mem_insert_self a s⟩) := by
     rintro ⟨y₁, w₁⟩ ⟨y₂, w₂⟩ h
     simp only [Prod.mk.injEq] at h
     obtain ⟨⟨h₁, h₂⟩, h₃⟩ := h
@@ -208,7 +211,7 @@ lemma condEntropy_pair_blockRV_anti (hμ : IsPMF μ) (Z : ∀ j, Ω → B j) (Y 
     [Fintype β] (X : Ω → β) {s t : Finset κ} (hst : s ⊆ t) :
     H[X | pair (blockRV Z t) Y ; μ] ≤ H[X | pair (blockRV Z s) Y ; μ] :=
   condEntropy_le_condEntropy_comp hμ X (pair (blockRV Z t) Y)
-    (fun p => (fun j : s => p.1 ⟨j, hst j.2⟩, p.2))
+    (fun p => (fun j : s => p.1 ⟨j, hst j.property⟩, p.2))
 
 /-- `I(Zₐ; Z_s | Y)` grows with `s`. -/
 lemma condMutualInfo_blockRV_mono (hμ : IsPMF μ) (Z : ∀ j, Ω → B j) (Y : Ω → γ) {β : Type*}

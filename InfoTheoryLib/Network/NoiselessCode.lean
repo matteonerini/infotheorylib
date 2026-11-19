@@ -189,8 +189,8 @@ theorem NetCode.cut_bound [∀ j, Nonempty (M j)] (c : NetCode V A M) (D : V →
   classical
   set T := cutSources D S with hT
   have hTS : ∀ j, j ∉ S → j ∉ T := fun j hj hjT => hj (Finset.mem_filter.mp hjT).1
-  let Φ : (∀ j, M j) → (∀ j : ↥(Tᶜ), M j) × (∀ p : ↥(S ×ˢ Sᶜ), A p.1.1 p.1.2) :=
-    fun m => (fun j => m j, fun p => c.edge m p.1.1 p.1.2)
+  let Φ : (∀ j, M j) → (∀ j : ↥(Tᶜ), M j) × (∀ p : ↥(S ×ˢ Sᶜ), A p.val.1 p.val.2) :=
+    fun m => (fun j => m j, fun p => c.edge m p.val.1 p.val.2)
   have hinj : Set.InjOn Φ {m | c.Correct D m} := by
     intro m hm m' hm' hΦ
     have h₁ : ∀ j, j ∉ T → m j = m' j := fun j hj =>
@@ -206,11 +206,11 @@ theorem NetCode.cut_bound [∀ j, Nonempty (M j)] (c : NetCode V A M) (D : V →
       exact c.out_congr (fun i hi => h₁ i (hTS i hi)) h₂ (Finset.mem_compl.mp hlS) j
     · exact h₁ j hj
   have hcard : #{m : ∀ j, M j | c.Correct D m} ≤
-      Fintype.card ((∀ j : ↥(Tᶜ), M j) × (∀ p : ↥(S ×ˢ Sᶜ), A p.1.1 p.1.2)) :=
+      Fintype.card ((∀ j : ↥(Tᶜ), M j) × (∀ p : ↥(S ×ˢ Sᶜ), A p.val.1 p.val.2)) :=
     Finset.card_le_card_of_injOn Φ (fun _ _ => Finset.mem_univ _)
       (fun m hm m' hm' h => hinj (by simpa using hm) (by simpa using hm') h)
   rw [Fintype.card_prod, Fintype.card_pi, Fintype.card_pi] at hcard
-  have hX : (∏ p : ↥(S ×ˢ Sᶜ), (Fintype.card (A p.1.1 p.1.2) : ℝ)) =
+  have hX : (∏ p : ↥(S ×ˢ Sᶜ), (Fintype.card (A p.val.1 p.val.2) : ℝ)) =
       ∏ j ∈ S, ∏ k ∈ Sᶜ, (Fintype.card (A j k) : ℝ) := by
     rw [← Finset.prod_product']
     exact Finset.prod_coe_sort (S ×ˢ Sᶜ) fun p : V × V => (Fintype.card (A p.1 p.2) : ℝ)

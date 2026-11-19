@@ -169,7 +169,7 @@ theorem sum_dfGenie_win_le (hp : IsPMF p) (hW : IsChannel W) (hκc : ∀ k, IsCh
     intro B
     by_cases hB : j ≤ (B : ℕ) ∧ (B : ℕ) - j < d
     · simp only [h, hB, and_self, ite_true]
-      have htN : (B : ℕ) - j < N := hB.2.trans d.2
+      have htN : (B : ℕ) - j < N := hB.2.trans d.isLt
       have ht := sum_dfBlock_test_le (Mm := Mm) (n := n) d₀ hW hp hκc hκ
         (τ := dfTagOf msg B) (τ' := dfTagOf (Function.update msg j m) B)
         ⟨(B : ℕ) - j, htN⟩ d (by
@@ -207,11 +207,11 @@ theorem sum_dfGenie_win_le (hp : IsPMF p) (hW : IsChannel W) (hκc : ∀ k, IsCh
         ∏ k ∈ univ.filter (fun k : Fin N => (k : ℕ) < d), e' k := by
       rw [dfEd, mul_sum, ← sum_neg_distrib, exp_sum]
       refine prod_congr rfl fun k _ => ?_
-      simp only [he', k.2, dite_true]
+      simp only [he', k.isLt, dite_true]
     rw [h₁]
     refine prod_bij (fun B hB => (⟨(B : ℕ) - j, by
       have := (mem_filter.mp hB).2.2
-      have := d.2
+      have := d.isLt
       omega⟩ : Fin N)) (fun B hB => ?_) (fun a ha a' ha' he => ?_) (fun k hk => ?_) fun B _ => rfl
     · exact mem_filter.mpr ⟨mem_univ _, (mem_filter.mp hB).2.2⟩
     · have h₂ := (mem_filter.mp ha).2.1
@@ -310,7 +310,7 @@ theorem sum_dfGenie_not_good_le (hp : IsPMF p) (hW : IsChannel W) (hκc : ∀ k,
     by_cases hc : (d : ℕ) ≠ 0 ∧ m ≠ msg j
     · have hjb : ∀ t, t < (d : ℕ) → j + t < b := fun t ht => by
         have := mem_range.mp hj
-        have := d.2
+        have := d.isLt
         omega
       have h₁ := sum_dfGenie_win_le d₀ hp hW hκc hκ msg d hjb hc.2 ε dξ
       refine le_trans (sum_le_sum fun ξ _ => mul_le_mul_of_nonneg_left (ind_mono fun h => h.2.2)
@@ -355,7 +355,7 @@ lemma dfWin_true_of_good {L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ} {ε : ℝ
     dfWin d₀ L₀ ε (fun B => (arrOf dξ ξ B).1) d (fun B i => (arrOf dξ ξ B).2 i d) j msg := by
   intro k hk
   have hjk : j + k < b := by
-    have := k.2
+    have := k.isLt
     omega
   have h₁ := h ⟨j + k, hjk⟩
   have e : arrOf dξ ξ (j + k) = ξ ⟨j + k, hjk⟩ := arrOf_coe dξ ξ ⟨j + k, hjk⟩
@@ -374,7 +374,7 @@ lemma dfWin_wrong_of_good {L₀ : (∀ l, X l) × (∀ l, Y l) → ℝ} {ε : �
       (Function.update msg j m) := by
   intro hw
   refine h.2 d hd j hj m hm fun t ht => ?_
-  have htN : t < N := ht.trans d.2
+  have htN : t < N := ht.trans d.isLt
   simp only [dfEvt, htN, dite_true]
   exact hw ⟨t, htN⟩ ht
 

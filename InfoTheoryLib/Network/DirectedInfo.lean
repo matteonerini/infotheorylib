@@ -156,7 +156,7 @@ variable {X₁ X₂ Y : Type*} [Fintype X₁] [Fintype X₂] [Fintype Y] {V : X�
 /-- The past inputs of a strategy from the masked past outputs. -/
 def xFromPast {α : Type*} (s : Strat n α Y) (k' : ℕ) (p : Fin n → Option Y) : Fin n → Option α :=
   fun j => if (j : ℕ) < k' then
-    some (s j fun t => (p ⟨t, t.2.trans j.2⟩).getD (Classical.arbitrary Y)) else none
+    some (s j fun t => (p ⟨t, t.isLt.trans j.isLt⟩).getD (Classical.arbitrary Y)) else none
 
 /-- The inputs of a strategy, as a sequence. -/
 def stratSeq {α : Type*} (s : Strat n α Y) (y : Fin n → Y) : Fin n → α :=
@@ -169,7 +169,7 @@ lemma xFromPast_eq {α : Type*} (s : Strat n α Y) {i k' : ℕ} (h : k' ≤ i + 
   funext j
   by_cases hj : (j : ℕ) < k'
   · have ht : ∀ t : Fin j, (t : ℕ) < i := fun t => by
-      have := t.2
+      have := t.isLt
       omega
     simp only [xFromPast, degradedBCPast, hj, ite_true, stratSeq]
     congr 2
@@ -227,7 +227,7 @@ theorem cInfo_stratW_eq_causalDirectedInfo (hp₁ : IsPMF p₁) (hp₂ : IsPMF p
       have e : (fun z : (Strat n X₁ Y × Strat n X₂ Y) × (Fin n → Y) =>
           stratEnc n i z.1 (fbPre i z.2)) = X i := by
         funext z
-        simp [stratEnc, X, stratSeq, i.2]
+        simp [stratEnc, X, stratSeq, i.isLt]
       rw [e] at h
       exact h
     exact condEntropy_of_channel (W := V) id hlaw
@@ -256,13 +256,14 @@ theorem cInfo_stratW_eq_causalDirectedInfo (hp₁ : IsPMF p₁) (hp₂ : IsPMF p
     have e : (fun t : (Fin i → Y) × (Strat n X₁ Y × Strat n X₂ Y) => stratEnc n i t.2 t.1) ∘
         pair (fun z => fbPre i z.2) Prod.fst = X i := by
       funext z
-      simp [stratEnc, X, stratSeq, i.2, pair]
+      simp [stratEnc, X, stratSeq, i.isLt, pair]
     rw [e]
   let ar : Y := Classical.arbitrary Y
   let C : Fin n → (Strat n X₁ Y × Strat n X₂ Y) × (Fin n → Y) →
       (Fin n → Option Y) × (Fin n → Option X₂) := fun i => pair (P i) (Q₂ ((i : ℕ) + 1))
   have hfpre : ∀ (i : Fin n) (y : Fin n → Y),
-      (fun t : Fin i => (degradedBCPast (i : ℕ) y ⟨t, t.2.trans i.2⟩).getD ar) = fbPre i y := by
+      (fun t : Fin i => (degradedBCPast (i : ℕ) y ⟨t, t.isLt.trans i.isLt⟩).getD ar) =
+        fbPre i y := by
     intro i y
     funext t
     simp [degradedBCPast]
@@ -272,10 +273,10 @@ theorem cInfo_stratW_eq_causalDirectedInfo (hp₁ : IsPMF p₁) (hp₂ : IsPMF p
     intro i
     have h := condEntropy_le_condEntropy_comp hμ (O i) (pair (C i) T₁)
       (fun t : ((Fin n → Option Y) × (Fin n → Option X₂)) × Strat n X₁ Y =>
-        (t.2 i fun u => (t.1.1 ⟨u, u.2.trans i.2⟩).getD ar,
+        (t.2 i fun u => (t.1.1 ⟨u, u.isLt.trans i.isLt⟩).getD ar,
           (t.1.2 i).getD (Classical.arbitrary X₂)))
     have e : (fun t : ((Fin n → Option Y) × (Fin n → Option X₂)) × Strat n X₁ Y =>
-        (t.2 i fun u => (t.1.1 ⟨u, u.2.trans i.2⟩).getD ar,
+        (t.2 i fun u => (t.1.1 ⟨u, u.isLt.trans i.isLt⟩).getD ar,
           (t.1.2 i).getD (Classical.arbitrary X₂))) ∘ pair (C i) T₁ = X i := by
       funext z
       simp only [Function.comp, pair, C, P, Q₂, T₁, X, hfpre]
@@ -342,7 +343,7 @@ theorem cInfo_stratW_eq_causalDirectedInfo (hp₁ : IsPMF p₁) (hp₂ : IsPMF p
       refine le_antisymm ?_ (condMutualInfo_nonneg hμ _ _ _)
       have hle := condMutualInfo_cond_comp_le hμ T₁ T₂ (pair (P i) (Q₂ i))
         (fun t : ((Fin n → Option Y) × (Fin n → Option X₂)) × Strat n X₂ Y =>
-          t.2 i fun u => (t.1.1 ⟨u, u.2.trans i.2⟩).getD ar)
+          t.2 i fun u => (t.1.1 ⟨u, u.isLt.trans i.isLt⟩).getD ar)
       rw [h0] at hle
       refine le_trans (le_of_eq ?_) hle
       refine condMutualInfo_cond_congr' hμ T₁ T₂
@@ -410,7 +411,7 @@ theorem cInfo_stratW_eq_causalDirectedInfo (hp₁ : IsPMF p₁) (hp₂ : IsPMF p
       intro hj
       exact (hstep ⟨j, hj⟩ (ih (Nat.le_of_succ_le hj))).1
   have hM : ∀ i : Fin n, I[T₂ : O i | C i ; μ] = 0 := fun i =>
-    (hstep i (hall i i.2.le)).2
+    (hstep i (hall i i.isLt.le)).2
   -- the terms of the sum
   have hterm₁ : ∀ i : Fin n, H[O i | pair (P i) T₂ ; μ] = H[O i | C i ; μ] := by
     intro i

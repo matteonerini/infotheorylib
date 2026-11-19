@@ -112,7 +112,7 @@ lemma sum_blockDist_update (n : ℕ) [Fintype (A n)] (x : ∀ i, A i) :
   simp only [Function.update_self]
   congr 2
   funext i
-  exact Function.update_of_ne (fun h => by simpa [h] using i.2) _ _
+  exact Function.update_of_ne (fun h => by simpa [h] using i.property) _ _
 
 end Dist
 
@@ -129,8 +129,8 @@ omit [Fintype Ω] in
 lemma chainPoint_restrict (ω₀ : Ω) (k : ℕ) (u : ∀ i : range k, A i) (y : A k) :
     (fun i : range k => chainPoint X ω₀ k u y i) = u := by
   funext i
-  have hi : (i : ℕ) ≠ k := fun h => by simpa [h] using i.2
-  simp [chainPoint, Function.update_of_ne hi, mem_range.1 i.2]
+  have hi : (i : ℕ) ≠ k := fun h => by simpa [h] using i.property
+  simp [chainPoint, Function.update_of_ne hi, mem_range.1 i.property]
 
 omit [Fintype Ω] in
 lemma chainPoint_self (ω₀ : Ω) (k : ℕ) (u : ∀ i : range k, A i) (y : A k) :
@@ -155,7 +155,7 @@ lemma markovChain_block_iff (hμ : IsPMF μ) (X : ∀ i, Ω → A i) (k : ℕ) :
     have hr : (fun i : range k => Function.update (chainPoint X ω₀ k u y) (k + 1) z i) = u := by
       funext i
       have hi : (i : ℕ) ≠ k + 1 := by
-        have := mem_range.1 i.2
+        have := mem_range.1 i.property
         omega
       rw [Function.update_of_ne hi]
       exact congrFun (chainPoint_restrict ω₀ k u y) i
@@ -493,7 +493,7 @@ lemma markovChain_last_of_factorization [∀ i, Finite (A i)] (hμ : IsPMF μ) {
   have hlow : ∀ i, i ≠ k + 2 → x i = x₀ i := fun i hi => Function.update_of_ne hi _ _
   have hu : (fun i : range (k + 1) => x i) = u := by
     funext i
-    have : (i : ℕ) ≠ k + 2 := by have := mem_range.1 i.2; omega
+    have : (i : ℕ) ≠ k + 2 := by have := mem_range.1 i.property; omega
     rw [hlow _ this]
     exact congrFun (chainPoint_restrict ω₀ (k + 1) u y) i
   have hy' : x (k + 1) = y := by

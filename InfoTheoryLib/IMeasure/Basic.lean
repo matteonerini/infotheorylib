@@ -125,7 +125,7 @@ section Atoms
 omit [Fintype ι] [DecidableEq ι] in
 /-- A set is the singleton of an atom if its members are the atoms with the same indices. -/
 lemma singleton_eq_of_forall {S : NAtom ι} {F : Finset (NAtom ι)}
-    (h : ∀ a : NAtom ι, a ∈ F ↔ ∀ i, i ∈ a.1 ↔ i ∈ S.1) : ({S} : Finset (NAtom ι)) = F := by
+    (h : ∀ a : NAtom ι, a ∈ F ↔ ∀ i, i ∈ a.val ↔ i ∈ S.val) : ({S} : Finset (NAtom ι)) = F := by
   ext a
   rw [mem_singleton, h]
   constructor
@@ -211,7 +211,7 @@ theorem iMeasure_atom_pair (hμ : IsPMF μ) (i j : ι) :
 
 /-- **Section 3.4.** `μ*` is nonnegative on the atoms with at most two positive indices, as its
 values there are Shannon's information measures. -/
-theorem iMeasure_atom_nonneg (hμ : IsPMF μ) (S : NAtom ι) (hS : #S.1 ≤ 2) :
+theorem iMeasure_atom_nonneg (hμ : IsPMF μ) (S : NAtom ι) (hS : #S.val ≤ 2) :
     0 ≤ iMeasure μ X {S} := by
   obtain ⟨S, hne⟩ := S
   have hpos : 0 < #S := card_pos.2 hne

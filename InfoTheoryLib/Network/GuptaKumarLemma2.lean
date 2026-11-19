@@ -660,7 +660,7 @@ theorem gk_capacity_upper_whp {ν : ℝ} {P : ℝ≥0} (hν : 2 < ν) (hP : 0 < 
   refine ⟨b, hb, tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds h
     (fun _ => zero_le) fun N => measure_mono ?_⟩
   rintro w ⟨n, d, s, D, R, hd, hs, hD, hach, hle⟩
-  refine ⟨(P : ℝ) • 1, PosSemidef.one.smul P.2, ?_, hle.trans (hach.sum_le_gain hd hs hD)⟩
+  refine ⟨(P : ℝ) • 1, PosSemidef.one.smul P.property, ?_, hle.trans (hach.sum_le_gain hd hs hD)⟩
   simp [trace_smul]
   linarith
 

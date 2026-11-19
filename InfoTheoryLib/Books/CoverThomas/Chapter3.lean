@@ -135,7 +135,7 @@ lemma sampleEntropy_bernoulli {θ : ℝ} (h0 : 0 < θ) (h1 : θ < 1) {n : ℕ} (
     sampleEntropy (bernoulliPMF θ) x =
       binEntropy θ - (((numOnes x : ℕ) : ℝ) / n - θ) * log (θ / (1 - θ)) := by
   have hn' : (n : ℝ) ≠ 0 := by exact_mod_cast hn.ne'
-  have hk : (numOnes x : ℕ) ≤ n := Nat.lt_succ_iff.1 (numOnes x).2
+  have hk : (numOnes x : ℕ) ≤ n := Nat.lt_succ_iff.1 (numOnes x).isLt
   have hq : 0 < 1 - θ := by linarith
   rw [sampleEntropy, ← bernSeq_eq_iidPMF, bernSeq_eq, log_mul (by positivity) (by positivity),
     log_pow, log_pow, Nat.cast_sub hk, log_div h0.ne' hq.ne', binEntropy_eq_mul_log_inv, log_inv,

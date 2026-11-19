@@ -369,7 +369,7 @@ theorem swCondH_zTuple {p : mLetter α γ → ℝ} (hp : IsPMF p) {S : Finset (F
         simp [hDz, maskL, hj', hj, swRest, hΓ]
     · funext a
       funext j
-      have hj : (j : Fin N) ∈ Sᶜ := by simpa using j.2
+      have hj : (j : Fin N) ∈ Sᶜ := by simpa using j.property
       simp [hDz, maskL, hj, swRest, hΓ]
   rw [hC]
   -- `Z` is known from the condition.

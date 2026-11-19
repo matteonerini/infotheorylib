@@ -85,7 +85,7 @@ lemma exists_code_of_card_le [Nonempty α] {M n : ℕ} (hM : 0 < M) (T : Finset 
   classical
   let e := T.equivFin
   refine ⟨⟨fun x => if hx : x ∈ T then Fin.castLE hT (e ⟨x, hx⟩) else ⟨0, hM⟩,
-    fun m => if h : (m : ℕ) < T.card then (e.symm ⟨m, h⟩).1 else fun _ => Classical.arbitrary α⟩,
+    fun m => if h : (m : ℕ) < T.card then (e.symm ⟨m, h⟩).val else fun _ => Classical.arbitrary α⟩,
     fun x hx => ?_⟩
   simp [hx]
 

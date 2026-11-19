@@ -317,7 +317,7 @@ lemma exists_tri_code {n Lu L₁ L₂ : ℕ} [NeZero Lu] [NeZero L₁] [NeZero L
     by_cases h₀₁' : j = 0 ∧ k = 1
     · obtain ⟨rfl, rfl⟩ := h₀₁'
       have h₁ : Nat.card (Set.range (part 0 1)) ≤ Nat.card (Fin Lu × Fin L₁) :=
-        Nat.card_le_card_of_injective (fun t => (t.1.1, t.1.2.1)) (by
+        Nat.card_le_card_of_injective (fun t => (t.val.1, t.val.2.1)) (by
           rintro ⟨_, t, rfl⟩ ⟨_, t', rfl⟩ h
           refine Subtype.ext ?_
           simp only [e₀₁] at h ⊢
@@ -328,7 +328,7 @@ lemma exists_tri_code {n Lu L₁ L₂ : ℕ} [NeZero Lu] [NeZero L₁] [NeZero L
     by_cases h₀₂' : j = 0 ∧ k = 2
     · obtain ⟨rfl, rfl⟩ := h₀₂'
       have h₁ : Nat.card (Set.range (part 0 2)) ≤ Nat.card (Fin L₂) :=
-        Nat.card_le_card_of_injective (fun t => t.1.2.2) (by
+        Nat.card_le_card_of_injective (fun t => t.val.2.2) (by
           rintro ⟨_, t, rfl⟩ ⟨_, t', rfl⟩ h
           refine Subtype.ext ?_
           simp only [e₀₂] at h ⊢
@@ -338,7 +338,7 @@ lemma exists_tri_code {n Lu L₁ L₂ : ℕ} [NeZero Lu] [NeZero L₁] [NeZero L
     by_cases h₁₂' : j = 1 ∧ k = 2
     · obtain ⟨rfl, rfl⟩ := h₁₂'
       have h₁ : Nat.card (Set.range (part 1 2)) ≤ Nat.card (Fin Lu) :=
-        Nat.card_le_card_of_injective (fun t => t.1.1) (by
+        Nat.card_le_card_of_injective (fun t => t.val.1) (by
           rintro ⟨_, t, rfl⟩ ⟨_, t', rfl⟩ h
           refine Subtype.ext ?_
           simp only [e₁₂] at h ⊢

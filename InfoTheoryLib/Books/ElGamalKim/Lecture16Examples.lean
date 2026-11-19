@@ -321,7 +321,7 @@ private lemma butterfly_bits (S : RoutingScheme cap b (multicastD 0 {5, 6}))
       (r ∈ S.carry 3 4 → r ∈ S.carry 0 1 ∨ r ∈ S.carry 0 2) := by
   have hr0 : r.1 = 0 := by
     by_contra h
-    have hi := r.2.2
+    have hi := r.2.isLt
     have := hb r.1 h
     omega
   have hempty : ∀ j k, butterflyW j k = 0 → r ∉ S.carry j k := by
@@ -471,7 +471,7 @@ def butterflyScheme {b : Fin 7 → ℕ} {n q : ℕ} (hb : ∀ j, j ≠ 0 → b j
     have hr0 : ∀ r : Σ j, Fin (b j), r.1 = 0 := by
       intro r
       by_contra h
-      have hi := r.2.2
+      have hi := r.2.isLt
       have := hb r.1 h
       omega
     by_cases hkl : butterflyW k l = 0
@@ -483,7 +483,7 @@ def butterflyScheme {b : Fin 7 → ℕ} {n q : ℕ} (hb : ∀ j, j ≠ 0 → b j
         refine Finset.card_le_card_of_injOn (fun r => r.2.val) (fun r hr => ?_) ?_
         · have hr' := (Finset.mem_filter.mp hr).2.2
           have hlt : r.2.val < 3 * q := by
-            have hi := r.2.2
+            have hi := r.2.isLt
             have hb0 : b r.1 = b 0 := by rw [hr0 r]
             omega
           exact hI₂ _ hlt hr'
@@ -501,7 +501,7 @@ def butterflyScheme {b : Fin 7 → ℕ} {n q : ℕ} (hb : ∀ j, j ≠ 0 → b j
     obtain ⟨hw, hp⟩ := (Finset.mem_filter.mp hr).2
     have hr0 : r.1 = 0 := by
       by_contra h
-      have hi := r.2.2
+      have hi := r.2.isLt
       have := hb r.1 h
       omega
     have hall : ∀ k l : Fin 7, butterflyW k l ≠ 0 → k = 0 ∨ k = 1 ∨ k = 2 ∨ k = 3 ∨ k = 4 := by
@@ -534,7 +534,7 @@ def butterflyScheme {b : Fin 7 → ℕ} {n q : ℕ} (hb : ∀ j, j ≠ 0 → b j
   deliver r l hl := by
     have hr0 : r.1 = 0 := by
       by_contra h
-      have hi := r.2.2
+      have hi := r.2.isLt
       have := hb r.1 h
       omega
     have hl' : l = 5 ∨ l = 6 := by simpa [multicastD, hr0] using hl
@@ -739,7 +739,7 @@ theorem unicast_routing_bound {cap : Fin 6 → Fin 6 → ℕ} {b : Fin 6 → ℕ
     rcases hall r.1 with h | h | h
     · exact Or.inl h
     · exact Or.inr h
-    · have hi := r.2.2
+    · have hi := r.2.isLt
       have := hb r.1 h
       omega
   have hthrough : ∀ l (r : Σ j, Fin (b j)), r ∈ S.carry 3 l → r ∈ S.carry 2 3 := by
@@ -862,7 +862,7 @@ def kmCoeff : LinCoeff K (Fin 5) kmB where
     else if e = 4 then (if r.2.val = 0 then α 9 else α 11) else 0
 
 lemma sum_subtype_five {M : Type*} [AddCommMonoid M] (p : Fin 5 → Prop) [DecidablePred p]
-    [Fintype {e // p e}] (f : Fin 5 → M) : ∑ e : {e // p e}, f e.1 =
+    [Fintype {e // p e}] (f : Fin 5 → M) : ∑ e : {e // p e}, f e.val =
       ∑ e, if p e then f e else 0 := by
   rw [← Finset.sum_filter]
   exact (Finset.sum_subtype _ (by simp) f).symm

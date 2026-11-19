@@ -410,7 +410,7 @@ theorem IsAchievableGN.sum_le_gain {r t : Type*} [Fintype r] [Fintype t]
     obtain ⟨k, hk⟩ := hD j
     exact ⟨k, mem_univ k, hk⟩
   rw [gvRate_submatrix_univ] at h₁
-  exact h₁.trans (gvRate_submatrix_le G hd hs P.2)
+  exact h₁.trans (gvRate_submatrix_le G hd hs P.property)
 
 omit [DecidableEq ι] in
 /-- **The upper bound of page 20-33 of [elgamal2010], for a fixed network.** If the gain matrix `G`
@@ -422,7 +422,7 @@ theorem IsAchievableGN.sum_le_sum_log {r t : Type*} [Fintype r] [Fintype t]
     {R : t → ℝ} (h : IsAchievableGN (G.submatrix d s) D P R) (hD : ∀ j, (D j).Nonempty) :
     (∑ j, R j) * log 2 ≤ ∑ j, log (1 + √((Fintype.card ι : ℝ) * P) * G j j) := by
   classical
-  refine (h.sum_le_gain hd hs hD).trans (gvRate_le_sum_log hG (PosSemidef.one.smul P.2) ?_
+  refine (h.sum_le_gain hd hs hD).trans (gvRate_le_sum_log hG (PosSemidef.one.smul P.property) ?_
     (by positivity))
   simp [trace_smul, mul_comm]
 

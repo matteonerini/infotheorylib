@@ -203,8 +203,8 @@ omit [Fintype α] [Fintype β] in
 lemma prefixRV_update (z₀ : α × β) (i : Fin n) (ω : Fin n → α × β) (c : α × β) :
     prefixRV (seqZ z₀) i (Function.update ω i c) = prefixRV (seqZ z₀) i ω := by
   funext j
-  have hj : (j : ℕ) < n := j.2.trans i.2
-  have hne : (⟨j, hj⟩ : Fin n) ≠ i := fun h => absurd (congrArg Fin.val h) (ne_of_lt j.2)
+  have hj : (j : ℕ) < n := j.isLt.trans i.isLt
+  have hne : (⟨j, hj⟩ : Fin n) ≠ i := fun h => absurd (congrArg Fin.val h) (ne_of_lt j.isLt)
   have e : ∀ ω₁ : Fin n → α × β, seqZ z₀ j ω₁ = ω₁ ⟨j, hj⟩ := fun ω₁ => by simp [seqZ, hj]
   simp only [prefixRV]
   rw [e, e, Function.update_of_ne hne]

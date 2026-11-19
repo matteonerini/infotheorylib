@@ -212,7 +212,7 @@ theorem sum_iidPMF_ite_forall_not_mem_le {μ : X → ℝ} (hμ : IsPMF μ) (L : 
   calc (1 - prob μ S) ^ L ≤ exp (-prob μ S) ^ L :=
         pow_le_pow_left₀ (by linarith) (by linarith [add_one_le_exp (-prob μ S)]) L
     _ = exp (-(L * prob μ S)) := by
-        rw [← exp_nat_mul]
+        rw [← exp_natCast_mul]
         ring_nf
 
 end Missing

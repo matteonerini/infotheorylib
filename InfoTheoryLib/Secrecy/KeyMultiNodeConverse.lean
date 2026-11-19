@@ -151,7 +151,7 @@ lemma MultiKeyCode.condEntropy_trans_eq_sum {μ : mBlock α γ κ n → ℝ} (h�
     H[c.transB | eveM ; μ] = ∑ j, c.nodeA μ j := by
   classical
   have h := condEntropy_runTo hμ c.protocolB eveM r le_rfl
-  have e : ∀ l : Fin r, ((l : ℕ) < r) := fun l => l.2
+  have e : ∀ l : Fin r, ((l : ℕ) < r) := fun l => l.isLt
   simp only [e, ite_true] at h
   have hT : (fun w => runTo (c.protocolB w) r) = c.transB := rfl
   rw [hT] at h
@@ -168,7 +168,7 @@ lemma MultiKeyCode.condEntropy_trans_le_sum {μ : mBlock α γ κ n → ℝ} (h�
     H[c.transB | pair (viewB Sᶜ) eveM ; μ] ≤ ∑ j ∈ S, c.nodeA μ j := by
   classical
   have h := condEntropy_runTo hμ c.protocolB (pair (viewB Sᶜ) eveM) r le_rfl
-  have e : ∀ l : Fin r, ((l : ℕ) < r) := fun l => l.2
+  have e : ∀ l : Fin r, ((l : ℕ) < r) := fun l => l.isLt
   simp only [e, ite_true] at h
   have hT : (fun w => runTo (c.protocolB w) r) = c.transB := rfl
   rw [hT] at h

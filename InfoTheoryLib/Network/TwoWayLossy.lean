@@ -299,7 +299,7 @@ theorem lemma1_speak (hμ : IsPMF μ) (h0 : I[A₂ : B₁ | pair A₁ B₂ ; μ]
     (spk l = false → I[A₂ : fun ω => lemProtocol spk g₁ g₂ A₁ A₂ B₁ B₂ ω l
         (runTo (lemProtocol spk g₁ g₂ A₁ A₂ B₁ B₂ ω) l) |
       pair (fun ω => runTo (lemProtocol spk g₁ g₂ A₁ A₂ B₁ B₂ ω) l) (pair A₁ B₂) ; μ] = 0) := by
-  have ih := lemma1 (spk := spk) (g₁ := g₁) (g₂ := g₂) hμ h0 l l.2.le
+  have ih := lemma1 (spk := spk) (g₁ := g₁) (g₂ := g₂) hμ h0 l l.isLt.le
   constructor
   · intro hs
     exact (lemma1_step_info hμ (X := B₁) (Y := A₂)
@@ -350,9 +350,9 @@ lemma sum_iidPMF_mul_split (hP : IsPMF P) (p : Fin n → Prop) {f g : (Fin n →
     rw [← Fintype.prod_subtype_mul_prod_subtype p]
     congr 1
     · refine prod_congr rfl fun i _ => ?_
-      simp [e, Equiv.piEquivPiSubtypeProd, i.2]
+      simp [e, Equiv.piEquivPiSubtypeProd, i.property]
     · refine prod_congr rfl fun i _ => ?_
-      simp [e, Equiv.piEquivPiSubtypeProd, i.2]
+      simp [e, Equiv.piEquivPiSubtypeProd, i.property]
   set F : ({i // p i} → γ) → ℝ := fun a => f (e.symm (a, fun _ => z₀)) with hF
   set G : ({i // ¬ p i} → γ) → ℝ := fun b => g (e.symm (fun _ => z₀, b)) with hG
   have hfF : ∀ a b, f (e.symm (a, b)) = F a := fun a b => hf _ _ fun i hi => by

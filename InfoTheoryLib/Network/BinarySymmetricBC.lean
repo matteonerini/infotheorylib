@@ -564,7 +564,7 @@ theorem isClosed_bsbcSuperpositionRegion (p₁ p₂ : ℝ) :
   · rintro ⟨a, ha, h⟩
     exact ⟨(R, ⟨a, ha⟩), h, rfl⟩
   · rintro ⟨⟨R', a⟩, h, rfl⟩
-    exact ⟨a, a.2, h⟩
+    exact ⟨a, a.property, h⟩
 
 /-- **Lecture 5 of [elgamal2010], page 5-8.** The time-division inner bound of the BS-BC, in bits:
 `R₁ ≤ λ C₁`, `R₂ ≤ (1 - λ) C₂` for some `λ ∈ [0, 1]`, with `Cⱼ = 1 - H(pⱼ)` the capacity of

@@ -373,9 +373,10 @@ lemma dist_msMap :
       simp [uniformPMF]
     rw [hun, iidPMF, ← prod_mul_distrib, ← prod_mul_distrib]
     refine prod_congr rfl fun i _ => ?_
-    have hpre : msPre (fun j => (z j).2) (i : ℕ) = fun t : Fin i => (z ⟨t, t.2.trans i.2⟩).2 := by
+    have hpre : msPre (fun j => (z j).2) (i : ℕ) =
+        fun t : Fin i => (z ⟨t, t.isLt.trans i.isLt⟩).2 := by
       funext t
-      simp [msPre, t.2.trans i.2]
+      simp [msPre, t.isLt.trans i.isLt]
     simp only [msEnc, hpre, RCCode.fbEnc, rcRO, msP, msBern]
     have hb : ∀ a b d : Bool, (if (xor (xor a b) d) = true then p else 1 - p) =
         bsbcBSC p (xor a b) d := by

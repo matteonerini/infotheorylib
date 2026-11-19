@@ -122,8 +122,8 @@ theorem nnc_wrong_sum_le (hpx : ∀ k, IsPMF (px k)) (hW : IsChannel W) (hτ : �
         refine hMR k₀ ?_
         by_contra hlt
         have h1 : M k₀ ≤ 1 := by omega
-        have := (m' k₀).2
-        have := (m k₀).2
+        have := (m' k₀).isLt
+        have := (m k₀).isLt
         exact hk₀ (Fin.ext (by omega))
       have hsl := hslack A hdA ⟨k₀, hTA hk₀T, hposR⟩
       have hRT : ∑ k ∈ T, R k ≤ ∑ k ∈ A, R k :=
@@ -184,7 +184,7 @@ theorem nnc_wrong_sum_le (hpx : ∀ k, IsPMF (px k)) (hW : IsChannel W) (hτ : �
           mul_le_mul_of_nonneg_right hp (hf0 T)
       _ = _ := by
           simp only [f]
-          rw [← exp_nat_mul]
+          rw [← exp_natCast_mul]
           have : exp (n * ((s + 1) * ((∑ k ∈ T, R k) * log 2))) * exp (∑ k, a k) *
               (c₂ * (exp (((s + 1 : ℕ) : ℝ) * -(n * ((∑ k ∈ T, R k) * log 2 + ζ))) *
                 exp (n * ∑ k, r k))) = exp (∑ k, a k) * (c₂ *

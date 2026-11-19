@@ -404,17 +404,17 @@ theorem KeyCode.entropyKey₁_le_oneWay (c : KeyCode spk M K ((Fin n → α₁) 
     fun j w => if h : j < n then (w.1 ⟨j, h⟩).2.2 else l₀.2.2 with hZ
   have hYn : prefixRV Y n = Xs := by
     funext w j
-    simp [prefixRV, hY, hXs, j.2]
+    simp [prefixRV, hY, hXs, j.isLt]
   have hZn : H[K₁ | pair (suffixRV Z 0 n) T ; keyLaw P π₁ π₂ n] =
       H[K₁ | pair Zs T ; keyLaw P π₁ π₂ n] := by
-    refine condEntropy_congr_right hμ _ (fun w => (fun j => w.1 ⟨j, by have := j.2; omega⟩, w.2))
+    refine condEntropy_congr_right hμ _ (fun w => (fun j => w.1 ⟨j, by have := j.isLt; omega⟩, w.2))
       (fun a b h => ?_) fun w => ?_
     · simp only [Prod.mk.injEq] at h
       refine Prod.ext (funext fun j => ?_) h.2
-      have := congrFun h.1 ⟨j, by have := j.2; omega⟩
+      have := congrFun h.1 ⟨j, by have := j.isLt; omega⟩
       simpa using this
     · refine Prod.ext (funext fun j => ?_) rfl
-      have hj : (0 + (j : ℕ)) < n := by have := j.2; omega
+      have hj : (0 + (j : ℕ)) < n := by have := j.isLt; omega
       simp [suffixRV, hZ, hZs, KeyCode.eveB]
   -- The single-letterization.
   have hsum : I[K₁ : prefixRV Y n | T ; keyLaw P π₁ π₂ n] -
@@ -455,7 +455,7 @@ theorem KeyCode.entropyKey₁_le_oneWay (c : KeyCode spk M K ((Fin n → α₁) 
       · change c.key₁ _ (T _) = c.key₁ _ (T _)
         rw [htr, hobs]
       · funext j
-        have hj : (j : ℕ) < i := j.2
+        have hj : (j : ℕ) < i := j.isLt
         have hjn : (j : ℕ) < n := by omega
         simp only [pair, prefixRV, hY, hjn, ↓reduceDIte]
         rw [hne j (by omega) hjn]

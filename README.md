@@ -66,7 +66,7 @@ Add the library to your project's `lakefile.toml`:
 [[require]]
 name = "infotheorylib"
 git = "https://github.com/matteonerini/infotheorylib"
-rev = "v4.36.0"
+rev = "v4.37.0-rc1"
 ```
 
 A Lake project can contain only one version of Mathlib, so your project must use the same Lean

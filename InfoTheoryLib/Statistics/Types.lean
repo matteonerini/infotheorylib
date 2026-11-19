@@ -141,7 +141,7 @@ lemma iidPMF_eq_exp_sum {Q : α → ℝ} (hQ : ∀ a, 0 ≤ Q a) {n : ℕ} {x : 
   refine prod_congr rfl fun a _ => ?_
   by_cases h0 : symbolCount x a = 0
   · simp [h0]
-  · rw [exp_nat_mul, exp_log (lt_of_le_of_ne (hQ a) (hx a h0).symm)]
+  · rw [exp_natCast_mul, exp_log (lt_of_le_of_ne (hQ a) (hx a h0).symm)]
 
 /-- **Theorem 11.1.2.** The probability of a sequence under the i.i.d. law `Qⁿ` depends only on
 its type: `Qⁿ(x) = e^{-n(H(Pₓ) + D(Pₓ‖Q))}`, for `Pₓ ≪ Q`. -/

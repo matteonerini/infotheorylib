@@ -144,13 +144,13 @@ lemma markov_dec_eq (e : Fin M ≃ MarkovMsg Ma Mc B) (d₁ : Y₁) (d : Y) (w :
   · dsimp only
     rw [hA (B - j) (by omega)]
     have : B - (B - (j : ℕ)) = j := by omega
-    simp only [this, msgA, j.2, dite_true]
+    simp only [this, msgA, j.isLt, dite_true]
   · dsimp only
     rw [hA (B - j) (by omega)]
     have : B - (B - (j : ℕ)) = j := by omega
     simp only [this]
-    rw [hd j (by have := j.2; omega)]
-    simp only [msgC, j.2, dite_true]
+    rw [hd j (by have := j.isLt; omega)]
+    simp only [msgC, j.isLt, dite_true]
 
 section Law
 
@@ -188,8 +188,8 @@ lemma finProd_div_mod (j : Fin (B + 1)) (i : Fin n) :
   have hn := NeZero.pos n
   rw [hval]
   refine ⟨?_, ?_⟩
-  · rw [Nat.add_mul_div_left _ _ hn, Nat.div_eq_of_lt i.2, zero_add]
-  · rw [Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt i.2]
+  · rw [Nat.add_mul_div_left _ _ hn, Nat.div_eq_of_lt i.isLt, zero_add]
+  · rw [Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt i.isLt]
 
 omit [Fintype X] [Fintype X₁] [Fintype Y] [Fintype Y₁] in
 /-- The law of the code of all the blocks. -/
@@ -207,16 +207,17 @@ lemma markov_law (e : Fin M ≃ MarkovMsg Ma Mc B) (d₁ : Y₁) (d : Y) (w : Fi
   have hin : (⟨((finProdFinEquiv (j, i) : Fin ((B + 1) * n)) : ℕ) % n,
       Nat.mod_lt _ (NeZero.pos n)⟩ : Fin n) = i := Fin.ext hmod
   have hst : stZ C (getBlock d₁ fun t : Fin (finProdFinEquiv (j, i) : Fin ((B + 1) * n)) =>
-      (z ⟨t, t.2.trans (finProdFinEquiv (j, i)).2⟩).2) j = stZ C (y₁Arr d₁ (blockEquiv z)) j := by
+      (z ⟨t, t.isLt.trans (finProdFinEquiv (j, i)).isLt⟩).2) j =
+        stZ C (y₁Arr d₁ (blockEquiv z)) j := by
     refine stZ_congr C j fun j' hj' => ?_
     funext i'
-    have hj'B : j' < B + 1 := hj'.trans j.2
+    have hj'B : j' < B + 1 := hj'.trans j.isLt
     have hlt : i'.val + n * j' <
         ((finProdFinEquiv (j, i) : Fin ((B + 1) * n)) : ℕ) := by
       have hval : ((finProdFinEquiv (j, i) : Fin ((B + 1) * n)) : ℕ) = i + n * j := rfl
       rw [hval]
       have h₁ : n * (j' + 1) ≤ n * j := Nat.mul_le_mul_left _ hj'
-      have h₂ := i'.2
+      have h₂ := i'.isLt
       rw [Nat.mul_add, Nat.mul_one] at h₁
       omega
     simp only [getBlock, dite_eq_left hlt, y₁Arr, dite_eq_left hj'B]
@@ -275,7 +276,7 @@ theorem markov_row_le (e : Fin M ≃ MarkovMsg Ma Mc B) (d₁ : Y₁) (d : Y) (h
       stZ_eq_msgL C m (fun j' hj' => by
         have hlt : j' < B + 1 := by omega
         have := (hZ ⟨j', hlt⟩).1
-        simpa only [y₁Arr, dite_eq_left hlt] using this) j (by have := j.2; omega)
+        simpa only [y₁Arr, dite_eq_left hlt] using this) j (by have := j.isLt; omega)
     simp only [markovReal, piLaw, ν]
     exact prod_congr rfl fun j _ => by rw [hst j]
   -- a good run decodes correctly
@@ -288,7 +289,7 @@ theorem markov_row_le (e : Fin M ≃ MarkovMsg Ma Mc B) (d₁ : Y₁) (d : Y) (h
       funext i
       have hi : i.val + n * j < (B + 1) * n := by
         have h₁ : n * (j + 1) ≤ n * (B + 1) := Nat.mul_le_mul_left _ hlt
-        have h₂ := i.2
+        have h₂ := i.isLt
         rw [Nat.mul_add, Nat.mul_one] at h₁
         rw [Nat.mul_comm (B + 1) n]
         omega
@@ -533,7 +534,7 @@ theorem RelayBlock.markov_errProb_le {W : X × X₁ → Y × Y₁ → ℝ} (hB :
     _ ≤ ∑ _j : Fin (B + 1), (M : ℝ) * C.avgErr (relaySeq W n) := by
         refine sum_le_sum fun j _ => ?_
         have := avg_block_le C (Ma := Ma) (Mc := Mc) (V := relaySeq W n) hB hV
-          (j := j) (by have := j.2; omega)
+          (j := j) (by have := j.isLt; omega)
         rwa [div_le_iff₀ (by positivity), ← hcard, mul_comm] at this
     _ = _ := by
         simp only [sum_const, card_univ, Fintype.card_fin, nsmul_eq_mul]

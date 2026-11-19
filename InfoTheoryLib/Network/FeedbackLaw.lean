@@ -41,22 +41,23 @@ variable {𝒲 α β γ : Type*} [Fintype 𝒲] [Fintype β] {ν : 𝒲 → ℝ}
   {enc : ∀ k, 𝒲 → (Fin k → β) → α}
 
 /-- The outputs before time `i`. -/
-def fbPre {n : ℕ} (i : Fin n) (z : Fin n → β) : Fin i → β := fun t => z ⟨t, t.2.trans i.2⟩
+def fbPre {n : ℕ} (i : Fin n) (z : Fin n → β) : Fin i → β := fun t => z ⟨t, t.isLt.trans i.isLt⟩
 
 /-- **The law of the first `m` outputs.** -/
 lemma dist_fbLaw_prefix (hW : IsChannel W) (m : ℕ) : ∀ k (h : m ≤ k),
-    dist (fbLaw ν W enc k) (fun z => (z.1, fun t : Fin m => z.2 ⟨t, lt_of_lt_of_le t.2 h⟩)) =
+    dist (fbLaw ν W enc k) (fun z => (z.1, fun t : Fin m => z.2 ⟨t, lt_of_lt_of_le t.isLt h⟩)) =
       fbLaw ν W enc m := by
   intro k h
   induction k, h using Nat.le_induction with
   | base =>
-    have e : (fun z : 𝒲 × (Fin m → β) => (z.1, fun t : Fin m => z.2 ⟨t, lt_of_lt_of_le t.2 le_rfl⟩))
+    have e : (fun z : 𝒲 × (Fin m → β) =>
+        (z.1, fun t : Fin m => z.2 ⟨t, lt_of_lt_of_le t.isLt le_rfl⟩))
       = id := rfl
     rw [e, dist_id]
   | succ k hk ih =>
     have e : (fun z : 𝒲 × (Fin (k + 1) → β) =>
-        (z.1, fun t : Fin m => z.2 ⟨t, lt_of_lt_of_le t.2 (hk.trans (Nat.le_succ k))⟩)) =
-        (fun z : 𝒲 × (Fin k → β) => (z.1, fun t : Fin m => z.2 ⟨t, lt_of_lt_of_le t.2 hk⟩)) ∘
+        (z.1, fun t : Fin m => z.2 ⟨t, lt_of_lt_of_le t.isLt (hk.trans (Nat.le_succ k))⟩)) =
+        (fun z : 𝒲 × (Fin k → β) => (z.1, fun t : Fin m => z.2 ⟨t, lt_of_lt_of_le t.isLt hk⟩)) ∘
           fun z => (z.1, Fin.init z.2) := rfl
     rw [e, dist_comp_eq, dist_fbLaw_init hW k, ih]
 
@@ -70,9 +71,9 @@ theorem dist_fbLaw_letter [Finite γ] (hW : IsChannel W) {n : ℕ} (i : Fin n)
       dist (fbLaw ν W enc n) (fun z => G₀ (z.1, fbPre i z.2)) c * W (f c) b := by
   have : Fintype γ := Fintype.ofFinite γ
   classical
-  have hT := dist_fbLaw_prefix (ν := ν) (enc := enc) hW (i + 1) n i.2
+  have hT := dist_fbLaw_prefix (ν := ν) (enc := enc) hW (i + 1) n i.isLt
   set T : 𝒲 × (Fin n → β) → 𝒲 × (Fin (i + 1) → β) := fun z =>
-    (z.1, fun t : Fin (i + 1) => z.2 ⟨t, lt_of_lt_of_le t.2 i.2⟩) with hTd
+    (z.1, fun t : Fin (i + 1) => z.2 ⟨t, lt_of_lt_of_le t.isLt i.isLt⟩) with hTd
   set μ := fbLaw ν W enc n with hμ
   -- the input is a function of the past and of the message
   let Q : 𝒲 × (Fin n → β) → (Fin i → β) × 𝒲 := fun z => (fbPre i z.2, z.1)

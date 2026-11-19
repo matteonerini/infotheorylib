@@ -54,16 +54,17 @@ variable [NeZero k]
 /-- The input of a strategy at time `(j, i)`, from the outputs of all the blocks. -/
 def stratAt {X : Type*} (e : ∀ j, (Fin j → Fin k → Y) → Strat k X Y) (j : ℕ) (i : Fin k)
     (Z : ℕ → Fin k → Y) : X :=
-  e j (fun j' => Z j') i fun t => Z j ⟨t, t.2.trans i.2⟩
+  e j (fun j' => Z j') i fun t => Z j ⟨t, t.isLt.trans i.isLt⟩
 
 omit [NeZero k] in
 lemma stratAt_congr {X : Type*} (e : ∀ j, (Fin j → Fin k → Y) → Strat k X Y) (j : ℕ) (i : Fin k)
     {Z Z' : ℕ → Fin k → Y} (h₁ : ∀ j' < j, Z j' = Z' j')
-    (h₂ : ∀ t (ht : t < (i : ℕ)), Z j ⟨t, ht.trans i.2⟩ = Z' j ⟨t, ht.trans i.2⟩) :
+    (h₂ : ∀ t (ht : t < (i : ℕ)), Z j ⟨t, ht.trans i.isLt⟩ = Z' j ⟨t, ht.trans i.isLt⟩) :
     stratAt e j i Z = stratAt e j i Z' := by
-  have e₁ : (fun j' : Fin j => Z j') = fun j' : Fin j => Z' j' := funext fun j' => h₁ j' j'.2
-  have e₂ : (fun t : Fin i => Z j ⟨t, t.2.trans i.2⟩) = fun t : Fin i => Z' j ⟨t, t.2.trans i.2⟩ :=
-    funext fun t => h₂ t t.2
+  have e₁ : (fun j' : Fin j => Z j') = fun j' : Fin j => Z' j' := funext fun j' => h₁ j' j'.isLt
+  have e₂ : (fun t : Fin i => Z j ⟨t, t.isLt.trans i.isLt⟩) =
+      fun t : Fin i => Z' j ⟨t, t.isLt.trans i.isLt⟩ :=
+    funext fun t => h₂ t t.isLt
   simp only [stratAt, e₁, e₂]
 
 variable [Nonempty Y]
@@ -92,7 +93,7 @@ lemma blocksOf_eq (y : Fin (m * k) → Y) (j : Fin m) (i : Fin k) :
     blocksOf y j i = y (finProdFinEquiv (j, i)) := by
   have hlt : (i : ℕ) + k * j < m * k := by
     rw [← finProd_val j i]
-    exact (finProdFinEquiv (j, i)).2
+    exact (finProdFinEquiv (j, i)).isLt
   simp only [blocksOf, getBlock, dite_eq_left hlt]
   rfl
 
@@ -100,11 +101,11 @@ omit [NeZero k] in
 /-- The first blocks depend only on the first symbols. -/
 lemma blocksOf_prefix {N : ℕ} (h : m * k ≤ N) (y : Fin N → Y) :
     (blocksOf y : Fin m → Fin k → Y) =
-      blocksOf (fun t : Fin (m * k) => y ⟨t, lt_of_lt_of_le t.2 h⟩) := by
+      blocksOf (fun t : Fin (m * k) => y ⟨t, lt_of_lt_of_le t.isLt h⟩) := by
   funext j i
   have hlt : (i : ℕ) + k * j < m * k := by
     rw [← finProd_val j i]
-    exact (finProdFinEquiv (j, i)).2
+    exact (finProdFinEquiv (j, i)).isLt
   simp only [blocksOf, getBlock, dite_eq_left hlt, dite_eq_left (lt_of_lt_of_le hlt h)]
 
 /-- The input at the time `(j, i)` depends only on the outputs before it. -/
@@ -113,39 +114,40 @@ lemma stratAt_block {X : Type*} (e : ∀ j, (Fin j → Fin k → Y) → Strat k 
     stratAt e ((finProdFinEquiv (j, i) : Fin (m * k)) / k)
         ⟨((finProdFinEquiv (j, i) : Fin (m * k)) : ℕ) % k, Nat.mod_lt _ (NeZero.pos k)⟩
         (getBlock (Classical.arbitrary Y)
-          fun t : Fin (finProdFinEquiv (j, i) : Fin (m * k)) => y ⟨t, t.2.trans (Fin.is_lt _)⟩) =
+          fun t : Fin (finProdFinEquiv (j, i) : Fin (m * k)) => y ⟨t, t.isLt.trans (Fin.is_lt _)⟩) =
       stratAt e j i (getBlock (Classical.arbitrary Y) y) := by
   set K : Fin (m * k) := finProdFinEquiv (j, i) with hK
   have hval : (K : ℕ) = i + k * j := rfl
   have hpos := NeZero.pos k
   have hdiv : (K : ℕ) / k = j := by
-    rw [hval, Nat.add_mul_div_left _ _ hpos, Nat.div_eq_of_lt i.2, zero_add]
+    rw [hval, Nat.add_mul_div_left _ _ hpos, Nat.div_eq_of_lt i.isLt, zero_add]
   have hmod : (⟨(K : ℕ) % k, Nat.mod_lt _ hpos⟩ : Fin k) = i := by
     apply Fin.ext
     change (K : ℕ) % k = i
-    rw [hval, Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt i.2]
+    rw [hval, Nat.add_mul_mod_self_left, Nat.mod_eq_of_lt i.isLt]
   rw [hdiv, hmod]
   refine stratAt_congr e j i (fun j' hj' => ?_) fun t ht => ?_
   · funext i'
     have hlt : (i' : ℕ) + k * j' < K := by
       rw [hval]
       have h₁ : k * (j' + 1) ≤ k * j := Nat.mul_le_mul_left _ hj'
-      have h₂ := i'.2
+      have h₂ := i'.isLt
       rw [Nat.mul_add, Nat.mul_one] at h₁
       omega
-    simp only [getBlock, dite_eq_left hlt, dite_eq_left (hlt.trans K.2)]
+    simp only [getBlock, dite_eq_left hlt, dite_eq_left (hlt.trans K.isLt)]
   · have hlt : t + k * j < K := by
       rw [hval]
       omega
-    simp only [getBlock, dite_eq_left hlt, dite_eq_left (hlt.trans K.2)]
+    simp only [getBlock, dite_eq_left hlt, dite_eq_left (hlt.trans K.isLt)]
 
 /-- **The law of the code on the channel.** -/
 lemma prod_blockCode (c : TWCCode M₁ M₂ m (Strat k X₁ Y) (Strat k X₂ Y) (Fin k → Y) (Fin k → Y))
     {V : X₁ × X₂ → Y → ℝ} (N : ℕ) (w : Fin M₁ × Fin M₂) (y : Fin (m * k) → Y) :
-    ∏ K : Fin (m * k), V ((blockCode c N).fbEnc id id K w fun t : Fin K => y ⟨t, t.2.trans K.2⟩)
+    ∏ K : Fin (m * k),
+      V ((blockCode c N).fbEnc id id K w fun t : Fin K => y ⟨t, t.isLt.trans K.isLt⟩)
         (y K) =
       ∏ j : Fin m, stratW V k (c.fbEnc id id j w fun t : Fin j =>
-        blocksOf y ⟨t, t.2.trans j.2⟩) (blocksOf y j) := by
+        blocksOf y ⟨t, t.isLt.trans j.isLt⟩) (blocksOf y j) := by
   rw [← Equiv.prod_comp finProdFinEquiv, Fintype.prod_prod_type]
   refine prod_congr rfl fun j _ => ?_
   simp only [stratW]
@@ -185,7 +187,7 @@ theorem sum_blockLaw (c : TWCCode M₁ M₂ m (Strat k X₁ Y) (Strat k X₂ Y) 
   have hd := dist_fbLaw_prefix (ν := uniformPMF (Fin M₁ × Fin M₂)) (W := V)
     (enc := (blockCode c N).fbEnc id id) hV (m * k) N h
   have hm := sum_dist_mul (fbLaw (uniformPMF (Fin M₁ × Fin M₂)) V ((blockCode c N).fbEnc id id) N)
-    (fun z => (z.1, fun t : Fin (m * k) => z.2 ⟨t, lt_of_lt_of_le t.2 h⟩))
+    (fun z => (z.1, fun t : Fin (m * k) => z.2 ⟨t, lt_of_lt_of_le t.isLt h⟩))
     (fun ω : (Fin M₁ × Fin M₂) × (Fin (m * k) → Y) => F ω.1 (blocksOf ω.2))
   rw [hd] at hm
   have e₁ : ∑ ω, (blockCode c N).law V id id ω * F ω.1 (blocksOf ω.2) =

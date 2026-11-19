@@ -101,8 +101,8 @@ omit [Fintype α] [Fintype β₁] [Fintype β₂] in
 lemma mask_injective (i : Fin n) {γ : Type*} : Function.Injective (mask (i := i) (γ := γ)) := by
   intro u v h
   funext t
-  have ht := congrFun h ⟨t, t.2.trans i.2⟩
-  simpa [mask, t.2] using ht
+  have ht := congrFun h ⟨t, t.isLt.trans i.isLt⟩
+  simpa [mask, t.isLt] using ht
 
 omit [Fintype α] in
 /-- The law of `((Uᵢ, Xᵢ), (Y₁ᵢ, Y₂ᵢ))`. -/

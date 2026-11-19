@@ -108,8 +108,8 @@ open Classical in
 is copied, and an upper bound `p` and a lower bound `n` are combined with weights `-c n` and
 `c p`, which cancels the eliminated variable. -/
 noncomputable def fmCoef (c : J → ℝ) : Matrix (fmIndex c) J ℝ := fun i j => match i with
-  | Sum.inl j₀ => if j = j₀.1 then 1 else 0
-  | Sum.inr s => (if j = s.1.1 then -c s.2.1 else 0) + (if j = s.2.1 then c s.1.1 else 0)
+  | Sum.inl j₀ => if j = j₀.val then 1 else 0
+  | Sum.inr s => (if j = s.1.val then -c s.2.val else 0) + (if j = s.2.val then c s.1.val else 0)
 
 /-- The coefficients of the combinations are nonnegative. -/
 lemma fmCoef_nonneg {c : J → ℝ} (i : fmIndex c) (j : J) : 0 ≤ fmCoef c i j := by
@@ -117,8 +117,8 @@ lemma fmCoef_nonneg {c : J → ℝ} (i : fmIndex c) (j : J) : 0 ≤ fmCoef c i j
   · simp only [fmCoef]
     split_ifs <;> norm_num
   · simp only [fmCoef]
-    have h₁ := s.1.2
-    have h₂ := s.2.2
+    have h₁ := s.1.property
+    have h₂ := s.2.property
     split_ifs <;> linarith
 
 section Coef
@@ -127,17 +127,17 @@ variable [Fintype J] {c : J → ℝ}
 
 /-- The combination of a vector `u`: a copied inequality. -/
 lemma fmCoef_mulVec_inl (u : J → ℝ) (j₀ : {j // c j = 0}) :
-    (fmCoef c *ᵥ u) (Sum.inl j₀) = u j₀.1 := by
+    (fmCoef c *ᵥ u) (Sum.inl j₀) = u j₀.val := by
   simp only [fmCoef, mulVec, dotProduct]
-  rw [sum_eq_single j₀.1 (fun i _ hi => by simp [hi]) (by simp)]
+  rw [sum_eq_single j₀.val (fun i _ hi => by simp [hi]) (by simp)]
   simp
 
 /-- The combination of a vector `u`: an upper bound and a lower bound. -/
 lemma fmCoef_mulVec_inr (u : J → ℝ) (s : {j // 0 < c j} × {j // c j < 0}) :
-    (fmCoef c *ᵥ u) (Sum.inr s) = -c s.2.1 * u s.1.1 + c s.1.1 * u s.2.1 := by
+    (fmCoef c *ᵥ u) (Sum.inr s) = -c s.2.val * u s.1.val + c s.1.val * u s.2.val := by
   simp only [fmCoef, mulVec, dotProduct, add_mul, sum_add_distrib]
-  rw [sum_eq_single s.1.1 (fun i _ hi => by simp [hi]) (by simp),
-    sum_eq_single s.2.1 (fun i _ hi => by simp [hi]) (by simp)]
+  rw [sum_eq_single s.1.val (fun i _ hi => by simp [hi]) (by simp),
+    sum_eq_single s.2.val (fun i _ hi => by simp [hi]) (by simp)]
   simp
 
 /-- The eliminated variable cancels. -/
@@ -145,7 +145,7 @@ lemma fmCoef_mulVec_self : fmCoef c *ᵥ c = 0 := by
   funext i
   rcases i with j₀ | s
   · rw [fmCoef_mulVec_inl]
-    exact j₀.2
+    exact j₀.property
   · rw [fmCoef_mulVec_inr]
     simp only [Pi.zero_apply]
     ring
@@ -157,9 +157,9 @@ theorem exists_forall_mul_le_iff_fmCoef {u : J → ℝ} :
   constructor
   · rintro ⟨h0, h⟩ (j₀ | s)
     · rw [fmCoef_mulVec_inl]
-      exact h0 _ j₀.2
+      exact h0 _ j₀.property
     · rw [fmCoef_mulVec_inr]
-      exact h _ _ s.1.2 s.2.2
+      exact h _ _ s.1.property s.2.property
   · intro h
     refine ⟨fun j hj => ?_, fun p n hp hn => ?_⟩
     · simpa [fmCoef_mulVec_inl] using h (Sum.inl ⟨j, hj⟩)

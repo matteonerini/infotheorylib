@@ -324,7 +324,7 @@ def yeungScheme {b : Fin 5 → ℕ} {n p : ℕ} (hb : ∀ j, 2 ≤ j → b j = 0
         rcases hall r.1 with h | h | h
         · exact Or.inl h
         · exact Or.inr h
-        · have hi := r.2.2
+        · have hi := r.2.isLt
           have := hb r.1 h
           omega
       have hle : ∀ I : Finset ℕ, #I ≤ p → (∀ r : Σ j, Fin (b j), r.1 = 1 →
@@ -359,7 +359,7 @@ def yeungScheme {b : Fin 5 → ℕ} {n p : ℕ} (hb : ∀ j, 2 ≤ j → b j = 0
             rcases hsrc r with h | h
             · simp only [Finset.mem_coe, f, h, ite_true]
               refine Finset.inl_mem_disjSum.mpr (Finset.mem_range.mpr ?_)
-              have hi := r.2.2
+              have hi := r.2.isLt
               have hb0 : b r.1 = b 0 := by rw [h]
               omega
             · simp only [Finset.mem_coe, f, h, one_ne_zero, ite_false]
@@ -386,7 +386,7 @@ def yeungScheme {b : Fin 5 → ℕ} {n p : ℕ} (hb : ∀ j, 2 ≤ j → b j = 0
           rcases hp with hp | hp
           · exact absurd (hp.symm.trans hr) (by decide)
           · refine Finset.mem_Ico.mpr ⟨hp.2, ?_⟩
-            have hi := r.2.2
+            have hi := r.2.isLt
             have hb1 : b r.1 = b 1 := by rw [hr]
             omega
   forward k l r hr := by

@@ -266,7 +266,7 @@ lemma expect_exp_symbolCount_le {p : α → ℝ} (hp : IsPMF p) (n : ℕ) (a : �
     nlinarith [exp_pos t]
   calc (1 + p a * (exp t - 1)) ^ n ≤ exp (p a * (exp t - 1)) ^ n :=
         pow_le_pow_left₀ hnn (by linarith [add_one_le_exp (p a * (exp t - 1))]) n
-    _ = exp (n * (p a * (exp t - 1))) := by rw [← exp_nat_mul]
+    _ = exp (n * (p a * (exp t - 1))) := by rw [← exp_natCast_mul]
 
 /-- The Chernoff exponent `s (δ - s) ≥ s δ / 2` used in the proof of Theorem 6.3, with
 `s = min (1, δ / 2)`. -/

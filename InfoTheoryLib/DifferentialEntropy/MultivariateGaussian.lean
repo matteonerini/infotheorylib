@@ -407,7 +407,7 @@ lemma log_two_pi_e_pow (hdet : 0 < K.det) :
   have e : (2 * π * exp 1) ^ Fintype.card ι * K.det =
       (2 * π) ^ Fintype.card ι * K.det * exp 1 ^ Fintype.card ι := by ring
   have h1 : log (exp 1 ^ Fintype.card ι) = Fintype.card ι := by
-    rw [← exp_nat_mul, log_exp, mul_one]
+    rw [← exp_natCast_mul, log_exp, mul_one]
   rw [e, log_mul (x := (2 * π) ^ Fintype.card ι * K.det) (by positivity) (by positivity), h1]
   ring
 

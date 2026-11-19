@@ -91,7 +91,7 @@ lemma sum_prodLaw_ind_restr {μ : ∀ k, A k → ℝ} (hμ : ∀ k, IsPMF (μ k)
     · rw [ind_of_neg h]
       obtain ⟨j, hj⟩ := Function.ne_iff.mp h
       refine (prod_eq_zero (mem_univ (j : Fin N)) ?_).symm
-      rw [dite_eq_left j.2]
+      rw [dite_eq_left j.property]
       exact ind_of_neg hj
   simp_rw [h₁]
   rw [sum_prod_pi (A := A) fun k a => μ k a * if h : k ∈ S then ind (a = t ⟨k, h⟩) else 1]
@@ -113,7 +113,7 @@ lemma sum_prodLaw_ind_restr {μ : ∀ k, A k → ℝ} (hμ : ∀ k, IsPMF (μ k)
     rw [dite_eq_right hk]
   rw [h₃, ← Finset.prod_coe_sort S]
   refine prod_congr rfl fun j _ => ?_
-  rw [dite_eq_left j.2]
+  rw [dite_eq_left j.property]
 
 /-- The law of the part of an independent family on a set of indices. -/
 lemma dist_prodLaw_restr {C : Fin N → Type*} [∀ k, Finite (C k)] {ν : ∀ k, A k → ℝ}

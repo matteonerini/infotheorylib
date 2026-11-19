@@ -407,7 +407,7 @@ theorem StateCode.one_sub_errProb_mul_log_le_gpValue [Finite α] [Nonempty α] (
     have hτ2 : ∀ ω, (τ (Z ω)).2 = gpAux S Y Mv n i ω := fun ω => by
       refine Prod.ext ?_ rfl
       funext j
-      have hj : (j : ℕ) < n := lt_trans j.2 hi
+      have hj : (j : ℕ) < n := lt_trans j.isLt hi
       simp [τ, Z, gpAux, pair, prefixRV, Y, hj]
       rfl
     set K : (σ × (Fin i → β) × (Fin (n - (i + 1)) → σ) × Fin M) → α → β → ℝ :=
@@ -454,7 +454,7 @@ theorem StateCode.one_sub_errProb_mul_log_le_gpValue [Finite α] [Nonempty α] (
   -- Fano's inequality.
   have hYn : prefixRV Y n = Prod.snd := by
     funext ω i
-    simp [prefixRV, Y, i.2]
+    simp [prefixRV, Y, i.isLt]
   set s₀' : Fin n → σ := fun _ => s₀
   rw [hYn] at hsum
   have h1 := mutualInfo_eq_entropy_sub_condEntropy hμ Mv Prod.snd

@@ -79,9 +79,10 @@ omit [Fintype Ω] in
 /-- `(X(S), X(T))` and `X(S ∪ T)` are functions of each other. -/
 lemma rvEquiv_blockRV_union (X : ∀ i, Ω → A i) (S T : Finset ι) :
     RVEquiv (InfoTheory.pair (blockRV X S) (blockRV X T)) (blockRV X (S ∪ T)) := by
-  refine ⟨⟨fun t => (fun i => t ⟨i, mem_union_left _ i.2⟩, fun i => t ⟨i, mem_union_right _ i.2⟩),
+  refine ⟨⟨fun t => (fun i => t ⟨i, mem_union_left _ i.property⟩,
+      fun i => t ⟨i, mem_union_right _ i.property⟩),
     fun ω => rfl⟩, ⟨fun p i => if h : (i : ι) ∈ S then p.1 ⟨i, h⟩ else
-      p.2 ⟨i, (mem_union.1 i.2).resolve_left h⟩, fun ω => ?_⟩⟩
+      p.2 ⟨i, (mem_union.1 i.property).resolve_left h⟩, fun ω => ?_⟩⟩
   funext i
   by_cases h : (i : ι) ∈ S <;> simp [blockRV, InfoTheory.pair, h]
 
@@ -90,7 +91,7 @@ omit [Fintype Ω] [DecidableEq ι] in
 lemma rvEquiv_blockRV_singleton (X : ∀ i, Ω → A i) (i : ι) :
     RVEquiv (X i) (blockRV X {i}) := by
   refine ⟨⟨fun t => t ⟨i, mem_singleton_self i⟩, fun ω => rfl⟩,
-    ⟨fun a j => (mem_singleton.1 j.2).symm ▸ a, fun ω => ?_⟩⟩
+    ⟨fun a j => (mem_singleton.1 j.property).symm ▸ a, fun ω => ?_⟩⟩
   funext j
   obtain ⟨j, hj⟩ := j
   obtain rfl := mem_singleton.1 hj
@@ -120,7 +121,7 @@ lemma condMutualInfo_eq_blockEntropy [Fintype β] [Fintype γ] [Fintype β'] (h�
 /-- Entropies of index sets are monotone. -/
 lemma blockEntropy_mono (hμ : IsPMF μ) {S T : Finset ι} (h : S ⊆ T) :
     blockEntropy μ X S ≤ blockEntropy μ X T :=
-  entropyRV_comp_le hμ (blockRV X T) (fun t (i : S) => t ⟨i, h i.2⟩)
+  entropyRV_comp_le hμ (blockRV X T) (fun t (i : S) => t ⟨i, h i.property⟩)
 
 /-- Entropies of index sets are submodular. -/
 lemma blockEntropy_submodular (hμ : IsPMF μ) (S T : Finset ι) :
@@ -175,9 +176,9 @@ omit [∀ i, Fintype (A i)] [Fintype Ω] in
 lemma rvEquiv_blockRV_biUnion (X : ∀ i, Ω → A i) {κ : Type*} (α : κ → Finset ι) (t : Finset κ) :
     RVEquiv (blockRV (fun j => blockRV X (α j)) t) (blockRV X (t.biUnion α)) := by
   classical
-  have hmem : ∀ i : t.biUnion α, ∃ j, j ∈ t ∧ (i : ι) ∈ α j := fun i => mem_biUnion.1 i.2
+  have hmem : ∀ i : t.biUnion α, ∃ j, j ∈ t ∧ (i : ι) ∈ α j := fun i => mem_biUnion.1 i.property
   choose J hJ₁ hJ₂ using hmem
-  refine ⟨⟨fun v j i => v ⟨i, mem_biUnion.2 ⟨j, j.2, i.2⟩⟩, fun ω => rfl⟩,
+  refine ⟨⟨fun v j i => v ⟨i, mem_biUnion.2 ⟨j, j.property, i.property⟩⟩, fun ω => rfl⟩,
     ⟨fun v i => v ⟨J i, hJ₁ i⟩ ⟨i, hJ₂ i⟩, fun ω => rfl⟩⟩
 
 end InfoTheory

@@ -128,7 +128,8 @@ theorem condDist_numOnes {n : ℕ} {θ : ℝ} (h0 : 0 < θ) (h1 : θ < 1) (k : F
   rw [hpair]
   split_ifs with h
   · rw [bernSeq_eq, h]
-    have hc : (n.choose k : ℝ) ≠ 0 := by exact_mod_cast (Nat.choose_pos (Nat.lt_succ_iff.1 k.2)).ne'
+    have hc : (n.choose k : ℝ) ≠ 0 := by
+      exact_mod_cast (Nat.choose_pos (Nat.lt_succ_iff.1 k.isLt)).ne'
     have hθ1 : θ ^ (k : ℕ) ≠ 0 := pow_ne_zero _ h0.ne'
     have hθ2 : (1 - θ) ^ (n - k) ≠ 0 := pow_ne_zero _ (by linarith)
     field_simp
@@ -205,8 +206,8 @@ theorem numOnes_minimal {n : ℕ} (θ : Θ → ℝ) (hθ : ∀ t, 0 < θ t ∧ �
     have hθ1 := hθ t₁
     have hθ2 := hθ t₂
     simp only [f, bernSeq_eq] at hlog
-    have hk : (numOnes x : ℕ) ≤ n := Nat.lt_succ_iff.1 (numOnes x).2
-    have hk' : (numOnes x' : ℕ) ≤ n := Nat.lt_succ_iff.1 (numOnes x').2
+    have hk : (numOnes x : ℕ) ≤ n := Nat.lt_succ_iff.1 (numOnes x).isLt
+    have hk' : (numOnes x' : ℕ) ≤ n := Nat.lt_succ_iff.1 (numOnes x').isLt
     have p1 : 0 < θ t₁ := hθ1.1
     have p2 : 0 < θ t₂ := hθ2.1
     have q1 : 0 < 1 - θ t₁ := by linarith [hθ1.2]

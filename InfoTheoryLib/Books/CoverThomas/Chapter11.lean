@@ -283,7 +283,7 @@ theorem sqrt_gaussian_mul_gaussian {v : ℝ≥0} (hv : v ≠ 0) (x : ℝ) :
       _ = _ := by
           rw [gaussianPDFReal_def, show exp (2 * (-(1 / (2 * v)) + -(x - 0) ^ 2 / (2 * v))) =
             (exp (-(1 / (2 * v))) * exp (-(x - 0) ^ 2 / (2 * v))) ^ 2 by
-              rw [← exp_add, ← exp_nat_mul]; norm_num]
+              rw [← exp_add, ← exp_natCast_mul]; norm_num]
           ring
   rw [h, sqrt_sq (mul_nonneg (exp_pos _).le (gaussianPDFReal_nonneg _ _ _))]
 

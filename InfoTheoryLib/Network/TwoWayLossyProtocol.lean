@@ -191,7 +191,7 @@ lemma runTo_code {x₁ : Fin n → α₁} {x₂ : Fin n → α₂} (r : ℕ)
 /-- **The code follows the ideal past**, if all the rounds are correct. -/
 theorem trans_code {x₁ : Fin n → α₁} {x₂ : Fin n → α₂} (hok : ∀ l, p.Ok x₁ x₂ l) (l : Fin q) :
     (p.code f₁ f₂).trans x₁ x₂ l = p.msg x₁ x₂ l :=
-  p.runTo_code q (fun l _ => hok l) l l.2
+  p.runTo_code q (fun l _ => hok l) l l.isLt
 
 /-- **The nodes end with the ideal past**, if all the rounds are correct. -/
 theorem view_code {x₁ : Fin n → α₁} {x₂ : Fin n → α₂} (hok : ∀ l, p.Ok x₁ x₂ l) :

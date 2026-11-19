@@ -136,7 +136,7 @@ theorem condEntropy_le_sum_of_order {γ : Type*} [Fintype γ] [Nonempty γ] [Non
       exact Fin.lt_def.1 ht
     have e : ∀ ω, prefixRV Y k ω ⟨_, ht'⟩ = X ω t := fun ω => by
       change (if h : ((ord.symm t : Fin n) : ℕ) < n then X ω (ord ⟨_, h⟩) else _) = X ω t
-      rw [dite_eq_left (ord.symm t).2]
+      rw [dite_eq_left (ord.symm t).isLt]
       simp
     have := congrFun h₂ ⟨_, ht'⟩
     rwa [e, e] at this
@@ -701,8 +701,8 @@ theorem rate₂ (hP : IsPMF P) :
       · rfl
       · refine congrArg some (hX t ?_)
         simp only [Fin.revPerm_symm, Fin.revPerm_apply, Fin.lt_def, Fin.val_rev]
-        have := t.2
-        have := i.2
+        have := t.isLt
+        have := i.isLt
         omega
     · simp only [kUs, kU]
       rw [show c.tr ω = c.tr ω' from h₂]

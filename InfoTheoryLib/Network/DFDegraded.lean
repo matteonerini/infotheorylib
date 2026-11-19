@@ -78,11 +78,11 @@ theorem cutInfo_dfLt_eq (hW : IsChannel W) (hdeg : IsDegradedNet W) {p : (∀ k,
       exact this
   have hdc : d ∈ (dfLt d)ᶜ := (hmem d).2 (Or.inl rfl)
   let g : (∀ l : ((dfLt d)ᶜ : Finset (Fin N)), Y l) → Y d × ∀ l : dfGt d, Y l := fun c =>
-    (c ⟨d, hdc⟩, fun l => c ⟨l, (hmem l).2 (Or.inr l.2)⟩)
+    (c ⟨d, hdc⟩, fun l => c ⟨l, (hmem l).2 (Or.inr l.property)⟩)
   have hg : Function.Injective g := by
     intro a b h
     funext l
-    rcases (hmem l).1 l.2 with hl | hl
+    rcases (hmem l).1 l.property with hl | hl
     · have e : l = ⟨d, hdc⟩ := Subtype.ext hl
       rw [e]
       exact (Prod.ext_iff.mp h).1
@@ -130,7 +130,7 @@ lemma isAchievableMN_zero [∀ k, Nonempty (X k)] (s : Fin N)
   rintro ⟨j, k, _, hne⟩
   apply hne
   exact Fin.ext (by
-    have h₁ := (z.1 j).2
+    have h₁ := (z.1 j).isLt
     have h₂ := h1 n j
     simp only at h₁
     omega)
@@ -213,7 +213,7 @@ theorem cutInfo_eq_dfInfo (hW : IsChannel W) {p : (∀ k, X k) → ℝ} (hp : Is
   have hmem : ∀ l : (Sᶜ : Finset (Fin N)), (l : Fin N) = d := fun l => by
     have h : (l : Fin N) ∈ ({d} : Finset (Fin N)) := by
       rw [← hS]
-      exact l.2
+      exact l.property
     exact mem_singleton.mp h
   have hdl : d ∈ (dfLt d)ᶜ := by simp [dfLt]
   have hsub : ∀ l : (Sᶜ : Finset (Fin N)), (l : Fin N) ∈ (dfLt d)ᶜ := fun l => by
@@ -242,7 +242,7 @@ theorem cutInfo_eq_dfInfo (hW : IsChannel W) {p : (∀ k, X k) → ℝ} (hp : Is
       rw [e]
       exact this
     · have hlt : (d : ℕ) < (l : Fin N) := by
-        have := l.2
+        have := l.property
         simp only [dfLt, mem_compl, mem_filter, mem_univ, true_and, not_lt] at this
         have h' : (d : ℕ) ≤ (l : Fin N) := this
         have hne : (d : ℕ) ≠ (l : Fin N) := fun e => hl (Fin.ext e.symm)
@@ -309,7 +309,7 @@ theorem mnCapacity_relay_both {X Y : Fin 3 → Type*} [∀ k, Fintype (X k)] [�
     · refine ⟨2, by decide, {0, 1}, by decide, by decide, ?_⟩
       refine (cutInfo_eq_dfInfo hW hp (fun k hk => ?_) hS₂).le
       exact absurd hk (by
-        have := k.2
+        have := k.isLt
         change ¬ (2 : ℕ) < k
         omega)
 

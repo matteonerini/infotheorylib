@@ -276,7 +276,8 @@ theorem exists_channel_representation [Nonempty Z] [DecidableEq Z] {q : Y → Z 
   have hTb : ∀ t ∈ T, 0 < t ∧ t ≤ 1 := fun t ht => mem_cdfThresholds_bounds hq ht
   set e := T.equivFin with he
   refine ⟨T.card, card_cdfThresholds_le q, fun w => thrMass T (e.symm w),
-    fun y w => quantileOf (q y) (e.symm w), ⟨fun w => (thrMass_pos (hTb _ (e.symm w).2).1).le, ?_⟩,
+    fun y w => quantileOf (q y) (e.symm w),
+      ⟨fun w => (thrMass_pos (hTb _ (e.symm w).property).1).le, ?_⟩,
     fun y z => ?_⟩
   · rw [e.symm.sum_comp (fun t : T => thrMass T t), sum_coe_sort T (thrMass T)]
     exact sum_thrMass_cdfThresholds hq

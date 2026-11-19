@@ -134,8 +134,8 @@ lemma thresholdDecode_ne {w₀ w : Fin M} {y : Fin n → ℝ} (h : thresholdDeco
   push Not at hc
   obtain ⟨hw, hothers⟩ := hc
   have hex : ∃ k, M ≤ k ∨ ∃ h : k < M, γ < θ (C ⟨k, h⟩) y := ⟨M, Or.inl le_rfl⟩
-  have hle : Nat.find hex ≤ w := Nat.find_min' hex (Or.inr ⟨w.2, hw⟩)
-  have hlt : Nat.find hex < M := lt_of_le_of_lt hle w.2
+  have hle : Nat.find hex ≤ w := Nat.find_min' hex (Or.inr ⟨w.isLt, hw⟩)
+  have hlt : Nat.find hex < M := lt_of_le_of_lt hle w.isLt
   have hspec := Nat.find_spec hex
   rcases hspec with hM | ⟨hk, hk'⟩
   · omega
@@ -619,7 +619,7 @@ theorem isAchievableGaussianRate_of_lt {P N : ℝ≥0} (hN : N ≠ 0) {R : ℝ}
       refine ⟨by simp [exp_pos], ?_⟩
       have : (n : ℝ) * R ≤ 0 := mul_nonpos_of_nonneg_of_nonpos (Nat.cast_nonneg n) hR0
       simpa using exp_le_one_iff.2 this
-    choose c hc using fun n : ℕ => exists_gaussianCode_maxErrProb_eq_zero (h1 n) n N P.2
+    choose c hc using fun n : ℕ => exists_gaussianCode_maxErrProb_eq_zero (h1 n) n N P.property
     exact ⟨c, fun n => (hc n).1, by simp [fun n => (hc n).2]⟩
   have hN' : (0 : ℝ) < N := by positivity
   -- Choose `P' < P` with `R < ½ log (1 + P'/N)`: the midpoint of `N (e^{2R} - 1)` and `P`.
@@ -658,7 +658,7 @@ theorem isAchievableGaussianRate_of_lt {P N : ℝ≥0} (hN : N ≠ 0) {R : ℝ}
     intro n
     have hM := one_le_ceil_exp (n * R)
     obtain ⟨c₀, hpow₀, hc₀⟩ := exists_gaussianCode_avgErrProb_le (M := 2 * ⌈exp (n * R)⌉₊)
-      P.2 P' hN (by omega) (n * (C' - δ))
+      P.property P' hN (by omega) (n * (C' - δ))
     obtain ⟨c, hpow, hc⟩ := GaussianCode.exists_maxErrProb_le_two_mul N (by omega) c₀ hpow₀
     refine ⟨c, hpow, hc.trans ?_⟩
     push_cast at hc₀

@@ -513,7 +513,7 @@ lemma DMNCode.one_sub_errProb_mul_le (c : DMNCode M n X Y) (hM : ∀ k, 0 < M k)
   let A : (∀ k, Fin (M k)) × (Fin n → ∀ k, Y k) → ∀ k : T, Fin (M k) := fun z => restr T z.1
   -- the destination that decodes a message
   have hdest : ∀ j : T, ∃ k, k ∈ D j ∧ k ∈ (Sᶜ : Finset (Fin N)) := fun j => by
-    obtain ⟨k, hk⟩ := (mem_filter.mp j.2).2
+    obtain ⟨k, hk⟩ := (mem_filter.mp j.property).2
     exact ⟨k, (mem_inter.mp hk).1, (mem_inter.mp hk).2⟩
   choose dk hdk hdc using hdest
   let g : ((∀ k : (Sᶜ : Finset (Fin N)), Fin (M k)) ×
@@ -552,7 +552,7 @@ lemma DMNCode.one_sub_errProb_mul_le (c : DMNCode M n X Y) (hM : ∀ k, 0 < M k)
     I[fun z : (∀ k, Fin (M k)) × (Fin n → ∀ k, Y k) => restr S z.1 : O ; μ] := by
     rw [mutualInfo_comm hμ A O, mutualInfo_comm hμ _ O]
     exact mutualInfo_comp_le hμ O (fun z : (∀ k, Fin (M k)) × (Fin n → ∀ k, Y k) => restr S z.1)
-      fun t (k : T) => t ⟨k, hTS k.2⟩
+      fun t (k : T) => t ⟨k, hTS k.property⟩
   have hE : c.errProb W D * ∑ k ∈ T, log (M k : ℝ) ≥
       InfoTheory.errProb μ A O g * ∑ k ∈ T, log (M k : ℝ) :=
     mul_le_mul_of_nonneg_right hP (hL ▸ hL0)

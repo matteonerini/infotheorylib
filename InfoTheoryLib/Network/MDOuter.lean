@@ -233,7 +233,7 @@ lemma isClosed_exists_mem_compact {A V : Type*} [TopologicalSpace A] [Topologica
     IsClosed {t : V | ∃ κ ∈ K, (κ, t) ∈ T} := by
   have : CompactSpace K := isCompact_iff_compactSpace.1 hK
   have hT' : IsClosed {p : K × V | ((p.1 : A), p.2) ∈ T} :=
-    hT.preimage ((continuous_subtype_val.comp continuous_fst).prodMk continuous_snd)
+    hT.preimage ((continuous_subtypeVal.comp continuous_fst).prodMk continuous_snd)
   have h := isClosedMap_snd_of_compactSpace _ hT'
   convert h using 1
   ext t
@@ -242,7 +242,7 @@ lemma isClosed_exists_mem_compact {A V : Type*} [TopologicalSpace A] [Topologica
   · rintro ⟨κ, hκ, ht⟩
     exact ⟨(⟨κ, hκ⟩, t), ht, rfl⟩
   · rintro ⟨⟨κ, s⟩, ht, rfl⟩
-    exact ⟨κ, κ.2, ht⟩
+    exact ⟨κ, κ.property, ht⟩
 
 /-- The set of the rates and distortions satisfying the outer bound is closed. -/
 theorem isClosed_mdOuter (hP : IsPMF P) (d₀ : α → β₀ → ℝ) (d₁ : α → β₁ → ℝ) (d₂ : α → β₂ → ℝ) :

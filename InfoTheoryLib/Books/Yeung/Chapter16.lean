@@ -206,7 +206,7 @@ the group characterization `Gᵢ = {0}` for `i ∈ β` and `Gᵢ = G` otherwise,
 modulo 2 addition, (16.57)–(16.58). -/
 theorem example_16_19 {ι : Type*} [DecidableEq ι] (β : Finset ι) :
     groupEntropy (fun i => if i ∈ β then (⊥ : Subgroup (Multiplicative (ZMod 2))) else ⊤) =
-      fun α => if (α.1 ∩ β).Nonempty then log 2 else 0 := by
+      fun α => if (α.val ∩ β).Nonempty then log 2 else 0 := by
   funext α
   have hG : Nat.card (Multiplicative (ZMod 2)) = 2 := by simp [Nat.card_eq_fintype_card]
   rw [groupEntropy, hG]
@@ -214,14 +214,14 @@ theorem example_16_19 {ι : Type*} [DecidableEq ι] (β : Finset ι) :
   · obtain ⟨i, hi⟩ := h
     rw [mem_inter] at hi
     have : subgroupInter (fun i => if i ∈ β then (⊥ : Subgroup (Multiplicative (ZMod 2)))
-        else ⊤) α.1 = ⊥ := by
+        else ⊤) α.val = ⊥ := by
       refine eq_bot_iff.2 fun x hx => ?_
       have := mem_subgroupInter.1 hx i hi.1
       simpa [hi.2] using this
     rw [this, Subgroup.card_bot]
     norm_num
   · have : subgroupInter (fun i => if i ∈ β then (⊥ : Subgroup (Multiplicative (ZMod 2)))
-        else ⊤) α.1 = ⊤ := by
+        else ⊤) α.val = ⊤ := by
       refine eq_top_iff.2 fun x _ => mem_subgroupInter.2 fun i hi => ?_
       have : i ∉ β := fun hb => h ⟨i, mem_inter.2 ⟨hi, hb⟩⟩
       simp [this]
@@ -231,7 +231,7 @@ theorem example_16_19 {ι : Type*} [DecidableEq ι] (β : Finset ι) :
 /-- **Example 16.18.** The case `n = 3` of Example 16.19, (16.50)–(16.56). -/
 theorem example_16_18 (β : Finset (Fin 3)) :
     groupEntropy (fun i => if i ∈ β then (⊥ : Subgroup (Multiplicative (ZMod 2))) else ⊤) =
-      fun α => if (α.1 ∩ β).Nonempty then log 2 else 0 :=
+      fun α => if (α.val ∩ β).Nonempty then log 2 else 0 :=
   example_16_19 β
 
 /-- The subgroups `G₁ = {(0, 0), (1, 0)}`, `G₂ = {(0, 0), (0, 1)}` and `G₃ = {(0, 0), (1, 1)}` of
@@ -265,13 +265,13 @@ theorem example_16_20 : groupEntropy example1620Subgroup = log 2 • rankVector 
       exact forall₂_congr fun i _ => hmem i x)
   have hG : Nat.card (Multiplicative (ZMod 2 × ZMod 2)) = 4 := by simp [Nat.card_eq_fintype_card]
   funext α
-  rw [groupEntropy, hcard α.1 α.2, hG, Pi.smul_apply, rankVector, smul_eq_mul]
-  have hle : #α.1 ≤ 3 := by simpa using card_le_univ α.1
-  have hpos : 0 < #α.1 := card_pos.2 α.2
+  rw [groupEntropy, hcard α.val α.property, hG, Pi.smul_apply, rankVector, smul_eq_mul]
+  have hle : #α.val ≤ 3 := by simpa using card_le_univ α.val
+  have hpos : 0 < #α.val := card_pos.2 α.property
   have h4 : log 4 = 2 * log 2 := by
     rw [show (4 : ℝ) = 2 ^ 2 by norm_num, log_pow]
     norm_num
-  interval_cases h : #α.1 <;> norm_num [h4] <;> ring
+  interval_cases h : #α.val <;> norm_num [h4] <;> ring
 
 /-! ### 16.3 A Group Characterization of `Γ̄*ₙ` -/
 

@@ -126,7 +126,7 @@ lemma quantMutualInfo_nonneg (P : Measure (α × β)) [IsProbabilityMeasure P] {
 `I(X; Y) = sup_{P, Q} I([X]_P; [Y]_Q)`, the supremum over all finite measurable partitions. -/
 def mutualInfoSup (P : Measure (α × β)) : ENNReal :=
   ⨆ (k : ℕ) (l : ℕ) (q : {q : α → Fin k // Measurable q}) (r : {r : β → Fin l // Measurable r}),
-    ENNReal.ofReal (quantMutualInfo P q.1 r.1)
+    ENNReal.ofReal (quantMutualInfo P q.val r.val)
 
 lemma quantMutualInfo_le_mutualInfoSup (P : Measure (α × β)) {k l : ℕ} {q : α → Fin k}
     {r : β → Fin l} (hq : Measurable q) (hr : Measurable r) :
@@ -159,7 +159,7 @@ theorem mutualInfoSup_eq_of_finite [Fintype α] [MeasurableSingletonClass α] [F
     pmfOfMeasure_map P (Prod.map q r)
   refine le_antisymm (iSup_le fun k => iSup_le fun l => iSup_le fun q => iSup_le fun r => ?_) ?_
   · rw [quantMutualInfo, hquant]
-    exact ENNReal.ofReal_le_ofReal (mutualInfo_dist_prodMap_le hP q.1 r.1)
+    exact ENNReal.ofReal_le_ofReal (mutualInfo_dist_prodMap_le hP q.val r.val)
   · set e := Fintype.equivFin α
     set e' := Fintype.equivFin β
     refine le_trans (le_of_eq ?_) (quantMutualInfo_le_mutualInfoSup P (q := e) (r := e')
